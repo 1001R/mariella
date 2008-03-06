@@ -25,10 +25,12 @@ import org.eclipse.swt.widgets.Widget;
 import org.mariella.rcp.databinding.VDataBindingContext;
 
 /**
- * Copied from original TableCursor and modified so that - selection events are
+ * Copied from original TableCursor and modified in a way that 
+ * - selection events are
  * also sent when the use clicks on the current cell. (this is needed when the
- * user leaves the table (to a different control) and clicks on the cell where
- * he came from). - tab next / tab previous events are handled - when the border
+ * user selects a control outside the table and clicks on the cell he had left). 
+ * - tab next / tab previous events are handled 
+ * - when the border
  * of the table is reached (for example on the right side) and the user presses
  * continues traversing in that direction (presses the right key), the cursors
  * appears on the next row (row below, cell 0).
@@ -335,6 +337,7 @@ private boolean moveCursorLeftRight(int direction) {
 }
 
 void paint(Event event) {
+	//System.out.println("Row: " + row);
 	if (row == null)
 		return;
 	
@@ -483,6 +486,11 @@ void setRowColumn(int row, int column, boolean notify) {
 	TableItem item = row == -1 ? null : table.getItem(row);
 	TableColumn col = column == -1 || table.getColumnCount() == 0 ? null : table.getColumn(column);
 	setRowColumn(item, col, notify);
+}
+
+void resetRowColumn() {
+	row = null;
+	column = null;
 }
 
 void setRowColumn(TableItem row, TableColumn column, boolean notify) {

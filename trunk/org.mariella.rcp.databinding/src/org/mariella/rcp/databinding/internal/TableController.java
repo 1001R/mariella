@@ -175,7 +175,7 @@ public boolean isEditable(int columnIndex) {
 
 public void install(TableViewerColumnEditExtension columnEditExtension) {
 	editExtensionMap.put(columnEditExtension.getPropertyPath(), columnEditExtension);
-	Composite editControlComposite = new Composite(tableCursor, SWT.NONE);
+	final Composite editControlComposite = new Composite(tableCursor, SWT.NONE);
 	editControlComposite.setLayout(new FormLayout());
 	VDataBindingFactory.Callback factoryCallback = new VDataBindingFactory.Callback() {
 		public void bindingCreated(final VBinding binding) {
@@ -212,13 +212,41 @@ public void install(TableViewerColumnEditExtension columnEditExtension) {
 		public void focusGained(FocusEvent e) {
 		}
 		public void focusLost(FocusEvent e) {
-			/*
-			editControl.setVisible(false);
-			editControl.setSize(0,0);
-			cursorEditor.setEditor(null);
-			*/
 			tableViewer.refresh(selectionHolder.getValue());
 			tableViewer.getTable().redraw();
+		}
+	});
+	editControl.addFocusListener(new FocusListener() {
+		public void focusGained(FocusEvent e) {
+		}
+		public void focusLost(FocusEvent e) {
+			Display.getCurrent().asyncExec(new Runnable() {
+				public void run() {
+					Control focusControl = Display.getCurrent().getFocusControl();
+					if (!isTableChild(tableViewer.getTable(), focusControl) && focusControl.getShell() == editControl.getShell()) {
+						
+						Control x = focusControl;
+						while (x != null) {
+							System.out.print(x.getClass() + " / ");
+							x = x.getParent();
+						}
+						System.out.println();
+						
+						editControlComposite.setVisible(false);
+						editControlComposite.setSize(0,0);
+						//tableCursor.resetRowColumn();
+					}
+				}
+
+				private boolean isTableChild(Table table, Control focusControl) {
+					Composite parent = focusControl.getParent();
+					while (parent != null) {
+						if (parent == table) return true;
+						parent = parent.getParent();
+					}
+					return false;
+				}
+			});
 		}
 	});
 }
