@@ -352,8 +352,9 @@ public void setEditable(boolean editable) {
 			cursorEditor.setEditor(null);
 		}
 		control.setEnabled(editable);
-		tableCursor.redraw();
 	}
+	tableCursor.setVisible(editable);
+	tableCursor.redraw();
 	this.editable = editable;
 }
 
