@@ -17,10 +17,9 @@ public void install(final VBinding binding) {
 		public void focusGained(FocusEvent e) {
 			Display.getCurrent().asyncExec(new Runnable() {
 				public void run() {
-					if (textViewer != null && textViewer.getTextWidget() != null && !textViewer.getTextWidget().isDisposed()) { {
+					if (textViewer != null && textViewer.getTextWidget() != null && !textViewer.getTextWidget().isDisposed()) { 
 						textViewer.getTextWidget().invokeAction(ST.SELECT_ALL);
 						binding.getDataBindingContext().globalClipboardActionsHandler.validateActions();
-					}
 					}
 				}
 			});
@@ -29,7 +28,7 @@ public void install(final VBinding binding) {
 			Display.getCurrent().asyncExec(new Runnable() {
 				public void run() {
 					if (textViewer != null && textViewer.getTextWidget() != null && !textViewer.getTextWidget().isDisposed()) {
-						textViewer.getTextWidget().invokeAction(ST.SELECT_TEXT_START);
+						textViewer.getTextWidget().setSelection(0,0);
 						binding.getDataBindingContext().globalClipboardActionsHandler.validateActions();
 					}
 				}
