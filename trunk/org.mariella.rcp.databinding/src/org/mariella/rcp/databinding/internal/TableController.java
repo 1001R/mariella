@@ -224,17 +224,9 @@ public void install(TableViewerColumnEditExtension columnEditExtension) {
 				public void run() {
 					Control focusControl = Display.getCurrent().getFocusControl();
 					if (!isTableChild(tableViewer.getTable(), focusControl) && focusControl.getShell() == editControl.getShell()) {
-						
-						Control x = focusControl;
-						while (x != null) {
-							System.out.print(x.getClass() + " / ");
-							x = x.getParent();
-						}
-						System.out.println();
-						
 						editControlComposite.setVisible(false);
 						editControlComposite.setSize(0,0);
-						//tableCursor.resetRowColumn();
+						tableCursor.setRowColumn(null, null, false);
 					}
 				}
 

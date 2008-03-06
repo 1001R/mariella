@@ -337,7 +337,7 @@ private boolean moveCursorLeftRight(int direction) {
 }
 
 void paint(Event event) {
-	//System.out.println("Row: " + row);
+	System.out.println("Row: " + row);
 	if (row == null)
 		return;
 	
@@ -488,11 +488,6 @@ void setRowColumn(int row, int column, boolean notify) {
 	setRowColumn(item, col, notify);
 }
 
-void resetRowColumn() {
-	row = null;
-	column = null;
-}
-
 void setRowColumn(TableItem row, TableColumn column, boolean notify) {
 	if (this.row != null && this.row != row) {
 		this.row.removeListener(SWT.Dispose, disposeItemListener);
@@ -523,6 +518,8 @@ void setRowColumn(TableItem row, TableColumn column, boolean notify) {
 		if (notify) {
 			notifyListeners(SWT.Selection, new Event());
 		}
+	} else {
+		setBounds(0,0,0,0);
 	}
 }
 
