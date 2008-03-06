@@ -38,12 +38,12 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.mariella.rcp.databinding.BindingDomain;
-import org.mariella.rcp.databinding.BindingDomainExtension;
 import org.mariella.rcp.databinding.SelectionManagementExtension;
 import org.mariella.rcp.databinding.SelectionPath;
 import org.mariella.rcp.databinding.TableViewerColumnEditExtension;
 import org.mariella.rcp.databinding.TableViewerColumnExtension;
 import org.mariella.rcp.databinding.TableViewerColumnImageExtension;
+import org.mariella.rcp.databinding.TableViewerColumnLabelDecoratorExtension;
 import org.mariella.rcp.databinding.TableViewerColumnToolTipExtension;
 import org.mariella.rcp.databinding.TableViewerEditExtension;
 import org.mariella.rcp.databinding.TableViewerElementChangeListenerExtension;
@@ -64,6 +64,7 @@ private List<TableViewerColumnExtension> columnExtensions = new ArrayList<TableV
 private Map<String,TableViewerColumnImageExtension> imageExtensionMap = new HashMap<String, TableViewerColumnImageExtension>();
 private Map<String,TableViewerColumnToolTipExtension> toolTipExtensionMap = new HashMap<String, TableViewerColumnToolTipExtension>();
 private Map<String,TableViewerColumnEditExtension> editExtensionMap = new HashMap<String, TableViewerColumnEditExtension>();
+private Map<String, TableViewerColumnLabelDecoratorExtension> labelDecoratorExtensionMap = new HashMap<String, TableViewerColumnLabelDecoratorExtension>();
 private Map<String,Composite> editCompositeMap = new HashMap<String,Composite>();
 private Map<String,Control> editControlMap = new HashMap<String,Control>();
 private VDataBindingContext dataBindingContext;
@@ -226,24 +227,12 @@ public void install(TableViewerColumnEditExtension columnEditExtension) {
 		public void focusLost(FocusEvent e) {
 			tableViewer.refresh(selectionHolder.getValue());
 			tableViewer.getTable().redraw();
-		}
-	});
-	editControl.addFocusListener(new FocusListener() {
-		public void focusGained(FocusEvent e) {
-		}
-		public void focusLost(FocusEvent e) {
 			Display.getCurrent().asyncExec(new Runnable() {
 				public void run() {
-					Control focusControl = Display.getCurrent().getFocusControl();
-					if (focusControl != null && !isTableChild(tableViewer.getTable(), focusControl) && focusControl.getShell() == editControl.getShell()) {
-						/*
-						Control x = focusControl;
-						while (x != null) {
-							System.out.print(x.getClass() + " / ");
-							x = x.getParent();
-						}
-						System.out.println();
-						*/
+					Control newFocusControl = Display.getCurrent().getFocusControl();
+					if (newFocusControl != null && !newFocusControl.isDisposed() && !editControl.isDisposed() &&
+							!isTableChild(tableViewer.getTable(), newFocusControl) && newFocusControl.getShell() == editControl.getShell()) {
+						// if focus was lost to something out of the table, we hide the edit control
 						editControlComposite.setVisible(false);
 						editControlComposite.setSize(0,0);
 						tableCursor.setRowColumn(null, null, false);
@@ -266,6 +255,10 @@ public void install(TableViewerColumnEditExtension columnEditExtension) {
 
 public void install(TableViewerColumnImageExtension imageExtension) {
 	imageExtensionMap.put(imageExtension.getPropertyPath(), imageExtension);
+}
+
+public void install(TableViewerColumnLabelDecoratorExtension decoratorExtension) {
+	labelDecoratorExtensionMap .put(decoratorExtension.getPropertyPath(), decoratorExtension);
 }
 
 
@@ -303,7 +296,10 @@ public String getColumnText(Object element, int columnIndex) {
 	TableViewerColumnExtension ext = columnExtensions.get(columnIndex);
 	Object value = readValue(element, ext);
 	Object converted = ext.getDomain().getConverterBuilder().buildFromModelConverter(ext.getDomain()).convert(value);
-	return (converted == null ? "" : converted.toString());
+	String string =  (converted == null ? "" : converted.toString());
+	TableViewerColumnLabelDecoratorExtension decoratorExt = labelDecoratorExtensionMap.get(ext.getPropertyPath());
+	if (decoratorExt == null) return string;
+	return decoratorExt.getLabelDecoratorCallback().decorateLabel(element, string);
 }
 
 

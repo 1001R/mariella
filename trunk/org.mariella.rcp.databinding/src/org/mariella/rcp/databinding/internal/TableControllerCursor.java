@@ -240,8 +240,7 @@ void dispose(Event event) {
 void keyDown(Event event) {
 	if (row == null)
 		return;
-	final int rowIndex = table.indexOf(row);
-	final int columnIndex = column == null ? 0 : table.indexOf(column);
+	int columnIndex = column == null ? 0 : table.indexOf(column);
 	if (tableController.blockDefaultTraversing(columnIndex))
 		return;
 	
@@ -252,10 +251,10 @@ void keyDown(Event event) {
 	}
 	switch (event.keyCode) {
 	case SWT.ARROW_UP:
-		setRowColumn(Math.max(0, rowIndex - 1), columnIndex, true);
+		moveCursorUpDown(-1);
 		break;
 	case SWT.ARROW_DOWN:
-		setRowColumn(Math.min(rowIndex + 1, table.getItemCount() - 1), columnIndex, true);
+		moveCursorUpDown(+1);
 		break;
 	}
 }
@@ -276,8 +275,8 @@ void handleTraverse(final Event event) {
 	
 	switch (event.detail) {
 	case SWT.TRAVERSE_TAB_NEXT:
+		// if cursor could be moved to next column, consume event. Otherwise let default traverse mechanism do its job.
 		if (moveCursorLeftRight(+1))
-			// forward move works automatically
 			event.doit = false;
 		break;
 	case SWT.TRAVERSE_TAB_PREVIOUS:
@@ -339,7 +338,42 @@ private boolean moveCursorLeftRight(int direction) {
 	}
 }
 
+/**
+ * Returns true if the cursor could be moved within the table bounds.
+ * 
+ * @param direction
+ * @return
+ */
+private boolean moveCursorUpDown(int direction) {
+	if (row == null)
+		return false;
+	int rowIndex = table.indexOf(row);
+	int columnIndex = column == null ? 0 : table.indexOf(column);
+
+	int rowCount = table.getItemCount();
+	if (rowCount == 0)
+		return false;
+
+	if (direction == -1) {
+		if (rowIndex > 0) {
+			rowIndex--;
+			tableViewer.setSelection(new StructuredSelection(tableViewer.getElementAt(rowIndex)));
+			setRowColumn(rowIndex, columnIndex, true);
+			return true;
+		}
+	} else { 
+		if (rowIndex < rowCount-1) {
+			rowIndex++;
+			tableViewer.setSelection(new StructuredSelection(tableViewer.getElementAt(rowIndex)));
+			setRowColumn(rowIndex, columnIndex, true);
+			return true;
+		}
+	}
+	return false;
+}
+
 void paint(Event event) {
+	/*
 	if (row == null)
 		return;
 	
@@ -407,6 +441,7 @@ void paint(Event event) {
 		gc.setForeground(display.getSystemColor(SWT.COLOR_WHITE));
 		gc.drawFocus(0, 0, size.x, size.y);
 	}
+	*/
 }
 
 void tableFocusIn(Event event) {
@@ -517,10 +552,13 @@ void setRowColumn(TableItem row, TableColumn column, boolean notify) {
 		}
 		int columnIndex = column == null ? 0 : table.indexOf(column);
 		setBounds(row.getBounds(columnIndex));
+		/*
 		redraw();
+		*/
 		if (notify) {
 			notifyListeners(SWT.Selection, new Event());
 		}
+		
 	} else {
 		setBounds(0,0,0,0);
 	}
