@@ -33,6 +33,10 @@ public VComboViewerObservableValue(IObservableValue nested, ComboViewer comboVie
 	initialize();
 }
 
+public boolean isResponsibleFor(Control control) {
+	return control == getComboViewer().getControl();
+}
+
 private ComboViewer getComboViewer()  {
 	return (ComboViewer)getStructuredViewer();
 }
@@ -123,6 +127,10 @@ private void applyValueSet() {
 	List oldValueSet = (List)getComboViewer().getInput();
 	if (oldValueSet == null || Diffs.computeListDiff(oldValueSet, newValueSet).getDifferences().length > 0)
 		getComboViewer().setInput(new ArrayList(newValueSet));
+}
+
+public boolean blockDefaultTraversing() {
+	return false;
 }
 
 }

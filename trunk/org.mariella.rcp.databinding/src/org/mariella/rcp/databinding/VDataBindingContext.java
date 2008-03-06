@@ -11,17 +11,20 @@ import org.eclipse.core.databinding.ListBinding;
 import org.eclipse.core.databinding.ObservablesManager;
 import org.eclipse.core.databinding.UpdateListStrategy;
 import org.eclipse.core.databinding.UpdateValueStrategy;
+import org.eclipse.core.databinding.observable.IObservable;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.jface.databinding.swt.ISWTObservable;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IActionBars;
 import org.mariella.rcp.databinding.internal.GlobalClipboardActionsHandler;
 import org.mariella.rcp.databinding.internal.TableController;
 import org.mariella.rcp.databinding.internal.VDataBindingContextObserver;
 import org.mariella.rcp.databinding.internal.VDataBindingSelectionProvider;
 import org.mariella.rcp.databinding.internal.VTableViewerListBindingImpl;
+import org.mariella.rcp.databinding.internal.VTargetObservable;
 
 
 public class VDataBindingContext {
@@ -123,6 +126,16 @@ public IActionBars getActionBars() {
 public void setActionBars(IActionBars actionBars) {
 	this.actionBars = actionBars;
 	globalClipboardActionsHandler.initialize(actionBars);
+}
+
+public List<VTargetObservable> getObservablesFor(Control control) {
+	List<VTargetObservable> result = new ArrayList<VTargetObservable>();
+	for (VBinding binding : bindings) {
+		IObservable target = binding.getBinding().getTarget();
+		if (target instanceof VTargetObservable && ((VTargetObservable)target).isResponsibleFor(control))
+			result.add((VTargetObservable)target);
+	}
+	return result;
 }
 
 }

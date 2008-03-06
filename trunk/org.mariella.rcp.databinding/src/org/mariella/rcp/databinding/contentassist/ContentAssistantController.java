@@ -72,5 +72,9 @@ public void setEnabled(boolean enabled) {
 	this.enabled = enabled;
 }
 
+public boolean isContentAssistantOpen() {
+	return contentAssistantOpen;
+}
+
 
 }

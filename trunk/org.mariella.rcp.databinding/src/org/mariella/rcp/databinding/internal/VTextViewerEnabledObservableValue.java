@@ -1,6 +1,7 @@
 package org.mariella.rcp.databinding.internal;
 
 import org.eclipse.jface.internal.databinding.provisional.swt.AbstractSWTObservableValue;
+import org.eclipse.swt.widgets.Control;
 
 public class VTextViewerEnabledObservableValue extends AbstractSWTObservableValue implements EnabledObservableValue, VTargetObservable {
 private VTextViewerObservableValue textViewerObservable;
@@ -10,6 +11,11 @@ public VTextViewerEnabledObservableValue(VTextViewerObservableValue textViewerOb
 	
 	this.textViewerObservable = textViewerObservable;
 }
+
+public boolean isResponsibleFor(Control control) {
+	return textViewerObservable.isResponsibleFor(control);
+}
+
 
 protected Object doGetValue() {
 	throw new UnsupportedOperationException();
@@ -23,10 +29,11 @@ protected void doSetValue(Object value) {
 	textViewerObservable.setEnabled((Boolean)value);
 }
 
-@Override
 public void extensionsInstalled() {
-	// TODO Auto-generated method stub
-	
+}
+
+public boolean blockDefaultTraversing() {
+	return false;
 }
 
 }

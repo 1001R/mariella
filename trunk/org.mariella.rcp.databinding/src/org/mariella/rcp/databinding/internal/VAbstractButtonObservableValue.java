@@ -32,6 +32,10 @@ public VAbstractButtonObservableValue(Button button) {
 	button.addListener(SWT.DefaultSelection, updateListener);
 }
 
+public boolean isResponsibleFor(Control control) {
+	return control == button;
+}
+
 public void doSetValue(final Object value) {
 	Object oldSelectionValue = selectionValue;
 	selectionValue = value;
@@ -77,6 +81,10 @@ public void extensionsInstalled() {
 
 public void setContextSelectionCallback(	GetContextSelectionCallback getContextSelectionCallback) {
 	selectionDispatchingSupport.setContextSelectionCallback(getContextSelectionCallback);
+}
+
+public boolean blockDefaultTraversing() {
+	return false;
 }
 
 }

@@ -6,7 +6,7 @@ import org.eclipse.core.databinding.observable.Diffs;
 import org.eclipse.jface.internal.databinding.provisional.swt.AbstractSWTVetoableValue;
 import org.eclipse.jface.text.DocumentEvent;
 import org.eclipse.jface.text.IDocumentListener;
-import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.jface.text.TextViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ST;
 import org.eclipse.swt.custom.StyledText;
@@ -30,7 +30,7 @@ static Log log = LogFactory.getLog(VTextViewerObservableValue.class);
 private static final int[] validUpdateEventTypes = new int[] { SWT.Modify,
 	SWT.FocusOut, SWT.NONE };
 
-final ITextViewer textViewer;
+final TextViewer textViewer;
 private final StyledText text;
 private final int updateEventType;
 private boolean updating = false;
@@ -88,7 +88,7 @@ private FocusListener focusListener = new FocusListener() {
 	}
 };
 
-public VTextViewerObservableValue(VDataBindingContext dataBindingContext, ITextViewer textViewer, int updateEventType) {
+public VTextViewerObservableValue(VDataBindingContext dataBindingContext, TextViewer textViewer, int updateEventType) {
 	super(textViewer.getTextWidget());
 	this.dataBindingContext = dataBindingContext;
 	this.textViewer = textViewer;
@@ -117,6 +117,11 @@ public VTextViewerObservableValue(VDataBindingContext dataBindingContext, ITextV
 	textViewer.getTextWidget().addFocusListener(focusListener);
 	text.addSelectionListener(selectionListener);
 }
+
+public boolean isResponsibleFor(Control control) {
+	return control == textViewer.getControl();
+}
+
 
 public Object getValueType() {
 	return String.class;
@@ -151,7 +156,7 @@ public void dispose() {
 	super.dispose();
 }
 
-public ITextViewer getTextViewer() {
+public TextViewer getTextViewer() {
 	return textViewer;
 }
 
@@ -240,4 +245,10 @@ public void doCut() {
 public void doDelete() {
 	text.invokeAction(ST.DELETE_WORD_NEXT);
 }
+
+public boolean blockDefaultTraversing() {
+	if (contentAssistantController == null) return false;
+	return contentAssistantController.isContentAssistantOpen();
+}
+
 }

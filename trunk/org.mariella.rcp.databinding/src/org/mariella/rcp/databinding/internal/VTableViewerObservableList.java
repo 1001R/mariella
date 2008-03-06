@@ -60,8 +60,12 @@ public VTableViewerObservableList(VDataBindingContext dataBindingContext, TableV
 			}
 		}
 	});
-
 }
+
+public boolean isResponsibleFor(Control control) {
+	return control == tableViewer.getControl();
+}
+
 
 protected int doGetSize() {
 	if (tableViewer.getInput() == null) return 0;
@@ -216,6 +220,10 @@ public void extensionsInstalled() {
 
 public void setContextSelectionCallback(	GetContextSelectionCallback getContextSelectionCallback) {
 	throw new IllegalStateException("TableViewers do not support context selection support");
+}
+
+public boolean blockDefaultTraversing() {
+	return false;
 }
 
 }

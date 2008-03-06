@@ -64,6 +64,7 @@ private List<TableViewerColumnExtension> columnExtensions = new ArrayList<TableV
 private Map<String,TableViewerColumnImageExtension> imageExtensionMap = new HashMap<String, TableViewerColumnImageExtension>();
 private Map<String,TableViewerColumnToolTipExtension> toolTipExtensionMap = new HashMap<String, TableViewerColumnToolTipExtension>();
 private Map<String,TableViewerColumnEditExtension> editExtensionMap = new HashMap<String, TableViewerColumnEditExtension>();
+private Map<String,Composite> editCompositeMap = new HashMap<String,Composite>();
 private Map<String,Control> editControlMap = new HashMap<String,Control>();
 private VDataBindingContext dataBindingContext;
 private boolean editable = true;
@@ -112,14 +113,14 @@ public void install(TableViewerEditExtension tableViewerEditExtension) {
 	tableCursor.addSelectionListener(new SelectionAdapter() {
 		public void widgetSelected(SelectionEvent e) {
 			if (!editable) return;
-			for (Control c : editControlMap.values()) c.setVisible(false);
+			for (Control c : editCompositeMap.values()) c.setVisible(false);
 
 			TableItem row = tableCursor.getRow();
 			int rowIndex = tableViewer.getTable().indexOf(row);
 			tableViewer.getTable().select(rowIndex);
 			int colIndex = tableCursor.getColumn();
 			String propertyPath = columnExtensions.get(colIndex).getPropertyPath();
-			final Control editControl = editControlMap.get(propertyPath);
+			final Control editControl = editCompositeMap.get(propertyPath);
 			if (editControl == null) return;
 			
 			editControl.setVisible(true);
@@ -169,14 +170,24 @@ boolean hookElementChangeListeners() {
 
 public boolean isEditable(int columnIndex) {
 	String propertyPath = columnExtensions.get(columnIndex).getPropertyPath();
-	return editControlMap.get(propertyPath) != null;
+	return editCompositeMap.get(propertyPath) != null;
+}
 
+public boolean blockDefaultTraversing(int columnIndex) {
+	String propertyPath = columnExtensions.get(columnIndex).getPropertyPath();
+	Control editControl = editControlMap.get(propertyPath);
+	List<VTargetObservable> observables = dataBindingContext.getObservablesFor(editControl);
+	for (VTargetObservable observable : observables)
+		if (observable.blockDefaultTraversing())
+			return true;
+	return false;
 }
 
 public void install(TableViewerColumnEditExtension columnEditExtension) {
 	editExtensionMap.put(columnEditExtension.getPropertyPath(), columnEditExtension);
 	final Composite editControlComposite = new Composite(tableCursor, SWT.NONE);
 	editControlComposite.setLayout(new FormLayout());
+	// add callback to associate all created SelectionAwareObservables with a proper GetContextSelectionCallback
 	VDataBindingFactory.Callback factoryCallback = new VDataBindingFactory.Callback() {
 		public void bindingCreated(final VBinding binding) {
 			onExtensionInstalledCommands.add(new Runnable() {
@@ -205,7 +216,8 @@ public void install(TableViewerColumnEditExtension columnEditExtension) {
 	formData.bottom = new FormAttachment(100);
 	formData.right = new FormAttachment(100);
 	editControl.setLayoutData(formData);
-	editControlMap.put(columnEditExtension.getPropertyPath(), editControlComposite);
+	editCompositeMap.put(columnEditExtension.getPropertyPath(), editControlComposite);
+	editControlMap.put(columnEditExtension.getPropertyPath(), editControl);
 	editControlComposite.setVisible(false);
 	tableCursor.attachTraverseListener(editControl);
 	editControl.addFocusListener(new FocusListener() {
@@ -223,7 +235,15 @@ public void install(TableViewerColumnEditExtension columnEditExtension) {
 			Display.getCurrent().asyncExec(new Runnable() {
 				public void run() {
 					Control focusControl = Display.getCurrent().getFocusControl();
-					if (!isTableChild(tableViewer.getTable(), focusControl) && focusControl.getShell() == editControl.getShell()) {
+					if (focusControl != null && !isTableChild(tableViewer.getTable(), focusControl) && focusControl.getShell() == editControl.getShell()) {
+						/*
+						Control x = focusControl;
+						while (x != null) {
+							System.out.print(x.getClass() + " / ");
+							x = x.getParent();
+						}
+						System.out.println();
+						*/
 						editControlComposite.setVisible(false);
 						editControlComposite.setSize(0,0);
 						tableCursor.setRowColumn(null, null, false);
@@ -231,7 +251,8 @@ public void install(TableViewerColumnEditExtension columnEditExtension) {
 				}
 
 				private boolean isTableChild(Table table, Control focusControl) {
-					Composite parent = focusControl.getParent();
+					if (focusControl == null) return false;
+					Control parent = focusControl;
 					while (parent != null) {
 						if (parent == table) return true;
 						parent = parent.getParent();
@@ -328,7 +349,7 @@ public void install(TableViewerColumnToolTipExtension extension) {
 }
 
 public void setEditable(boolean editable) {
-	for (Control control : editControlMap.values()) {
+	for (Control control : editCompositeMap.values()) {
 		if (!editable) {
 			control.setVisible(false);
 			control.setSize(0,0);

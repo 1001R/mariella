@@ -51,7 +51,6 @@ VDataBindingContext dataBindingContext;
 Listener listener = new Listener() {
 	public void handleEvent(Event event) {
 		switch (event.type) {
-		// maschmid: we also need the mouse down event
 		case SWT.MouseDown:
 			mouseDown(event);
 			break;
@@ -241,28 +240,22 @@ void dispose(Event event) {
 void keyDown(Event event) {
 	if (row == null)
 		return;
+	final int rowIndex = table.indexOf(row);
+	final int columnIndex = column == null ? 0 : table.indexOf(column);
+	if (tableController.blockDefaultTraversing(columnIndex))
+		return;
+	
 	switch (event.character) {
 	case SWT.CR:
 		notifyListeners(SWT.DefaultSelection, new Event());
 		return;
 	}
-	final int rowIndex = table.indexOf(row);
-	final int columnIndex = column == null ? 0 : table.indexOf(column);
 	switch (event.keyCode) {
 	case SWT.ARROW_UP:
-		Display.getCurrent().asyncExec(new Runnable() {
-			public void run() {
-				setRowColumn(Math.max(0, rowIndex - 1), columnIndex, true);
-			}
-		});
+		setRowColumn(Math.max(0, rowIndex - 1), columnIndex, true);
 		break;
 	case SWT.ARROW_DOWN:
-		if (event.widget instanceof Control && ((Control)event.widget).isFocusControl())
-			Display.getCurrent().asyncExec(new Runnable() {
-				public void run() {
-					setRowColumn(Math.min(rowIndex + 1, table.getItemCount() - 1), columnIndex, true);
-				}
-			});
+		setRowColumn(Math.min(rowIndex + 1, table.getItemCount() - 1), columnIndex, true);
 		break;
 	}
 }
@@ -272,6 +265,15 @@ public void attachTraverseListener(Control editControl) {
 }
 
 void handleTraverse(final Event event) {
+	if (row == null) 
+		return;
+	
+	final int columnIndex = column == null ? 0 : table.indexOf(column);
+	if (tableController.blockDefaultTraversing(columnIndex))	{
+		event.doit = false;
+		return;
+	}
+	
 	switch (event.detail) {
 	case SWT.TRAVERSE_TAB_NEXT:
 		if (moveCursorLeftRight(+1))
@@ -280,11 +282,12 @@ void handleTraverse(final Event event) {
 		break;
 	case SWT.TRAVERSE_TAB_PREVIOUS:
 		if (!moveCursorLeftRight(-1))
-			// back move has to be started by table, otherwise we run into our tableFocusIn(...) method
+			// back move has to be started from table widget, otherwise we run into our tableFocusIn(...) method
 			dataBindingContext.getTraverseHandler().incrementFocusControl(table, -1);
 		event.doit = false;
 		break;
 	}
+	keyDown(event);
 }
 
 /**
@@ -337,7 +340,6 @@ private boolean moveCursorLeftRight(int direction) {
 }
 
 void paint(Event event) {
-	System.out.println("Row: " + row);
 	if (row == null)
 		return;
 	
@@ -485,7 +487,8 @@ void tableMouseDown(Event event) {
 void setRowColumn(int row, int column, boolean notify) {
 	TableItem item = row == -1 ? null : table.getItem(row);
 	TableColumn col = column == -1 || table.getColumnCount() == 0 ? null : table.getColumn(column);
-	setRowColumn(item, col, notify);
+	if (this.row != item || this.column != col)
+		setRowColumn(item, col, notify);
 }
 
 void setRowColumn(TableItem row, TableColumn column, boolean notify) {

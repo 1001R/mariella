@@ -42,6 +42,10 @@ public DateTimeObservableValue(DateTime dateTime) {
 	});
 }
 
+public boolean isResponsibleFor(Control control) {
+	return control == dateTime;
+}
+
 public Object getValueType() {
 	return Calendar.class;
 }
@@ -113,4 +117,7 @@ public void setContextSelectionCallback(	GetContextSelectionCallback getContextS
 	selectionDispatchingSupport.setContextSelectionCallback(getContextSelectionCallback);
 }
 
+public boolean blockDefaultTraversing() {
+	return false;
+}
 }

@@ -72,13 +72,16 @@ public void implementDoSetValue(Object value) {
 
 Object readTargetObject() {
 	Object element = null;
-	if (object instanceof IObservableValue)
+	if (object instanceof IObservableValue) {
 		element = ((IObservableValue)object).getValue();
-	else
+		if (element == null && log.isDebugEnabled())
+			log.debug("Target object is null (" + "IObservableValue " + object + " returned null)");
+	} else {
 		element = object;
-	if (element == null) {
-		if (log.isDebugEnabled())
+		if (element == null && log.isDebugEnabled())
 			log.debug("Target object is null");
+	}
+	if (element == null) {
 		return null;
 	}
 	

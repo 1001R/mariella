@@ -10,6 +10,10 @@ public DefaultEnabledObservableValue(Widget widget) {
 	super(widget);
 }
 
+public boolean isResponsibleFor(Control control) {
+	return control == getWidget();
+}
+
 public Object getValueType() {
 	return Boolean.class;
 }
@@ -22,10 +26,11 @@ protected void doSetValue(Object value) {
 	((Control)getWidget()).setEnabled((Boolean)value);
 }
 
-@Override
 public void extensionsInstalled() {
-	// TODO Auto-generated method stub
-	
+}
+
+public boolean blockDefaultTraversing() {
+	return false;
 }
 
 }
