@@ -41,7 +41,7 @@ public void refererClosed(VResourceRef ref, Object referer) {
 	if (ref.getReferers().size() == 0) {
 		VResource resource = resourceMap.remove(ref);
 		resourceRefInstanceMap.remove(ref);
-		if (resource != null && resource.getRef().getPersistentId() != null)
+		if (resource != null)
 			resourceRemovedFromPool(resource);
 	}
 }
