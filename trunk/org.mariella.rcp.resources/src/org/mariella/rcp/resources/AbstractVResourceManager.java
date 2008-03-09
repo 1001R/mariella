@@ -169,7 +169,7 @@ public void saveResource(IWorkbenchWindow window, VResource resource) throws VRe
 	saveResource(resource);
 }
 
-protected VResourceRef getRefForPersistentId(Object persistentId) {
+public VResourceRef getRefForPersistentId(Object persistentId) {
 	for (VResourceRef ref : resourceMap.keySet())
 		if (persistentId.equals(ref.getPersistentId()))
 			return ref;
