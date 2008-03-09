@@ -117,9 +117,6 @@ public VResource createNewResource(VResource resource) {
 
 public void addReferer(VResourceRef ref, Object referer) {
 	ref.addReferer(referer);
-	// assure resouceLoded(...) event is sent in order to update ProblemManager
-	// TODO is there a better solution?
-	getResource(ref);
 }
 
 private VResourceRef createNewRef() {
