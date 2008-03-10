@@ -40,7 +40,7 @@ public Object convert(Object value) {
 	try {
 		return super.convert(value);
 	} catch (Throwable t) {
-		if (log.isDebugEnabled()) log.debug("Conversion error: " + t.getMessage());
+		if (log.isDebugEnabled()) log.debug("Conversion error: ", t);
 		conversionError = t.getMessage();
 		return null;
 	}

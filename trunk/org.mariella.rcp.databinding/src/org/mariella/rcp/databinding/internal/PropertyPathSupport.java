@@ -129,6 +129,10 @@ private PropertyDescriptor getPropertyDescriptor(Object target, String propertyN
 }
 
 private PropertyDescriptor getPropertyDescriptor(Class clazz, String propertyName) {
+	if (clazz == null) {
+		log.error("Class is null");
+		throw new IllegalArgumentException();
+	}
 	PropertyDescriptor prop = cachedPropertyDescriptorMap.get(clazz);
 	if (prop != null) return prop;
 	try {

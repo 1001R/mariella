@@ -22,6 +22,7 @@ public static IObservableList createObservableList(VDataBindingContext ctx, List
 }
 
 public static IObservableList observeList(VDataBindingContext ctx, Object object, String propertyPath, Class type) {
+	/*
 	PropertyPathSupport supp = new PropertyPathSupport();
 	supp.object = object;
 	supp.propertyPath = propertyPath;
@@ -29,6 +30,7 @@ public static IObservableList observeList(VDataBindingContext ctx, Object object
 	Object value = supp.implementDoGetValue();
 	if (value instanceof IObservableList)
 		return (IObservableList)value;
+	*/
 	return new PropertyPathObservableList(ctx, Realm.getDefault(), object, propertyPath, type);
 }
 

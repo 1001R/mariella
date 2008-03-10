@@ -24,6 +24,7 @@ import org.mariella.rcp.databinding.internal.TableController;
 import org.mariella.rcp.databinding.internal.VDataBindingContextObserver;
 import org.mariella.rcp.databinding.internal.VDataBindingSelectionProvider;
 import org.mariella.rcp.databinding.internal.VTableViewerListBindingImpl;
+import org.mariella.rcp.databinding.internal.VTableViewerObservableList;
 import org.mariella.rcp.databinding.internal.VTargetObservable;
 
 
@@ -69,18 +70,28 @@ public VBinding bindList(IObservableList targetObservableList,
 		IObservableList modelObservableList,
 		UpdateListStrategy targetToModel, UpdateListStrategy modelToTarget,
 		BindingDomain domain) {
-	VBinding binding = new VBinding(this, createConentViewerListBinding(targetObservableList, modelObservableList, targetToModel, modelToTarget),
+	VBinding binding = new VBinding(this, createListBinding(targetObservableList, modelObservableList, targetToModel, modelToTarget),
 			domain);
 	bindings.add(binding);
 	return binding;
 }
 
-private final Binding createConentViewerListBinding(IObservableList targetObservableList,
+private final Binding createListBinding(IObservableList targetObservableList,
 		IObservableList modelObservableList,
 		UpdateListStrategy targetToModel, UpdateListStrategy modelToTarget) {
-	ListBinding result = new VTableViewerListBindingImpl(targetObservableList,
-			modelObservableList, targetToModel,
-			modelToTarget);
+	ListBinding result; 	
+
+	if (targetObservableList instanceof VTableViewerObservableList) {
+		result = new VTableViewerListBindingImpl(targetObservableList,
+				modelObservableList, 
+				targetToModel,
+				modelToTarget);
+	} else {
+		result = new ListBinding(targetObservableList, 
+				modelObservableList, 
+				targetToModel,
+				modelToTarget);
+	}
 	result.init(dataBindingContext);
 	return result;
 }
