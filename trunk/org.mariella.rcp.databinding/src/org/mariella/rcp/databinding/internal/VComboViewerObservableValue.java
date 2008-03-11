@@ -22,6 +22,8 @@ public class VComboViewerObservableValue extends VStructuredViewerSingleSelectio
 private SelectionDispatchingObservableSupport selectionDispatchingSupport;
 private ComboViewerLabelProviderExtension labelProviderExtension;
 private ValueSetExtension valueSetExtension = null;
+private Object value;
+private boolean extensionsInstalled = false;
 
 public VComboViewerObservableValue(IObservableValue nested, ComboViewer comboViewer) {
 	super(nested, comboViewer);
@@ -46,6 +48,9 @@ private void initialize() {
 }
 
 protected void doSetValue(Object value) {
+	this.value = value;
+	if (!extensionsInstalled)
+		return;
 	if (valueSetExtension != null) {
 		applyValueSet();
 	}
@@ -110,6 +115,8 @@ public boolean isLabelProperty(Object element, String property) {
 public void removeListener(ILabelProviderListener listener) {}
 
 public void extensionsInstalled() {
+	extensionsInstalled = true;
+	setValue(value);
 }
 
 public void setContextSelectionCallback(	GetContextSelectionCallback getContextSelectionCallback) {
