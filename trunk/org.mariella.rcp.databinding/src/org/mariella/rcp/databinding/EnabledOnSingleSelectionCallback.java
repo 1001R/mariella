@@ -10,14 +10,14 @@ public class EnabledOnSingleSelectionCallback implements EnabledCallback, ISelec
 
 ISelectionProvider selectionProvider;
 EnabledStateModelObservableValue enabledStateValue;
-boolean enabled = false;
+boolean hadSelectionChangedEvent = false;
 
 public EnabledOnSingleSelectionCallback(ISelectionProvider selectionProvider) {
 	this.selectionProvider = selectionProvider;
 }
 
 public boolean isEnabled() {
-	return enabled;
+	return ((IStructuredSelection)selectionProvider.getSelection()).size() == 1;
 }
 
 public void dispose() {
@@ -25,7 +25,7 @@ public void dispose() {
 }
 
 public void selectionChanged(SelectionChangedEvent event) {
-	enabled = ((IStructuredSelection)event.getSelection()).size() == 1;
+	hadSelectionChangedEvent = true;
 	enabledStateValue.revalidate();
 }
 
