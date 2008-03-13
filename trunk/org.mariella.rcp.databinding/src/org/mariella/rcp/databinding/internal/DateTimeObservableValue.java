@@ -76,6 +76,10 @@ public VDataBindingSelectionDispatcher getSelectionDispatcher() {
 	return selectionDispatchingSupport;
 }
 
+public void setOffsetSelection(boolean offsetSelection) {
+	selectionDispatchingSupport.setOffsetSelection(offsetSelection);
+}
+
 public void setSelectionBasePath(Object[] path) {
 	selectionDispatchingSupport.implementSetSelectionBasePath(path);
 }

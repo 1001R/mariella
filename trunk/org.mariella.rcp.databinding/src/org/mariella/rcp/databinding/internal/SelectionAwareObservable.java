@@ -24,4 +24,6 @@ VDataBindingSelection getSelection();
 void setSelectionTargetControl(Control control);
 
 void setContextSelectionCallback(GetContextSelectionCallback getContextSelectionCallback);
+
+void setOffsetSelection(boolean offsetSelection);
 }

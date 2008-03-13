@@ -130,6 +130,10 @@ public VDataBindingSelectionDispatcher getSelectionDispatcher() {
 	return selectionDispatchingSupport;
 }
 
+public void setOffsetSelection(boolean offsetSelection) {
+	selectionDispatchingSupport.setOffsetSelection(offsetSelection);
+}
+
 public VDataBindingSelection getSelection() {
 	if (text != null && !text.isDisposed() && text.isFocusControl())
 		return selectionDispatchingSupport.implementGetSelection();

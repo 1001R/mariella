@@ -26,7 +26,7 @@ public SelectionManagementExtension(Object[] rootQualifiers1, Object[] rootQuali
 
 public void install(VBinding binding) {
 	if (!(binding.getBinding().getTarget() instanceof SelectionAwareObservable)) {
-		throw new IllegalStateException("SelectorExtension can only be applied to bindings where the target observable implements the " + SelectionAwareObservable.class.getName() + " interface");
+		throw new IllegalStateException("SelectionManagementExtension can only be applied to bindings where the target observable implements the " + SelectionAwareObservable.class.getName() + " interface");
 	}
 	
 	((VDataBindingSelectionProvider)binding.getDataBindingContext().getDataBindingSelectionProvider()).addManagedBinding(binding);

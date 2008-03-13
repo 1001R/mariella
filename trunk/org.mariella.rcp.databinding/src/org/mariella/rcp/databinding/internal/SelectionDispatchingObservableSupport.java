@@ -9,6 +9,7 @@ private SelectionDecorator selectionDecorator;
 private Object[] basePath;
 private GetContextSelectionCallback contextSelectionCallback;
 private VTargetObservable targetObservable;
+private boolean offsetSelection = false;
 
 public SelectionDispatchingObservableSupport(VTargetObservable targetObservable, SelectionDecorator selectionDecorator) {
 	this.selectionDecorator = selectionDecorator;
@@ -28,7 +29,8 @@ public void dispatchSelection(VDataBindingSelectionDispatchContext dispatchCtx) 
 			dispatchCtx.dispatched = true;
 		}
 	} finally {
-		dispatchCtx.resetOffset();
+		if (!(offsetSelection && dispatchCtx.dispatched))
+			dispatchCtx.resetOffset();
 	}
 	if (!dispatchCtx.dispatched) 
 		dispatchCtx.invokeNextDispatcher(false);
@@ -51,6 +53,10 @@ public void setSelectionTargetControl(Control control) {
 
 public void setContextSelectionCallback(	GetContextSelectionCallback getContextSelectionCallback) {
 	this.contextSelectionCallback = getContextSelectionCallback;
+}
+
+public void setOffsetSelection(boolean offsetSelection) {
+	offsetSelection = offsetSelection;
 }
 
 }

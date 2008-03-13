@@ -60,6 +60,10 @@ public VDataBindingSelectionDispatcher getSelectionDispatcher() {
 	return selectionDispatchingSupport;
 }
 
+public void setOffsetSelection(boolean offsetSelection) {
+	selectionDispatchingSupport.setOffsetSelection(offsetSelection);
+}
+
 public VDataBindingSelection getSelection() {
 	Combo combo = getComboViewer().getCombo(); 
 	if (combo != null && !combo.isDisposed() && combo.isFocusControl())

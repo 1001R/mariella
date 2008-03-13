@@ -89,7 +89,7 @@ public void validateActions() {
 
 private ClipboardSupportingObservable getClipboardSupportingObservable(ISelection selection) {
 	if (selection instanceof VDataBindingSelection) {
-		VTargetObservable target = ((VDataBindingSelection)selection).targetObservable;
+		VTargetObservable target = ((VDataBindingSelection)selection).getTargetObservable();
 		if (target instanceof ClipboardSupportingObservable) {
 			return (ClipboardSupportingObservable)target;
 		}

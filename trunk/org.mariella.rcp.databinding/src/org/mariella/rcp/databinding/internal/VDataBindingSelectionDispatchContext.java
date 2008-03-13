@@ -37,7 +37,7 @@ public Object nextPathToken() {
 }
 
 public boolean matchesPath(Object[] matchPath) {
-	for (int i=selectionPathOffset, m = 0; m<matchPath.length; i++, m++)
+	for (int i=selectionPathOffset, m = 0; m<matchPath.length && i<selectionPath.length; i++, m++)
 		if (!selectionPath[i].equals(matchPath[m]))	return false;
 	return true;
 }

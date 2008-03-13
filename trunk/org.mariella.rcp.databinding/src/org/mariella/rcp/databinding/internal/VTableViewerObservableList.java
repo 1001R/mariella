@@ -32,6 +32,7 @@ boolean updatingSelection = false;
 List<PropertyListenerSupport> elementPropertyListenerSupportList = new ArrayList<PropertyListenerSupport>();
 Map<Object,Object> elementListenerTargetToElementMap = new HashMap<Object, Object>();
 List input;
+boolean offsetSelection = false;
 
 PropertyChangeListener elementPropertyChangeListener = new PropertyChangeListener() {
 	public void propertyChange(PropertyChangeEvent evt) {
@@ -166,7 +167,8 @@ public void dispatchSelection(VDataBindingSelectionDispatchContext dispatchCtx) 
 			}
 		}
 	} finally {
-		dispatchCtx.resetOffset();
+		if (!(offsetSelection && dispatchCtx.dispatched))
+			dispatchCtx.resetOffset();
 	}
 	if (!dispatchCtx.dispatched)
 		dispatchCtx.invokeNextDispatcher(false);
@@ -228,6 +230,10 @@ public void setContextSelectionCallback(	GetContextSelectionCallback getContextS
 
 public boolean blockDefaultTraversing() {
 	return false;
+}
+
+public void setOffsetSelection(boolean offsetSelection) {
+	this.offsetSelection = offsetSelection;
 }
 
 }
