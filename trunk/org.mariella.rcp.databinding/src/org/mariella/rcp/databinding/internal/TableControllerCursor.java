@@ -299,7 +299,8 @@ private boolean moveCursorLeftRight(int direction) {
 	if (row == null)
 		return false;
 	int rowIndex = table.indexOf(row);
-	int columnIndex = column == null ? 0 : table.indexOf(column);
+	int columnIndex = column == null ? -1 : table.indexOf(column);
+	int startColumnIndex = columnIndex;
 
 	int columnCount = table.getColumnCount();
 	if (columnCount == 0)
@@ -328,9 +329,11 @@ private boolean moveCursorLeftRight(int direction) {
 				return true;
 			}
 		}
-		if (rowIndex < table.getItemCount()-1) {
+		if (startColumnIndex != -1 && rowIndex < table.getItemCount()-1) {
+			// there is one editable column, go to next row and go to the first editable cell
 			tableViewer.setSelection(new StructuredSelection(tableViewer.getElementAt(rowIndex+1)));
-			setRowColumn(rowIndex+1, 0, true);
+			setRowColumn(rowIndex+1, -1, true);
+			moveCursorLeftRight(+1);
 			return true;
 		} else {
 			return false;
@@ -452,7 +455,9 @@ void tableFocusIn(Event event) {
 		if (row == null) {
 			if (table.getItemCount() > 0) {
 				tableViewer.setSelection(new StructuredSelection(tableViewer.getElementAt(0)));
-				setRowColumn(0, 0, true);
+				setRowColumn(0, -1, true);
+				moveCursorLeftRight(+1);
+				//
 			}
 		}
 		if (row != null) {
@@ -551,7 +556,10 @@ void setRowColumn(TableItem row, TableColumn column, boolean notify) {
 			table.showColumn(column);
 		}
 		int columnIndex = column == null ? 0 : table.indexOf(column);
-		setBounds(row.getBounds(columnIndex));
+		if (tableController.isEditable(columnIndex))
+			setBounds(row.getBounds(columnIndex));
+		else
+			setBounds(0,0,0,0);
 		/*
 		redraw();
 		*/
