@@ -3,7 +3,7 @@ package org.mariella.rcp.databinding.internal;
 import org.eclipse.swt.widgets.Control;
 import org.mariella.rcp.databinding.SelectionPath;
 
-public class SelectionDispatchingObservableSupport {
+public class SelectionDispatchingObservableSupport implements VDataBindingSelectionDispatcher{
 
 private SelectionDecorator selectionDecorator;
 private Object[] basePath;
@@ -19,18 +19,19 @@ public void implementSetSelectionBasePath(Object[] path) {
 	this.basePath = path;;
 }
 
-public boolean implementDispatchSelectionPath(SelectionPath path, int offset) {
-	if (hasBasePath(path, offset)) {
-		selectionDecorator.decorateSelected();
-		return true;
+public void dispatchSelection(VDataBindingSelectionDispatchContext dispatchCtx) {
+	dispatchCtx.markOffset();
+	try {
+		dispatchCtx.nextPathToken();
+		if (dispatchCtx.matchesPath(basePath)) {
+			selectionDecorator.decorateSelected();
+			dispatchCtx.dispatched = true;
+		}
+	} finally {
+		dispatchCtx.resetOffset();
 	}
-	return false;
-}
-
-private boolean hasBasePath(SelectionPath path, int offset) {
-	for (int i=offset, c = 0; i<offset+basePath.length; i++, c++)
-		if (!path.getQualifiers()[i].equals(basePath[c]))	return false;
-	return true;
+	if (!dispatchCtx.dispatched) 
+		dispatchCtx.invokeNextDispatcher(false);
 }
 
 public VDataBindingSelection implementGetSelection() {

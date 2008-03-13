@@ -7,7 +7,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.mariella.rcp.databinding.SelectionPath;
 
 public abstract class VAbstractButtonObservableValue extends AbstractSWTObservableValue implements SelectionAwareObservable, EnabledObservableValueFactory, VTargetObservable {
 
@@ -54,8 +53,8 @@ public synchronized void dispose() {
 	}
 }
 
-public boolean dispatchSelectionPath(SelectionPath path, int offset) {
-	return selectionDispatchingSupport.implementDispatchSelectionPath(path, offset);
+public VDataBindingSelectionDispatcher getSelectionDispatcher() {
+	return selectionDispatchingSupport;
 }
 
 public void setSelectionBasePath(Object[] path) {

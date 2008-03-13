@@ -10,7 +10,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
-import org.mariella.rcp.databinding.SelectionPath;
 
 public class VTextObservableValue extends AbstractSWTVetoableValue implements SelectionAwareObservable, EnabledObservableValueFactory, VTargetObservable {
 
@@ -127,8 +126,8 @@ public void dispose() {
 	super.dispose();
 }
 
-public boolean dispatchSelectionPath(SelectionPath path, int offset) {
-	return selectionDispatchingSupport.implementDispatchSelectionPath(path, offset);
+public VDataBindingSelectionDispatcher getSelectionDispatcher() {
+	return selectionDispatchingSupport;
 }
 
 public VDataBindingSelection getSelection() {

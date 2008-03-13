@@ -47,9 +47,13 @@ public void implementConfigurePage(int index, IFormPage page) {
 }
 
 public void implementSetFocus() {
-	IFormPage activePage = ((AbstractVResourceFormEditor)editorPart).getActivePageInstance();
-	if (activePage != null)
-		activePage.setFocus();
+	Display.getCurrent().asyncExec(new Runnable() {
+		public void run() {
+			IFormPage activePage = ((AbstractVResourceFormEditor)editorPart).getActivePageInstance();
+			if (activePage != null && !activePage.getPartControl().isFocusControl())
+				activePage.setFocus();
+		}
+	});
 }
 
 }

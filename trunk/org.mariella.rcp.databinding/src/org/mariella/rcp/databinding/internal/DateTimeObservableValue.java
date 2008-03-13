@@ -10,7 +10,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DateTime;
-import org.mariella.rcp.databinding.SelectionPath;
 
 public class DateTimeObservableValue extends AbstractSWTVetoableValue implements SelectionAwareObservable, VTargetObservable {
 
@@ -73,9 +72,8 @@ protected Object doGetValue() {
 	return readCalendarValue();
 }
 
-
-public boolean dispatchSelectionPath(SelectionPath path, int offset) {
-	return selectionDispatchingSupport.implementDispatchSelectionPath(path, offset);
+public VDataBindingSelectionDispatcher getSelectionDispatcher() {
+	return selectionDispatchingSupport;
 }
 
 public void setSelectionBasePath(Object[] path) {

@@ -1,17 +1,10 @@
 package org.mariella.rcp.databinding.internal;
 
 import org.eclipse.swt.widgets.Control;
-import org.mariella.rcp.databinding.SelectionPath;
 
 public interface SelectionAwareObservable {
 
-/**
- * Returns true if it was responsible for selection path and had dispatched it.
- * 
- * @param path
- * @return
- */
-boolean dispatchSelectionPath(SelectionPath path, int offset);
+VDataBindingSelectionDispatcher getSelectionDispatcher();
 
 void setSelectionBasePath(Object[] qualifiers);
 

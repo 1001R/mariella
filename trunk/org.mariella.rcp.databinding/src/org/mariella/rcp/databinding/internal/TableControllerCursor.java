@@ -7,13 +7,10 @@ import org.eclipse.swt.SWTException;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.ScrollBar;
@@ -522,6 +519,13 @@ void tableMouseDown(Event event) {
 	setRowColumn(item, newColumn, true);
 	setFocus();
 	return;
+}
+
+void setColumn(int column, boolean notify) {
+	if (row == null && table.getSelectionCount() > 0)
+		row = table.getSelection()[0];
+	TableColumn col = column == -1 || table.getColumnCount() == 0 ? null : table.getColumn(column);
+	setRowColumn(this.row, col, notify);
 }
 
 void setRowColumn(int row, int column, boolean notify) {

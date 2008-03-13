@@ -19,7 +19,6 @@ import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.mariella.rcp.databinding.SelectionPath;
 import org.mariella.rcp.databinding.VDataBindingContext;
 import org.mariella.rcp.databinding.contentassist.ContentAssistantController;
 
@@ -160,8 +159,8 @@ public TextViewer getTextViewer() {
 	return textViewer;
 }
 
-public boolean dispatchSelectionPath(SelectionPath path, int offset) {
-	return selectionDispatchingSupport.implementDispatchSelectionPath(path, offset);
+public VDataBindingSelectionDispatcher getSelectionDispatcher() {
+	return selectionDispatchingSupport;
 }
 
 public void setSelectionBasePath(Object[] path) {

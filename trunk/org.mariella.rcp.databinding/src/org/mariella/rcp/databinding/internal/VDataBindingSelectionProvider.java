@@ -1,7 +1,7 @@
 package org.mariella.rcp.databinding.internal;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -14,21 +14,20 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.forms.editor.FormEditor;
-import org.mariella.rcp.databinding.FormPageSelectionExtension;
+import org.mariella.rcp.databinding.ContextSelectionManagementExtension;
 import org.mariella.rcp.databinding.SelectionPath;
 import org.mariella.rcp.databinding.VBinding;
 import org.mariella.rcp.databinding.VDataBindingContext;
 
 public class VDataBindingSelectionProvider implements ISelectionProvider {
+@SuppressWarnings("unused")
 private static Log log = LogFactory.getLog(VDataBindingSelectionProvider.class);
 
 @SuppressWarnings("unused")
 private VDataBindingContext dataBindingContext;
 private ListenerList listeners = new ListenerList();
 private List<VBinding> managedBindings = new ArrayList<VBinding>();
-FormEditor formEditor = null;
+List<ContextSelectionManagementExtension> contextSelectionManagementExtensions = new ArrayList<ContextSelectionManagementExtension>();
 private ISelectionProvider delegateSelectionProvider = null;
 
 public VDataBindingSelectionProvider(VDataBindingContext dbc) {
@@ -36,53 +35,53 @@ public VDataBindingSelectionProvider(VDataBindingContext dbc) {
 }
 
 public ISelection getSelection() {
-	if (formEditor != null && formEditor.getActivePageInstance() == null) return new StructuredSelection();
-	
 	for (VBinding binding : managedBindings) {
+		// Ask every binding for its selection (if selected). The selection is relative to the context (it does not include for example the page id)
 		VDataBindingSelection selection = ((SelectionAwareObservable)binding.getBinding().getTarget()).getSelection();
 		if (selection != null) {
-			if (formEditor == null || formEditor.getActivePageInstance().getId().equals(((SelectionPath)selection.getFirstElement()).getQualifiers()[0]))
-				return selection;
+			// the target of the binding is selected, let the ContextSelectionManagementExtension complete the selection path...
+			List<ContextSelectionManagementExtension> reverseExtension = new ArrayList<ContextSelectionManagementExtension>();
+			Collections.reverse(reverseExtension);
+			for (ContextSelectionManagementExtension selExt : reverseExtension) {
+				selection = selExt.completeSelectionPath(selection);
+				if (selection == null)
+					return new StructuredSelection();
+			}
+			return selection;
 		}
 	}
+
 	if (delegateSelectionProvider == null) return new StructuredSelection();
 	return delegateSelectionProvider.getSelection();
 }
 
 public void setSelection(final ISelection selection) {
+	VDataBindingSelectionDispatchContext dispatchCtx = new VDataBindingSelectionDispatchContext();
 	if(selection instanceof IStructuredSelection) {
 		for (Iterator i= ((IStructuredSelection)selection).iterator(); i.hasNext();) {
 			final Object element = i.next();
 			if (element instanceof SelectionPath) {
-				boolean changedPage = false;
-				if (formEditor != null) {
-					String newPageId = (String)((SelectionPath)element).getQualifiers()[0];
-					changedPage = !formEditor.getActivePageInstance().getId().equals(newPageId);
-					if (changedPage)
-						formEditor.setActivePage(newPageId);
-				}
-				Runnable dispatchBlock = new Runnable() {
-					public void run() {
-						boolean dispatched = false;
-						for (VBinding binding : managedBindings) {
-							if (((SelectionAwareObservable)binding.getBinding().getTarget()).dispatchSelectionPath((SelectionPath)element, 0)) {
-								dispatched = true;
-							}
-						}
-						if (!dispatched) {
-							 if (delegateSelectionProvider != null)
-								 delegateSelectionProvider.setSelection(selection);
-							 else
-								 log.warn("Could not dispatch selection having path " + Arrays.toString(((SelectionPath)element).getQualifiers()) + ". If you work with multiple pages, do not forget to add a FormPageSelectionExtension!");
-						}
+				final SelectionPath path = (SelectionPath)element;
+				List<VDataBindingSelectionDispatcher> allDispatchers = new ArrayList<VDataBindingSelectionDispatcher>();
+				allDispatchers.addAll(contextSelectionManagementExtensions);
+				for (VBinding binding : managedBindings) {
+					if (binding.getBinding().getTarget() instanceof SelectionAwareObservable) {
+						VDataBindingSelectionDispatcher dispatcher = ((SelectionAwareObservable)binding.getBinding().getTarget()).getSelectionDispatcher();
+						if (dispatcher != null)
+							allDispatchers.add(dispatcher);
 					}
-				};
-				if (changedPage) 
-					Display.getCurrent().asyncExec(dispatchBlock);
-				else
-					dispatchBlock.run();
+				}
+				
+				dispatchCtx.dispatcherChain = allDispatchers.iterator();
+				dispatchCtx.selectionPath = path.getQualifiers(); 
+				
+				dispatchCtx.invokeNextDispatcher(false);
 			}
 		}
+	}
+	if (!dispatchCtx.dispatched) {
+		 if (delegateSelectionProvider != null)
+			 delegateSelectionProvider.setSelection(selection);
 	}
 }
 
@@ -108,9 +107,8 @@ public void addManagedBinding(VBinding binding) {
 	managedBindings.add(binding);
 }
 
-public void installFormPageSelection(FormPageSelectionExtension formPageSelectionExtension) {
-	formEditor = formPageSelectionExtension.getFormEditor();
-	
+public void installContextSelectionManagementExtension(ContextSelectionManagementExtension ext) {
+	contextSelectionManagementExtensions.add(ext);
 }
 
 public ISelectionProvider getDelegateSelectionProvider() {

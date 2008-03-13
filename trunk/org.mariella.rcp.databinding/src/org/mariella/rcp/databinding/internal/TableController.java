@@ -39,7 +39,6 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.mariella.rcp.databinding.BindingDomain;
 import org.mariella.rcp.databinding.SelectionManagementExtension;
-import org.mariella.rcp.databinding.SelectionPath;
 import org.mariella.rcp.databinding.TableViewerColumnEditExtension;
 import org.mariella.rcp.databinding.TableViewerColumnExtension;
 import org.mariella.rcp.databinding.TableViewerColumnImageExtension;
@@ -321,11 +320,12 @@ public void addListener(ILabelProviderListener listener) {}
 
 public void removeListener(ILabelProviderListener listener) {}
 
-public void dispatchSelectionPath(SelectionPath path, int offset, int row) {
-	String propertyPath = (String)path.getQualifiers()[offset];
+public void dispatchSelection(VDataBindingSelectionDispatchContext ctx) {
+	String propertyPath = (String)ctx.nextPathToken();
+	if (propertyPath == null) return;
 	
 	int colIndex = getColumnIndex(propertyPath);
-	tableCursor.setRowColumn(row, colIndex, true);
+	tableCursor.setColumn(colIndex, true);
 }
 
 private int getColumnIndex(String propertyPath) {

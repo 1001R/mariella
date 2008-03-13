@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Widget;
 import org.mariella.rcp.databinding.SelectionPath;
 import org.mariella.rcp.databinding.VDataBindingContext;
 
-public class VTableViewerObservableList extends AbstractObservableList implements ISWTObservable, SelectionAwareObservable, EnabledObservableValueFactory, VTargetObservable {
+public class VTableViewerObservableList extends AbstractObservableList implements ISWTObservable, SelectionAwareObservable, EnabledObservableValueFactory, VTargetObservable, VDataBindingSelectionDispatcher {
 
 VDataBindingContext dataBindingContext;
 TableViewer tableViewer;
@@ -143,29 +143,33 @@ public Widget getWidget() {
 	return tableViewer.getTable();
 }
 
-public boolean dispatchSelectionPath(SelectionPath path, int offset) {
-	if (updatingSelection) return false;
-	if (!hasBasePath(path, offset)) return false;
-	
-	offset += selectionBasePath.length;
-	if (offset >= path.getQualifiers().length) return false;
-	
-	int index = (Integer)path.getQualifiers()[offset];
-	tableViewer.setSelection(new StructuredSelection(tableViewer.getElementAt(index)));
-	tableViewer.getTable().setTopIndex(index);
-	
-	offset++;
-	if (tableController != null && offset < path.getQualifiers().length) {
-		tableController.dispatchSelectionPath(path, offset, index);
-	}
-	
-	return true;
+public VDataBindingSelectionDispatcher getSelectionDispatcher() {
+	return this;
 }
 
-private boolean hasBasePath(SelectionPath path, int offset) {
-	for (int i=offset, c = 0; i<offset+selectionBasePath.length; i++, c++)
-		if (!path.getQualifiers()[i].equals(selectionBasePath[c]))	return false;
-	return true;
+public void dispatchSelection(VDataBindingSelectionDispatchContext dispatchCtx) {
+	if (updatingSelection) return;
+	
+	dispatchCtx.markOffset();
+	try {
+		dispatchCtx.nextPathToken();
+		if (dispatchCtx.matchesPath(selectionBasePath)) {
+			dispatchCtx.dispatched = true;
+			if (dispatchCtx.hasNextPathToken()) {
+				int index = (Integer)dispatchCtx.nextPathToken();
+				tableViewer.setSelection(new StructuredSelection(tableViewer.getElementAt(index)));
+				tableViewer.getTable().setTopIndex(index);
+			
+				if (tableController != null) {
+					tableController.dispatchSelection(dispatchCtx);
+				}
+			}
+		}
+	} finally {
+		dispatchCtx.resetOffset();
+	}
+	if (!dispatchCtx.dispatched)
+		dispatchCtx.invokeNextDispatcher(false);
 }
 
 public VDataBindingSelection getSelection() {

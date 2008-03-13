@@ -12,7 +12,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Control;
 import org.mariella.rcp.databinding.ComboViewerLabelProviderExtension;
-import org.mariella.rcp.databinding.SelectionPath;
 import org.mariella.rcp.databinding.VBinding;
 import org.mariella.rcp.databinding.ValueSetExtension;
 
@@ -57,8 +56,8 @@ protected void doSetValue(Object value) {
 	super.doSetValue(value);
 }
 
-public boolean dispatchSelectionPath(SelectionPath path, int offset) {
-	return selectionDispatchingSupport.implementDispatchSelectionPath(path, offset);
+public VDataBindingSelectionDispatcher getSelectionDispatcher() {
+	return selectionDispatchingSupport;
 }
 
 public VDataBindingSelection getSelection() {

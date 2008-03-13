@@ -177,8 +177,10 @@ private void implementOpenEditor(IWorkbenchWindow window, ProblemResource res, S
 	IEditorInput editorInput = getEditorInput(res);
 	if (res.getResourceOpenHandler() != null)
 		res.getResourceOpenHandler().openEditor(window, editorInput, editorId, cb);
-	IEditorPart part = window.getActivePage().openEditor(getEditorInput(res), editorId);
-	cb.editorOpened(part);
+	else {
+		IEditorPart part = window.getActivePage().openEditor(getEditorInput(res), editorId);
+		cb.editorOpened(part);
+	}
 }
 
 private IEditorInput getEditorInput(ProblemResource res) {
