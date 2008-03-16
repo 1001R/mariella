@@ -54,8 +54,8 @@ public Object implementDoGetValue() {
 public void implementDoSetValue(Object value) {
 	try {
 		Object targetObject = readTargetObject();
-		PropertyDescriptor propDescr = getPropertyDescriptor(targetObject, pathTokens.get(pathTokens.size()-1));
 		if (targetObject == null) return;
+		PropertyDescriptor propDescr = getPropertyDescriptor(targetObject, pathTokens.get(pathTokens.size()-1));
 		if (propertyPath.equals("this"))
 			throw new IllegalStateException("A 'this' property cannot be written");
 		if (propDescr.getWriteMethod() == null) {
