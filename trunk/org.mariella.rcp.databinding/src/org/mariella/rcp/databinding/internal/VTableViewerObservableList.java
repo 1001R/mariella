@@ -129,7 +129,11 @@ private void removeElementChangedListener(Object o) {
 }
 
 public Object remove(int index) {
-	return remove(tableViewer.getElementAt(index));
+	// update slave list
+	Object removed = ((List)tableViewer.getInput()).remove(index);
+	removeElementChangedListener(removed);
+	tableViewer.remove(removed);
+	return removed;
 }
 
 public Object getElementType() {
