@@ -90,6 +90,10 @@ public Collection<VResourceRef> getAppearingRefs() {
 	return resourceMap.keySet();
 }
 
+public Collection<VResource> getAppearingResources() {
+	return resourceMap.values();
+}
+
 public Collection<VResource> getLoadedResources() {
 	List<VResource> loaded = new ArrayList<VResource>(resourceMap.size());
 	for (VResource res : resourceMap.values())
