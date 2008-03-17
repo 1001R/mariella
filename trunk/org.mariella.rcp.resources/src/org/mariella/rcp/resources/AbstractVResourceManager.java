@@ -135,15 +135,19 @@ public VResource getResource(VResourceRef ref) {
 		if (resourceRefInstanceMap.containsKey(ref))
 			ref = resourceRefInstanceMap.get(ref);
 		resource = implementBuildResource(ref.getPersistentId());
-		resource.setRef(ref);
-		resourceMap.put(ref, resource);
-		resourceRefInstanceMap.put(ref, ref);
-		if (ref.getRefId() > lastRefId)
-			// if it comes from an IPersistableElement, it comes already with an id
-			lastRefId = ref.getRefId();
-		resourceLoaded(resource);
+		putResource(ref, resource);
 	}
 	return resource;
+}
+
+public void putResource(VResourceRef ref, VResource resource) {
+	resource.setRef(ref);
+	resourceMap.put(ref, resource);
+	resourceRefInstanceMap.put(ref, ref);
+	if (ref.getRefId() > lastRefId)
+		// if it comes from an IPersistableElement, it comes already with an id
+		lastRefId = ref.getRefId();
+	resourceLoaded(resource);
 }
 
 public void reload(VResourceRef ref) {
