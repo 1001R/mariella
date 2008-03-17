@@ -15,7 +15,7 @@ import org.eclipse.core.databinding.observable.value.IValueChangeListener;
 import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
 import org.mariella.rcp.databinding.VDataBindingContext;
 
-public class PropertyPathObservableList extends ObservableList {
+public class PropertyPathObservableList extends ObservableList implements VDataBindingContextObserver {
 
 private PropertyPathSupport propertyPathSupport = new PropertyPathSupport();
 private PropertyListenerSupport propertyListenSupport;
@@ -61,6 +61,7 @@ public PropertyPathObservableList(VDataBindingContext dataBindingContext, Realm 
 	this.propertyListenSupport = new PropertyListenerSupport(propertyChangeListener, propertyPathSupport.getLastPathComponent());
 
 	updateWrappedList();
+	this.dataBindingContext.addObserver(this);
 }
 
 private void updateWrappedList() {
@@ -103,6 +104,10 @@ private List primGetValues() {
 
 public Object getObserved() {
 	return propertyPathSupport.object;
+}
+
+public void aboutToUpdateModelToTarget() {
+	updateWrappedList();
 }
 
 }
