@@ -4,7 +4,6 @@ Bundle-Name: Logging Plug-in
 Bundle-SymbolicName: org.mariella.logging
 Bundle-Version: 1.0.0
 Bundle-Activator: org.mariella.logging.LogPlugin
-Require-Bundle: org.eclipse.core.runtime,
- org.slf4j.log4j
+Require-Bundle: org.eclipse.core.runtime
 Eclipse-LazyStart: true
 Export-Package: org.mariella.logging
