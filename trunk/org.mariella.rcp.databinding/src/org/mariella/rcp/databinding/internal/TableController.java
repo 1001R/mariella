@@ -226,9 +226,11 @@ public void install(TableViewerColumnEditExtension columnEditExtension) {
 		public void focusLost(FocusEvent e) {
 			tableViewer.refresh(selectionHolder.getValue());
 			tableViewer.getTable().redraw();
-			Display.getCurrent().asyncExec(new Runnable() {
+			
+			Runnable focusLostBlock = new Runnable() {
 				public void run() {
 					Control newFocusControl = Display.getCurrent().getFocusControl();
+					System.out.println("process focus lost; newFocusControl is " + newFocusControl);
 					if (newFocusControl != null && !newFocusControl.isDisposed() && !editControl.isDisposed() &&
 							!isTableChild(tableViewer.getTable(), newFocusControl) && newFocusControl.getShell() == editControl.getShell()) {
 						// if focus was lost to something out of the table, we hide the edit control
@@ -247,7 +249,9 @@ public void install(TableViewerColumnEditExtension columnEditExtension) {
 					}
 					return false;
 				}
-			});
+			}; 
+			
+			Display.getCurrent().asyncExec(focusLostBlock);
 		}
 	});
 }

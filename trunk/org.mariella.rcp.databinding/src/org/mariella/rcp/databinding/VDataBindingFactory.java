@@ -24,7 +24,9 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Text;
+import org.mariella.rcp.databinding.internal.AsyncActionWrapper;
 import org.mariella.rcp.databinding.internal.BindingDomainExtensionDependendBinding;
+import org.mariella.rcp.databinding.internal.ButtonContributionItem;
 import org.mariella.rcp.databinding.internal.EnabledObservableValue;
 import org.mariella.rcp.databinding.internal.EnabledObservableValueFactory;
 import org.mariella.rcp.databinding.internal.EnabledStateModelObservableValue;
@@ -367,6 +369,12 @@ VBinding createEnabledBinding(VDataBindingContext dbc, EnabledObservableValueFac
 	return binding;	
 }
 
+public VBinding createActionBinding(VDataBindingContext dbc, Button button, Action action, BindingDomainExtension ...extensions) {
+	new ButtonContributionItem(button, new AsyncActionWrapper(action));
+	return createActionBinding(dbc, action, extensions);
+}
+
+@Deprecated
 public VBinding createActionBinding(VDataBindingContext dbc, Action action, BindingDomainExtension ...extensions) {
 	IObservableValue actionObservable = RcpObservables.observeAction(dbc, action);
 	BindingDomain domain = new BindingDomain("action", DefaultBean.class, extensions);
@@ -380,7 +388,6 @@ public VBinding createActionBinding(VDataBindingContext dbc, Action action, Bind
 	completeBindingCreation(binding, domain);
 	
 	return binding;
-	
 }
 
 public BindingDomain copyExtend(Object domainSymbol, BindingDomainExtension ... extensions) {

@@ -1,4 +1,4 @@
-package org.mariella.rcp.actions;
+package org.mariella.rcp.databinding.internal;
 
 import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.action.IAction;
@@ -12,11 +12,6 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Widget;
 
-@Deprecated
-/**
- * Use VDataBindingFactory#createActionBinding(VDataBindingContext, Button, Action, BindingDomainExtensions ...) instead.
- * 
- */
 public class ButtonContributionItem extends ContributionItem {
 
 private IAction action;
@@ -28,8 +23,9 @@ private final IPropertyChangeListener propertyListener = new IPropertyChangeList
 	}
 };
 
-public ButtonContributionItem(IAction action) {
+public ButtonContributionItem(Button button, IAction action) {
 	this.action = action;
+	setButton(button);
 }
 
 private void actionPropertyChange(final PropertyChangeEvent e) {
@@ -50,7 +46,7 @@ private void actionPropertyChange(final PropertyChangeEvent e) {
 	}
 }
 
-public void setButton(Button b) {
+private void setButton(Button b) {
 	b.setData(this);
 	b.addListener(SWT.Dispose, getButtonListener());
 	// Don't hook a dispose listener on the parent
