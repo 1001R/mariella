@@ -190,6 +190,11 @@ public String toString() {
 }
 
 public TextViewer createTextViewer(Composite client, int style) {
+	if ((style & SWT.BORDER) != 0) {
+		style = style ^ SWT.BORDER;
+	}
+	
+	
 	final TextViewer textViewer = new TextViewer(client, style);
 	textViewer.getTextWidget().setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
 	Document doc = new Document();
