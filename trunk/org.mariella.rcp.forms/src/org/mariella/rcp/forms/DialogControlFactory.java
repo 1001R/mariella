@@ -83,7 +83,7 @@ public Text createText(Composite parent, String value) {
 }
 
 public TextViewer createTextViewer(Composite parent, int style) {
-	final TextViewer textViewer = new TextViewer(parent, style);
+	final TextViewer textViewer = new TextViewer(parent, style | SWT.BORDER);
 	Document doc = new Document();
 	doc.addDocumentListener(new IDocumentListener() {
 		public void documentChanged(DocumentEvent event) {
