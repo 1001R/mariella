@@ -449,18 +449,13 @@ void tableFocusIn(Event event) {
 		return;
 	if (isVisible()) {
 		setFocus();
-		if (row == null) {
+		if (row == null && column == null) {
 			if (table.getItemCount() > 0) {
 				tableViewer.setSelection(new StructuredSelection(tableViewer.getElementAt(0)));
 				setRowColumn(0, -1, true);
 				moveCursorLeftRight(+1);
 				//
 			}
-		}
-		if (row != null) {
-			int rowIndex = table.indexOf(row);
-			int columnIndex = column == null ? 0 : table.indexOf(column);
-			setRowColumn(rowIndex, columnIndex, true);
 		}
 	}
 }
