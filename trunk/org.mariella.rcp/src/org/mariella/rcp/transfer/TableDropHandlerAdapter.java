@@ -2,7 +2,7 @@ package org.mariella.rcp.transfer;
 
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,28 +29,40 @@ public TableDropHandlerAdapter(TableViewer tableViewer, TableDropHandler ... han
 }
 
 public void drop(DropTargetEvent evt) {
-	List targetElements = handleDrop(evt.data);
-	for (Object targetElement : targetElements) {
+	List modifiedElements = handleDrop(evt.data);
+	for (Object targetElement : modifiedElements) {
 		tableViewer.refresh(targetElement);
-		handlePostDrop(targetElement, evt.data);
 	}
+	handlePostDrop(modifiedElements);
 	
 	tableViewer.getTable().setFocus();
 }
 
-private void handlePostDrop(Object targetElement, Object dropObject) {
+private void handlePostDrop(List modifiedElements) {
 	for (TableDropHandler m : handlers) {
-		if (m.isResponsibleFor(dropObject))
-			m.handlePostDrop(dropObject);
+		m.handlePostDrop(modifiedElements);
 	}
 }
 
 private List handleDrop(Object dropObject) {
+	List modifiedElements = new ArrayList();
+	Collection<Object> resolvedDropObjects = resolveDropObjects(dropObject);
 	for (TableDropHandler m : handlers) {
-		if (m.isResponsibleFor(dropObject))
-			return m.handleDrop(dropObject);
+		for (Object o : resolvedDropObjects)
+			if (m.isResponsibleFor(o))
+				m.handleDrop(modifiedElements, o);
 	}
-	return Collections.EMPTY_LIST;
+	return modifiedElements;
+}
+
+private Collection<Object> resolveDropObjects(Object dropObject) {
+	if (dropObject instanceof Collection) {
+		return (Collection)dropObject;
+	} else {
+		List<Object> objects = new ArrayList<Object>(1);
+		objects.add(dropObject);
+		return objects;
+	}
 }
 
 public void dragOver(DropTargetEvent evt) {

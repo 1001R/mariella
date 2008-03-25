@@ -20,7 +20,7 @@ public abstract boolean isResponsibleFor(Object dropObject);
  * 
  * @param dropObject
  */
-public abstract List handleDrop(Object dropObject);
+public abstract void handleDrop(List modifiedElements, Object dropObject);
 
 /**
  * Invoked after all handleDrop(...) is invoked  for all handlers.  
@@ -28,7 +28,7 @@ public abstract List handleDrop(Object dropObject);
  * 
  * @param dropObject
  */
-public abstract void handlePostDrop(Object dropObject);
+public abstract void handlePostDrop(List modifiedElements);
 
 /**
  * Receivers are responsible for adding those Transfer objects, for which they are responsible for
