@@ -13,6 +13,8 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.events.TraverseEvent;
 import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Text;
 import org.mariella.rcp.databinding.VDataBindingContext;
@@ -39,6 +41,10 @@ public static ISWTObservableValue observeText(VDataBindingContext ctx, Text text
 	ISWTObservableValue value = new VTextObservableValue(text, eventType);
 	ctx.observablesManager.addObservable(value);
 	return value;
+}
+
+public static ISWTObservableValue observeControlVisible(VDataBindingContext ctx, Control control, Composite parentToRedraw) {
+	return new ControlVisibleObservableValue(control, parentToRedraw);
 }
 
 public static ISWTObservableValue observeDateTime(VDataBindingContext ctx, DateTime dateTime) {

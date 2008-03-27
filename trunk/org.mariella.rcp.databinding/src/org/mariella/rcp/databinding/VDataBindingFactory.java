@@ -21,6 +21,7 @@ import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Text;
@@ -38,6 +39,7 @@ import org.mariella.rcp.databinding.internal.VStatusLineManagerErrorMsgAdapter;
 import org.mariella.rcp.databinding.internal.VTableViewerObservableList;
 import org.mariella.rcp.databinding.internal.VTargetObservable;
 import org.mariella.rcp.databinding.internal.VUpdateValueStrategy;
+import org.mariella.rcp.databinding.internal.VisibleStateModelObservableValue;
 
 
 public class VDataBindingFactory {
@@ -122,6 +124,26 @@ public VBinding createButtonBinding(VDataBindingContext dbc, Button button, Obje
 	VBinding binding = dbc.bindValue(
 			swtObservable,
 			ModelObservables.observeValue(bean, propertyPath, domain.getType()), 
+			new UpdateValueStrategy(),  
+			new UpdateValueStrategy(),
+			domain);
+	
+	completeBindingCreation(binding, domain);
+	
+	return binding;
+}
+
+public VBinding createControlVisibleBinding(VDataBindingContext dbc, Control control, Composite parentToRedraw, Object bean, String propertyPath) {
+	return createControlVisibleBinding(dbc, control, parentToRedraw, bean, propertyPath, null);
+}
+
+public VBinding createControlVisibleBinding(VDataBindingContext dbc, Control control, Composite parentToRedraw, Object bean, String propertyPath, VisibleCallback callback) {
+	ISWTObservableValue visibleObservable = RcpObservables.observeControlVisible(dbc, control, parentToRedraw);
+	BindingDomain domain = new BindingDomain("visible", Boolean.class);
+	final VisibleStateModelObservableValue stateModel = new VisibleStateModelObservableValue(callback, bean, propertyPath);
+	VBinding binding = dbc.bindValue(
+			visibleObservable,
+			stateModel, 
 			new UpdateValueStrategy(),  
 			new UpdateValueStrategy(),
 			domain);
