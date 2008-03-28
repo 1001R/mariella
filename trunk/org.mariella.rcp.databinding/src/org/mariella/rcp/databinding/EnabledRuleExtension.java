@@ -22,6 +22,18 @@ public EnabledRuleExtension(EnabledCallback enabledCallback) {
 	this.enabledCallback = enabledCallback;
 }
 
+public EnabledRuleExtension copyExtend(EnabledCallback ...addCallbacks) {
+	EnabledCallback[] newCallbacks = new EnabledCallback[addCallbacks.length+1];
+	newCallbacks[0] = enabledCallback;
+	System.arraycopy(addCallbacks, 0, newCallbacks, 1, addCallbacks.length);
+	
+	EnabledRuleExtension copy = new EnabledRuleExtension(bean, 
+			new CompoundEnabledCallback(newCallbacks),
+			this.dependencyPropertyPathes);
+	
+	return copy;
+}
+
 public void install(VBinding binding) {
 	IObservable observable = binding.getBinding().getTarget();
 	if (!(observable instanceof EnabledObservableValueFactory))
