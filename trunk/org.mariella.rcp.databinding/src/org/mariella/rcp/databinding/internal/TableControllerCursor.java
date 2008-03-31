@@ -214,22 +214,22 @@ public void addSelectionListener(SelectionListener listener) {
 void dispose(Event event) {
 	table.removeListener(SWT.FocusIn, tableListener);
 	table.removeListener(SWT.MouseDown, tableListener);
-	if (column != null) {
+	if (column != null && !column.isDisposed()) {
 		column.removeListener(SWT.Dispose, disposeColumnListener);
 		column.removeListener(SWT.Move, resizeListener);
 		column.removeListener(SWT.Resize, resizeListener);
 		column = null;
 	}
-	if (row != null) {
+	if (row != null && !row.isDisposed()) {
 		row.removeListener(SWT.Dispose, disposeItemListener);
 		row = null;
 	}
 	ScrollBar hBar = table.getHorizontalBar();
-	if (hBar != null) {
+	if (hBar != null && !hBar.isDisposed()) {
 		hBar.removeListener(SWT.Selection, resizeListener);
 	}
 	ScrollBar vBar = table.getVerticalBar();
-	if (vBar != null) {
+	if (vBar != null && !vBar.isDisposed()) {
 		vBar.removeListener(SWT.Selection, resizeListener);
 	}
 }
