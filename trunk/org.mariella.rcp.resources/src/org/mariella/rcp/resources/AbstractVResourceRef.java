@@ -55,4 +55,10 @@ public void removeReferer(Object referer) {
 	referers.remove(referer);
 }
 
+public boolean equalsPersistentId(VResourceRef ref) {
+	if (persistentId == null) return false;
+
+	return persistentId.equals(ref.getPersistentId());
+}
+
 }

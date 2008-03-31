@@ -24,4 +24,6 @@ void addReferer(Object referer);
 
 void removeReferer(Object referer);
 
+boolean equalsPersistentId(VResourceRef ref);
+
 }
