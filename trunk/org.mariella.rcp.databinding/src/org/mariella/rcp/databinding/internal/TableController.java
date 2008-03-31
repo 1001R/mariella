@@ -229,9 +229,7 @@ public void install(TableViewerColumnEditExtension columnEditExtension) {
 			
 			Runnable focusLostBlock = new Runnable() {
 				public void run() {
-					Control newFocusControl = Display.getCurrent().getFocusControl();
-					if (newFocusControl != null && !newFocusControl.isDisposed() && !editControl.isDisposed() &&
-							!isTableChild(tableViewer.getTable(), newFocusControl) && newFocusControl.getShell() == editControl.getShell()) {
+					if (!editControl.isDisposed() && isTableFocusOut(editControl)) {
 						// if focus was lost to something out of the table, we hide the edit control
 						editControlComposite.setVisible(false);
 						editControlComposite.setSize(0,0);
@@ -239,20 +237,28 @@ public void install(TableViewerColumnEditExtension columnEditExtension) {
 					}
 				}
 
-				private boolean isTableChild(Table table, Control focusControl) {
-					if (focusControl == null) return false;
-					Control parent = focusControl;
-					while (parent != null) {
-						if (parent == table) return true;
-						parent = parent.getParent();
-					}
-					return false;
-				}
 			}; 
 			
 			Display.getCurrent().asyncExec(focusLostBlock);
 		}
 	});
+}
+
+boolean isTableFocusOut(Control focusLostTrigger) {
+	Control newFocusControl = Display.getCurrent().getFocusControl();
+	return newFocusControl != null && !newFocusControl.isDisposed() && 
+			!isTableChild(tableViewer.getTable(), newFocusControl) && newFocusControl.getShell() == focusLostTrigger.getShell();
+
+}
+
+private boolean isTableChild(Table table, Control focusControl) {
+	if (focusControl == null) return false;
+	Control parent = focusControl;
+	while (parent != null) {
+		if (parent == table) return true;
+		parent = parent.getParent();
+	}
+	return false;
 }
 
 public void install(TableViewerColumnImageExtension imageExtension) {

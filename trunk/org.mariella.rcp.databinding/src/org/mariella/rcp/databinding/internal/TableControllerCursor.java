@@ -11,6 +11,7 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.ScrollBar;
@@ -135,10 +136,14 @@ public TableControllerCursor(VDataBindingContext dbc, TableController tableContr
 			case SWT.FocusIn:
 				tableFocusIn(event);
 				break;
+			case SWT.FocusOut:
+				tableFocusOut(event);
+				break;
 			}
 		}
 	};
 	table.addListener(SWT.FocusIn, tableListener);
+	table.addListener(SWT.FocusOut, tableListener);
 	table.addListener(SWT.MouseDown, tableListener);
 
 	disposeItemListener = new Listener() {
@@ -459,6 +464,24 @@ void tableFocusIn(Event event) {
 		}
 	}
 }
+
+/**
+ * Reset row/column if table looses focus.
+ * 
+ * @param event
+ */
+void tableFocusOut(final Event event) {
+	Display.getCurrent().asyncExec(new Runnable() {
+		public void run() {
+			if (isDisposed())
+				return;
+			if (isVisible() && tableController.isTableFocusOut(TableControllerCursor.this)) {
+				setRowColumn(null, null, false);
+			}
+		}
+	});
+}
+
 
 void setColumn(int colIndex) {
 	int rowIndex = table.indexOf(row);
