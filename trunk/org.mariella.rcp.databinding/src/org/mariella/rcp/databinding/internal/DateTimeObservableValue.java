@@ -10,6 +10,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DateTime;
+import org.mariella.rcp.databinding.VDataBindingSelection;
 
 public class DateTimeObservableValue extends AbstractSWTVetoableValue implements SelectionAwareObservable, VTargetObservable {
 

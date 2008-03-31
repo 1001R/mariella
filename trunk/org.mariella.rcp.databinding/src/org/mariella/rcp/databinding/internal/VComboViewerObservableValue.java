@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Control;
 import org.mariella.rcp.databinding.ComboViewerLabelProviderExtension;
 import org.mariella.rcp.databinding.VBinding;
+import org.mariella.rcp.databinding.VDataBindingSelection;
 import org.mariella.rcp.databinding.ValueSetExtension;
 
 public class VComboViewerObservableValue extends VStructuredViewerSingleSelectionObservableValue implements SelectionAwareObservable, EnabledObservableValueFactory, ILabelProvider, VTargetObservable,

@@ -1,6 +1,7 @@
 package org.mariella.rcp.databinding.internal;
 
 import org.eclipse.swt.widgets.Control;
+import org.mariella.rcp.databinding.VDataBindingSelection;
 
 public interface SelectionAwareObservable {
 

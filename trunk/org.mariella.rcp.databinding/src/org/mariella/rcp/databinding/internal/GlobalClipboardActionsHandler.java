@@ -7,6 +7,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.actions.ActionFactory;
 import org.mariella.rcp.databinding.VDataBindingContext;
+import org.mariella.rcp.databinding.VDataBindingSelection;
 
 public class GlobalClipboardActionsHandler implements ISelectionChangedListener {
 abstract class GlobalClipboardAction extends Action {

@@ -52,6 +52,7 @@ import org.mariella.rcp.databinding.TableViewerElementChangeListenerExtension;
 import org.mariella.rcp.databinding.VBinding;
 import org.mariella.rcp.databinding.VDataBindingContext;
 import org.mariella.rcp.databinding.VDataBindingFactory;
+import org.mariella.rcp.databinding.VDataBindingSelection;
 
 public class TableController implements ITableLabelProvider, ITableFontProvider {
 
@@ -96,7 +97,7 @@ public void install(TableViewerColumnExtension columnExtension, VBinding binding
 		columnExtension.setDomain(binding.getDataBindingContext().getDataBindingFactory().getDomainRegistry().getDomain(columnExtension.getDomainSymbol()));
 	columnExtensions.add(columnExtension);
 	tableLayout.addColumnData(new ColumnWeightData(columnExtension.getWeight()));
-	TableColumn tableCol = new TableColumn(tableViewer.getTable(), SWT.NONE);
+	TableColumn tableCol = new TableColumn(tableViewer.getTable(), SWT.ITALIC);
 	tableCol.setText(columnExtension.getHeaderText());
 }
 

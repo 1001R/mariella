@@ -13,6 +13,7 @@ import org.eclipse.jface.databinding.swt.ISWTObservable;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -20,6 +21,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Widget;
 import org.mariella.rcp.databinding.SelectionPath;
 import org.mariella.rcp.databinding.VDataBindingContext;
+import org.mariella.rcp.databinding.VDataBindingSelection;
 
 public class VTableViewerObservableList extends AbstractObservableList implements ISWTObservable, SelectionAwareObservable, EnabledObservableValueFactory, VTargetObservable, VDataBindingSelectionDispatcher {
 
@@ -180,10 +182,12 @@ public void dispatchSelection(VDataBindingSelectionDispatchContext dispatchCtx) 
 
 public VDataBindingSelection getSelection() {
 	if (tableViewer == null && tableViewer.getTable() == null || tableViewer.getTable().isDisposed()) return null;
-	int index = tableViewer.getTable().getSelectionIndex();
-	if (index == -1) return null;
+	IStructuredSelection selection = (IStructuredSelection)tableViewer.getSelection(); 
+	if (selection.isEmpty()) return null;
 	
-	return new VDataBindingSelection(this, new SelectionPath(selectionBasePath, new Object[]{index}));
+	return new VDataBindingSelection(this, 
+			(IStructuredSelection)tableViewer.getSelection(), 
+			new SelectionPath(selectionBasePath, new Object[]{indexOf(selection.getFirstElement())}));
 }
 
 public void setSelectionBasePath(Object[] qualifiers) {

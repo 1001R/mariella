@@ -2,7 +2,6 @@ package org.mariella.rcp.databinding.internal;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -11,13 +10,13 @@ import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.mariella.rcp.databinding.ContextSelectionManagementExtension;
 import org.mariella.rcp.databinding.SelectionPath;
 import org.mariella.rcp.databinding.VBinding;
 import org.mariella.rcp.databinding.VDataBindingContext;
+import org.mariella.rcp.databinding.VDataBindingSelection;
 
 public class VDataBindingSelectionProvider implements ISelectionProvider {
 @SuppressWarnings("unused")
@@ -57,26 +56,22 @@ public ISelection getSelection() {
 
 public void setSelection(final ISelection selection) {
 	VDataBindingSelectionDispatchContext dispatchCtx = new VDataBindingSelectionDispatchContext();
-	if(selection instanceof IStructuredSelection) {
-		for (Iterator i= ((IStructuredSelection)selection).iterator(); i.hasNext();) {
-			final Object element = i.next();
-			if (element instanceof SelectionPath) {
-				final SelectionPath path = (SelectionPath)element;
-				List<VDataBindingSelectionDispatcher> allDispatchers = new ArrayList<VDataBindingSelectionDispatcher>();
-				allDispatchers.addAll(contextSelectionManagementExtensions);
-				for (VBinding binding : managedBindings) {
-					if (binding.getBinding().getTarget() instanceof SelectionAwareObservable) {
-						VDataBindingSelectionDispatcher dispatcher = ((SelectionAwareObservable)binding.getBinding().getTarget()).getSelectionDispatcher();
-						if (dispatcher != null)
-							allDispatchers.add(dispatcher);
-					}
+	if(selection instanceof VDataBindingSelection) {
+		for (SelectionPath path : ((VDataBindingSelection)selection).getSelectionPathes()) {
+			List<VDataBindingSelectionDispatcher> allDispatchers = new ArrayList<VDataBindingSelectionDispatcher>();
+			allDispatchers.addAll(contextSelectionManagementExtensions);
+			for (VBinding binding : managedBindings) {
+				if (binding.getBinding().getTarget() instanceof SelectionAwareObservable) {
+					VDataBindingSelectionDispatcher dispatcher = ((SelectionAwareObservable)binding.getBinding().getTarget()).getSelectionDispatcher();
+					if (dispatcher != null)
+						allDispatchers.add(dispatcher);
 				}
-				
-				dispatchCtx.dispatcherChain = allDispatchers.iterator();
-				dispatchCtx.selectionPath = path.getQualifiers(); 
-				
-				dispatchCtx.invokeNextDispatcher(false);
 			}
+			
+			dispatchCtx.dispatcherChain = allDispatchers.iterator();
+			dispatchCtx.selectionPath = path.getQualifiers(); 
+			
+			dispatchCtx.invokeNextDispatcher(false);
 		}
 	}
 	if (!dispatchCtx.dispatched) {

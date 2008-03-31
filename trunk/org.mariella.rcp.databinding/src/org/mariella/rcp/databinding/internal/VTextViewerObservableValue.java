@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.mariella.rcp.databinding.VDataBindingContext;
+import org.mariella.rcp.databinding.VDataBindingSelection;
 import org.mariella.rcp.databinding.contentassist.ContentAssistantController;
 
 public class VTextViewerObservableValue extends AbstractSWTVetoableValue implements SelectionAwareObservable, EnabledObservableValueFactory, 

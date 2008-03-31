@@ -3,7 +3,6 @@ package org.mariella.rcp.databinding;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.ui.forms.editor.FormEditor;
-import org.mariella.rcp.databinding.internal.VDataBindingSelection;
 import org.mariella.rcp.databinding.internal.VDataBindingSelectionDispatchContext;
 
 public class FormPageSelectionExtension extends ContextSelectionManagementExtension {
@@ -29,7 +28,7 @@ public VDataBindingSelection completeSelectionPath(VDataBindingSelection selecti
 		SelectionPath path = (SelectionPath)elements[i];
 		newPathes[i] = new SelectionPath(new Object[]{pageId},path.qualifiers);
 	}
-	return new VDataBindingSelection(selection.getTargetObservable(), newPathes);
+	return new VDataBindingSelection(selection.getTargetObservable(), selection.origin, newPathes);
 }
 
 public void dispatchSelection(VDataBindingSelectionDispatchContext dispatchCtx) {

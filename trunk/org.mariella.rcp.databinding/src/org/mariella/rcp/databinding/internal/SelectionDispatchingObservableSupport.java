@@ -1,7 +1,9 @@
 package org.mariella.rcp.databinding.internal;
 
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Control;
 import org.mariella.rcp.databinding.SelectionPath;
+import org.mariella.rcp.databinding.VDataBindingSelection;
 
 public class SelectionDispatchingObservableSupport implements VDataBindingSelectionDispatcher{
 
@@ -38,13 +40,13 @@ public void dispatchSelection(VDataBindingSelectionDispatchContext dispatchCtx) 
 
 public VDataBindingSelection implementGetSelection() {
 	if (contextSelectionCallback == null) 
-		return new VDataBindingSelection(targetObservable, new SelectionPath(basePath));
+		return new VDataBindingSelection(targetObservable, new StructuredSelection(), new SelectionPath(basePath));
 	
 	VDataBindingSelection contextSelection = contextSelectionCallback.getContextSelection();
-	if (contextSelection == null || contextSelection.isEmpty()) return null;
+	if (contextSelection == null || contextSelection.getSelectionPathes().length == 0) return null;
 	
-	SelectionPath contextSelectionPath = (SelectionPath)contextSelection.getFirstElement();
-	return new VDataBindingSelection(targetObservable, new SelectionPath(contextSelectionPath.getQualifiers(), basePath));
+	SelectionPath contextSelectionPath = (SelectionPath)contextSelection.getSelectionPathes()[0];
+	return new VDataBindingSelection(targetObservable, new StructuredSelection(), new SelectionPath(contextSelectionPath.getQualifiers(), basePath));
 }
 
 public void setSelectionTargetControl(Control control) {
@@ -56,7 +58,7 @@ public void setContextSelectionCallback(	GetContextSelectionCallback getContextS
 }
 
 public void setOffsetSelection(boolean offsetSelection) {
-	offsetSelection = offsetSelection;
+	this.offsetSelection = offsetSelection;
 }
 
 }

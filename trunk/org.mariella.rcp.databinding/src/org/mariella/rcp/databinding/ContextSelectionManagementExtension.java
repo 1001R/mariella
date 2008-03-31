@@ -1,6 +1,5 @@
 package org.mariella.rcp.databinding;
 
-import org.mariella.rcp.databinding.internal.VDataBindingSelection;
 import org.mariella.rcp.databinding.internal.VDataBindingSelectionDispatchContext;
 import org.mariella.rcp.databinding.internal.VDataBindingSelectionDispatcher;
 

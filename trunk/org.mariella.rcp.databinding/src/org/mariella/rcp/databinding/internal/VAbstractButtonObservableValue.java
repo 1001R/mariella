@@ -7,6 +7,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.mariella.rcp.databinding.VDataBindingSelection;
 
 public abstract class VAbstractButtonObservableValue extends AbstractSWTObservableValue implements SelectionAwareObservable, EnabledObservableValueFactory, VTargetObservable {
 

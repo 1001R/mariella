@@ -555,13 +555,16 @@ void setRowColumn(int row, int column, boolean notify) {
 
 void setRowColumn(TableItem row, TableColumn column, boolean notify) {
 	if (this.row != null && this.row != row) {
-		this.row.removeListener(SWT.Dispose, disposeItemListener);
+		if (!this.row.isDisposed())
+			this.row.removeListener(SWT.Dispose, disposeItemListener);
 		this.row = null;
 	}
 	if (this.column != null && this.column != column) {
-		this.column.removeListener(SWT.Dispose, disposeColumnListener);
-		this.column.removeListener(SWT.Move, resizeListener);
-		this.column.removeListener(SWT.Resize, resizeListener);
+		if (!this.column.isDisposed()) {
+			this.column.removeListener(SWT.Dispose, disposeColumnListener);
+			this.column.removeListener(SWT.Move, resizeListener);
+			this.column.removeListener(SWT.Resize, resizeListener);
+		}
 		this.column = null;
 	}
 	if (row != null) {
