@@ -14,6 +14,7 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.ITableFontProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
@@ -24,6 +25,7 @@ import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FormAttachment;
@@ -41,6 +43,7 @@ import org.mariella.rcp.databinding.BindingDomain;
 import org.mariella.rcp.databinding.SelectionManagementExtension;
 import org.mariella.rcp.databinding.TableViewerColumnEditExtension;
 import org.mariella.rcp.databinding.TableViewerColumnExtension;
+import org.mariella.rcp.databinding.TableViewerColumnFontExtension;
 import org.mariella.rcp.databinding.TableViewerColumnImageExtension;
 import org.mariella.rcp.databinding.TableViewerColumnLabelDecoratorExtension;
 import org.mariella.rcp.databinding.TableViewerColumnToolTipExtension;
@@ -50,7 +53,7 @@ import org.mariella.rcp.databinding.VBinding;
 import org.mariella.rcp.databinding.VDataBindingContext;
 import org.mariella.rcp.databinding.VDataBindingFactory;
 
-public class TableController implements ITableLabelProvider {
+public class TableController implements ITableLabelProvider, ITableFontProvider {
 
 private LocalResourceManager resourceManager = new LocalResourceManager(JFaceResources.getResources());
 private IObservableValue selectionHolder;
@@ -61,6 +64,7 @@ public VTableViewerObservableList targetObservable;
 private TableLayout tableLayout;
 private List<TableViewerColumnExtension> columnExtensions = new ArrayList<TableViewerColumnExtension>();
 private Map<String,TableViewerColumnImageExtension> imageExtensionMap = new HashMap<String, TableViewerColumnImageExtension>();
+private Map<String,TableViewerColumnFontExtension> fontExtensionMap = new HashMap<String, TableViewerColumnFontExtension>();
 private Map<String,TableViewerColumnToolTipExtension> toolTipExtensionMap = new HashMap<String, TableViewerColumnToolTipExtension>();
 private Map<String,TableViewerColumnEditExtension> editExtensionMap = new HashMap<String, TableViewerColumnEditExtension>();
 private Map<String, TableViewerColumnLabelDecoratorExtension> labelDecoratorExtensionMap = new HashMap<String, TableViewerColumnLabelDecoratorExtension>();
@@ -265,6 +269,10 @@ public void install(TableViewerColumnImageExtension imageExtension) {
 	imageExtensionMap.put(imageExtension.getPropertyPath(), imageExtension);
 }
 
+public void install(TableViewerColumnFontExtension fontExtension) {
+	fontExtensionMap.put(fontExtension.getPropertyPath(), fontExtension);
+}
+
 public void install(TableViewerColumnLabelDecoratorExtension decoratorExtension) {
 	labelDecoratorExtensionMap .put(decoratorExtension.getPropertyPath(), decoratorExtension);
 }
@@ -276,6 +284,15 @@ public Image getColumnImage(Object element, int columnIndex) {
 	TableViewerColumnImageExtension imgExt = imageExtensionMap.get(ext.getPropertyPath());
 	if (imgExt != null)
 		return getImage(imgExt.getImageCallback().getImageDescriptor(element, value));
+	return null;
+}
+
+public Font getFont(Object element, int columnIndex) {
+	TableViewerColumnExtension ext = columnExtensions.get(columnIndex);
+	Object value = readValue(element, ext);
+	TableViewerColumnFontExtension fontExt = fontExtensionMap.get(ext.getPropertyPath());
+	if (fontExt != null)
+		return fontExt.getFontCallback().getFont(element, value);
 	return null;
 }
 
@@ -382,6 +399,7 @@ public void extensionsInstalled() {
 	for (Runnable r : onExtensionInstalledCommands)
 		r.run();
 }
+
 
 
 }
