@@ -1,6 +1,7 @@
 package org.mariella.sample.core;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class SampleCoreService {
@@ -123,6 +124,12 @@ private Address copyAddress(Address a) {
 	aCopy.setZipCode(a.getZipCode());
 	aCopy.setCountry(a.getCountry());	// we don't make a copy of country, because this is not edited in our sample application
 	return aCopy;
+}
+
+public void removePerson(Person person) {
+	for (Iterator<Person> it = persons.iterator(); it.hasNext();)
+		if (it.next().getId().equals(person.getId()))
+			it.remove();
 }
 
 }

@@ -63,7 +63,7 @@ protected boolean mustRevalidate(VResourceChangeEvent event) {
 		((VResourceRefHolder)this.selectedItems).getRef().equals(event.getResource().getRef());
 }
 
-public void resourceRemovedFromPool(VResourceChangeEvent event) {
+public void resourceRemoved(VResourceChangeEvent event) {
 	if (this.selectedItems instanceof VResourceRefHolder &&
 			((VResourceRefHolder)this.selectedItems).getRef().equals(event.getResource().getRef()))
 		setEnabled(calculateEnabled());

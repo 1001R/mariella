@@ -30,7 +30,7 @@ VResourceChangeListener resourceChangeListener = new VResourceChangeListener() {
 		if (event.getSource() == event.getResource() && event.getResource() == getEditorInput())
 			setDirty();
 	}
-	public void resourceRemovedFromPool(VResourceChangeEvent event) {
+	public void resourceRemoved(VResourceChangeEvent event) {
 		if (event.getResource() == getEditorInput())
 			throw new IllegalStateException("A resource should not be removed from pool when a corresponding editor is open");
 	}

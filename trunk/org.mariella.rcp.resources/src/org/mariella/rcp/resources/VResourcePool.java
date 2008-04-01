@@ -15,23 +15,23 @@ public void removeResourceChangeListener(VResourceChangeListener l) {
 	resourceChangeListeners.remove(l);
 }
 
-void fireResourceChanged(Object source, VResource resource) {
+void fireResourceChanged(Object source, VResource resource, boolean persistentChange) {
 	if (resource.getRef() == null)
 		// currently we only support resource change support for resources that have been persisted
 		return;
-	VResourceChangeEvent ev = new VResourceChangeEvent(source, resource);
+	VResourceChangeEvent ev = new VResourceChangeEvent(source, resource, persistentChange);
 	for (VResourceChangeListener l : resourceChangeListeners)
 		l.resourceChanged(ev);
 }
 
-void fireResourceRemovedFromPool(Object source, VResource resource) {
-	VResourceChangeEvent ev = new VResourceChangeEvent(source, resource);
+void fireResourceRemoved(Object source, VResource resource, boolean persistentChange) {
+	VResourceChangeEvent ev = new VResourceChangeEvent(source, resource, persistentChange);
 	for (VResourceChangeListener l : resourceChangeListeners)
-		l.resourceRemovedFromPool(ev);
+		l.resourceRemoved(ev);
 }
 
-void fireResourceLoaded(Object source, VResource resource) {
-	VResourceChangeEvent ev = new VResourceChangeEvent(source, resource);
+void fireResourceLoaded(Object source, VResource resource, boolean persistentChange) {
+	VResourceChangeEvent ev = new VResourceChangeEvent(source, resource, persistentChange);
 	for (VResourceChangeListener l : resourceChangeListeners)
 		l.resourceLoaded(ev);
 }

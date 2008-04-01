@@ -15,7 +15,7 @@ public VResourceRef getRef() {
 
 public void fireChanged() {
 	if (getRef() != null) 
-		VResourcesPlugin.getResourcePool().fireResourceChanged(this, this);
+		VResourcesPlugin.getResourcePool().fireResourceChanged(this, this, false);
 }
 
 public void fireIfChanged(Object lastValue, Object newValue) {

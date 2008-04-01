@@ -40,6 +40,11 @@ public void openEditor(final IWorkbenchWindow window, final VResource resource) 
 	});
 }
 
+public boolean removeResource(VResourceRef ref)	throws VResourceSaveException {
+	VResource resource = getResource(ref);
+	return removeResource(resource);
+}
+
 public boolean removeResource(VResource resource)	throws VResourceSaveException {
 	String name = "'" + resource.getName() + "'";
 	if (!MessageDialog.openConfirm(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), name + "wirklich löschen?", "Wollen Sie " + name + " wirklich löschen?"))

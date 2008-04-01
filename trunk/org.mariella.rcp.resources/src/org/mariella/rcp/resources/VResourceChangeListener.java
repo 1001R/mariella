@@ -4,7 +4,7 @@ public interface VResourceChangeListener {
 
 void resourceChanged(VResourceChangeEvent event);
 
-void resourceRemovedFromPool(VResourceChangeEvent event);
+void resourceRemoved(VResourceChangeEvent event);
 
 void resourceLoaded(VResourceChangeEvent event);
 

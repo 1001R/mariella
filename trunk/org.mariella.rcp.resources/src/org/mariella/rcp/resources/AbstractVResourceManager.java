@@ -47,7 +47,7 @@ public void refererClosed(VResourceRef ref, Object referer) {
 }
 
 void resourceRemovedFromPool(VResource resource) {
-	VResourcesPlugin.getResourcePool().fireResourceRemovedFromPool(this, resource);
+	VResourcesPlugin.getResourcePool().fireResourceRemoved(this, resource, false);
 	resource.dispose();
 }
 
@@ -56,6 +56,7 @@ public boolean removeResource(VResource resource) throws VResourceSaveException 
 	resourceMap.remove(resource.getRef());
 	resourceRefInstanceMap.remove(resource.getRef());
 	resourceRemovedFromPool(resource);
+	VResourcesPlugin.getResourcePool().fireResourceRemoved(this, resource, true);
 	return true;
 }
 
@@ -63,14 +64,6 @@ public void removeResourceFromPool(VResource resource) {
 	resourceMap.remove(resource.getRef());
 	resourceRefInstanceMap.remove(resource.getRef());
 	resourceRemovedFromPool(resource);
-}
-
-private void resourceLoaded(VResource resource) {
-	VResourcesPlugin.getResourcePool().fireResourceLoaded(this, resource);
-}
-
-public void resourceChanged(VResource resource) {
-	VResourcesPlugin.getResourcePool().fireResourceChanged(this, resource);
 }
 
 private Collection<VResourceRef> getRefsHavingReferer(Object referer) {
@@ -142,12 +135,14 @@ public VResource getResource(VResourceRef ref) {
 
 public void putResource(VResourceRef ref, VResource resource) {
 	resource.setRef(ref);
+	boolean isNew = !resourceMap.containsKey(ref);
 	resourceMap.put(ref, resource);
 	resourceRefInstanceMap.put(ref, ref);
 	if (ref.getRefId() > lastRefId)
 		// if it comes from an IPersistableElement, it comes already with an id
 		lastRefId = ref.getRefId();
-	resourceLoaded(resource);
+	if (isNew)
+		VResourcesPlugin.getResourcePool().fireResourceLoaded(this, resource, true);
 }
 
 public void reload(VResourceRef ref) {
@@ -160,7 +155,7 @@ public void reload(VResourceRef ref) {
 		resource = implementBuildResource(ref.getPersistentId());
 		resource.setRef(ref);
 		resourceMap.put(ref, resource);
-		resourceLoaded(resource);
+		VResourcesPlugin.getResourcePool().fireResourceLoaded(this, resource, true);
 	}
 }
 
@@ -169,7 +164,7 @@ public void saveResource(VResource resource) throws VResourceSaveException {
 	Object persistentId = implementSaveResource(resource);
 	if (persistentId != null) {
 		resource.getRef().setPersistentId(persistentId);
-		VResourcesPlugin.getResourcePool().fireResourceChanged(this, resource);
+		VResourcesPlugin.getResourcePool().fireResourceChanged(this, resource, true);
 	}
 }
 

@@ -263,7 +263,7 @@ public void resourceChanged(VResourceChangeEvent event) {
 		invalidate(((ProblemResourceHolder)event.getResource()).getProblemResource());
 }
 
-public void resourceRemovedFromPool(VResourceChangeEvent event) {
+public void resourceRemoved(VResourceChangeEvent event) {
 	if (event.getResource() instanceof ProblemResourceHolder)
 		removed(((ProblemResourceHolder)event.getResource()).getProblemResource());
 }
