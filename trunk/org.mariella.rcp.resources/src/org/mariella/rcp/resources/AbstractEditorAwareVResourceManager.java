@@ -19,6 +19,10 @@ public AbstractEditorAwareVResourceManager(String editorId, String elementFactor
 	this.elementFactoryId = elementFactoryId;
 }
 
+public void openEditor(final IWorkbenchWindow window, Object persistentId) {
+	openEditor(window, getResourceForPersistentId(persistentId));
+}
+
 public void openEditor(final IWorkbenchWindow window, VResourceRef ref) {
 	openEditor(window, getResource(ref));
 }

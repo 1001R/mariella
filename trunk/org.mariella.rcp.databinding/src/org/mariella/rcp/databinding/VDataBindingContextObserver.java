@@ -1,4 +1,4 @@
-package org.mariella.rcp.databinding.internal;
+package org.mariella.rcp.databinding;
 
 public interface VDataBindingContextObserver {
 

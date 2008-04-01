@@ -21,7 +21,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IActionBars;
 import org.mariella.rcp.databinding.internal.GlobalClipboardActionsHandler;
 import org.mariella.rcp.databinding.internal.TableController;
-import org.mariella.rcp.databinding.internal.VDataBindingContextObserver;
 import org.mariella.rcp.databinding.internal.VDataBindingSelectionProvider;
 import org.mariella.rcp.databinding.internal.VTableViewerListBindingImpl;
 import org.mariella.rcp.databinding.internal.VTableViewerObservableList;
