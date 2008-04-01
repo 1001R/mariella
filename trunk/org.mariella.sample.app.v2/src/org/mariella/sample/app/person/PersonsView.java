@@ -24,7 +24,13 @@ import org.mariella.sample.core.SampleCorePlugin;
 public class PersonsView extends ViewPart {
 public static final String ID = PersonsView.class.getName();
 
-
+/**
+ * ViewEntry class that holds a Person object and acts as 
+ * a ResourceRefHolder. 
+ * 
+ * @author maschmid
+ *
+ */
 class ViewEntry implements PersonResourceRefHolder {
 Person person;
 
