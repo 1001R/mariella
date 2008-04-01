@@ -57,7 +57,7 @@ public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {}
 }
 
 /**
- * Label providdeer for table viewer
+ * Label provider for table viewer
  * 
  * @author maschmid
  *
@@ -116,17 +116,13 @@ public void createPartControl(Composite parent) {
 
 @Override
 public void dispose() {
+	removeReferers();
 	VResourcesPlugin.getResourcePool().removeResourceChangeListener(resourceChangeListener);
 }
 
 void refreshContent() {
 	PersonResourceManager rm = VResourcesPlugin.getResourceManagerRegistry().getResourceManager(PersonResourceManager.class);
-	if (currentViewEntries != null) {
-		// remove VResourceRef referers of current shown view entries (to free resources if possible) 
-		for (ViewEntry entry : currentViewEntries) {
-			rm.refererClosed(entry.getRef(), entry);
-		}
-	}
+	removeReferers();
 	
 	List<Person> persons = SampleCorePlugin.getCoreService().getAvailablePersons();
 
@@ -138,6 +134,16 @@ void refreshContent() {
 		currentViewEntries.add(entry);
 	}
 	tableViewer.setInput(currentViewEntries);
+}
+
+void removeReferers() {
+	if (currentViewEntries != null) {
+		PersonResourceManager rm = VResourcesPlugin.getResourceManagerRegistry().getResourceManager(PersonResourceManager.class);
+		// remove VResourceRef referers of current shown view entries (to free resources if possible) 
+		for (ViewEntry entry : currentViewEntries) {
+			rm.refererClosed(entry.getRef(), entry);
+		}
+	}
 }
 
 @Override
