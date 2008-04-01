@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Core Plug-in
+Bundle-SymbolicName: org.mariella.sample.core
+Bundle-Version: 1.0.0
+Bundle-Activator: org.mariella.sample.core.SampleCorePlugin
+Require-Bundle: org.eclipse.core.runtime
+Eclipse-LazyStart: true
+Export-Package: org.mariella.sample.core
