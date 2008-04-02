@@ -5,14 +5,14 @@ import java.util.List;
 
 public class VResourceManagerRegistry {
 
-private List<AbstractVResourceManager> managers = new ArrayList<AbstractVResourceManager>();
+private List<VResourceManager> managers = new ArrayList<VResourceManager>();
 private List<VResourceManagerRegistryObserver> observers = new ArrayList<VResourceManagerRegistryObserver>();
 
 VResourceManagerRegistry() {
 }
 
 public <T> T getResourceManager(Class<T> clazz) {
-	for (AbstractVResourceManager mgr : managers)
+	for (VResourceManager mgr : managers)
 		if (mgr.getClass() == clazz)
 			return (T)mgr;
 	throw new IllegalArgumentException();
@@ -26,7 +26,7 @@ public void removeObserver(VResourceManagerRegistryObserver o) {
 	observers.remove(o);
 }
 
-public void addManager(AbstractVResourceManager mgr) {
+public void addManager(VResourceManager mgr) {
 	managers.add(mgr);
 	try {
 		mgr.initialize();
@@ -36,13 +36,9 @@ public void addManager(AbstractVResourceManager mgr) {
 }
 
 public void preStartup() {
-	for (AbstractVResourceManager m : managers)
-		m.preStartup();
 }
 
 public void postStartup() {
-	for (AbstractVResourceManager m : managers)
-		m.postStartup();
 	fireResourceManagersReady();
 }
 

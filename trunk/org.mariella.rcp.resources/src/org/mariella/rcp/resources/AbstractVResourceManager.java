@@ -17,7 +17,7 @@ import org.eclipse.ui.XMLMemento;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public abstract class AbstractVResourceManager {
+public abstract class AbstractVResourceManager implements VResourceManager {
 private static int lastRefId = 0;
 
 private Map<VResourceRef, VResourceRef> resourceRefInstanceMap = new HashMap<VResourceRef, VResourceRef>();
@@ -60,12 +60,6 @@ public boolean removeResource(VResource resource) throws VResourceSaveException 
 	return true;
 }
 
-public void removeResourceFromPool(VResource resource) {
-	resourceMap.remove(resource.getRef());
-	resourceRefInstanceMap.remove(resource.getRef());
-	resourceRemovedFromPool(resource);
-}
-
 private Collection<VResourceRef> getRefsHavingReferer(Object referer) {
 	Set<VResourceRef> refs = new HashSet<VResourceRef>();
 	for (VResourceRef ref : resourceMap.keySet()) {
@@ -75,19 +69,11 @@ private Collection<VResourceRef> getRefsHavingReferer(Object referer) {
 	return refs;
 }
 
-protected void putRef(Object persistentId) {
-	getRefForPersistentId(persistentId);
-}
-
-public Collection<VResourceRef> getAppearingRefs() {
+public Collection<VResourceRef> getRefs() {
 	return resourceMap.keySet();
 }
 
-public Collection<VResource> getAppearingResources() {
-	return resourceMap.values();
-}
-
-public Collection<VResource> getLoadedResources() {
+public Collection<VResource> getResources() {
 	List<VResource> loaded = new ArrayList<VResource>(resourceMap.size());
 	for (VResource res : resourceMap.values())
 		if (res != null)
@@ -187,10 +173,6 @@ public VResourceRef getRefForPersistentId(Object persistentId) {
 	resourceRefInstanceMap.put(ref, ref);
 	return ref;
 }
-
-protected void preStartup() {}
-
-public void postStartup() {}
 
 protected abstract VResource implementBuildResource(Object persistentId);
 

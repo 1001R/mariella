@@ -8,7 +8,7 @@ package org.mariella.rcp.resources;
  */
 public interface VResourceEditorCustomizationCallback {
 
-AbstractVResourceManager getResourceManager();
+VResourceManager getResourceManager();
 
 VResource getResource();
 

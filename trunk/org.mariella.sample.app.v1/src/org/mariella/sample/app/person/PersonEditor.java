@@ -10,9 +10,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.mariella.rcp.resources.AbstractVResourceEditor;
 import org.mariella.rcp.resources.AbstractVResourceEditorCustomizationCallback;
-import org.mariella.rcp.resources.AbstractVResourceManager;
 import org.mariella.rcp.resources.VResource;
 import org.mariella.rcp.resources.VResourceEditorCustomizationCallback;
+import org.mariella.rcp.resources.VResourceManager;
 import org.mariella.rcp.resources.VResourcesPlugin;
 
 public class PersonEditor extends AbstractVResourceEditor {
@@ -83,7 +83,7 @@ public VResource getResource() {
 }
 
 @Override
-public AbstractVResourceManager getResourceManager() {
+public VResourceManager getResourceManager() {
 	return VResourcesPlugin.getResourceManagerRegistry().getResourceManager(PersonResourceManager.class);
 }
 

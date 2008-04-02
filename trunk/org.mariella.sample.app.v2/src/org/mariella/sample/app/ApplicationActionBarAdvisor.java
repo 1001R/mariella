@@ -11,6 +11,7 @@ import org.eclipse.ui.actions.ContributionItemFactory;
 import org.eclipse.ui.actions.ActionFactory.IWorkbenchAction;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
+import org.mariella.sample.app.person.CreatePersonAction;
 import org.mariella.sample.app.person.DeletePersonAction;
 import org.mariella.sample.app.person.OpenPersonEditorAction;
 
@@ -21,6 +22,7 @@ private IWorkbenchAction saveAllAction;
 private IWorkbenchAction closeAction;
 private IWorkbenchAction closeAllAction;
 private IContributionItem openViews;
+private IWorkbenchAction createPersonAction;
 private IWorkbenchAction openPersonEditorAction;
 private IWorkbenchAction deletePersonAction;
 
@@ -40,6 +42,8 @@ protected void makeActions(IWorkbenchWindow window) {
 	saveAllAction = ActionFactory.SAVE_ALL.create(window);
 	register(saveAllAction);
 	openViews = ContributionItemFactory.VIEWS_SHORTLIST.create(window);
+	createPersonAction = new CreatePersonAction(window);
+	register(createPersonAction);
 	openPersonEditorAction = new OpenPersonEditorAction(window);
 	register(openPersonEditorAction);
 	deletePersonAction = new DeletePersonAction(window);
@@ -59,6 +63,7 @@ protected void fillMenuBar(IMenuManager menuBar) {
 	
 	MenuManager personMenu = new MenuManager("&Person", "person");
 	menuBar.add(personMenu);
+	personMenu.add(createPersonAction);
 	personMenu.add(openPersonEditorAction);
 	personMenu.add(deletePersonAction);
 	
