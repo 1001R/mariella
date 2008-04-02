@@ -14,7 +14,8 @@ public void restoreFromMemento(IMemento memento) {
 @Override
 public void storeToMemento(IMemento memento) {
 	memento.putInteger("refId", refId);
-	memento.putInteger("persistentId", (Integer)persistentId);
+	if (persistentId != null)
+		memento.putInteger("persistentId", (Integer)persistentId);
 }
 
 }
