@@ -2,12 +2,12 @@ package org.mariella.rcp.problems;
 
 import org.mariella.rcp.resources.VResourceRef;
 
-public class VResourceRefProblemResource extends ProblemResource {
+public class VResourceProblemResource extends ProblemResource {
 private VResourceRef ref;
 private String description;
 
 
-public VResourceRefProblemResource(ProblemsProvider provider, VResourceRef ref, String editorId, String elementFactoryId, String description) {
+public VResourceProblemResource(ProblemsProvider provider, VResourceRef ref, String editorId, String elementFactoryId, String description) {
 	super();
 	this.ref = ref;
 	this.description = description;
@@ -29,7 +29,7 @@ public boolean equals(Object obj) {
 	} else if(obj.getClass() != getClass()) {
 		return false;
 	} else {
-		return ((VResourceRefProblemResource)obj).ref.equals(ref);
+		return ((VResourceProblemResource)obj).ref.equals(ref);
 	}
 }
 

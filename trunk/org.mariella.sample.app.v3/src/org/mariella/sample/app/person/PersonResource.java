@@ -7,12 +7,14 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
+import org.mariella.rcp.problems.ProblemResource;
+import org.mariella.rcp.problems.ProblemResourceHolder;
 import org.mariella.rcp.resources.AbstractVResource;
 import org.mariella.sample.core.Address;
 import org.mariella.sample.core.Person;
 
 public class PersonResource extends AbstractVResource implements IAdaptable, IEditorInput, PersonResourceRefHolder, 
-	PropertyChangeListener {
+	PropertyChangeListener, ProblemResourceHolder {
 
 private Person person;
 
@@ -90,6 +92,11 @@ public void propertyChange(PropertyChangeEvent evt) {
 
 public Person getPerson() {
 	return person;
+}
+
+@Override
+public ProblemResource getProblemResource() {
+	return new PersonProblemResource((PersonResourceRef)getRef(), getName());
 }
 
 }

@@ -1,29 +1,17 @@
 package org.mariella.sample.app.person;
 
-import org.mariella.rcp.problems.ProblemResource;
+import org.mariella.rcp.problems.VResourceProblemResource;
+import org.mariella.rcp.resources.VResourcesPlugin;
 
-public class PersonProblemResource extends ProblemResource {
+public class PersonProblemResource extends VResourceProblemResource {
 
-public PersonProblemResource() {
-	// TODO Auto-generated constructor stub
-}
-
-@Override
-public boolean equals(Object obj) {
-	// TODO Auto-generated method stub
-	return false;
-}
-
-@Override
-public String getDescription() {
-	// TODO Auto-generated method stub
-	return null;
-}
-
-@Override
-public int hashCode() {
-	// TODO Auto-generated method stub
-	return 0;
+public PersonProblemResource(PersonResourceRef ref, String description) {
+	super(
+			VResourcesPlugin.getResourceManagerRegistry().getResourceManager(PersonResourceManager.class),	// our ProblemsProvider  
+			ref,		// the given VResourceRef
+			PersonEditor.ID,		// the corresponding Eclipse editor id 
+			PersonResourceElementFactory.ID,	// the corresponding Eclipse IElementFactory id
+			description);	// the given text that appears in the ProblemsView
 }
 
 }

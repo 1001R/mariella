@@ -159,7 +159,7 @@ public void openEditorAndSetSelection(final Problem problem) {
 	try {
 		EditorOpenedCallback cb = new EditorOpenedCallback() {
 			public void editorOpened(final IEditorPart part) {
-				if (part != null)
+				if (part != null && problem.getSelection() != null)
 					Display.getCurrent().asyncExec(new Runnable() {
 						public void run() {
 							part.getSite().getSelectionProvider().setSelection(problem.getSelection());

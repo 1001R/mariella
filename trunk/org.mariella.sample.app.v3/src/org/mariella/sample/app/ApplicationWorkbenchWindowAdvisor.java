@@ -5,6 +5,7 @@ import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
+import org.mariella.rcp.problems.ProblemsPlugin;
 import org.mariella.rcp.resources.VResourcesPlugin;
 
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
@@ -25,5 +26,6 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
         configurer.setTitle("Mariella Sample App");
         
     	VResourcesPlugin.initializeForWindow(configurer.getWindow());
+    	ProblemsPlugin.initializeForWindow(configurer.getWindow());
     }
 }
