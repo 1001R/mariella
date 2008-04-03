@@ -1,12 +1,14 @@
 package org.mariella.sample.app.person;
 
 import org.eclipse.ui.PartInitException;
+import org.mariella.rcp.databinding.VDataBindingContext;
 import org.mariella.rcp.forms.AbstractVResourceFormEditor;
 import org.mariella.rcp.forms.AbstractVResourceFormEditorCustomizationCallback;
 import org.mariella.rcp.resources.VResource;
 import org.mariella.rcp.resources.VResourceEditorCustomizationCallback;
 import org.mariella.rcp.resources.VResourceManager;
 import org.mariella.rcp.resources.VResourcesPlugin;
+import org.mariella.sample.app.Activator;
 
 public class PersonEditor extends AbstractVResourceFormEditor {
 public static final String ID = PersonEditor.class.getName();
@@ -24,6 +26,10 @@ PersonResource getPersonResource() {
 	return PersonEditor.this.getPersonResource();
 }
 
+VDataBindingContext getDataBindingContext() {
+	return dataBindingContext;
+}
+
 }
 
 
@@ -34,6 +40,17 @@ PersonResource getPersonResource() {
  *
  */
 class CustomizationCallback extends AbstractVResourceFormEditorCustomizationCallback {
+
+
+@Override
+public void implementInit() {
+	dataBindingContext = Activator.getDataBindingFactory().createDataBindingContext();
+}
+
+@Override
+public void implementDispose() {
+	dataBindingContext.dispose();
+}
 
 @Override
 public VResource getResource() {
@@ -59,6 +76,9 @@ public Object createCustomEditingContext() {
 	return new CustomEditingContext();
 }
 }
+
+
+VDataBindingContext dataBindingContext;
 
 
 @Override
