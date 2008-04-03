@@ -1,0 +1,20 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: App Plug-in
+Bundle-SymbolicName: org.mariella.sample.app.v5;singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: org.mariella.sample.app.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.mariella.logging,
+ org.mariella.rcp.resources,
+ org.mariella.sample.core,
+ org.mariella.rcp.problems,
+ org.mariella.rcp.forms,
+ org.eclipse.jface.text,
+ org.eclipse.ui.forms,
+ org.eclipse.jface.databinding,
+ org.mariella.rcp.databinding,
+ org.eclipse.core.databinding,
+ org.eclipse.core.databinding.beans
+Eclipse-LazyStart: true
