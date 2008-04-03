@@ -4,7 +4,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.mariella.rcp.databinding.internal.TableController;
 import org.mariella.rcp.databinding.internal.VTableViewerObservableList;
 
-public class TableViewerColumnLabelDecoratorExtension implements BindingDomainExtension {
+public class TableViewerColumnLabelDecoratorExtension implements VBindingDomainExtension {
 
 String propertyPath;
 TableViewerColumnLabelDecoratorCallback labelDecoratorCallback;

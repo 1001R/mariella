@@ -8,7 +8,7 @@ public class NullConverterBuilder extends ConverterBuilder {
 public NullConverterBuilder() {
 }
 
-public IConverter buildFromModelConverter(BindingDomain domain) {
+public IConverter buildFromModelConverter(VBindingDomain domain) {
 	return new Converter(domain.getType(), domain.getType()) {
 		public Object convert(Object fromObject) {
 			return "";
@@ -16,7 +16,7 @@ public IConverter buildFromModelConverter(BindingDomain domain) {
 	};
 }
 
-public IConverter buildToModelConverter(BindingDomain domain) {
+public IConverter buildToModelConverter(VBindingDomain domain) {
 	throw new UnsupportedOperationException();
 }
 

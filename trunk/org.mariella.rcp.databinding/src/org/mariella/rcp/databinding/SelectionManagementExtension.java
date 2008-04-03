@@ -4,7 +4,7 @@ import org.eclipse.swt.widgets.Control;
 import org.mariella.rcp.databinding.internal.SelectionAwareObservable;
 import org.mariella.rcp.databinding.internal.VDataBindingSelectionProvider;
 
-public class SelectionManagementExtension implements BindingDomainExtension {
+public class SelectionManagementExtension implements VBindingDomainExtension {
 
 Control targetControl;
 Object[] rootQualifiers;

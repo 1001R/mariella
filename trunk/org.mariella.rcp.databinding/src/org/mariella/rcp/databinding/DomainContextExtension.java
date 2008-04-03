@@ -6,7 +6,7 @@ package org.mariella.rcp.databinding;
  * @author maschmid
  *
  */
-public class DomainContextExtension implements BindingDomainExtension {
+public class DomainContextExtension implements VBindingDomainExtension {
 
 Object domainContext;
 

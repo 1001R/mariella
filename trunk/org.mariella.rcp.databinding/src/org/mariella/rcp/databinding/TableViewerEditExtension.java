@@ -4,7 +4,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.mariella.rcp.databinding.internal.TableController;
 import org.mariella.rcp.databinding.internal.VTableViewerObservableList;
 
-public class TableViewerEditExtension implements BindingDomainExtension {
+public class TableViewerEditExtension implements VBindingDomainExtension {
 
 
 public TableViewerEditExtension() {

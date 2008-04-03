@@ -12,7 +12,7 @@ import org.mariella.rcp.databinding.internal.VTableViewerObservableList;
  * @author maschmid
  *
  */
-public class TableViewerElementChangeListenerExtension implements BindingDomainExtension {
+public class TableViewerElementChangeListenerExtension implements VBindingDomainExtension {
 
 public TableViewerElementChangeListenerExtension() {
 }

@@ -3,7 +3,7 @@ package org.mariella.rcp.databinding;
 import org.eclipse.core.databinding.observable.IObservable;
 import org.mariella.rcp.databinding.internal.EnabledObservableValueFactory;
 
-public class EnabledRuleExtension implements BindingDomainExtension {
+public class EnabledRuleExtension implements VBindingDomainExtension {
 
 
 private Object bean;

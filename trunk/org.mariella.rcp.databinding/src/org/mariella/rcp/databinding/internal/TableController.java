@@ -39,7 +39,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.mariella.rcp.databinding.BindingDomain;
+import org.mariella.rcp.databinding.VBindingDomain;
 import org.mariella.rcp.databinding.SelectionManagementExtension;
 import org.mariella.rcp.databinding.TableViewerColumnEditExtension;
 import org.mariella.rcp.databinding.TableViewerColumnExtension;
@@ -208,7 +208,7 @@ public void install(TableViewerColumnEditExtension columnEditExtension) {
 				}
 			});
 		}
-		public BindingDomain extendBindingDomain(VBinding binding, BindingDomain domain) {
+		public VBindingDomain extendBindingDomain(VBinding binding, VBindingDomain domain) {
 			return domain;
 		}
 	};

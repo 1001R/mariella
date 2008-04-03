@@ -14,7 +14,7 @@ public FormatConverterBuilder(Format format) {
 	this.format = format;
 }
 
-public IConverter buildFromModelConverter(BindingDomain domain) {
+public IConverter buildFromModelConverter(VBindingDomain domain) {
 	return new Converter(domain.getType(), String.class) {
 		public Object convert(Object fromObject) {
 			return format.format(fromObject);
@@ -22,7 +22,7 @@ public IConverter buildFromModelConverter(BindingDomain domain) {
 	};
 }
 
-public IConverter buildToModelConverter(BindingDomain domain) {
+public IConverter buildToModelConverter(VBindingDomain domain) {
 	return new Converter(String.class, domain.getType()) {
 		public Object convert(Object fromObject) {
 			try {

@@ -7,18 +7,18 @@ public class GlobalEnabledRuleExtension implements DataBindingContextExtension {
 EnabledCallback globalEnabledCallback;
 
 VDataBindingFactory.Callback dataBindingFactoryCallback = new VDataBindingFactory.Callback() {
-	public BindingDomain extendBindingDomain(VBinding binding, BindingDomain domain) {
+	public VBindingDomain extendBindingDomain(VBinding binding, VBindingDomain domain) {
 		if (!(binding.getBinding().getTarget() instanceof EnabledObservableValueFactory)) return domain;
 		
 		EnabledRuleExtension existingEnabledExt = domain.getExtension(EnabledRuleExtension.class);
 		if (existingEnabledExt != null) {
-			BindingDomain copy = new BindingDomain(domain);
+			VBindingDomain copy = new VBindingDomain(domain);
 			EnabledRuleExtension modifiedEnabledExt = new EnabledRuleExtension(
 					new CompoundEnabledCallback(existingEnabledExt.enabledCallback, globalEnabledCallback));
 			copy.replaceExtension(existingEnabledExt, modifiedEnabledExt);
 			return copy;
 		}
-		return new BindingDomain(domain, new EnabledRuleExtension(globalEnabledCallback));
+		return new VBindingDomain(domain, new EnabledRuleExtension(globalEnabledCallback));
 	}
 	public void bindingCreated(VBinding binding) {}
 };

@@ -55,7 +55,7 @@ public interface Callback {
 	 * @param domain
 	 * @return the modified copy of the domain or the original (when not modified)
 	 */
-	BindingDomain extendBindingDomain(VBinding binding, BindingDomain domain);
+	VBindingDomain extendBindingDomain(VBinding binding, VBindingDomain domain);
 }
 	
 public static class DefaultBean {
@@ -63,10 +63,10 @@ public void addPropertyChangeListener(PropertyChangeListener l) {}
 public void removePropertyChangeListener(PropertyChangeListener l) {}
 }
 
-private BindingDomainRegistry domainRegistry;
+private VBindingDomainRegistry domainRegistry;
 private List<Callback> callbacks = new ArrayList<Callback>();
 
-public VDataBindingFactory(BindingDomainRegistry registry) {
+public VDataBindingFactory(VBindingDomainRegistry registry) {
 	this.domainRegistry = registry;
 }
 
@@ -83,11 +83,11 @@ public IObservableValue createPropertyObservable(VDataBindingContext dbc, Object
 }
 
 public VBinding createSingleSelectionBinding(VDataBindingContext dbc, StructuredViewer structuredViewer, Object bean, String propertyPath, Object domainSymbol) {
-	BindingDomain domain = (BindingDomain)domainRegistry.getDomain(domainSymbol);
+	VBindingDomain domain = (VBindingDomain)domainRegistry.getDomain(domainSymbol);
 	return createSingleSelectionBinding(dbc, structuredViewer, bean, propertyPath, domain);
 }
 
-public VBinding createSingleSelectionBinding(VDataBindingContext dbc, StructuredViewer structuredViewer, Object bean, String propertyPath, BindingDomain domain) {
+public VBinding createSingleSelectionBinding(VDataBindingContext dbc, StructuredViewer structuredViewer, Object bean, String propertyPath, VBindingDomain domain) {
 	VBinding binding = dbc.bindValue(RcpObservables.observeSingleSelection(dbc, structuredViewer), 
 			ModelObservables.observeValue(bean, propertyPath, domain.getType()), 
 			createTargetTextToModel(dbc, domain),  
@@ -99,11 +99,11 @@ public VBinding createSingleSelectionBinding(VDataBindingContext dbc, Structured
 }
 
 public VBinding createComboViewerBinding(VDataBindingContext dbc, ComboViewer comboViewer, Object bean, String propertyPath, Object domainSymbol) {
-	BindingDomain domain = (BindingDomain)domainRegistry.getDomain(domainSymbol);
+	VBindingDomain domain = (VBindingDomain)domainRegistry.getDomain(domainSymbol);
 	return createComboViewerBinding(dbc, comboViewer, bean, propertyPath, domain);
 }
 
-public VBinding createComboViewerBinding(VDataBindingContext dbc, ComboViewer comboViewer, Object bean, String propertyPath, BindingDomain domain) {
+public VBinding createComboViewerBinding(VDataBindingContext dbc, ComboViewer comboViewer, Object bean, String propertyPath, VBindingDomain domain) {
 	VBinding binding = dbc.bindValue(RcpObservables.observeComboViewer(dbc, comboViewer), 
 			ModelObservables.observeValue(bean, propertyPath, domain.getType()), 
 			createTargetTextToModel(dbc, domain),  
@@ -115,11 +115,11 @@ public VBinding createComboViewerBinding(VDataBindingContext dbc, ComboViewer co
 }
 
 public VBinding createButtonBinding(VDataBindingContext dbc, Button button, Object bean, String propertyPath, Object domainSymbol) {
-	BindingDomain domain = (BindingDomain)domainRegistry.getDomain(domainSymbol);
+	VBindingDomain domain = (VBindingDomain)domainRegistry.getDomain(domainSymbol);
 	return createButtonBinding(dbc, button, bean, propertyPath, domain);
 }
 
-public VBinding createButtonBinding(VDataBindingContext dbc, Button button, Object bean, String propertyPath, BindingDomain domain) {
+public VBinding createButtonBinding(VDataBindingContext dbc, Button button, Object bean, String propertyPath, VBindingDomain domain) {
 	ISWTObservableValue swtObservable = RcpObservables.observeButton(dbc, button);
 	VBinding binding = dbc.bindValue(
 			swtObservable,
@@ -139,7 +139,7 @@ public VBinding createControlVisibleBinding(VDataBindingContext dbc, Control con
 
 public VBinding createControlVisibleBinding(VDataBindingContext dbc, Control control, Composite parentToRedraw, Object bean, String propertyPath, VisibleCallback callback) {
 	ISWTObservableValue visibleObservable = RcpObservables.observeControlVisible(dbc, control, parentToRedraw);
-	BindingDomain domain = new BindingDomain("visible", Boolean.class);
+	VBindingDomain domain = new VBindingDomain("visible", Boolean.class);
 	final VisibleStateModelObservableValue stateModel = new VisibleStateModelObservableValue(callback, bean, propertyPath);
 	VBinding binding = dbc.bindValue(
 			visibleObservable,
@@ -154,11 +154,11 @@ public VBinding createControlVisibleBinding(VDataBindingContext dbc, Control con
 }
 
 public VBinding[] createRadioSetBindings(VDataBindingContext dbc, Button[] buttons, Object[] values, Object bean, String propertyPath, Object domainSymbol) {
-	BindingDomain domain = (BindingDomain)domainRegistry.getDomain(domainSymbol);
+	VBindingDomain domain = (VBindingDomain)domainRegistry.getDomain(domainSymbol);
 	return createRadioSetBindings(dbc, buttons, values, bean, propertyPath, domain);
 }
 
-public VBinding[] createRadioSetBindings(VDataBindingContext dbc, Button[] buttons, Object[] values, Object bean, String propertyPath, BindingDomain domain) {
+public VBinding[] createRadioSetBindings(VDataBindingContext dbc, Button[] buttons, Object[] values, Object bean, String propertyPath, VBindingDomain domain) {
 	VBinding[] bindings = new VBinding[buttons.length];
 	// for each button/value we create a ValueMatchObservable which is suitable for a button binding (boolean)
 	for (int i=0; i<buttons.length; i++) {
@@ -179,11 +179,11 @@ public VBinding[] createRadioSetBindings(VDataBindingContext dbc, Button[] butto
 }
 
 public VBinding createTextBinding(VDataBindingContext dbc, TextViewer textViewer, Object bean, String propertyPath, Object domainSymbol, TextDataBindingDetails details) {
-	BindingDomain domain = domainRegistry.getDomain(domainSymbol);
+	VBindingDomain domain = domainRegistry.getDomain(domainSymbol);
 	return createTextBinding(dbc, textViewer, bean, propertyPath, domain, details);
 }
 
-public VBinding createTextBinding(VDataBindingContext dbc, TextViewer textViewer, Object bean, String propertyPath, BindingDomain domain, TextDataBindingDetails details) {
+public VBinding createTextBinding(VDataBindingContext dbc, TextViewer textViewer, Object bean, String propertyPath, VBindingDomain domain, TextDataBindingDetails details) {
 	if (details == null)
 		details = new TextDataBindingDetails();
 	ISWTObservableValue swtObservable = RcpObservables.observeText(dbc, textViewer, details.eventType);
@@ -204,11 +204,11 @@ public VBinding createTextBinding(VDataBindingContext dbc, TextViewer textViewer
 }
 
 public VBinding createTextBinding(VDataBindingContext dbc, Text text, Object bean, String propertyPath, Object domainSymbol, TextDataBindingDetails details) {
-	BindingDomain domain = domainRegistry.getDomain(domainSymbol);
+	VBindingDomain domain = domainRegistry.getDomain(domainSymbol);
 	return createTextBinding(dbc, text, bean, propertyPath, domain, details);
 }
 
-public VBinding createTextBinding(VDataBindingContext dbc, Text text, Object bean, String propertyPath, BindingDomain domain, TextDataBindingDetails details) {
+public VBinding createTextBinding(VDataBindingContext dbc, Text text, Object bean, String propertyPath, VBindingDomain domain, TextDataBindingDetails details) {
 	if (details == null)
 		details = new TextDataBindingDetails();
 	ISWTObservableValue swtObservable = RcpObservables.observeText(dbc, text, details.eventType);
@@ -229,11 +229,11 @@ public VBinding createTextBinding(VDataBindingContext dbc, Text text, Object bea
 }
 
 public VBinding createDateTimeBinding(VDataBindingContext dbc, DateTime dateTime, Object bean, String propertyPath, Object domainSymbol) {
-	BindingDomain domain = domainRegistry.getDomain(domainSymbol);
+	VBindingDomain domain = domainRegistry.getDomain(domainSymbol);
 	return createDateTimeBinding(dbc, dateTime, bean, propertyPath, domain);
 }
 
-public VBinding createDateTimeBinding(VDataBindingContext dbc, DateTime dateTime, Object bean, String propertyPath, BindingDomain domain) {
+public VBinding createDateTimeBinding(VDataBindingContext dbc, DateTime dateTime, Object bean, String propertyPath, VBindingDomain domain) {
 	ISWTObservableValue swtObservable = RcpObservables.observeDateTime(dbc, dateTime);
 	VUpdateValueStrategy textToModel = createTargetTextToModel(dbc, domain);
 	textToModel.swtObservable = swtObservable;
@@ -251,7 +251,7 @@ public VBinding createDateTimeBinding(VDataBindingContext dbc, DateTime dateTime
 
 
 public VBinding createTableViewerListBinding(VDataBindingContext dbc, TableViewer tableViewer, Object bean, String propertyPath, Object domainSymbol) {
-	BindingDomain domain = (BindingDomain)domainRegistry.getDomain(domainSymbol);
+	VBindingDomain domain = (VBindingDomain)domainRegistry.getDomain(domainSymbol);
 	return createTableViewerListBinding(dbc, tableViewer, bean, propertyPath, domain);
 }
 
@@ -271,7 +271,7 @@ public IObservableValue observeSingleSelection(VDataBindingContext dbc, Structur
 	return RcpObservables.observeSingleSelection(dbc, viewer, targetType);
 }
 
-public VBinding createTableViewerListBinding(VDataBindingContext dbc, TableViewer tableViewer, Object bean, String propertyPath, BindingDomain domain) {
+public VBinding createTableViewerListBinding(VDataBindingContext dbc, TableViewer tableViewer, Object bean, String propertyPath, VBindingDomain domain) {
 	tableViewer.setContentProvider(new IStructuredContentProvider() {
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {}
 		public void dispose() {}
@@ -298,18 +298,18 @@ public VBinding createTableViewerListBinding(VDataBindingContext dbc, TableViewe
 	return binding;
 }
 
-private void completeBindingCreation(VBinding binding, BindingDomain domain) {
+private void completeBindingCreation(VBinding binding, VBindingDomain domain) {
 	for (Callback callback : callbacks) {
 		domain = callback.extendBindingDomain(binding, domain);
 	}
 	
 	if (domain.getExtensions() == null) return;
 	// first install DomainContextExtension
-	for (BindingDomainExtension extension : domain.getExtensions())
+	for (VBindingDomainExtension extension : domain.getExtensions())
 		if (extension instanceof DomainContextExtension)
 			extension.install(binding);
 	
-	for (BindingDomainExtension extension : domain.getExtensions())
+	for (VBindingDomainExtension extension : domain.getExtensions())
 		if (!(extension instanceof DomainContextExtension))
 			extension.install(binding);
 	if (binding.getBinding() instanceof BindingDomainExtensionDependendBinding)
@@ -330,7 +330,7 @@ public void createStatusBarErrorBinding(VDataBindingContext dbc, IStatusLineMana
 			null);
 }
 
-private VUpdateValueStrategy createTargetTextToModel(VDataBindingContext dbc, BindingDomain domain) {
+private VUpdateValueStrategy createTargetTextToModel(VDataBindingContext dbc, VBindingDomain domain) {
 	VUpdateValueStrategy strategy = new VUpdateValueStrategy(dbc);
 	strategy.setConverter(domain.getConverterBuilder().buildToModelConverter(domain));
 	IValidator beforeConvertToModel = domain.getConverterBuilder().buildBeforeSetModelValidator(domain);
@@ -347,7 +347,7 @@ private VUpdateValueStrategy createTargetTextToModel(VDataBindingContext dbc, Bi
  * @param domainSymbol
  * @return
  */
-private VUpdateValueStrategy createModelToTargetText(VDataBindingContext dbc, BindingDomain domain) {
+private VUpdateValueStrategy createModelToTargetText(VDataBindingContext dbc, VBindingDomain domain) {
 	VUpdateValueStrategy strategy = new VUpdateValueStrategy(dbc);
 	strategy.setConverter(domain.getConverterBuilder().buildFromModelConverter(domain));
 	return strategy;
@@ -359,7 +359,7 @@ private IValidator createValidator(IValidator[] validators) {
 	return new VCompoundValidator(validators);
 }
 
-public BindingDomainRegistry getDomainRegistry() {
+public VBindingDomainRegistry getDomainRegistry() {
 	return domainRegistry;
 }
 
@@ -369,7 +369,7 @@ VBinding createEnabledBinding(VDataBindingContext dbc, EnabledObservableValueFac
 
 VBinding createEnabledBinding(VDataBindingContext dbc, EnabledObservableValueFactory targetFactory, Object bean, final EnabledCallback enabledCallback, String ...propertyPathes) {
 	EnabledObservableValue target = targetFactory.createEnabledObservableValue();
-	BindingDomain domain = new BindingDomain("enabled", Boolean.class);
+	VBindingDomain domain = new VBindingDomain("enabled", Boolean.class);
 	final EnabledStateModelObservableValue model = new EnabledStateModelObservableValue(enabledCallback, bean, propertyPathes);
 	VBinding binding = dbc.bindValue(
 			target,
@@ -391,15 +391,15 @@ VBinding createEnabledBinding(VDataBindingContext dbc, EnabledObservableValueFac
 	return binding;	
 }
 
-public VBinding createActionBinding(VDataBindingContext dbc, Button button, Action action, BindingDomainExtension ...extensions) {
+public VBinding createActionBinding(VDataBindingContext dbc, Button button, Action action, VBindingDomainExtension ...extensions) {
 	new ButtonContributionItem(button, new AsyncActionWrapper(action));
 	return createActionBinding(dbc, action, extensions);
 }
 
 @Deprecated
-public VBinding createActionBinding(VDataBindingContext dbc, Action action, BindingDomainExtension ...extensions) {
+public VBinding createActionBinding(VDataBindingContext dbc, Action action, VBindingDomainExtension ...extensions) {
 	IObservableValue actionObservable = RcpObservables.observeAction(dbc, action);
-	BindingDomain domain = new BindingDomain("action", DefaultBean.class, extensions);
+	VBindingDomain domain = new VBindingDomain("action", DefaultBean.class, extensions);
 	VBinding binding = dbc.bindValue(
 			actionObservable,
 			ModelObservables.observeValue(new DefaultBean(), "this", domain.getType()), 
@@ -412,13 +412,13 @@ public VBinding createActionBinding(VDataBindingContext dbc, Action action, Bind
 	return binding;
 }
 
-public BindingDomain copyExtend(Object domainSymbol, BindingDomainExtension ... extensions) {
-	BindingDomain domain = new BindingDomain(getDomainRegistry().getDomain(domainSymbol), extensions);
+public VBindingDomain copyExtend(Object domainSymbol, VBindingDomainExtension ... extensions) {
+	VBindingDomain domain = new VBindingDomain(getDomainRegistry().getDomain(domainSymbol), extensions);
 	return domain;
 }
 
-public BindingDomain copyExtend(BindingDomain domain, BindingDomainExtension ... extensions) {
-	BindingDomain extended= new BindingDomain(domain, extensions);
+public VBindingDomain copyExtend(VBindingDomain domain, VBindingDomainExtension ... extensions) {
+	VBindingDomain extended= new VBindingDomain(domain, extensions);
 	return extended;
 }
 

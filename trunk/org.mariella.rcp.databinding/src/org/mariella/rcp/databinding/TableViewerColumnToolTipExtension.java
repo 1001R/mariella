@@ -4,7 +4,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.mariella.rcp.databinding.internal.TableController;
 import org.mariella.rcp.databinding.internal.VTableViewerObservableList;
 
-public class TableViewerColumnToolTipExtension implements BindingDomainExtension {
+public class TableViewerColumnToolTipExtension implements VBindingDomainExtension {
 
 String propertyPath;
 TableViewerColumnToolTipCallback toolTipCallback;

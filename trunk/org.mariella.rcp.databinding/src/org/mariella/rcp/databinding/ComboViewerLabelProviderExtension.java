@@ -2,14 +2,14 @@ package org.mariella.rcp.databinding;
 
 import org.mariella.rcp.databinding.internal.VComboViewerObservableValue;
 
-public class ComboViewerLabelProviderExtension implements BindingDomainExtension {
+public class ComboViewerLabelProviderExtension implements VBindingDomainExtension {
 	
 String propertyPath;
 Object domainSymbol;
-BindingDomain domain;
+VBindingDomain domain;
 
 
-public ComboViewerLabelProviderExtension(String propertyPath, BindingDomain domain) {
+public ComboViewerLabelProviderExtension(String propertyPath, VBindingDomain domain) {
 	this.propertyPath = propertyPath;
 	this.domain = domain;
 }
@@ -32,11 +32,11 @@ public Object getDomainSymbol() {
 	return domainSymbol;
 }
 
-public BindingDomain getDomain() {
+public VBindingDomain getDomain() {
 	return domain;
 }
 
-public void setDomain(BindingDomain domain) {
+public void setDomain(VBindingDomain domain) {
 	this.domain = domain;
 }
 }

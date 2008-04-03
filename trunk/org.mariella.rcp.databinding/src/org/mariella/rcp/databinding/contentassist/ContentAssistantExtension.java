@@ -1,10 +1,10 @@
 package org.mariella.rcp.databinding.contentassist;
 
-import org.mariella.rcp.databinding.BindingDomainExtension;
+import org.mariella.rcp.databinding.VBindingDomainExtension;
 import org.mariella.rcp.databinding.VBinding;
 import org.mariella.rcp.databinding.internal.VTextViewerObservableValue;
 
-public abstract class ContentAssistantExtension implements BindingDomainExtension {
+public abstract class ContentAssistantExtension implements VBindingDomainExtension {
 
 public void install(VBinding binding) {
 	VTextViewerObservableValue textViewerObservable = (VTextViewerObservableValue)binding.getBinding().getTarget(); 

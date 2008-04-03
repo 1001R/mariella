@@ -4,7 +4,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.mariella.rcp.databinding.internal.TableController;
 import org.mariella.rcp.databinding.internal.VTableViewerObservableList;
 
-public class TableViewerColumnImageExtension implements BindingDomainExtension {
+public class TableViewerColumnImageExtension implements VBindingDomainExtension {
 
 String propertyPath;
 TableViewerColumnImageCallback imageCallback;

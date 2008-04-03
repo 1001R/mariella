@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.mariella.rcp.databinding.internal.ValueSetAwareObservable;
 
-public abstract class ValueSetExtension implements BindingDomainExtension {
+public abstract class ValueSetExtension implements VBindingDomainExtension {
 
 public void install(VBinding binding) {
 	((ValueSetAwareObservable)binding.getBinding().getTarget()).installValueSetExtension(this);

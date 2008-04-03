@@ -1,9 +1,9 @@
 package org.mariella.rcp.databinding.internal;
 
-import org.mariella.rcp.databinding.BindingDomainExtension;
+import org.mariella.rcp.databinding.VBindingDomainExtension;
 import org.mariella.rcp.databinding.VBinding;
 
-public class TextViewerClipboardHandlerExtension implements BindingDomainExtension {
+public class TextViewerClipboardHandlerExtension implements VBindingDomainExtension {
 
 public void install(VBinding binding) {
 	if (!(binding.getBinding().getTarget() instanceof VTextViewerObservableValue)) return;

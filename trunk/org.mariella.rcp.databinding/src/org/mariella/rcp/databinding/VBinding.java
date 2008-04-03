@@ -12,11 +12,11 @@ void disposed(VBinding binding);
 }
 
 private VDataBindingContext dataBindingContext;
-private BindingDomain domain;
+private VBindingDomain domain;
 private Binding binding;
 private List<DisposeListener> disposeListeners = new ArrayList<DisposeListener>();
 
-VBinding(VDataBindingContext dataBindingContext, Binding binding, BindingDomain domain) {
+VBinding(VDataBindingContext dataBindingContext, Binding binding, VBindingDomain domain) {
 	this.dataBindingContext = dataBindingContext;
 	this.binding = binding;
 	this.domain = domain;
@@ -30,7 +30,7 @@ public Binding getBinding() {
 	return binding;
 }
 
-public BindingDomain getDomain() {
+public VBindingDomain getDomain() {
 	return domain;
 }
 

@@ -21,7 +21,7 @@ public CommonsValidatorConverterBuilder(AbstractFormatValidator cValidator, Form
 	this.modelType = modelType;
 }
 
-public IConverter buildFromModelConverter(BindingDomain domain) {
+public IConverter buildFromModelConverter(VBindingDomain domain) {
 	return new Converter(modelType, String.class) {
 		public Object convert(Object fromObject) {
 			try {
@@ -33,7 +33,7 @@ public IConverter buildFromModelConverter(BindingDomain domain) {
 	};
 }
 
-public IConverter buildToModelConverter(BindingDomain domain) {
+public IConverter buildToModelConverter(VBindingDomain domain) {
 	return new Converter(String.class, modelType) {
 		public Object convert(Object fromObject) {
 			if ("".equals(fromObject))

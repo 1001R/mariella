@@ -1,7 +1,7 @@
 package org.mariella.rcp.databinding;
 
 
-public interface BindingDomainExtension {
+public interface VBindingDomainExtension {
 
 void install(VBinding binding);
 

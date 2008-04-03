@@ -4,15 +4,15 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.mariella.rcp.databinding.internal.TableController;
 import org.mariella.rcp.databinding.internal.VTableViewerObservableList;
 
-public class TableViewerColumnExtension implements BindingDomainExtension {
+public class TableViewerColumnExtension implements VBindingDomainExtension {
 
 String propertyPath;
 Object domainSymbol;
-BindingDomain domain;
+VBindingDomain domain;
 String headerText;
 int weight;
 
-public TableViewerColumnExtension(String propertyPath, BindingDomain domain, String headerText, int weight) {
+public TableViewerColumnExtension(String propertyPath, VBindingDomain domain, String headerText, int weight) {
 	this.propertyPath = propertyPath;
 	this.domain = domain;
 	this.headerText = headerText;
@@ -47,7 +47,7 @@ public String getPropertyPath() {
 	return propertyPath;
 }
 
-public BindingDomain getDomain() {
+public VBindingDomain getDomain() {
 	return domain;
 }
 
@@ -55,7 +55,7 @@ public Object getDomainSymbol() {
 	return domainSymbol;
 }
 
-public void setDomain(BindingDomain domain) {
+public void setDomain(VBindingDomain domain) {
 	this.domain = domain;
 }
 

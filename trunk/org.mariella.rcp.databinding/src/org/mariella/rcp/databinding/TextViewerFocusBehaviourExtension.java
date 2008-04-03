@@ -7,7 +7,7 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.widgets.Display;
 import org.mariella.rcp.databinding.internal.VTextViewerObservableValue;
 
-public class TextViewerFocusBehaviourExtension implements BindingDomainExtension {
+public class TextViewerFocusBehaviourExtension implements VBindingDomainExtension {
 
 public void install(final VBinding binding) {
 	if (!(binding.getBinding().getTarget() instanceof VTextViewerObservableValue)) return;

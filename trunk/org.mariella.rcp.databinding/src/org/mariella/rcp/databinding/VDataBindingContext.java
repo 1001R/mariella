@@ -58,7 +58,7 @@ public void addObserver(VDataBindingContextObserver observer) {
 public VBinding bindValue(IObservableValue targetObservableValue,
 		IObservableValue modelObservableValue,
 		UpdateValueStrategy targetToModel, UpdateValueStrategy modelToTarget,
-		BindingDomain domain) {
+		VBindingDomain domain) {
 	VBinding binding = new VBinding(this, dataBindingContext.bindValue(targetObservableValue, modelObservableValue, targetToModel, modelToTarget),
 			domain);
 	bindings.add(binding);
@@ -68,7 +68,7 @@ public VBinding bindValue(IObservableValue targetObservableValue,
 public VBinding bindList(IObservableList targetObservableList,
 		IObservableList modelObservableList,
 		UpdateListStrategy targetToModel, UpdateListStrategy modelToTarget,
-		BindingDomain domain) {
+		VBindingDomain domain) {
 	VBinding binding = new VBinding(this, createListBinding(targetObservableList, modelObservableList, targetToModel, modelToTarget),
 			domain);
 	bindings.add(binding);
