@@ -49,6 +49,10 @@ public SelectionPath[] getSelectionPathes() {
 	return selectionPathes;
 }
 
+public boolean isEmptySelectionPathes() {
+	return selectionPathes.length == 0;
+}
+
 @Override
 public Object getFirstElement() {
 	return origin == null ? null : origin.getFirstElement();

@@ -12,6 +12,8 @@ VResource createNewResource();
 
 VResource createNewResource(VResource resource);
 
+Collection<Object> getReferrers(VResourceRef ref);
+
 VResourceRef getRefForPersistentId(Object persistentId);
 
 Collection<VResourceRef> getRefs();

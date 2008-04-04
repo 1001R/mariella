@@ -1,15 +1,17 @@
 package org.mariella.rcp.databinding;
 
-import org.mariella.rcp.databinding.internal.EnabledObservableValueFactory;
 
 public class GlobalEnabledRuleExtension implements DataBindingContextExtension {
 
 EnabledCallback globalEnabledCallback;
 
 VBindingFactory.Callback dataBindingFactoryCallback = new VBindingFactory.Callback() {
+	/**
+	 * Implementation installs or extens existing instances of EnabledRuleExtension with the 
+	 * given globalEnabledCallback.  
+	 * 
+	 */
 	public VBindingDomain extendBindingDomain(VBinding binding, VBindingDomain domain) {
-		if (!(binding.getBinding().getTarget() instanceof EnabledObservableValueFactory)) return domain;
-		
 		EnabledRuleExtension existingEnabledExt = domain.getExtension(EnabledRuleExtension.class);
 		if (existingEnabledExt != null) {
 			VBindingDomain copy = new VBindingDomain(domain);

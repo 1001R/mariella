@@ -33,7 +33,7 @@ VBindingFactory dataBindingFactory;
 public ObservablesManager observablesManager = new ObservablesManager();
 private TraverseHandler traverseHandler = new TraverseHandler();
 VDataBindingSelectionProvider selectionProvider = new VDataBindingSelectionProvider(this);
-private DataBindingContext bindingContext;
+DataBindingContext bindingContext;
 public Map<ISWTObservable,SWTObservableStatusDecorator> swtObservableStatusDecoratorMap = new HashMap<ISWTObservable, SWTObservableStatusDecorator>();
 public Map<TableViewer,TableController> tableControllerMap = new HashMap<TableViewer, TableController>();
 private List<VBinding> bindings = new ArrayList<VBinding>();
@@ -59,10 +59,18 @@ public VBinding bindValue(IObservableValue targetObservableValue,
 		IObservableValue modelObservableValue,
 		UpdateValueStrategy targetToModel, UpdateValueStrategy modelToTarget,
 		VBindingDomain domain) {
-	VBinding binding = new VBinding(this, bindingContext.bindValue(targetObservableValue, modelObservableValue, targetToModel, modelToTarget),
+	
+	return createBinding(
+			new Binding[] {bindingContext.bindValue(targetObservableValue, modelObservableValue, targetToModel, modelToTarget)}, 
 			domain);
-	bindings.add(binding);
-	return binding;
+}
+
+VBinding createBinding(Binding[] baseBindings, VBindingDomain domain) {
+	VBinding vBinding = new VBinding(this, 
+			baseBindings,
+			domain);
+	this.bindings.add(vBinding);
+	return vBinding;
 }
 
 public VBinding bindList(IObservableList targetObservableList,

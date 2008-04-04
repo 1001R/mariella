@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -36,17 +37,19 @@ public VDataBindingSelectionProvider(VBindingContext dbc) {
 public ISelection getSelection() {
 	for (VBinding binding : managedBindings) {
 		// Ask every binding for its selection (if selected). The selection is relative to the context (it does not include for example the page id)
-		VBindingSelection selection = ((SelectionAwareObservable)binding.getBinding().getTarget()).getSelection();
-		if (selection != null) {
-			// the target of the binding is selected, let the ContextSelectionManagementExtension complete the selection path...
-			List<ContextSelectionManagementExtension> reverseExtension = new ArrayList<ContextSelectionManagementExtension>();
-			Collections.reverse(reverseExtension);
-			for (ContextSelectionManagementExtension selExt : reverseExtension) {
-				selection = selExt.completeSelectionPath(selection);
-				if (selection == null)
-					return new StructuredSelection();
+		for (Binding b : binding.getBindings()) {
+			VBindingSelection selection = ((SelectionAwareObservable)b.getTarget()).getSelection();
+			if (selection != null) {
+				// the target of the binding is selected, let the ContextSelectionManagementExtension complete the selection path...
+				List<ContextSelectionManagementExtension> reverseExtension = new ArrayList<ContextSelectionManagementExtension>();
+				Collections.reverse(reverseExtension);
+				for (ContextSelectionManagementExtension selExt : reverseExtension) {
+					selection = selExt.completeSelectionPath(selection);
+					if (selection == null)
+						return new StructuredSelection();
+				}
+				return selection;
 			}
-			return selection;
 		}
 	}
 
@@ -61,10 +64,12 @@ public void setSelection(final ISelection selection) {
 			List<VDataBindingSelectionDispatcher> allDispatchers = new ArrayList<VDataBindingSelectionDispatcher>();
 			allDispatchers.addAll(contextSelectionManagementExtensions);
 			for (VBinding binding : managedBindings) {
-				if (binding.getBinding().getTarget() instanceof SelectionAwareObservable) {
-					VDataBindingSelectionDispatcher dispatcher = ((SelectionAwareObservable)binding.getBinding().getTarget()).getSelectionDispatcher();
-					if (dispatcher != null)
-						allDispatchers.add(dispatcher);
+				for (Binding b : binding.getBindings()) {
+					if (b.getTarget() instanceof SelectionAwareObservable) {
+						VDataBindingSelectionDispatcher dispatcher = ((SelectionAwareObservable)b.getTarget()).getSelectionDispatcher();
+						if (dispatcher != null)
+							allDispatchers.add(dispatcher);
+					}
 				}
 			}
 			

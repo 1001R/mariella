@@ -1,5 +1,6 @@
 package org.mariella.rcp.databinding;
 
+import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.observable.IObservable;
 import org.mariella.rcp.databinding.internal.EnabledObservableValueFactory;
 
@@ -35,23 +36,25 @@ public EnabledRuleExtension copyExtend(EnabledCallback ...addCallbacks) {
 }
 
 public void install(VBinding binding) {
-	IObservable observable = binding.getBinding().getTarget();
-	if (!(observable instanceof EnabledObservableValueFactory))
-		throw new IllegalStateException();
-	if (bean == null || dependencyPropertyPathes == null) {
-		binding.getBindingContext().dataBindingFactory.createEnabledBinding(
-				binding.getBindingContext(),
-				(EnabledObservableValueFactory)observable,
-				enabledCallback
-				);
-	} else {
-		binding.getBindingContext().dataBindingFactory.createEnabledBinding(
-				binding.getBindingContext(),
-				(EnabledObservableValueFactory)observable,
-				bean,
-				enabledCallback,
-				dependencyPropertyPathes
-				);
+	for (Binding b : binding.getBindings()) {
+		IObservable observable = b.getTarget();
+		if (!(observable instanceof EnabledObservableValueFactory))
+			throw new IllegalStateException();
+		if (bean == null || dependencyPropertyPathes == null) {
+			binding.getBindingContext().dataBindingFactory.createEnabledBinding(
+					binding.getBindingContext(),
+					(EnabledObservableValueFactory)observable,
+					enabledCallback
+					);
+		} else {
+			binding.getBindingContext().dataBindingFactory.createEnabledBinding(
+					binding.getBindingContext(),
+					(EnabledObservableValueFactory)observable,
+					bean,
+					enabledCallback,
+					dependencyPropertyPathes
+					);
+		}
 	}
 }
 

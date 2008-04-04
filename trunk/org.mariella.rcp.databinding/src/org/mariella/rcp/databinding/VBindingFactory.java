@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.databinding.AggregateValidationStatus;
+import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateListStrategy;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.observable.list.IObservableList;
@@ -43,6 +46,7 @@ import org.mariella.rcp.databinding.internal.VisibleStateModelObservableValue;
 
 
 public class VBindingFactory {
+static Log log = LogFactory.getLog(VBindingFactory.class);
 
 public interface Callback {
 	void bindingCreated(VBinding binding);
@@ -153,11 +157,45 @@ public VBinding createControlVisibleBinding(VBindingContext dbc, Control control
 	return binding;
 }
 
+public VBinding createRadioSetBinding(VBindingContext dbc, Button[] buttons, Object bean, String propertyPath, Object domainSymbol) {
+	VBindingDomain domain = (VBindingDomain)domainRegistry.getDomain(domainSymbol);
+	return createRadioSetBinding(dbc, buttons, bean, propertyPath, domain);
+}
+
+public VBinding createRadioSetBinding(VBindingContext dbc, Button[] buttons, Object bean, String propertyPath, VBindingDomain domain) {
+	Binding[] baseBindings = new Binding[buttons.length];
+	RadioSetExtension radioSetExtension = domain.getExtension(RadioSetExtension.class);
+	if (radioSetExtension == null) {
+		throw new IllegalArgumentException("No RadioSetExtension found in domain " + domain);
+	}
+	if (radioSetExtension.valuesAndLabels.length != buttons.length)
+		throw new IllegalArgumentException("Length of valuesAndLabels given in RadioSetExtension does not match with length of given buttons. Domain: " + domain);
+	for (int i=0;i<buttons.length;i++) {
+		Object[] valueAndLabel = radioSetExtension.valuesAndLabels[i];
+		Object value = valueAndLabel[0];
+		String label = valueAndLabel[1].toString();
+		
+		buttons[i].setText(label);
+		
+		ISWTObservableValue targetObservable = RcpObservables.observeRadioButton(dbc, buttons[i], value);
+		IObservableValue modelObservable = ModelObservables.observeValue(bean, propertyPath, domain.getType());
+		baseBindings[i] = dbc.bindingContext.bindValue(targetObservable, 
+				modelObservable, 
+				new UpdateValueStrategy(), 
+				new UpdateValueStrategy());
+	}
+	VBinding binding = dbc.createBinding(baseBindings, domain);
+	completeBindingCreation(binding, domain);
+	return binding;
+}
+
+@Deprecated
 public VBinding[] createRadioSetBindings(VBindingContext dbc, Button[] buttons, Object[] values, Object bean, String propertyPath, Object domainSymbol) {
 	VBindingDomain domain = (VBindingDomain)domainRegistry.getDomain(domainSymbol);
 	return createRadioSetBindings(dbc, buttons, values, bean, propertyPath, domain);
 }
 
+@Deprecated
 public VBinding[] createRadioSetBindings(VBindingContext dbc, Button[] buttons, Object[] values, Object bean, String propertyPath, VBindingDomain domain) {
 	VBinding[] bindings = new VBinding[buttons.length];
 	// for each button/value we create a ValueMatchObservable which is suitable for a button binding (boolean)

@@ -1,5 +1,6 @@
 package org.mariella.rcp.databinding;
 
+import org.eclipse.core.databinding.Binding;
 import org.eclipse.swt.widgets.Control;
 import org.mariella.rcp.databinding.internal.SelectionAwareObservable;
 import org.mariella.rcp.databinding.internal.VDataBindingSelectionProvider;
@@ -25,16 +26,14 @@ public SelectionManagementExtension(Object[] rootQualifiers1, Object[] rootQuali
 }
 
 public void install(VBinding binding) {
-	if (!(binding.getBinding().getTarget() instanceof SelectionAwareObservable)) {
-		throw new IllegalStateException("SelectionManagementExtension can only be applied to bindings where the target observable implements the " + SelectionAwareObservable.class.getName() + " interface");
-	}
-	
 	((VDataBindingSelectionProvider)binding.getBindingContext().getDataBindingSelectionProvider()).addManagedBinding(binding);
-	
-	((SelectionAwareObservable)binding.getBinding().getTarget()).setSelectionBasePath(rootQualifiers);
-	
-	if (targetControl != null)
-		((SelectionAwareObservable)binding.getBinding().getTarget()).setSelectionTargetControl(targetControl);
+
+	for (Binding b : binding.getBindings()) {
+		((SelectionAwareObservable)b.getTarget()).setSelectionBasePath(rootQualifiers);
+		
+		if (targetControl != null)
+			((SelectionAwareObservable)b.getTarget()).setSelectionTargetControl(targetControl);
+	}
 }
 
 }

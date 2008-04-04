@@ -2,11 +2,10 @@ package org.mariella.rcp.resources;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -100,6 +99,13 @@ public void addReferrer(VResourceRef ref, Object referrer) {
 		referrersMap.put(ref, referrers);
 	}
 	referrers.add(referrer);
+}
+
+public Collection<Object> getReferrers(VResourceRef ref) {
+	List<Object> referrers = referrersMap.get(ref);
+	if (referrers == null) return Collections.EMPTY_LIST;
+	
+	return Collections.unmodifiableCollection(referrers);
 }
 
 private VResourceRef createNewRef() {

@@ -13,12 +13,16 @@ void disposed(VBinding binding);
 
 private VBindingContext bindingContext;
 private VBindingDomain domain;
-private Binding binding;
+private Binding[] bindings;
 private List<DisposeListener> disposeListeners = new ArrayList<DisposeListener>();
 
 VBinding(VBindingContext bindingContext, Binding binding, VBindingDomain domain) {
+	this(bindingContext, new Binding[]{binding}, domain);
+}
+
+VBinding(VBindingContext bindingContext, Binding[] bindings, VBindingDomain domain) {
 	this.bindingContext = bindingContext;
-	this.binding = binding;
+	this.bindings = bindings;
 	this.domain = domain;
 }
 
@@ -27,7 +31,11 @@ public void addDisposeListener(DisposeListener l) {
 }
 
 public Binding getBinding() {
-	return binding;
+	return bindings[0];
+}
+
+public Binding[] getBindings() {
+	return bindings;
 }
 
 public VBindingDomain getDomain() {

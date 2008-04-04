@@ -6,7 +6,9 @@ public class Person extends Entity {
 
 private String firstName;
 private String lastName;
-private Character gender;
+private Character gender; 	// (m)ale / (f)email)
+private Boolean buddy;		
+private Character maritalStatus;	// (m)arried / (s)ingle / (w)idow / (d)ivorcee
 private List<Address> addresses;
 
 public String getFirstName() {
@@ -45,6 +47,22 @@ public List<Address> getAddresses() {
 
 public void setAddresses(List<Address> adressses) {
 	this.addresses = adressses;
+}
+
+public Boolean getBuddy() {
+	return buddy;
+}
+
+public void setBuddy(Boolean buddy) {
+	this.buddy = buddy;
+}
+
+public Character getMaritalStatus() {
+	return maritalStatus;
+}
+
+public void setMaritalStatus(Character maritalStatus) {
+	this.maritalStatus = maritalStatus;
 }
 
 }
