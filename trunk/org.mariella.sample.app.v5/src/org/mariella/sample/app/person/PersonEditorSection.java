@@ -6,7 +6,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Section;
-import org.mariella.rcp.databinding.TextDataBindingDetails;
+import org.mariella.rcp.databinding.TextBindingDetails;
 import org.mariella.rcp.forms.FormLayoutFactory;
 import org.mariella.rcp.forms.VResourceSectionPart;
 import org.mariella.sample.app.Activator;
@@ -39,11 +39,11 @@ private void addFirstName(Composite parent) {
 	gridData.widthHint = 100;
 	textViewer.getControl().setLayoutData(gridData);
 
-	Activator.getDataBindingFactory().createTextBinding(getCustomEditingContext().getBindingContext(), 
+	Activator.getBindingFactory().createTextBinding(getCustomEditingContext().getBindingContext(), 
 			textViewer, 
 			getCustomEditingContext().getPersonResource().getPerson(), "firstName", 
 			DomainSymbols.FirstName, 
-			new TextDataBindingDetails(SWT.Modify));
+			new TextBindingDetails(SWT.Modify));
 }
 
 private void addLastName(Composite parent) {
@@ -53,11 +53,11 @@ private void addLastName(Composite parent) {
 	gridData.widthHint = 100;
 	textViewer.getControl().setLayoutData(gridData);
 
-	Activator.getDataBindingFactory().createTextBinding(getCustomEditingContext().getBindingContext(), 
+	Activator.getBindingFactory().createTextBinding(getCustomEditingContext().getBindingContext(), 
 			textViewer, 
 			getCustomEditingContext().getPersonResource().getPerson(), "lastName", 
 			DomainSymbols.LastName, 
-			new TextDataBindingDetails(SWT.Modify));
+			new TextBindingDetails(SWT.Modify));
 }
 
 CustomEditingContext getCustomEditingContext() {

@@ -18,7 +18,7 @@ public static final String PLUGIN_ID = "org.mariella.sample.app";
 
 private static Activator plugin;
 
-private static VBindingFactory dataBindingFactory;
+private static VBindingFactory bindingFactory;
 
 static LocalResourceManager resourceManager;
 
@@ -39,12 +39,12 @@ public void start(BundleContext context) throws Exception {
 	// register mariella resource managers
 	VResourcesPlugin.getResourceManagerRegistry().addManager(new PersonResourceManager());
 	
-	dataBindingFactory = SampleBindingDomainFactory.buildDataBindingFactory();
+	bindingFactory = SampleBindingDomainFactory.buildBindingFactory();
 }
 
 public void stop(BundleContext context) throws Exception {
 	plugin = null;
-	dataBindingFactory = null;
+	bindingFactory = null;
 	super.stop(context);
 }
 
@@ -65,8 +65,8 @@ public static Image getImage(String path) {
 	return getImage(getImageDescriptor(path));
 }
 
-public static VBindingFactory getDataBindingFactory() {
-	return dataBindingFactory;
+public static VBindingFactory getBindingFactory() {
+	return bindingFactory;
 }
 
 }

@@ -178,14 +178,14 @@ public VBinding[] createRadioSetBindings(VBindingContext dbc, Button[] buttons, 
 	return bindings;
 }
 
-public VBinding createTextBinding(VBindingContext dbc, TextViewer textViewer, Object bean, String propertyPath, Object domainSymbol, TextDataBindingDetails details) {
+public VBinding createTextBinding(VBindingContext dbc, TextViewer textViewer, Object bean, String propertyPath, Object domainSymbol, TextBindingDetails details) {
 	VBindingDomain domain = domainRegistry.getDomain(domainSymbol);
 	return createTextBinding(dbc, textViewer, bean, propertyPath, domain, details);
 }
 
-public VBinding createTextBinding(VBindingContext dbc, TextViewer textViewer, Object bean, String propertyPath, VBindingDomain domain, TextDataBindingDetails details) {
+public VBinding createTextBinding(VBindingContext dbc, TextViewer textViewer, Object bean, String propertyPath, VBindingDomain domain, TextBindingDetails details) {
 	if (details == null)
-		details = new TextDataBindingDetails();
+		details = new TextBindingDetails();
 	ISWTObservableValue swtObservable = RcpObservables.observeText(dbc, textViewer, details.eventType);
 	VUpdateValueStrategy textToModel = createTargetTextToModel(dbc, domain);
 	textToModel.swtObservable = swtObservable;
@@ -203,14 +203,14 @@ public VBinding createTextBinding(VBindingContext dbc, TextViewer textViewer, Ob
 	return binding;
 }
 
-public VBinding createTextBinding(VBindingContext dbc, Text text, Object bean, String propertyPath, Object domainSymbol, TextDataBindingDetails details) {
+public VBinding createTextBinding(VBindingContext dbc, Text text, Object bean, String propertyPath, Object domainSymbol, TextBindingDetails details) {
 	VBindingDomain domain = domainRegistry.getDomain(domainSymbol);
 	return createTextBinding(dbc, text, bean, propertyPath, domain, details);
 }
 
-public VBinding createTextBinding(VBindingContext dbc, Text text, Object bean, String propertyPath, VBindingDomain domain, TextDataBindingDetails details) {
+public VBinding createTextBinding(VBindingContext dbc, Text text, Object bean, String propertyPath, VBindingDomain domain, TextBindingDetails details) {
 	if (details == null)
-		details = new TextDataBindingDetails();
+		details = new TextBindingDetails();
 	ISWTObservableValue swtObservable = RcpObservables.observeText(dbc, text, details.eventType);
 	VUpdateValueStrategy textToModel = createTargetTextToModel(dbc, domain);
 	textToModel.swtObservable = swtObservable;

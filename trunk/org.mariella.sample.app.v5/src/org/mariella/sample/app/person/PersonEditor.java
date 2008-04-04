@@ -44,7 +44,7 @@ class CustomizationCallback extends AbstractVResourceFormEditorCustomizationCall
 
 @Override
 public void implementInit() {
-	bindingContext = Activator.getDataBindingFactory().createDataBindingContext();
+	bindingContext = Activator.getBindingFactory().createDataBindingContext();
 }
 
 @Override

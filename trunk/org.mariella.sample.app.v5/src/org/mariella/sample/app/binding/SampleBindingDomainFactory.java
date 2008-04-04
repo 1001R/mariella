@@ -23,7 +23,7 @@ public static void addDefaultTextViewerExtensions(VBindingDomain domain) {
 	domain.addExtensions(new TextViewerFocusBehaviourExtension());
 }
 
-public static VBindingFactory buildDataBindingFactory() {
+public static VBindingFactory buildBindingFactory() {
 	VBindingDomainRegistry domainReg = new VBindingDomainRegistry();
 	
 	for (SampleBindingDomainFactory f : factories)
