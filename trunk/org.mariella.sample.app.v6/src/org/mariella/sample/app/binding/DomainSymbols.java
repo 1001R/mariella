@@ -4,6 +4,9 @@ public enum DomainSymbols {
 FirstName,
 LastName,
 Gender,
-MaritalStatus
+MaritalStatus,
+MaritalStatusAsText,
+Boolean
+
 
 }

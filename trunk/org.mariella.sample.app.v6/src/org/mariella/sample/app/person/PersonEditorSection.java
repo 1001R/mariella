@@ -1,6 +1,7 @@
 package org.mariella.sample.app.person;
 
 import org.eclipse.jface.text.TextViewer;
+import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
@@ -32,7 +33,9 @@ private void createClient(Section section) {
 	
 	addFirstName(client);
 	addLastName(client);
+	addMaritalStatus(client);
 	addGender(client);
+	addBuddy(client);
 }
 
 private void addFirstName(Composite parent) {
@@ -65,19 +68,48 @@ private void addLastName(Composite parent) {
 			new TextBindingDetails(SWT.Modify));
 }
 
+private void addBuddy(Composite parent) {
+	getVFormToolkit().createLabel(parent, "");
+	
+	Button checkbox = getVFormToolkit().createButton(parent, "Buddy", SWT.CHECK);
+	GridData gridData = new GridData();
+	gridData.horizontalSpan = 2;
+	checkbox.setLayoutData(gridData);
+
+	Activator.getBindingFactory().createButtonBinding(getCustomEditingContext().getBindingContext(), 
+			checkbox, 
+			getCustomEditingContext().getPersonResource().getPerson(), "buddy", 
+			DomainSymbols.Boolean);
+}
+
 private void addGender(Composite parent) {
 	getVFormToolkit().createLabel(parent, "");
 	
-	Button[] radios = new Button[2];
 	// we just create a pool of buttons, the other stuff  
 	// is done by the VBindingDomain created by the GenderDomainFactory
+	Button[] radios = new Button[2];
 	for (int i=0; i<GenderDomainFactory.AVAILABLE_VALUES.length; i++)
 		radios[i] = getVFormToolkit().createButton(parent, "", SWT.RADIO);
 	
+	// the pool of buttons is now bound to the Person's gender property:
 	Activator.getBindingFactory().createRadioSetBinding(getCustomEditingContext().getBindingContext(), 
 			radios, 
 			getCustomEditingContext().getPersonResource().getPerson(), "gender", 
 			DomainSymbols.Gender);
+}
+
+private void addMaritalStatus(Composite parent) {
+	getVFormToolkit().createLabel(parent, "Marital Status");
+	ComboViewer comboViewer = getVFormToolkit().createComboViewer(parent, SWT.DROP_DOWN | SWT.READ_ONLY);
+	GridData gridData = new GridData();
+	gridData.widthHint = 100;
+	gridData.horizontalSpan = 2;
+	comboViewer.getControl().setLayoutData(gridData);
+
+	Activator.getBindingFactory().createComboViewerBinding(getCustomEditingContext().getBindingContext(), 
+			comboViewer, 
+			getCustomEditingContext().getPersonResource().getPerson(), "maritalStatus", 
+			DomainSymbols.MaritalStatus);
 }
 
 CustomEditingContext getCustomEditingContext() {

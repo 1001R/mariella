@@ -16,6 +16,9 @@ static {
 	factories.add(new FirstNameDomainFactory());
 	factories.add(new LastNameDomainFactory());
 	factories.add(new GenderDomainFactory());
+	factories.add(new MaritalStatusDomainFactory());
+	factories.add(new MaritalStatusAsTextDomainFactory());
+	factories.add(new BooleanDomainFactory());
 }
 
 abstract VBindingDomain createDomain();

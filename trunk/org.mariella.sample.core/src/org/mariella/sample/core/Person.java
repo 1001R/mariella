@@ -54,7 +54,9 @@ public Boolean getBuddy() {
 }
 
 public void setBuddy(Boolean buddy) {
+	Object oldValue = getBuddy();
 	this.buddy = buddy;
+	propertyChangeSupport.firePropertyChange("buddy", oldValue, buddy);
 }
 
 public Character getMaritalStatus() {
@@ -62,7 +64,9 @@ public Character getMaritalStatus() {
 }
 
 public void setMaritalStatus(Character maritalStatus) {
+	Object oldValue = getMaritalStatus();
 	this.maritalStatus = maritalStatus;
+	propertyChangeSupport.firePropertyChange("buddy", oldValue, buddy);
 }
 
 }
