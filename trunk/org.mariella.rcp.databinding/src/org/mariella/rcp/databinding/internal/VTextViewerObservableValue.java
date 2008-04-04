@@ -19,8 +19,8 @@ import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.mariella.rcp.databinding.VDataBindingContext;
-import org.mariella.rcp.databinding.VDataBindingSelection;
+import org.mariella.rcp.databinding.VBindingContext;
+import org.mariella.rcp.databinding.VBindingSelection;
 import org.mariella.rcp.databinding.contentassist.ContentAssistantController;
 
 public class VTextViewerObservableValue extends AbstractSWTVetoableValue implements SelectionAwareObservable, EnabledObservableValueFactory, 
@@ -37,7 +37,7 @@ private boolean updating = false;
 private String oldValue;
 private final SelectionDispatchingObservableSupport selectionDispatchingSupport;
 ContentAssistantController contentAssistantController;
-VDataBindingContext dataBindingContext;
+VBindingContext dataBindingContext;
 
 private Listener updateListener = new Listener() {
 	public void handleEvent(Event event) {
@@ -88,7 +88,7 @@ private FocusListener focusListener = new FocusListener() {
 	}
 };
 
-public VTextViewerObservableValue(VDataBindingContext dataBindingContext, TextViewer textViewer, int updateEventType) {
+public VTextViewerObservableValue(VBindingContext dataBindingContext, TextViewer textViewer, int updateEventType) {
 	super(textViewer.getTextWidget());
 	this.dataBindingContext = dataBindingContext;
 	this.textViewer = textViewer;
@@ -172,10 +172,10 @@ public void setSelectionBasePath(Object[] path) {
 	selectionDispatchingSupport.implementSetSelectionBasePath(path);
 }
 
-public VDataBindingSelection getSelection() {
+public VBindingSelection getSelection() {
 	if (textViewer != null && textViewer.getTextWidget() != null && !textViewer.getTextWidget().isDisposed() && 
 			textViewer.getTextWidget().isFocusControl()) {
-		VDataBindingSelection selection  = selectionDispatchingSupport.implementGetSelection();
+		VBindingSelection selection  = selectionDispatchingSupport.implementGetSelection();
 		return selection;
 	}
 	return null;
@@ -211,7 +211,7 @@ public void setContextSelectionCallback(	GetContextSelectionCallback getContextS
 }
 
 void fireSelectionChanged() {
-	VDataBindingSelection selection = getSelection();
+	VBindingSelection selection = getSelection();
 	if (selection == null) return;
 	
 	VDataBindingSelectionProvider selectionProvider = (VDataBindingSelectionProvider)dataBindingContext.getSelectionProvider(); 

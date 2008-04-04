@@ -42,7 +42,7 @@ import org.mariella.rcp.databinding.internal.VUpdateValueStrategy;
 import org.mariella.rcp.databinding.internal.VisibleStateModelObservableValue;
 
 
-public class VDataBindingFactory {
+public class VBindingFactory {
 
 public interface Callback {
 	void bindingCreated(VBinding binding);
@@ -66,28 +66,28 @@ public void removePropertyChangeListener(PropertyChangeListener l) {}
 private VBindingDomainRegistry domainRegistry;
 private List<Callback> callbacks = new ArrayList<Callback>();
 
-public VDataBindingFactory(VBindingDomainRegistry registry) {
+public VBindingFactory(VBindingDomainRegistry registry) {
 	this.domainRegistry = registry;
 }
 
-public VDataBindingContext createDataBindingContext() {
-	return new VDataBindingContext(this);
+public VBindingContext createDataBindingContext() {
+	return new VBindingContext(this);
 }
 
-public void addContextExtension(VDataBindingContext dbc, DataBindingContextExtension extension) {
+public void addContextExtension(VBindingContext dbc, DataBindingContextExtension extension) {
 	extension.install(dbc);
 }
 
-public IObservableValue createPropertyObservable(VDataBindingContext dbc, Object bean, String propertyPath) {
+public IObservableValue createPropertyObservable(VBindingContext dbc, Object bean, String propertyPath) {
 	return ModelObservables.observeValue(bean, propertyPath, null);
 }
 
-public VBinding createSingleSelectionBinding(VDataBindingContext dbc, StructuredViewer structuredViewer, Object bean, String propertyPath, Object domainSymbol) {
+public VBinding createSingleSelectionBinding(VBindingContext dbc, StructuredViewer structuredViewer, Object bean, String propertyPath, Object domainSymbol) {
 	VBindingDomain domain = (VBindingDomain)domainRegistry.getDomain(domainSymbol);
 	return createSingleSelectionBinding(dbc, structuredViewer, bean, propertyPath, domain);
 }
 
-public VBinding createSingleSelectionBinding(VDataBindingContext dbc, StructuredViewer structuredViewer, Object bean, String propertyPath, VBindingDomain domain) {
+public VBinding createSingleSelectionBinding(VBindingContext dbc, StructuredViewer structuredViewer, Object bean, String propertyPath, VBindingDomain domain) {
 	VBinding binding = dbc.bindValue(RcpObservables.observeSingleSelection(dbc, structuredViewer), 
 			ModelObservables.observeValue(bean, propertyPath, domain.getType()), 
 			createTargetTextToModel(dbc, domain),  
@@ -98,12 +98,12 @@ public VBinding createSingleSelectionBinding(VDataBindingContext dbc, Structured
 	return binding;
 }
 
-public VBinding createComboViewerBinding(VDataBindingContext dbc, ComboViewer comboViewer, Object bean, String propertyPath, Object domainSymbol) {
+public VBinding createComboViewerBinding(VBindingContext dbc, ComboViewer comboViewer, Object bean, String propertyPath, Object domainSymbol) {
 	VBindingDomain domain = (VBindingDomain)domainRegistry.getDomain(domainSymbol);
 	return createComboViewerBinding(dbc, comboViewer, bean, propertyPath, domain);
 }
 
-public VBinding createComboViewerBinding(VDataBindingContext dbc, ComboViewer comboViewer, Object bean, String propertyPath, VBindingDomain domain) {
+public VBinding createComboViewerBinding(VBindingContext dbc, ComboViewer comboViewer, Object bean, String propertyPath, VBindingDomain domain) {
 	VBinding binding = dbc.bindValue(RcpObservables.observeComboViewer(dbc, comboViewer), 
 			ModelObservables.observeValue(bean, propertyPath, domain.getType()), 
 			createTargetTextToModel(dbc, domain),  
@@ -114,12 +114,12 @@ public VBinding createComboViewerBinding(VDataBindingContext dbc, ComboViewer co
 	return binding;
 }
 
-public VBinding createButtonBinding(VDataBindingContext dbc, Button button, Object bean, String propertyPath, Object domainSymbol) {
+public VBinding createButtonBinding(VBindingContext dbc, Button button, Object bean, String propertyPath, Object domainSymbol) {
 	VBindingDomain domain = (VBindingDomain)domainRegistry.getDomain(domainSymbol);
 	return createButtonBinding(dbc, button, bean, propertyPath, domain);
 }
 
-public VBinding createButtonBinding(VDataBindingContext dbc, Button button, Object bean, String propertyPath, VBindingDomain domain) {
+public VBinding createButtonBinding(VBindingContext dbc, Button button, Object bean, String propertyPath, VBindingDomain domain) {
 	ISWTObservableValue swtObservable = RcpObservables.observeButton(dbc, button);
 	VBinding binding = dbc.bindValue(
 			swtObservable,
@@ -133,11 +133,11 @@ public VBinding createButtonBinding(VDataBindingContext dbc, Button button, Obje
 	return binding;
 }
 
-public VBinding createControlVisibleBinding(VDataBindingContext dbc, Control control, Composite parentToRedraw, Object bean, String propertyPath) {
+public VBinding createControlVisibleBinding(VBindingContext dbc, Control control, Composite parentToRedraw, Object bean, String propertyPath) {
 	return createControlVisibleBinding(dbc, control, parentToRedraw, bean, propertyPath, null);
 }
 
-public VBinding createControlVisibleBinding(VDataBindingContext dbc, Control control, Composite parentToRedraw, Object bean, String propertyPath, VisibleCallback callback) {
+public VBinding createControlVisibleBinding(VBindingContext dbc, Control control, Composite parentToRedraw, Object bean, String propertyPath, VisibleCallback callback) {
 	ISWTObservableValue visibleObservable = RcpObservables.observeControlVisible(dbc, control, parentToRedraw);
 	VBindingDomain domain = new VBindingDomain("visible", Boolean.class);
 	final VisibleStateModelObservableValue stateModel = new VisibleStateModelObservableValue(callback, bean, propertyPath);
@@ -153,12 +153,12 @@ public VBinding createControlVisibleBinding(VDataBindingContext dbc, Control con
 	return binding;
 }
 
-public VBinding[] createRadioSetBindings(VDataBindingContext dbc, Button[] buttons, Object[] values, Object bean, String propertyPath, Object domainSymbol) {
+public VBinding[] createRadioSetBindings(VBindingContext dbc, Button[] buttons, Object[] values, Object bean, String propertyPath, Object domainSymbol) {
 	VBindingDomain domain = (VBindingDomain)domainRegistry.getDomain(domainSymbol);
 	return createRadioSetBindings(dbc, buttons, values, bean, propertyPath, domain);
 }
 
-public VBinding[] createRadioSetBindings(VDataBindingContext dbc, Button[] buttons, Object[] values, Object bean, String propertyPath, VBindingDomain domain) {
+public VBinding[] createRadioSetBindings(VBindingContext dbc, Button[] buttons, Object[] values, Object bean, String propertyPath, VBindingDomain domain) {
 	VBinding[] bindings = new VBinding[buttons.length];
 	// for each button/value we create a ValueMatchObservable which is suitable for a button binding (boolean)
 	for (int i=0; i<buttons.length; i++) {
@@ -178,12 +178,12 @@ public VBinding[] createRadioSetBindings(VDataBindingContext dbc, Button[] butto
 	return bindings;
 }
 
-public VBinding createTextBinding(VDataBindingContext dbc, TextViewer textViewer, Object bean, String propertyPath, Object domainSymbol, TextDataBindingDetails details) {
+public VBinding createTextBinding(VBindingContext dbc, TextViewer textViewer, Object bean, String propertyPath, Object domainSymbol, TextDataBindingDetails details) {
 	VBindingDomain domain = domainRegistry.getDomain(domainSymbol);
 	return createTextBinding(dbc, textViewer, bean, propertyPath, domain, details);
 }
 
-public VBinding createTextBinding(VDataBindingContext dbc, TextViewer textViewer, Object bean, String propertyPath, VBindingDomain domain, TextDataBindingDetails details) {
+public VBinding createTextBinding(VBindingContext dbc, TextViewer textViewer, Object bean, String propertyPath, VBindingDomain domain, TextDataBindingDetails details) {
 	if (details == null)
 		details = new TextDataBindingDetails();
 	ISWTObservableValue swtObservable = RcpObservables.observeText(dbc, textViewer, details.eventType);
@@ -203,12 +203,12 @@ public VBinding createTextBinding(VDataBindingContext dbc, TextViewer textViewer
 	return binding;
 }
 
-public VBinding createTextBinding(VDataBindingContext dbc, Text text, Object bean, String propertyPath, Object domainSymbol, TextDataBindingDetails details) {
+public VBinding createTextBinding(VBindingContext dbc, Text text, Object bean, String propertyPath, Object domainSymbol, TextDataBindingDetails details) {
 	VBindingDomain domain = domainRegistry.getDomain(domainSymbol);
 	return createTextBinding(dbc, text, bean, propertyPath, domain, details);
 }
 
-public VBinding createTextBinding(VDataBindingContext dbc, Text text, Object bean, String propertyPath, VBindingDomain domain, TextDataBindingDetails details) {
+public VBinding createTextBinding(VBindingContext dbc, Text text, Object bean, String propertyPath, VBindingDomain domain, TextDataBindingDetails details) {
 	if (details == null)
 		details = new TextDataBindingDetails();
 	ISWTObservableValue swtObservable = RcpObservables.observeText(dbc, text, details.eventType);
@@ -228,12 +228,12 @@ public VBinding createTextBinding(VDataBindingContext dbc, Text text, Object bea
 	return binding;
 }
 
-public VBinding createDateTimeBinding(VDataBindingContext dbc, DateTime dateTime, Object bean, String propertyPath, Object domainSymbol) {
+public VBinding createDateTimeBinding(VBindingContext dbc, DateTime dateTime, Object bean, String propertyPath, Object domainSymbol) {
 	VBindingDomain domain = domainRegistry.getDomain(domainSymbol);
 	return createDateTimeBinding(dbc, dateTime, bean, propertyPath, domain);
 }
 
-public VBinding createDateTimeBinding(VDataBindingContext dbc, DateTime dateTime, Object bean, String propertyPath, VBindingDomain domain) {
+public VBinding createDateTimeBinding(VBindingContext dbc, DateTime dateTime, Object bean, String propertyPath, VBindingDomain domain) {
 	ISWTObservableValue swtObservable = RcpObservables.observeDateTime(dbc, dateTime);
 	VUpdateValueStrategy textToModel = createTargetTextToModel(dbc, domain);
 	textToModel.swtObservable = swtObservable;
@@ -250,28 +250,28 @@ public VBinding createDateTimeBinding(VDataBindingContext dbc, DateTime dateTime
 }
 
 
-public VBinding createTableViewerListBinding(VDataBindingContext dbc, TableViewer tableViewer, Object bean, String propertyPath, Object domainSymbol) {
+public VBinding createTableViewerListBinding(VBindingContext dbc, TableViewer tableViewer, Object bean, String propertyPath, Object domainSymbol) {
 	VBindingDomain domain = (VBindingDomain)domainRegistry.getDomain(domainSymbol);
 	return createTableViewerListBinding(dbc, tableViewer, bean, propertyPath, domain);
 }
 
-public IObservableList createObservableList(VDataBindingContext dbc) {
+public IObservableList createObservableList(VBindingContext dbc) {
 	return ModelObservables.createObservableList(dbc);
 }
 
-public IObservableList createObservableList(VDataBindingContext dbc, List wrapped) {
+public IObservableList createObservableList(VBindingContext dbc, List wrapped) {
 	return ModelObservables.createObservableList(dbc, wrapped);
 }
 
-public IObservableValue observeSingleSelection(VDataBindingContext dbc, StructuredViewer viewer) {
+public IObservableValue observeSingleSelection(VBindingContext dbc, StructuredViewer viewer) {
 	return RcpObservables.observeSingleSelection(dbc, viewer);
 }
 
-public IObservableValue observeSingleSelection(VDataBindingContext dbc, StructuredViewer viewer, Class targetType) {
+public IObservableValue observeSingleSelection(VBindingContext dbc, StructuredViewer viewer, Class targetType) {
 	return RcpObservables.observeSingleSelection(dbc, viewer, targetType);
 }
 
-public VBinding createTableViewerListBinding(VDataBindingContext dbc, TableViewer tableViewer, Object bean, String propertyPath, VBindingDomain domain) {
+public VBinding createTableViewerListBinding(VBindingContext dbc, TableViewer tableViewer, Object bean, String propertyPath, VBindingDomain domain) {
 	tableViewer.setContentProvider(new IStructuredContentProvider() {
 		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {}
 		public void dispose() {}
@@ -323,14 +323,14 @@ private void completeBindingCreation(VBinding binding, VBindingDomain domain) {
 		((VTargetObservable)binding.getBinding().getTarget()).extensionsInstalled();
 }
 
-public void createStatusBarErrorBinding(VDataBindingContext dbc, IStatusLineManager mgr) {
+public void createStatusBarErrorBinding(VBindingContext dbc, IStatusLineManager mgr) {
 	dbc.bindValue(new VStatusLineManagerErrorMsgAdapter(mgr), 
 			new AggregateValidationStatus(dbc.getDataBindingContext().getBindings(), AggregateValidationStatus.MERGED), 
 			null, null,
 			null);
 }
 
-private VUpdateValueStrategy createTargetTextToModel(VDataBindingContext dbc, VBindingDomain domain) {
+private VUpdateValueStrategy createTargetTextToModel(VBindingContext dbc, VBindingDomain domain) {
 	VUpdateValueStrategy strategy = new VUpdateValueStrategy(dbc);
 	strategy.setConverter(domain.getConverterBuilder().buildToModelConverter(domain));
 	IValidator beforeConvertToModel = domain.getConverterBuilder().buildBeforeSetModelValidator(domain);
@@ -347,7 +347,7 @@ private VUpdateValueStrategy createTargetTextToModel(VDataBindingContext dbc, VB
  * @param domainSymbol
  * @return
  */
-private VUpdateValueStrategy createModelToTargetText(VDataBindingContext dbc, VBindingDomain domain) {
+private VUpdateValueStrategy createModelToTargetText(VBindingContext dbc, VBindingDomain domain) {
 	VUpdateValueStrategy strategy = new VUpdateValueStrategy(dbc);
 	strategy.setConverter(domain.getConverterBuilder().buildFromModelConverter(domain));
 	return strategy;
@@ -363,11 +363,11 @@ public VBindingDomainRegistry getDomainRegistry() {
 	return domainRegistry;
 }
 
-VBinding createEnabledBinding(VDataBindingContext dbc, EnabledObservableValueFactory targetFactory, EnabledCallback enabledCallback) {
+VBinding createEnabledBinding(VBindingContext dbc, EnabledObservableValueFactory targetFactory, EnabledCallback enabledCallback) {
 	return createEnabledBinding(dbc, targetFactory, new DefaultBean(), enabledCallback);
 }
 
-VBinding createEnabledBinding(VDataBindingContext dbc, EnabledObservableValueFactory targetFactory, Object bean, final EnabledCallback enabledCallback, String ...propertyPathes) {
+VBinding createEnabledBinding(VBindingContext dbc, EnabledObservableValueFactory targetFactory, Object bean, final EnabledCallback enabledCallback, String ...propertyPathes) {
 	EnabledObservableValue target = targetFactory.createEnabledObservableValue();
 	VBindingDomain domain = new VBindingDomain("enabled", Boolean.class);
 	final EnabledStateModelObservableValue model = new EnabledStateModelObservableValue(enabledCallback, bean, propertyPathes);
@@ -391,13 +391,13 @@ VBinding createEnabledBinding(VDataBindingContext dbc, EnabledObservableValueFac
 	return binding;	
 }
 
-public VBinding createActionBinding(VDataBindingContext dbc, Button button, Action action, VBindingDomainExtension ...extensions) {
+public VBinding createActionBinding(VBindingContext dbc, Button button, Action action, VBindingDomainExtension ...extensions) {
 	new ButtonContributionItem(button, new AsyncActionWrapper(action));
 	return createActionBinding(dbc, action, extensions);
 }
 
 @Deprecated
-public VBinding createActionBinding(VDataBindingContext dbc, Action action, VBindingDomainExtension ...extensions) {
+public VBinding createActionBinding(VBindingContext dbc, Action action, VBindingDomainExtension ...extensions) {
 	IObservableValue actionObservable = RcpObservables.observeAction(dbc, action);
 	VBindingDomain domain = new VBindingDomain("action", DefaultBean.class, extensions);
 	VBinding binding = dbc.bindValue(

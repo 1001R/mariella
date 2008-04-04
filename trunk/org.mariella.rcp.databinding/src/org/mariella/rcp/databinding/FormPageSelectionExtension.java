@@ -14,12 +14,12 @@ public FormPageSelectionExtension(FormEditor formEditor) {
 	this.formEditor = formEditor;
 }
 
-public void install(VDataBindingContext dataBindingContext) {
+public void install(VBindingContext dataBindingContext) {
 	super.install(dataBindingContext);
 	dataBindingContext.setActionBars(formEditor.getEditorSite().getActionBars());
 }
 
-public VDataBindingSelection completeSelectionPath(VDataBindingSelection selection) {
+public VBindingSelection completeSelectionPath(VBindingSelection selection) {
 	if (formEditor != null && formEditor.getActivePageInstance() == null) return null;
 	String pageId = formEditor.getActivePageInstance().getId();
 	Object[] elements = selection.toArray();
@@ -28,7 +28,7 @@ public VDataBindingSelection completeSelectionPath(VDataBindingSelection selecti
 		SelectionPath path = (SelectionPath)elements[i];
 		newPathes[i] = new SelectionPath(new Object[]{pageId},path.qualifiers);
 	}
-	return new VDataBindingSelection(selection.getTargetObservable(), selection.origin, newPathes);
+	return new VBindingSelection(selection.getTargetObservable(), selection.origin, newPathes);
 }
 
 public void dispatchSelection(VDataBindingSelectionDispatchContext dispatchCtx) {

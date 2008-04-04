@@ -10,7 +10,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DateTime;
-import org.mariella.rcp.databinding.VDataBindingSelection;
+import org.mariella.rcp.databinding.VBindingSelection;
 
 public class DateTimeObservableValue extends AbstractSWTVetoableValue implements SelectionAwareObservable, VTargetObservable {
 
@@ -85,7 +85,7 @@ public void setSelectionBasePath(Object[] path) {
 	selectionDispatchingSupport.implementSetSelectionBasePath(path);
 }
 
-public VDataBindingSelection getSelection() {
+public VBindingSelection getSelection() {
 	if (dateTime != null && !dateTime.isDisposed() && dateTime.isFocusControl())
 		return selectionDispatchingSupport.implementGetSelection();
 	return null;

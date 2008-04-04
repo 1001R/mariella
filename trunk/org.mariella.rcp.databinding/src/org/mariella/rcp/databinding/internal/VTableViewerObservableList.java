@@ -20,12 +20,12 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Widget;
 import org.mariella.rcp.databinding.SelectionPath;
-import org.mariella.rcp.databinding.VDataBindingContext;
-import org.mariella.rcp.databinding.VDataBindingSelection;
+import org.mariella.rcp.databinding.VBindingContext;
+import org.mariella.rcp.databinding.VBindingSelection;
 
 public class VTableViewerObservableList extends AbstractObservableList implements ISWTObservable, SelectionAwareObservable, EnabledObservableValueFactory, VTargetObservable, VDataBindingSelectionDispatcher {
 
-VDataBindingContext dataBindingContext;
+VBindingContext dataBindingContext;
 TableViewer tableViewer;
 Class elementType;
 Object[] selectionBasePath = null;
@@ -43,7 +43,7 @@ PropertyChangeListener elementPropertyChangeListener = new PropertyChangeListene
 	}
 };
 
-public VTableViewerObservableList(VDataBindingContext dataBindingContext, TableViewer tableViewer, Class elementType) {
+public VTableViewerObservableList(VBindingContext dataBindingContext, TableViewer tableViewer, Class elementType) {
 	super(SWTObservables.getRealm(tableViewer.getControl().getDisplay()));
 	this.dataBindingContext = dataBindingContext;
 	this.tableViewer = tableViewer;
@@ -55,7 +55,7 @@ public VTableViewerObservableList(VDataBindingContext dataBindingContext, TableV
 			try {
 				updatingSelection = true;
 
-				VDataBindingSelection selection = getSelection();
+				VBindingSelection selection = getSelection();
 				if (selection != null)
 					((VDataBindingSelectionProvider)VTableViewerObservableList.this.dataBindingContext.getSelectionProvider()).fireSelectionChanged(getSelection());
 			} finally {
@@ -180,12 +180,12 @@ public void dispatchSelection(VDataBindingSelectionDispatchContext dispatchCtx) 
 		dispatchCtx.invokeNextDispatcher(false);
 }
 
-public VDataBindingSelection getSelection() {
+public VBindingSelection getSelection() {
 	if (tableViewer == null && tableViewer.getTable() == null || tableViewer.getTable().isDisposed()) return null;
 	IStructuredSelection selection = (IStructuredSelection)tableViewer.getSelection(); 
 	if (selection.isEmpty()) return null;
 	
-	return new VDataBindingSelection(this, 
+	return new VBindingSelection(this, 
 			(IStructuredSelection)tableViewer.getSelection(), 
 			new SelectionPath(selectionBasePath, new Object[]{indexOf(selection.getFirstElement())}));
 }

@@ -7,7 +7,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.mariella.rcp.databinding.VDataBindingSelection;
+import org.mariella.rcp.databinding.VBindingSelection;
 
 public abstract class VAbstractButtonObservableValue extends AbstractSWTObservableValue implements SelectionAwareObservable, EnabledObservableValueFactory, VTargetObservable {
 
@@ -66,7 +66,7 @@ public void setSelectionBasePath(Object[] path) {
 	selectionDispatchingSupport.implementSetSelectionBasePath(path);
 }
 
-public VDataBindingSelection getSelection() {
+public VBindingSelection getSelection() {
 	if (button != null && !button.isDisposed() && button.isFocusControl())
 		return selectionDispatchingSupport.implementGetSelection();
 	return null;

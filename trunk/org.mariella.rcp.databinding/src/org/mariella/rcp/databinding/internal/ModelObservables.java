@@ -5,7 +5,7 @@ import java.util.List;
 import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
-import org.mariella.rcp.databinding.VDataBindingContext;
+import org.mariella.rcp.databinding.VBindingContext;
 
 public class ModelObservables {
 
@@ -13,15 +13,15 @@ public static IObservableValue observeValue(Object object, String propertyPath, 
 	return new PropertyPathObservableValue(Realm.getDefault(), object, propertyPath, valueType);
 }
 
-public static IObservableList createObservableList(VDataBindingContext ctx) {
+public static IObservableList createObservableList(VBindingContext ctx) {
 	return new WritableListImpl(ctx);
 }
 
-public static IObservableList createObservableList(VDataBindingContext ctx, List wrapped) {
+public static IObservableList createObservableList(VBindingContext ctx, List wrapped) {
 	return new WritableListImpl(ctx, wrapped);
 }
 
-public static IObservableList observeList(VDataBindingContext ctx, Object object, String propertyPath, Class type) {
+public static IObservableList observeList(VBindingContext ctx, Object object, String propertyPath, Class type) {
 	/*
 	PropertyPathSupport supp = new PropertyPathSupport();
 	supp.object = object;

@@ -9,18 +9,18 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.databinding.swt.ISWTObservableValue;
 import org.mariella.rcp.databinding.SWTObservableStatusDecorator;
-import org.mariella.rcp.databinding.VDataBindingContext;
+import org.mariella.rcp.databinding.VBindingContext;
 
 
 public class VUpdateValueStrategy extends UpdateValueStrategy {
 	
 private Log log = LogFactory.getLog(VUpdateValueStrategy.class);
 
-public VDataBindingContext dbc;
+public VBindingContext dbc;
 public ISWTObservableValue swtObservable;
 public String conversionError = null;
 
-public VUpdateValueStrategy(VDataBindingContext dbc) {
+public VUpdateValueStrategy(VBindingContext dbc) {
 	super();
 	this.dbc = dbc;
 }

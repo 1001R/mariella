@@ -3,7 +3,7 @@ package org.mariella.rcp.databinding.internal;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Control;
 import org.mariella.rcp.databinding.SelectionPath;
-import org.mariella.rcp.databinding.VDataBindingSelection;
+import org.mariella.rcp.databinding.VBindingSelection;
 
 public class SelectionDispatchingObservableSupport implements VDataBindingSelectionDispatcher{
 
@@ -38,15 +38,15 @@ public void dispatchSelection(VDataBindingSelectionDispatchContext dispatchCtx) 
 		dispatchCtx.invokeNextDispatcher(false);
 }
 
-public VDataBindingSelection implementGetSelection() {
+public VBindingSelection implementGetSelection() {
 	if (contextSelectionCallback == null) 
-		return new VDataBindingSelection(targetObservable, new StructuredSelection(), new SelectionPath(basePath));
+		return new VBindingSelection(targetObservable, new StructuredSelection(), new SelectionPath(basePath));
 	
-	VDataBindingSelection contextSelection = contextSelectionCallback.getContextSelection();
+	VBindingSelection contextSelection = contextSelectionCallback.getContextSelection();
 	if (contextSelection == null || contextSelection.getSelectionPathes().length == 0) return null;
 	
 	SelectionPath contextSelectionPath = (SelectionPath)contextSelection.getSelectionPathes()[0];
-	return new VDataBindingSelection(targetObservable, new StructuredSelection(), new SelectionPath(contextSelectionPath.getQualifiers(), basePath));
+	return new VBindingSelection(targetObservable, new StructuredSelection(), new SelectionPath(contextSelectionPath.getQualifiers(), basePath));
 }
 
 public void setSelectionTargetControl(Control control) {

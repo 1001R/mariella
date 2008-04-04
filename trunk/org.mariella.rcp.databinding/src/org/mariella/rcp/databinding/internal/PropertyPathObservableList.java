@@ -13,10 +13,10 @@ import org.eclipse.core.databinding.observable.list.ObservableList;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.IValueChangeListener;
 import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
-import org.mariella.rcp.databinding.VDataBindingContext;
-import org.mariella.rcp.databinding.VDataBindingContextObserver;
+import org.mariella.rcp.databinding.VBindingContext;
+import org.mariella.rcp.databinding.VBindingContextObserver;
 
-public class PropertyPathObservableList extends ObservableList implements VDataBindingContextObserver {
+public class PropertyPathObservableList extends ObservableList implements VBindingContextObserver {
 
 private PropertyPathSupport propertyPathSupport = new PropertyPathSupport();
 private PropertyListenerSupport propertyListenSupport;
@@ -46,10 +46,10 @@ private PropertyChangeListener propertyChangeListener = new PropertyChangeListen
 };
 
 private boolean updating = false;
-private VDataBindingContext dataBindingContext;
+private VBindingContext dataBindingContext;
 
 
-public PropertyPathObservableList(VDataBindingContext dataBindingContext, Realm realm, Object object, String propertyPath, Class elementType) {
+public PropertyPathObservableList(VBindingContext dataBindingContext, Realm realm, Object object, String propertyPath, Class elementType) {
 	super(realm, new ArrayList(), elementType);
 	this.dataBindingContext = dataBindingContext;
 	propertyPathSupport.object = object;

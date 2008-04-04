@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Control;
 import org.mariella.rcp.databinding.ComboViewerLabelProviderExtension;
 import org.mariella.rcp.databinding.VBinding;
-import org.mariella.rcp.databinding.VDataBindingSelection;
+import org.mariella.rcp.databinding.VBindingSelection;
 import org.mariella.rcp.databinding.ValueSetExtension;
 
 public class VComboViewerObservableValue extends VStructuredViewerSingleSelectionObservableValue implements SelectionAwareObservable, EnabledObservableValueFactory, ILabelProvider, VTargetObservable,
@@ -65,7 +65,7 @@ public void setOffsetSelection(boolean offsetSelection) {
 	selectionDispatchingSupport.setOffsetSelection(offsetSelection);
 }
 
-public VDataBindingSelection getSelection() {
+public VBindingSelection getSelection() {
 	Combo combo = getComboViewer().getCombo(); 
 	if (combo != null && !combo.isDisposed() && combo.isFocusControl())
 		return selectionDispatchingSupport.implementGetSelection();

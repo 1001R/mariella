@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import org.eclipse.core.databinding.observable.list.WritableList;
-import org.mariella.rcp.databinding.VDataBindingContext;
+import org.mariella.rcp.databinding.VBindingContext;
 
 /**
  * Same as WritableList, except no Realm check on read ("getterCalled") 
@@ -16,10 +16,10 @@ import org.mariella.rcp.databinding.VDataBindingContext;
  */
 public class WritableListImpl extends WritableList {
 
-public WritableListImpl(VDataBindingContext ctx) {
+public WritableListImpl(VBindingContext ctx) {
 }
 
-public WritableListImpl(VDataBindingContext ctx, List toWrap) {
+public WritableListImpl(VBindingContext ctx, List toWrap) {
 	super(toWrap, null);
 }
 

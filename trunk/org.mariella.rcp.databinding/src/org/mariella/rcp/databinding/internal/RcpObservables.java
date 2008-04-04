@@ -17,12 +17,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Text;
-import org.mariella.rcp.databinding.VDataBindingContext;
+import org.mariella.rcp.databinding.VBindingContext;
 
 
 public class RcpObservables {
 
-public static ISWTObservableValue observeText(VDataBindingContext ctx, TextViewer textViewer, int eventType) {
+public static ISWTObservableValue observeText(VBindingContext ctx, TextViewer textViewer, int eventType) {
 	if (textViewer.getDocument() == null)
 		textViewer.setDocument(new Document());
 	// overload tab processing from text viewers (yes, we want traverse behaviour on TAB-key events)
@@ -37,65 +37,65 @@ public static ISWTObservableValue observeText(VDataBindingContext ctx, TextViewe
 	return value;
 }
 
-public static ISWTObservableValue observeText(VDataBindingContext ctx, Text text, int eventType) {
+public static ISWTObservableValue observeText(VBindingContext ctx, Text text, int eventType) {
 	ISWTObservableValue value = new VTextObservableValue(text, eventType);
 	ctx.observablesManager.addObservable(value);
 	return value;
 }
 
-public static ISWTObservableValue observeControlVisible(VDataBindingContext ctx, Control control, Composite parentToRedraw) {
+public static ISWTObservableValue observeControlVisible(VBindingContext ctx, Control control, Composite parentToRedraw) {
 	return new ControlVisibleObservableValue(control, parentToRedraw);
 }
 
-public static ISWTObservableValue observeDateTime(VDataBindingContext ctx, DateTime dateTime) {
+public static ISWTObservableValue observeDateTime(VBindingContext ctx, DateTime dateTime) {
 	ISWTObservableValue value = new DateTimeObservableValue(dateTime);
 	ctx.observablesManager.addObservable(value);
 	return value;
 }
 
-public static IObservableValue observeSingleSelection(VDataBindingContext ctx, StructuredViewer structuredViewer) {
+public static IObservableValue observeSingleSelection(VBindingContext ctx, StructuredViewer structuredViewer) {
 	IObservableValue value = new VStructuredViewerSingleSelectionObservableValue(ViewersObservables.observeSingleSelection(structuredViewer), structuredViewer);
 	ctx.observablesManager.addObservable(value);
 	return value;
 }
 
-public static IObservableValue observeSingleSelection(VDataBindingContext ctx, StructuredViewer structuredViewer, Class targetType) {
+public static IObservableValue observeSingleSelection(VBindingContext ctx, StructuredViewer structuredViewer, Class targetType) {
 	IObservableValue value = new VStructuredViewerSingleSelectionObservableValue(ViewersObservables.observeSingleSelection(structuredViewer), structuredViewer, targetType);
 	ctx.observablesManager.addObservable(value);
 	return value;
 }
 
-public static IObservableValue observeComboViewer(VDataBindingContext ctx, ComboViewer comboViewer) {
+public static IObservableValue observeComboViewer(VBindingContext ctx, ComboViewer comboViewer) {
 	IObservableValue value = new VComboViewerObservableValue(ViewersObservables.observeSingleSelection(comboViewer), comboViewer);
 	ctx.observablesManager.addObservable(value);
 	return value;
 }
 
-public static IObservableValue observeComboViewer(VDataBindingContext ctx, ComboViewer comboViewer, Class targetType) {
+public static IObservableValue observeComboViewer(VBindingContext ctx, ComboViewer comboViewer, Class targetType) {
 	IObservableValue value = new VComboViewerObservableValue(ViewersObservables.observeSingleSelection(comboViewer), comboViewer, targetType);
 	ctx.observablesManager.addObservable(value);
 	return value;
 }
 
-public static IObservableList observeTableViewer(VDataBindingContext ctx, TableViewer tableViewer, Class type) {
+public static IObservableList observeTableViewer(VBindingContext ctx, TableViewer tableViewer, Class type) {
 	IObservableList value = new VTableViewerObservableList(ctx, tableViewer, type);
 	ctx.observablesManager.addObservable(value);
 	return value;
 }
 
-public static ISWTObservableValue observeButton(VDataBindingContext ctx, Button button) {
+public static ISWTObservableValue observeButton(VBindingContext ctx, Button button) {
 	ISWTObservableValue value = new VButtonObservableValue(button);
 	ctx.observablesManager.addObservable(value);
 	return value;
 }
 
-public static ISWTObservableValue observeRadioButton(VDataBindingContext ctx, Button button, Object matchingValue) {
+public static ISWTObservableValue observeRadioButton(VBindingContext ctx, Button button, Object matchingValue) {
 	ISWTObservableValue value = new VRadioButtonObservableValue(button, matchingValue);
 	ctx.observablesManager.addObservable(value);
 	return value;
 }
 
-public static IObservableValue observeAction(VDataBindingContext ctx, Action action) {
+public static IObservableValue observeAction(VBindingContext ctx, Action action) {
 	IObservableValue value = new VActionObservable(action);
 	ctx.observablesManager.addObservable(value);
 	return value;

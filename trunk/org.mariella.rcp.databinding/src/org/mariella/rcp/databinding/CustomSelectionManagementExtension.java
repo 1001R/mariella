@@ -4,7 +4,7 @@ import org.mariella.rcp.databinding.internal.VDataBindingSelectionDispatchContex
 
 public abstract class CustomSelectionManagementExtension extends ContextSelectionManagementExtension {
 
-public final VDataBindingSelection completeSelectionPath(VDataBindingSelection selection) {
+public final VBindingSelection completeSelectionPath(VBindingSelection selection) {
 	Object selectionPathToken = readSelection();
 	Object[] elements = selection.toArray();
 	SelectionPath[] newPathes = new SelectionPath[elements.length];
@@ -12,7 +12,7 @@ public final VDataBindingSelection completeSelectionPath(VDataBindingSelection s
 		SelectionPath path = (SelectionPath)elements[i];
 		newPathes[i] = new SelectionPath(new Object[]{selectionPathToken},path.qualifiers);
 	}
-	return new VDataBindingSelection(selection.getTargetObservable(), selection.origin, newPathes);
+	return new VBindingSelection(selection.getTargetObservable(), selection.origin, newPathes);
 }
 
 public final void dispatchSelection(VDataBindingSelectionDispatchContext dispatchCtx) {

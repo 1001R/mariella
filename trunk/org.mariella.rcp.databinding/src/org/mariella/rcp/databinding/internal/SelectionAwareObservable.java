@@ -1,7 +1,7 @@
 package org.mariella.rcp.databinding.internal;
 
 import org.eclipse.swt.widgets.Control;
-import org.mariella.rcp.databinding.VDataBindingSelection;
+import org.mariella.rcp.databinding.VBindingSelection;
 
 public interface SelectionAwareObservable {
 
@@ -14,7 +14,7 @@ void setSelectionBasePath(Object[] qualifiers);
  * 
  * @return
  */
-VDataBindingSelection getSelection();
+VBindingSelection getSelection();
 
 /**
  * If a targetControl is given to the selection management extension,

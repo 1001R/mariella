@@ -6,8 +6,8 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.actions.ActionFactory;
-import org.mariella.rcp.databinding.VDataBindingContext;
-import org.mariella.rcp.databinding.VDataBindingSelection;
+import org.mariella.rcp.databinding.VBindingContext;
+import org.mariella.rcp.databinding.VBindingSelection;
 
 public class GlobalClipboardActionsHandler implements ISelectionChangedListener {
 abstract class GlobalClipboardAction extends Action {
@@ -49,13 +49,13 @@ void implementAction(ClipboardSupportingObservable observable) {
 }
 
 
-VDataBindingContext dataBindingContext;
+VBindingContext dataBindingContext;
 CutAction cutAction;
 CopyAction copyAction;
 PasteAction pasteAction;
 DeleteAction deleteAction;
 
-public GlobalClipboardActionsHandler(VDataBindingContext dataBindingContext) {
+public GlobalClipboardActionsHandler(VBindingContext dataBindingContext) {
 	this.dataBindingContext = dataBindingContext;
 	cutAction = new CutAction();
 	copyAction = new CopyAction();
@@ -89,8 +89,8 @@ public void validateActions() {
 }
 
 private ClipboardSupportingObservable getClipboardSupportingObservable(ISelection selection) {
-	if (selection instanceof VDataBindingSelection) {
-		VTargetObservable target = ((VDataBindingSelection)selection).getTargetObservable();
+	if (selection instanceof VBindingSelection) {
+		VTargetObservable target = ((VBindingSelection)selection).getTargetObservable();
 		if (target instanceof ClipboardSupportingObservable) {
 			return (ClipboardSupportingObservable)target;
 		}

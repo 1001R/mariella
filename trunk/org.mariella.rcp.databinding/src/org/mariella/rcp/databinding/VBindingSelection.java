@@ -17,19 +17,19 @@ import org.mariella.rcp.databinding.internal.VTargetObservable;
  * @author martin
  *
  */
-public class VDataBindingSelection implements IStructuredSelection {
+public class VBindingSelection implements IStructuredSelection {
 
 VTargetObservable targetObservable;	
 IStructuredSelection origin;
 SelectionPath[] selectionPathes;
 	
-public VDataBindingSelection(VTargetObservable targetObservable, IStructuredSelection origin, SelectionPath ... pathes) {
+public VBindingSelection(VTargetObservable targetObservable, IStructuredSelection origin, SelectionPath ... pathes) {
 	this.targetObservable = targetObservable;
 	this.origin = origin;
 	this.selectionPathes = pathes;
 }
 
-public VDataBindingSelection(SelectionPath ... pathes) {
+public VBindingSelection(SelectionPath ... pathes) {
 	this.targetObservable = null;
 	this.origin = null;
 	this.selectionPathes = pathes;

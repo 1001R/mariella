@@ -15,28 +15,28 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.mariella.rcp.databinding.ContextSelectionManagementExtension;
 import org.mariella.rcp.databinding.SelectionPath;
 import org.mariella.rcp.databinding.VBinding;
-import org.mariella.rcp.databinding.VDataBindingContext;
-import org.mariella.rcp.databinding.VDataBindingSelection;
+import org.mariella.rcp.databinding.VBindingContext;
+import org.mariella.rcp.databinding.VBindingSelection;
 
 public class VDataBindingSelectionProvider implements ISelectionProvider {
 @SuppressWarnings("unused")
 private static Log log = LogFactory.getLog(VDataBindingSelectionProvider.class);
 
 @SuppressWarnings("unused")
-private VDataBindingContext dataBindingContext;
+private VBindingContext dataBindingContext;
 private ListenerList listeners = new ListenerList();
 private List<VBinding> managedBindings = new ArrayList<VBinding>();
 List<ContextSelectionManagementExtension> contextSelectionManagementExtensions = new ArrayList<ContextSelectionManagementExtension>();
 private ISelectionProvider delegateSelectionProvider = null;
 
-public VDataBindingSelectionProvider(VDataBindingContext dbc) {
+public VDataBindingSelectionProvider(VBindingContext dbc) {
 	this.dataBindingContext = dbc;
 }
 
 public ISelection getSelection() {
 	for (VBinding binding : managedBindings) {
 		// Ask every binding for its selection (if selected). The selection is relative to the context (it does not include for example the page id)
-		VDataBindingSelection selection = ((SelectionAwareObservable)binding.getBinding().getTarget()).getSelection();
+		VBindingSelection selection = ((SelectionAwareObservable)binding.getBinding().getTarget()).getSelection();
 		if (selection != null) {
 			// the target of the binding is selected, let the ContextSelectionManagementExtension complete the selection path...
 			List<ContextSelectionManagementExtension> reverseExtension = new ArrayList<ContextSelectionManagementExtension>();
@@ -56,8 +56,8 @@ public ISelection getSelection() {
 
 public void setSelection(final ISelection selection) {
 	VDataBindingSelectionDispatchContext dispatchCtx = new VDataBindingSelectionDispatchContext();
-	if(selection instanceof VDataBindingSelection) {
-		for (SelectionPath path : ((VDataBindingSelection)selection).getSelectionPathes()) {
+	if(selection instanceof VBindingSelection) {
+		for (SelectionPath path : ((VBindingSelection)selection).getSelectionPathes()) {
 			List<VDataBindingSelectionDispatcher> allDispatchers = new ArrayList<VDataBindingSelectionDispatcher>();
 			allDispatchers.addAll(contextSelectionManagementExtensions);
 			for (VBinding binding : managedBindings) {
@@ -80,7 +80,7 @@ public void setSelection(final ISelection selection) {
 	}
 }
 
-public void fireSelectionChanged(VDataBindingSelection selection) {
+public void fireSelectionChanged(VBindingSelection selection) {
 	SelectionChangedEvent ev = new SelectionChangedEvent(this, selection);
 	for (Object l : listeners.getListeners())
 		((ISelectionChangedListener)l).selectionChanged(ev);

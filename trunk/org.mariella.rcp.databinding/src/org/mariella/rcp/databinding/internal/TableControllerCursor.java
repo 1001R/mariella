@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.TypedListener;
 import org.eclipse.swt.widgets.Widget;
-import org.mariella.rcp.databinding.VDataBindingContext;
+import org.mariella.rcp.databinding.VBindingContext;
 
 /**
  * Copied from original TableCursor and modified in a way that 
@@ -44,7 +44,7 @@ TableViewer tableViewer;
 TableItem row = null;
 TableColumn column = null;
 Listener tableListener, resizeListener, disposeItemListener, disposeColumnListener;
-VDataBindingContext dataBindingContext;
+VBindingContext dataBindingContext;
 
 Listener listener = new Listener() {
 	public void handleEvent(Event event) {
@@ -113,7 +113,7 @@ static final int FOREGROUND = SWT.COLOR_LIST_SELECTION;
  * @see Widget#checkSubclass()
  * @see Widget#getStyle()
  */
-public TableControllerCursor(VDataBindingContext dbc, TableController tableController, TableViewer tableViewer, int style) {
+public TableControllerCursor(VBindingContext dbc, TableController tableController, TableViewer tableViewer, int style) {
 	super(tableViewer.getTable(), style);
 	this.dataBindingContext = dbc;
 	this.tableViewer = tableViewer;

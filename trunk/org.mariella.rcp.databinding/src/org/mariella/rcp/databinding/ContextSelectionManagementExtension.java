@@ -8,11 +8,11 @@ public abstract class ContextSelectionManagementExtension implements DataBinding
 public void dispose() {
 }
 
-public void install(VDataBindingContext dataBindingContext) {
+public void install(VBindingContext dataBindingContext) {
 	dataBindingContext.selectionProvider.installContextSelectionManagementExtension(this);
 }
 
-public abstract VDataBindingSelection completeSelectionPath(VDataBindingSelection selection);
+public abstract VBindingSelection completeSelectionPath(VBindingSelection selection);
 
 public abstract void dispatchSelection(VDataBindingSelectionDispatchContext dispatchCtx);
 

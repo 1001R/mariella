@@ -50,9 +50,9 @@ import org.mariella.rcp.databinding.TableViewerColumnToolTipExtension;
 import org.mariella.rcp.databinding.TableViewerEditExtension;
 import org.mariella.rcp.databinding.TableViewerElementChangeListenerExtension;
 import org.mariella.rcp.databinding.VBinding;
-import org.mariella.rcp.databinding.VDataBindingContext;
-import org.mariella.rcp.databinding.VDataBindingFactory;
-import org.mariella.rcp.databinding.VDataBindingSelection;
+import org.mariella.rcp.databinding.VBindingContext;
+import org.mariella.rcp.databinding.VBindingFactory;
+import org.mariella.rcp.databinding.VBindingSelection;
 
 public class TableController implements ITableLabelProvider, ITableFontProvider {
 
@@ -71,12 +71,12 @@ private Map<String,TableViewerColumnEditExtension> editExtensionMap = new HashMa
 private Map<String, TableViewerColumnLabelDecoratorExtension> labelDecoratorExtensionMap = new HashMap<String, TableViewerColumnLabelDecoratorExtension>();
 private Map<String,Composite> editCompositeMap = new HashMap<String,Composite>();
 private Map<String,Control> editControlMap = new HashMap<String,Control>();
-private VDataBindingContext dataBindingContext;
+private VBindingContext dataBindingContext;
 private boolean editable = true;
 private boolean hookElementChangeListeners = false;
 private List<Runnable> onExtensionInstalledCommands = new ArrayList<Runnable>();
 
-public static TableController createTableController(VDataBindingContext dbc, TableViewer tableViewer) {
+public static TableController createTableController(VBindingContext dbc, TableViewer tableViewer) {
 	TableController controller = new TableController();
 	controller.dataBindingContext = dbc;
 	dbc.tableControllerMap.put(tableViewer, controller);
@@ -193,14 +193,14 @@ public void install(TableViewerColumnEditExtension columnEditExtension) {
 	final Composite editControlComposite = new Composite(tableCursor, SWT.NONE);
 	editControlComposite.setLayout(new FormLayout());
 	// add callback to associate all created SelectionAwareObservables with a proper GetContextSelectionCallback
-	VDataBindingFactory.Callback factoryCallback = new VDataBindingFactory.Callback() {
+	VBindingFactory.Callback factoryCallback = new VBindingFactory.Callback() {
 		public void bindingCreated(final VBinding binding) {
 			onExtensionInstalledCommands.add(new Runnable() {
 				public void run() {
 					SelectionManagementExtension ext = binding.getDomain().getExtension(SelectionManagementExtension.class);
 					if (ext != null) {
 						((SelectionAwareObservable)binding.getBinding().getTarget()).setContextSelectionCallback(new GetContextSelectionCallback() {
-							public VDataBindingSelection getContextSelection() {
+							public VBindingSelection getContextSelection() {
 								return targetObservable.getSelection();
 							}
 						});

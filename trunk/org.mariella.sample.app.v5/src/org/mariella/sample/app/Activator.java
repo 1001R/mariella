@@ -6,7 +6,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.mariella.rcp.databinding.VDataBindingFactory;
+import org.mariella.rcp.databinding.VBindingFactory;
 import org.mariella.rcp.resources.VResourcesPlugin;
 import org.mariella.sample.app.binding.SampleBindingDomainFactory;
 import org.mariella.sample.app.person.PersonResourceManager;
@@ -18,7 +18,7 @@ public static final String PLUGIN_ID = "org.mariella.sample.app";
 
 private static Activator plugin;
 
-private static VDataBindingFactory dataBindingFactory;
+private static VBindingFactory dataBindingFactory;
 
 static LocalResourceManager resourceManager;
 
@@ -65,7 +65,7 @@ public static Image getImage(String path) {
 	return getImage(getImageDescriptor(path));
 }
 
-public static VDataBindingFactory getDataBindingFactory() {
+public static VBindingFactory getDataBindingFactory() {
 	return dataBindingFactory;
 }
 

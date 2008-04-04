@@ -10,7 +10,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
-import org.mariella.rcp.databinding.VDataBindingSelection;
+import org.mariella.rcp.databinding.VBindingSelection;
 
 public class VTextObservableValue extends AbstractSWTVetoableValue implements SelectionAwareObservable, EnabledObservableValueFactory, VTargetObservable {
 
@@ -135,7 +135,7 @@ public void setOffsetSelection(boolean offsetSelection) {
 	selectionDispatchingSupport.setOffsetSelection(offsetSelection);
 }
 
-public VDataBindingSelection getSelection() {
+public VBindingSelection getSelection() {
 	if (text != null && !text.isDisposed() && text.isFocusControl())
 		return selectionDispatchingSupport.implementGetSelection();
 	return null;

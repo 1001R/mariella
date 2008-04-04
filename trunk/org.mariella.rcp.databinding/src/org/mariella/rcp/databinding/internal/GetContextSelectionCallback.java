@@ -1,11 +1,11 @@
 package org.mariella.rcp.databinding.internal;
 
-import org.mariella.rcp.databinding.VDataBindingSelection;
+import org.mariella.rcp.databinding.VBindingSelection;
 
 
 
 public interface GetContextSelectionCallback {
 
-VDataBindingSelection getContextSelection();	
+VBindingSelection getContextSelection();	
 	
 }

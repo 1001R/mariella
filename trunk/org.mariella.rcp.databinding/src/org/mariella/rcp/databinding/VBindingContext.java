@@ -27,9 +27,9 @@ import org.mariella.rcp.databinding.internal.VTableViewerObservableList;
 import org.mariella.rcp.databinding.internal.VTargetObservable;
 
 
-public class VDataBindingContext {
+public class VBindingContext {
 
-VDataBindingFactory dataBindingFactory;
+VBindingFactory dataBindingFactory;
 public ObservablesManager observablesManager = new ObservablesManager();
 private TraverseHandler traverseHandler = new TraverseHandler();
 VDataBindingSelectionProvider selectionProvider = new VDataBindingSelectionProvider(this);
@@ -37,11 +37,11 @@ private DataBindingContext dataBindingContext;
 public Map<ISWTObservable,SWTObservableStatusDecorator> swtObservableStatusDecoratorMap = new HashMap<ISWTObservable, SWTObservableStatusDecorator>();
 public Map<TableViewer,TableController> tableControllerMap = new HashMap<TableViewer, TableController>();
 private List<VBinding> bindings = new ArrayList<VBinding>();
-private List<VDataBindingContextObserver> observers = new ArrayList<VDataBindingContextObserver>();
+private List<VBindingContextObserver> observers = new ArrayList<VBindingContextObserver>();
 private IActionBars actionBars;
 GlobalClipboardActionsHandler globalClipboardActionsHandler;
 
-VDataBindingContext(VDataBindingFactory dataBindingFactory) {
+VBindingContext(VBindingFactory dataBindingFactory) {
 	this.dataBindingFactory = dataBindingFactory;
 	dataBindingContext = new DataBindingContext();
 	globalClipboardActionsHandler = new GlobalClipboardActionsHandler(this);
@@ -51,7 +51,7 @@ public DataBindingContext getDataBindingContext() {
 	return dataBindingContext;
 }
 
-public void addObserver(VDataBindingContextObserver observer) {
+public void addObserver(VBindingContextObserver observer) {
 	observers.add(observer);
 }
 
@@ -95,7 +95,7 @@ private final Binding createListBinding(IObservableList targetObservableList,
 	return result;
 }
 
-public VDataBindingFactory getDataBindingFactory() {
+public VBindingFactory getDataBindingFactory() {
 	return dataBindingFactory;
 }
 
@@ -112,7 +112,7 @@ public ISelectionProvider getSelectionProvider() {
 }
 
 public void updateTargets() {
-	for (VDataBindingContextObserver o : observers)
+	for (VBindingContextObserver o : observers)
 		o.aboutToUpdateModelToTarget();
 	dataBindingContext.updateTargets();
 }

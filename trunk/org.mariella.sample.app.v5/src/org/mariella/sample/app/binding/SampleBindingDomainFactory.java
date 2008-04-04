@@ -6,7 +6,7 @@ import java.util.List;
 import org.mariella.rcp.databinding.VBindingDomain;
 import org.mariella.rcp.databinding.VBindingDomainRegistry;
 import org.mariella.rcp.databinding.TextViewerFocusBehaviourExtension;
-import org.mariella.rcp.databinding.VDataBindingFactory;
+import org.mariella.rcp.databinding.VBindingFactory;
 
 public abstract class SampleBindingDomainFactory {
 
@@ -23,13 +23,13 @@ public static void addDefaultTextViewerExtensions(VBindingDomain domain) {
 	domain.addExtensions(new TextViewerFocusBehaviourExtension());
 }
 
-public static VDataBindingFactory buildDataBindingFactory() {
+public static VBindingFactory buildDataBindingFactory() {
 	VBindingDomainRegistry domainReg = new VBindingDomainRegistry();
 	
 	for (SampleBindingDomainFactory f : factories)
 		domainReg.addDomain(f.createDomain());
 	
-	return new VDataBindingFactory(domainReg);
+	return new VBindingFactory(domainReg);
 }
 
 

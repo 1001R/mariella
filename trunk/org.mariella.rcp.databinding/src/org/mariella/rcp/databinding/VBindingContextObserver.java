@@ -1,6 +1,6 @@
 package org.mariella.rcp.databinding;
 
-public interface VDataBindingContextObserver {
+public interface VBindingContextObserver {
 
 void aboutToUpdateModelToTarget();
 
