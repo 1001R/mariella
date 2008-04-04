@@ -28,8 +28,8 @@ public GlobalEnabledRuleExtension(EnabledCallback globalEnabledCallback) {
 }
 
 
-public void install(VBindingContext dataBindingContext) {
-	dataBindingContext.dataBindingFactory.addCallback(dataBindingFactoryCallback);
+public void install(VBindingContext bindingContext) {
+	bindingContext.dataBindingFactory.addCallback(dataBindingFactoryCallback);
 }
 
 public void dispose() {

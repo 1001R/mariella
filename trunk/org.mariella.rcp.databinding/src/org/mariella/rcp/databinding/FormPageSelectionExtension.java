@@ -14,9 +14,9 @@ public FormPageSelectionExtension(FormEditor formEditor) {
 	this.formEditor = formEditor;
 }
 
-public void install(VBindingContext dataBindingContext) {
-	super.install(dataBindingContext);
-	dataBindingContext.setActionBars(formEditor.getEditorSite().getActionBars());
+public void install(VBindingContext bindingContext) {
+	super.install(bindingContext);
+	bindingContext.setActionBars(formEditor.getEditorSite().getActionBars());
 }
 
 public VBindingSelection completeSelectionPath(VBindingSelection selection) {

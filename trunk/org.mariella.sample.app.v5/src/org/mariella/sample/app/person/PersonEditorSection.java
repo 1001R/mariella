@@ -39,7 +39,7 @@ private void addFirstName(Composite parent) {
 	gridData.widthHint = 100;
 	textViewer.getControl().setLayoutData(gridData);
 
-	Activator.getDataBindingFactory().createTextBinding(getCustomEditingContext().getDataBindingContext(), 
+	Activator.getDataBindingFactory().createTextBinding(getCustomEditingContext().getBindingContext(), 
 			textViewer, 
 			getCustomEditingContext().getPersonResource().getPerson(), "firstName", 
 			DomainSymbols.FirstName, 
@@ -53,7 +53,7 @@ private void addLastName(Composite parent) {
 	gridData.widthHint = 100;
 	textViewer.getControl().setLayoutData(gridData);
 
-	Activator.getDataBindingFactory().createTextBinding(getCustomEditingContext().getDataBindingContext(), 
+	Activator.getDataBindingFactory().createTextBinding(getCustomEditingContext().getBindingContext(), 
 			textViewer, 
 			getCustomEditingContext().getPersonResource().getPerson(), "lastName", 
 			DomainSymbols.LastName, 

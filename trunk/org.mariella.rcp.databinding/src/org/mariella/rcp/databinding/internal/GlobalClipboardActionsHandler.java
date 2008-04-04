@@ -16,7 +16,7 @@ GlobalClipboardAction() {
 	setEnabled(true);
 }
 public final void run() {
-	ISelection selection = dataBindingContext.getSelectionProvider().getSelection();
+	ISelection selection = bindingContext.getSelectionProvider().getSelection();
 	ClipboardSupportingObservable observable = getClipboardSupportingObservable(selection);
 	if (observable != null)
 		implementAction(observable);
@@ -49,23 +49,23 @@ void implementAction(ClipboardSupportingObservable observable) {
 }
 
 
-VBindingContext dataBindingContext;
+VBindingContext bindingContext;
 CutAction cutAction;
 CopyAction copyAction;
 PasteAction pasteAction;
 DeleteAction deleteAction;
 
-public GlobalClipboardActionsHandler(VBindingContext dataBindingContext) {
-	this.dataBindingContext = dataBindingContext;
+public GlobalClipboardActionsHandler(VBindingContext bindingContext) {
+	this.bindingContext = bindingContext;
 	cutAction = new CutAction();
 	copyAction = new CopyAction();
 	pasteAction = new PasteAction();
 	deleteAction = new DeleteAction();
-	dataBindingContext.getSelectionProvider().addSelectionChangedListener(this);
+	bindingContext.getSelectionProvider().addSelectionChangedListener(this);
 }
 
 public void dispose() {
-	dataBindingContext.getSelectionProvider().removeSelectionChangedListener(this);
+	bindingContext.getSelectionProvider().removeSelectionChangedListener(this);
 }
 
 public void selectionChanged(SelectionChangedEvent event) {
@@ -73,7 +73,7 @@ public void selectionChanged(SelectionChangedEvent event) {
 }
 
 public void validateActions() {
-	ISelection selection = dataBindingContext.getSelectionProvider().getSelection();
+	ISelection selection = bindingContext.getSelectionProvider().getSelection();
 	ClipboardSupportingObservable observable = getClipboardSupportingObservable(selection);
 	if (observable != null) {
 		cutAction.setEnabled(observable.canCut());

@@ -33,7 +33,7 @@ VBindingFactory dataBindingFactory;
 public ObservablesManager observablesManager = new ObservablesManager();
 private TraverseHandler traverseHandler = new TraverseHandler();
 VDataBindingSelectionProvider selectionProvider = new VDataBindingSelectionProvider(this);
-private DataBindingContext dataBindingContext;
+private DataBindingContext bindingContext;
 public Map<ISWTObservable,SWTObservableStatusDecorator> swtObservableStatusDecoratorMap = new HashMap<ISWTObservable, SWTObservableStatusDecorator>();
 public Map<TableViewer,TableController> tableControllerMap = new HashMap<TableViewer, TableController>();
 private List<VBinding> bindings = new ArrayList<VBinding>();
@@ -43,12 +43,12 @@ GlobalClipboardActionsHandler globalClipboardActionsHandler;
 
 VBindingContext(VBindingFactory dataBindingFactory) {
 	this.dataBindingFactory = dataBindingFactory;
-	dataBindingContext = new DataBindingContext();
+	bindingContext = new DataBindingContext();
 	globalClipboardActionsHandler = new GlobalClipboardActionsHandler(this);
 }
 
-public DataBindingContext getDataBindingContext() {
-	return dataBindingContext;
+public DataBindingContext getBindingContext() {
+	return bindingContext;
 }
 
 public void addObserver(VBindingContextObserver observer) {
@@ -59,7 +59,7 @@ public VBinding bindValue(IObservableValue targetObservableValue,
 		IObservableValue modelObservableValue,
 		UpdateValueStrategy targetToModel, UpdateValueStrategy modelToTarget,
 		VBindingDomain domain) {
-	VBinding binding = new VBinding(this, dataBindingContext.bindValue(targetObservableValue, modelObservableValue, targetToModel, modelToTarget),
+	VBinding binding = new VBinding(this, bindingContext.bindValue(targetObservableValue, modelObservableValue, targetToModel, modelToTarget),
 			domain);
 	bindings.add(binding);
 	return binding;
@@ -91,7 +91,7 @@ private final Binding createListBinding(IObservableList targetObservableList,
 				targetToModel,
 				modelToTarget);
 	}
-	result.init(dataBindingContext);
+	result.init(bindingContext);
 	return result;
 }
 
@@ -114,12 +114,12 @@ public ISelectionProvider getSelectionProvider() {
 public void updateTargets() {
 	for (VBindingContextObserver o : observers)
 		o.aboutToUpdateModelToTarget();
-	dataBindingContext.updateTargets();
+	bindingContext.updateTargets();
 }
 
 public void dispose() {
 	globalClipboardActionsHandler.dispose();
-	dataBindingContext.dispose();
+	bindingContext.dispose();
 	observablesManager.dispose();
 	for (VBinding binding : bindings)
 		binding.dispose();

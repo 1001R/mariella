@@ -25,7 +25,7 @@ import org.mariella.rcp.databinding.VBindingSelection;
 
 public class VTableViewerObservableList extends AbstractObservableList implements ISWTObservable, SelectionAwareObservable, EnabledObservableValueFactory, VTargetObservable, VDataBindingSelectionDispatcher {
 
-VBindingContext dataBindingContext;
+VBindingContext bindingContext;
 TableViewer tableViewer;
 Class elementType;
 Object[] selectionBasePath = null;
@@ -43,9 +43,9 @@ PropertyChangeListener elementPropertyChangeListener = new PropertyChangeListene
 	}
 };
 
-public VTableViewerObservableList(VBindingContext dataBindingContext, TableViewer tableViewer, Class elementType) {
+public VTableViewerObservableList(VBindingContext bindingContext, TableViewer tableViewer, Class elementType) {
 	super(SWTObservables.getRealm(tableViewer.getControl().getDisplay()));
-	this.dataBindingContext = dataBindingContext;
+	this.bindingContext = bindingContext;
 	this.tableViewer = tableViewer;
 	
 	tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -57,7 +57,7 @@ public VTableViewerObservableList(VBindingContext dataBindingContext, TableViewe
 
 				VBindingSelection selection = getSelection();
 				if (selection != null)
-					((VDataBindingSelectionProvider)VTableViewerObservableList.this.dataBindingContext.getSelectionProvider()).fireSelectionChanged(getSelection());
+					((VDataBindingSelectionProvider)VTableViewerObservableList.this.bindingContext.getSelectionProvider()).fireSelectionChanged(getSelection());
 			} finally {
 				updatingSelection = false;
 			}

@@ -44,7 +44,7 @@ TableViewer tableViewer;
 TableItem row = null;
 TableColumn column = null;
 Listener tableListener, resizeListener, disposeItemListener, disposeColumnListener;
-VBindingContext dataBindingContext;
+VBindingContext bindingContext;
 
 Listener listener = new Listener() {
 	public void handleEvent(Event event) {
@@ -115,7 +115,7 @@ static final int FOREGROUND = SWT.COLOR_LIST_SELECTION;
  */
 public TableControllerCursor(VBindingContext dbc, TableController tableController, TableViewer tableViewer, int style) {
 	super(tableViewer.getTable(), style);
-	this.dataBindingContext = dbc;
+	this.bindingContext = dbc;
 	this.tableViewer = tableViewer;
 	this.tableController = tableController;
 	table = tableViewer.getTable();
@@ -284,7 +284,7 @@ void handleTraverse(final Event event) {
 	case SWT.TRAVERSE_TAB_PREVIOUS:
 		if (!moveCursorLeftRight(-1))
 			// back move has to be started from table widget, otherwise we run into our tableFocusIn(...) method
-			dataBindingContext.getTraverseHandler().incrementFocusControl(table, -1);
+			bindingContext.getTraverseHandler().incrementFocusControl(table, -1);
 		event.doit = false;
 		break;
 	}

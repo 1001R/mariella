@@ -37,7 +37,7 @@ private boolean updating = false;
 private String oldValue;
 private final SelectionDispatchingObservableSupport selectionDispatchingSupport;
 ContentAssistantController contentAssistantController;
-VBindingContext dataBindingContext;
+VBindingContext bindingContext;
 
 private Listener updateListener = new Listener() {
 	public void handleEvent(Event event) {
@@ -88,9 +88,9 @@ private FocusListener focusListener = new FocusListener() {
 	}
 };
 
-public VTextViewerObservableValue(VBindingContext dataBindingContext, TextViewer textViewer, int updateEventType) {
+public VTextViewerObservableValue(VBindingContext bindingContext, TextViewer textViewer, int updateEventType) {
 	super(textViewer.getTextWidget());
-	this.dataBindingContext = dataBindingContext;
+	this.bindingContext = bindingContext;
 	this.textViewer = textViewer;
 	selectionDispatchingSupport = new SelectionDispatchingObservableSupport(this, new ControlSelectionDecorator(textViewer.getTextWidget())); 
 	boolean eventValid = false;
@@ -214,7 +214,7 @@ void fireSelectionChanged() {
 	VBindingSelection selection = getSelection();
 	if (selection == null) return;
 	
-	VDataBindingSelectionProvider selectionProvider = (VDataBindingSelectionProvider)dataBindingContext.getSelectionProvider(); 
+	VDataBindingSelectionProvider selectionProvider = (VDataBindingSelectionProvider)bindingContext.getSelectionProvider(); 
 	selectionProvider.fireSelectionChanged(selection);
 }
 

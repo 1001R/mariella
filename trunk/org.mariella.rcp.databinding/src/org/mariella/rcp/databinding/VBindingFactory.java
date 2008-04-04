@@ -325,7 +325,7 @@ private void completeBindingCreation(VBinding binding, VBindingDomain domain) {
 
 public void createStatusBarErrorBinding(VBindingContext dbc, IStatusLineManager mgr) {
 	dbc.bindValue(new VStatusLineManagerErrorMsgAdapter(mgr), 
-			new AggregateValidationStatus(dbc.getDataBindingContext().getBindings(), AggregateValidationStatus.MERGED), 
+			new AggregateValidationStatus(dbc.getBindingContext().getBindings(), AggregateValidationStatus.MERGED), 
 			null, null,
 			null);
 }

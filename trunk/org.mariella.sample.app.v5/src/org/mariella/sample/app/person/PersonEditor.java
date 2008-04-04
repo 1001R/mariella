@@ -26,8 +26,8 @@ PersonResource getPersonResource() {
 	return PersonEditor.this.getPersonResource();
 }
 
-VBindingContext getDataBindingContext() {
-	return dataBindingContext;
+VBindingContext getBindingContext() {
+	return bindingContext;
 }
 
 }
@@ -44,12 +44,12 @@ class CustomizationCallback extends AbstractVResourceFormEditorCustomizationCall
 
 @Override
 public void implementInit() {
-	dataBindingContext = Activator.getDataBindingFactory().createDataBindingContext();
+	bindingContext = Activator.getDataBindingFactory().createDataBindingContext();
 }
 
 @Override
 public void implementDispose() {
-	dataBindingContext.dispose();
+	bindingContext.dispose();
 }
 
 @Override
@@ -78,7 +78,7 @@ public Object createCustomEditingContext() {
 }
 
 
-VBindingContext dataBindingContext;
+VBindingContext bindingContext;
 
 
 @Override

@@ -15,7 +15,7 @@ public TableViewerColumnEditExtension(String propertyPath, TableViewerColumnEdit
 }
 
 public void install(VBinding binding) {
-	TableController controller = binding.getDataBindingContext().tableControllerMap.get(getTableViewer(binding));
+	TableController controller = binding.getBindingContext().tableControllerMap.get(getTableViewer(binding));
 	controller.install(this);
 }
 

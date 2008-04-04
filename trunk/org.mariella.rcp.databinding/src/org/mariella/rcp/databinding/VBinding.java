@@ -11,13 +11,13 @@ public interface DisposeListener {
 void disposed(VBinding binding);
 }
 
-private VBindingContext dataBindingContext;
+private VBindingContext bindingContext;
 private VBindingDomain domain;
 private Binding binding;
 private List<DisposeListener> disposeListeners = new ArrayList<DisposeListener>();
 
-VBinding(VBindingContext dataBindingContext, Binding binding, VBindingDomain domain) {
-	this.dataBindingContext = dataBindingContext;
+VBinding(VBindingContext bindingContext, Binding binding, VBindingDomain domain) {
+	this.bindingContext = bindingContext;
 	this.binding = binding;
 	this.domain = domain;
 }
@@ -34,8 +34,8 @@ public VBindingDomain getDomain() {
 	return domain;
 }
 
-public VBindingContext getDataBindingContext() {
-	return dataBindingContext;
+public VBindingContext getBindingContext() {
+	return bindingContext;
 }
 
 public String toString() {

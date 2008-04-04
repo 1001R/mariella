@@ -71,14 +71,14 @@ private Map<String,TableViewerColumnEditExtension> editExtensionMap = new HashMa
 private Map<String, TableViewerColumnLabelDecoratorExtension> labelDecoratorExtensionMap = new HashMap<String, TableViewerColumnLabelDecoratorExtension>();
 private Map<String,Composite> editCompositeMap = new HashMap<String,Composite>();
 private Map<String,Control> editControlMap = new HashMap<String,Control>();
-private VBindingContext dataBindingContext;
+private VBindingContext bindingContext;
 private boolean editable = true;
 private boolean hookElementChangeListeners = false;
 private List<Runnable> onExtensionInstalledCommands = new ArrayList<Runnable>();
 
 public static TableController createTableController(VBindingContext dbc, TableViewer tableViewer) {
 	TableController controller = new TableController();
-	controller.dataBindingContext = dbc;
+	controller.bindingContext = dbc;
 	dbc.tableControllerMap.put(tableViewer, controller);
 	controller.setTableViewer(tableViewer);
 	return controller;
@@ -94,7 +94,7 @@ private void setTableViewer(TableViewer tableViewer) {
 
 public void install(TableViewerColumnExtension columnExtension, VBinding binding) {
 	if (columnExtension.getDomain() == null)
-		columnExtension.setDomain(binding.getDataBindingContext().getDataBindingFactory().getDomainRegistry().getDomain(columnExtension.getDomainSymbol()));
+		columnExtension.setDomain(binding.getBindingContext().getDataBindingFactory().getDomainRegistry().getDomain(columnExtension.getDomainSymbol()));
 	columnExtensions.add(columnExtension);
 	tableLayout.addColumnData(new ColumnWeightData(columnExtension.getWeight()));
 	TableColumn tableCol = new TableColumn(tableViewer.getTable(), SWT.ITALIC);
@@ -109,8 +109,8 @@ public void install(TableViewerEditExtension tableViewerEditExtension) {
 	if ((tableViewer.getTable().getStyle() & SWT.FULL_SELECTION) == 0)
 		throw new IllegalStateException("Table must have the SWT.FULL_SELECTION style");
 	
-	selectionHolder = RcpObservables.observeSingleSelection(dataBindingContext, tableViewer);
-	tableCursor = new TableControllerCursor(dataBindingContext, this, tableViewer, SWT.NONE);
+	selectionHolder = RcpObservables.observeSingleSelection(bindingContext, tableViewer);
+	tableCursor = new TableControllerCursor(bindingContext, this, tableViewer, SWT.NONE);
 	cursorEditor = new ControlEditor(tableCursor);
 	cursorEditor.grabHorizontal=true;
 	cursorEditor.grabVertical=true;
@@ -181,7 +181,7 @@ public boolean isEditable(int columnIndex) {
 public boolean blockDefaultTraversing(int columnIndex) {
 	String propertyPath = columnExtensions.get(columnIndex).getPropertyPath();
 	Control editControl = editControlMap.get(propertyPath);
-	List<VTargetObservable> observables = dataBindingContext.getObservablesFor(editControl);
+	List<VTargetObservable> observables = bindingContext.getObservablesFor(editControl);
 	for (VTargetObservable observable : observables)
 		if (observable.blockDefaultTraversing())
 			return true;
@@ -212,9 +212,9 @@ public void install(TableViewerColumnEditExtension columnEditExtension) {
 			return domain;
 		}
 	};
-	dataBindingContext.getDataBindingFactory().addCallback(factoryCallback);
+	bindingContext.getDataBindingFactory().addCallback(factoryCallback);
 	final Control editControl = columnEditExtension.getCallback().createEditControl(selectionHolder, editControlComposite);
-	dataBindingContext.getDataBindingFactory().removeCallback(factoryCallback);
+	bindingContext.getDataBindingFactory().removeCallback(factoryCallback);
 	FormData formData = new FormData();
 	formData.top= new FormAttachment(0);
 	formData.left = new FormAttachment(0);

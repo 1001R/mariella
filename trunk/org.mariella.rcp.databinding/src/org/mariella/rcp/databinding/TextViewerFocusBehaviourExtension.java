@@ -19,7 +19,7 @@ public void install(final VBinding binding) {
 				public void run() {
 					if (textViewer != null && textViewer.getTextWidget() != null && !textViewer.getTextWidget().isDisposed()) { 
 						textViewer.getTextWidget().invokeAction(ST.SELECT_ALL);
-						binding.getDataBindingContext().globalClipboardActionsHandler.validateActions();
+						binding.getBindingContext().globalClipboardActionsHandler.validateActions();
 					}
 				}
 			});
@@ -29,7 +29,7 @@ public void install(final VBinding binding) {
 				public void run() {
 					if (textViewer != null && textViewer.getTextWidget() != null && !textViewer.getTextWidget().isDisposed()) {
 						textViewer.getTextWidget().setSelection(0,0);
-						binding.getDataBindingContext().globalClipboardActionsHandler.validateActions();
+						binding.getBindingContext().globalClipboardActionsHandler.validateActions();
 					}
 				}
 			});

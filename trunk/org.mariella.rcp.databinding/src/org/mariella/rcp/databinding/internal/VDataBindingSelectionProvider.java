@@ -23,14 +23,14 @@ public class VDataBindingSelectionProvider implements ISelectionProvider {
 private static Log log = LogFactory.getLog(VDataBindingSelectionProvider.class);
 
 @SuppressWarnings("unused")
-private VBindingContext dataBindingContext;
+private VBindingContext bindingContext;
 private ListenerList listeners = new ListenerList();
 private List<VBinding> managedBindings = new ArrayList<VBinding>();
 List<ContextSelectionManagementExtension> contextSelectionManagementExtensions = new ArrayList<ContextSelectionManagementExtension>();
 private ISelectionProvider delegateSelectionProvider = null;
 
 public VDataBindingSelectionProvider(VBindingContext dbc) {
-	this.dataBindingContext = dbc;
+	this.bindingContext = dbc;
 }
 
 public ISelection getSelection() {

@@ -46,12 +46,12 @@ private PropertyChangeListener propertyChangeListener = new PropertyChangeListen
 };
 
 private boolean updating = false;
-private VBindingContext dataBindingContext;
+private VBindingContext bindingContext;
 
 
-public PropertyPathObservableList(VBindingContext dataBindingContext, Realm realm, Object object, String propertyPath, Class elementType) {
+public PropertyPathObservableList(VBindingContext bindingContext, Realm realm, Object object, String propertyPath, Class elementType) {
 	super(realm, new ArrayList(), elementType);
-	this.dataBindingContext = dataBindingContext;
+	this.bindingContext = bindingContext;
 	propertyPathSupport.object = object;
 	propertyPathSupport.propertyPath = propertyPath;
 	propertyPathSupport.initialize();
@@ -62,7 +62,7 @@ public PropertyPathObservableList(VBindingContext dataBindingContext, Realm real
 	this.propertyListenSupport = new PropertyListenerSupport(propertyChangeListener, propertyPathSupport.getLastPathComponent());
 
 	updateWrappedList();
-	this.dataBindingContext.addObserver(this);
+	this.bindingContext.addObserver(this);
 }
 
 private void updateWrappedList() {
