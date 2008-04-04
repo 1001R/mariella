@@ -1,15 +1,10 @@
 package org.mariella.rcp.resources;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-
 import org.eclipse.ui.IMemento;
 
 public abstract class AbstractVResourceRef implements VResourceRef {
 protected Integer refId;
 protected Object persistentId;
-private Collection<Object> referers = new HashSet<Object>();
 
 public AbstractVResourceRef() {
 }
@@ -41,18 +36,6 @@ public boolean equals(Object obj) {
 
 public int hashCode() {
 	return refId.hashCode();
-}
-
-public Collection<Object> getReferers() {
-	return Collections.unmodifiableCollection(referers);
-}
-
-public void addReferer(Object referer) {
-	referers.add(referer);
-}
-
-public void removeReferer(Object referer) {
-	referers.remove(referer);
 }
 
 public boolean equalsPersistentId(VResourceRef ref) {

@@ -22,6 +22,7 @@ private static int lastRefId = 0;
 
 private Map<VResourceRef, VResourceRef> resourceRefInstanceMap = new HashMap<VResourceRef, VResourceRef>();
 private Map<VResourceRef, VResource> resourceMap = new HashMap<VResourceRef, VResource>();
+private Map<VResourceRef, List<Object>> referrersMap = new HashMap<VResourceRef, List<Object>>();
 
 
 public AbstractVResourceManager() {
@@ -29,20 +30,22 @@ public AbstractVResourceManager() {
 
 public void initialize() {}
 
-public void refererClosed(Object referer) {
-	Collection<VResourceRef> refs = getRefsHavingReferer(referer);
-	for (VResourceRef ref : refs) {
-		refererClosed(ref, referer);
+public void removeReferrer(Object referrer) {
+	for (VResourceRef ref : referrersMap.keySet()) {
+		removeReferrer(ref, referrer);
 	}
 }
 
-public void refererClosed(VResourceRef ref, Object referer) {
-	ref.removeReferer(referer);
-	if (ref.getReferers().size() == 0) {
-		VResource resource = resourceMap.remove(ref);
-		resourceRefInstanceMap.remove(ref);
-		if (resource != null)
-			resourceRemovedFromPool(resource);
+public void removeReferrer(VResourceRef ref, Object referrer) {
+	List<Object> referrers = referrersMap.get(ref);
+	if (referrers != null) {
+		referrers.remove(referrer);
+		if (referrers.size() == 0) {
+			VResource resource = resourceMap.remove(ref);
+			resourceRefInstanceMap.remove(ref);
+			if (resource != null)
+				resourceRemovedFromPool(resource);
+		}
 	}
 }
 
@@ -60,14 +63,6 @@ public boolean removeResource(VResource resource) throws VResourceSaveException 
 	return true;
 }
 
-private Collection<VResourceRef> getRefsHavingReferer(Object referer) {
-	Set<VResourceRef> refs = new HashSet<VResourceRef>();
-	for (VResourceRef ref : resourceMap.keySet()) {
-		if (ref.getReferers().contains(referer))
-			refs.add(ref);
-	}
-	return refs;
-}
 
 public Collection<VResourceRef> getRefs() {
 	return resourceMap.keySet();
@@ -98,8 +93,13 @@ public VResource createNewResource(VResource resource) {
 	return resource;
 }
 
-public void addReferer(VResourceRef ref, Object referer) {
-	ref.addReferer(referer);
+public void addReferrer(VResourceRef ref, Object referrer) {
+	List<Object> referrers = referrersMap.get(ref);
+	if (referrers == null) {
+		referrers = new ArrayList<Object>();
+		referrersMap.put(ref, referrers);
+	}
+	referrers.add(referrer);
 }
 
 private VResourceRef createNewRef() {

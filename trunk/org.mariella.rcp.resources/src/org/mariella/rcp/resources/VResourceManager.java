@@ -6,36 +6,36 @@ import org.eclipse.ui.IWorkbenchWindow;
 
 public interface VResourceManager {
 
-void initialize();
-
-void refererClosed(Object referer);
-
-void refererClosed(VResourceRef ref, Object referer);
-
-boolean removeResource(VResource resource) throws VResourceSaveException;
-
-Collection<VResourceRef> getRefs();
-
-Collection<VResource> getResources();
+void addReferrer(VResourceRef ref, Object referrer);
 
 VResource createNewResource();
 
 VResource createNewResource(VResource resource);
 
-void addReferer(VResourceRef ref, Object referer);
+VResourceRef getRefForPersistentId(Object persistentId);
+
+Collection<VResourceRef> getRefs();
 
 VResource getResource(VResourceRef ref);
 
+VResource getResourceForPersistentId(Object persistentId);
+
+Collection<VResource> getResources();
+
+void initialize();
+
 void putResource(VResourceRef ref, VResource resource);
+
+void removeReferrer(Object referrer);
+
+void removeReferrer(VResourceRef ref, Object referrer);
 
 void reload(VResourceRef ref);
 
-void saveResource(VResource resource) throws VResourceSaveException;
+boolean removeResource(VResource resource) throws VResourceSaveException;
 
 void saveResource(IWorkbenchWindow window, VResource resource) throws VResourceSaveException;
 
-VResource getResourceForPersistentId(Object persistentId);
-
-VResourceRef getRefForPersistentId(Object persistentId);
+void saveResource(VResource resource) throws VResourceSaveException;
 
 }

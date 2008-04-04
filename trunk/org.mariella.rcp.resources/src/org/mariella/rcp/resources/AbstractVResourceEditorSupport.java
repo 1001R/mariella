@@ -121,7 +121,7 @@ public void implementInit(IEditorSite site, IEditorInput input) throws PartInitE
 }
 
 protected void doVResourceInitStuff() {
-	customizationCallback.getResourceManager().addReferer(customizationCallback.getResource().getRef(), this);
+	customizationCallback.getResourceManager().addReferrer(customizationCallback.getResource().getRef(), this);
 	customizationCallback.implementInit();	
 	
 	editorPart.getSite().getPage().addPartListener(partListener);
@@ -132,7 +132,7 @@ protected void doVResourceInitStuff() {
 public void implementDispose() {
 	customizationCallback.implementDispose();
 	VResourcesPlugin.getResourcePool().removeResourceChangeListener(resourceChangeListener);
-	customizationCallback.getResourceManager().refererClosed(this);
+	customizationCallback.getResourceManager().removeReferrer(this);
 	if (dirty)
 		customizationCallback.getResourceManager().reload(customizationCallback.getResource().getRef());
 

@@ -136,7 +136,7 @@ void refreshContent() {
 	currentViewEntries = new ArrayList<ViewEntry>(persons.size());
 	for (Person person : persons) {
 		ViewEntry entry = new ViewEntry(person);
-		rm.addReferer(entry.getRef(), entry);
+		rm.addReferrer(entry.getRef(), entry);
 		currentViewEntries.add(entry);
 	}
 	tableViewer.setInput(currentViewEntries);
@@ -147,7 +147,7 @@ void removeReferers() {
 		PersonResourceManager rm = VResourcesPlugin.getResourceManagerRegistry().getResourceManager(PersonResourceManager.class);
 		// remove VResourceRef referers of current shown view entries (to free resources if possible) 
 		for (ViewEntry entry : currentViewEntries) {
-			rm.refererClosed(entry.getRef(), entry);
+			rm.removeReferrer(entry.getRef(), entry);
 		}
 	}
 }
