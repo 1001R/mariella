@@ -347,12 +347,12 @@ public void addListener(ILabelProviderListener listener) {}
 
 public void removeListener(ILabelProviderListener listener) {}
 
-public void dispatchSelection(VDataBindingSelectionDispatchContext ctx) {
+public void dispatchSelection(int rowIndex, VDataBindingSelectionDispatchContext ctx) {
 	String propertyPath = (String)ctx.nextPathToken();
 	if (propertyPath == null) return;
 	
 	int colIndex = getColumnIndex(propertyPath);
-	tableCursor.setColumn(colIndex, true);
+	tableCursor.setRowColumn(rowIndex, colIndex, true);
 }
 
 private int getColumnIndex(String propertyPath) {

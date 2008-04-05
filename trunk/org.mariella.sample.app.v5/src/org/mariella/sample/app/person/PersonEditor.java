@@ -65,7 +65,7 @@ public VResourceManager getResourceManager() {
 @Override
 public void implementAddPages() {
 	try {
-		addPage(new PersonEditorPage(PersonEditor.this, getPersonResource()));
+		addPage(new PersonEditorPage(PersonEditor.this));
 	} catch (PartInitException e) {
 		throw new RuntimeException(e);
 	}

@@ -11,12 +11,8 @@ import org.mariella.rcp.forms.VResourceFormPage;
 public class PersonEditorPage extends VResourceFormPage {
 public static final String ID = PersonEditorPage.class.getName();
 
-PersonResource personResource;
-PersonEditorSection personSection;
-
-public PersonEditorPage(PersonEditor editor, PersonResource personResource) {
+public PersonEditorPage(PersonEditor editor) {
 	super(editor, ID, "Person");
-	this.personResource = personResource;
 }
 
 @Override
@@ -33,7 +29,7 @@ private void fillBody(IManagedForm managedForm, FormToolkit toolkit) {
 	Composite body = managedForm.getForm().getBody();
 	body.setLayout(FormLayoutFactory.createFormGridLayout(false, 1));
 	
-	personSection = new PersonEditorSection(this, body);
+	PersonEditorSection personSection = new PersonEditorSection(this, body);
 	personSection.getSection().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 }
 
