@@ -7,7 +7,8 @@ Gender,
 MaritalStatus,
 MaritalStatusAsText,
 Boolean,
-Street
+Street, 
+ZipCode
 
 
 }

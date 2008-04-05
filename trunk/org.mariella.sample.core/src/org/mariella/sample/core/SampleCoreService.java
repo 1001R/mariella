@@ -28,7 +28,8 @@ List<Person> persons = new ArrayList<Person>();
 	persons.add(paul);
 	
 	Address paulAddress = new Address();
-	paulAddress.setStreet("5th Avenue, Suite C; 10128 New York");
+	paulAddress.setZipCode("10128");
+	paulAddress.setStreet("5th Avenue, Suite C");
 	paulAddress.setCountry(usa);
 	paul.getAddresses().add(paulAddress);
 }

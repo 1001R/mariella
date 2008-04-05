@@ -20,6 +20,7 @@ static {
 	factories.add(new MaritalStatusAsTextDomainFactory());
 	factories.add(new BooleanDomainFactory());
 	factories.add(new StreetDomainFactory());
+	factories.add(new ZipCodeDomainFactory());
 }
 
 abstract VBindingDomain createDomain();

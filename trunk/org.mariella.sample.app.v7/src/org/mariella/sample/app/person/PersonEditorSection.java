@@ -85,7 +85,9 @@ private void addBuddy(Composite parent) {
 	Activator.getBindingFactory().createButtonBinding(getCustomEditingContext().getBindingContext(), 
 			checkbox, 
 			getCustomEditingContext().getPersonResource().getPerson(), "buddy", 
-			DomainSymbols.Boolean);
+			Activator.getBindingFactory().copyExtend(DomainSymbols.Boolean,
+					new SelectionManagementExtension("buddy")
+					));
 }
 
 private void addGender(Composite parent) {
@@ -101,7 +103,9 @@ private void addGender(Composite parent) {
 	Activator.getBindingFactory().createRadioSetBinding(getCustomEditingContext().getBindingContext(), 
 			radios, 
 			getCustomEditingContext().getPersonResource().getPerson(), "gender", 
-			DomainSymbols.Gender);
+			Activator.getBindingFactory().copyExtend(DomainSymbols.Gender,
+					new SelectionManagementExtension("gender")
+					));
 }
 
 private void addMaritalStatus(Composite parent) {
@@ -115,7 +119,9 @@ private void addMaritalStatus(Composite parent) {
 	Activator.getBindingFactory().createComboViewerBinding(getCustomEditingContext().getBindingContext(), 
 			comboViewer, 
 			getCustomEditingContext().getPersonResource().getPerson(), "maritalStatus", 
-			DomainSymbols.MaritalStatus);
+			Activator.getBindingFactory().copyExtend(DomainSymbols.MaritalStatus,
+					new SelectionManagementExtension("maritalStatus")
+					));
 }
 
 CustomEditingContext getCustomEditingContext() {

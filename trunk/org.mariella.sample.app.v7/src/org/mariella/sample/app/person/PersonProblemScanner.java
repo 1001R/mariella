@@ -26,6 +26,16 @@ public void scanForProblems(ProblemManager problemMgr, PersonProblemResource pro
 	}
 	
 	for (Address address : personResource.getPerson().getAddresses()) {
+		if (address.getZipCode() == null || address.getZipCode().length() < 4) {
+			problemMgr.addProblem(new Problem(
+					problemResource, 
+					new VBindingSelection(new SelectionPath(AddressesEditorPage.ID, 
+							"addresses",
+							personResource.getPerson().getAddresses().indexOf(address),
+							"zipCode")),
+					ProblemCategory.ERROR, 
+					"The zip code must have at least 4 characters."));
+		}
 		if (address.getStreet() == null || address.getStreet().length() < 5) {
 			problemMgr.addProblem(new Problem(
 					problemResource, 

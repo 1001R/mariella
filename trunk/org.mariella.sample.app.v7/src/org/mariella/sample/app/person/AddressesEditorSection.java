@@ -50,7 +50,7 @@ public void run() {
 			getPage().getId(),
 			"addresses",
 			personResource.getPerson().getAddresses().indexOf(newAddress),
-			"street")));
+			"zipCode")));
 }
 }
 
@@ -140,6 +140,9 @@ private TableViewer createTableViewer(Composite parent) {
 					new VBindingDomainExtension[] {
 						new TableViewerEditExtension(),
 						
+						createZipCodeColumnExtension(),
+						createZipCodeColumnEditExtension(),
+						
 						createStreetColumnExtension(),
 						createStreetColumnEditExtension(),
 
@@ -149,8 +152,30 @@ private TableViewer createTableViewer(Composite parent) {
 	return tableViewer;
 }
 
+private VBindingDomainExtension createZipCodeColumnExtension() {
+	return new TableViewerColumnExtension("zipCode", DomainSymbols.ZipCode, "Zip", 20);
+}
+
+private VBindingDomainExtension createZipCodeColumnEditExtension() {
+	return new TableViewerColumnEditExtension("zipCode", new TableViewerColumnEditExtensionCallback() {
+		public Control createEditControl(IObservableValue selectionHolder, Composite parent) {
+			TextViewer textViewer = new TextViewer(parent, SWT.NONE | SWT.SINGLE);
+			
+			Activator.getBindingFactory().createTextBinding(getCustomEditingContext().getBindingContext(), 
+					textViewer, 
+					selectionHolder, "zipCode", 
+					Activator.getBindingFactory().copyExtend(DomainSymbols.ZipCode,
+							new SelectionManagementExtension("zipCode")		// selection path is relative to the Address bean
+							),
+					new TextBindingDetails(SWT.Modify));
+
+			return textViewer.getTextWidget();
+		}
+	});
+}
+
 private VBindingDomainExtension createStreetColumnExtension() {
-	return new TableViewerColumnExtension("street", DomainSymbols.Street, "Street", 30);
+	return new TableViewerColumnExtension("street", DomainSymbols.Street, "Street", 40);
 }
 
 private VBindingDomainExtension createStreetColumnEditExtension() {
