@@ -164,8 +164,7 @@ public void dispatchSelection(VDataBindingSelectionDispatchContext dispatchCtx) 
 			dispatchCtx.dispatched = true;
 			if (dispatchCtx.hasNextPathToken()) {
 				int index = (Integer)dispatchCtx.nextPathToken();
-				Object selectedElement = new StructuredSelection(tableViewer.getElementAt(index));
-				tableViewer.setSelection(new StructuredSelection(selectedElement));
+				tableViewer.setSelection(new StructuredSelection(tableViewer.getElementAt(index)));
 				tableViewer.getTable().setTopIndex(index);
 			
 				if (tableController != null) {
