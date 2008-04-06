@@ -21,6 +21,7 @@ static {
 	factories.add(new BooleanDomainFactory());
 	factories.add(new StreetDomainFactory());
 	factories.add(new ZipCodeDomainFactory());
+	factories.add(new CountryByIsoCodeDomainFactory());
 }
 
 abstract VBindingDomain createDomain();

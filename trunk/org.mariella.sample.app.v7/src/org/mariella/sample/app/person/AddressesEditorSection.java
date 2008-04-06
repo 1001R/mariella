@@ -1,7 +1,12 @@
 package org.mariella.sample.app.person;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -15,6 +20,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
+import org.mariella.rcp.databinding.DomainContextExtension;
 import org.mariella.rcp.databinding.EnabledOnSingleSelectionCallback;
 import org.mariella.rcp.databinding.EnabledRuleExtension;
 import org.mariella.rcp.databinding.SelectionManagementExtension;
@@ -22,6 +28,8 @@ import org.mariella.rcp.databinding.SelectionPath;
 import org.mariella.rcp.databinding.TableViewerColumnEditExtension;
 import org.mariella.rcp.databinding.TableViewerColumnEditExtensionCallback;
 import org.mariella.rcp.databinding.TableViewerColumnExtension;
+import org.mariella.rcp.databinding.TableViewerColumnImageCallback;
+import org.mariella.rcp.databinding.TableViewerColumnImageExtension;
 import org.mariella.rcp.databinding.TableViewerEditExtension;
 import org.mariella.rcp.databinding.TextBindingDetails;
 import org.mariella.rcp.databinding.VBindingDomain;
@@ -32,9 +40,12 @@ import org.mariella.rcp.forms.VResourceFormPage;
 import org.mariella.rcp.forms.VResourceSectionPart;
 import org.mariella.rcp.util.ColumnLayout;
 import org.mariella.sample.app.Activator;
+import org.mariella.sample.app.binding.CountryByIsoCodeDomainFactory;
 import org.mariella.sample.app.binding.DomainSymbols;
 import org.mariella.sample.app.person.PersonEditor.CustomEditingContext;
 import org.mariella.sample.core.Address;
+import org.mariella.sample.core.Country;
+import org.mariella.sample.core.SampleCorePlugin;
 
 public class AddressesEditorSection extends VResourceSectionPart {
 
@@ -134,20 +145,23 @@ private TableViewer createTableViewer(Composite parent) {
 	
 	Activator.getBindingFactory().createTableViewerListBinding(getCustomEditingContext().getBindingContext(), 
 			tableViewer, 
-			getCustomEditingContext().getPersonResource().getPerson(), "addresses", 
-			new VBindingDomain("addresses", 
-					PersonResource.class,
-					new VBindingDomainExtension[] {
-						new TableViewerEditExtension(),
-						
-						createZipCodeColumnExtension(),
-						createZipCodeColumnEditExtension(),
-						
-						createStreetColumnExtension(),
-						createStreetColumnEditExtension(),
+			getCustomEditingContext().getPersonResource().getPerson(), "addresses",		// the property to the java.util.List 
+			new VBindingDomain("addresses", 			// create VBindingDomain ...
+					Address.class,									// the TableViewer's element type	
+					new TableViewerEditExtension(),		// an extension that installs edit behaviour
+					
+					createZipCodeColumnExtension(),		// adding a "column" extension 
+					createZipCodeColumnEditExtension(),	// adding a column edit behaviour
+					
+					createStreetColumnExtension(),	
+					createStreetColumnEditExtension(),
 
-						new SelectionManagementExtension("addresses")
-					}));
+					createCountryColumnExtension(),	
+					createCountryColumnEditExtension(),
+					createCountryColumnImageExtension(),
+
+					new SelectionManagementExtension("addresses")	// the selection qualifier is "addresses"	
+					));
 	
 	return tableViewer;
 }
@@ -192,6 +206,52 @@ private VBindingDomainExtension createStreetColumnEditExtension() {
 					new TextBindingDetails(SWT.Modify));
 
 			return textViewer.getTextWidget();
+		}
+	});
+}
+
+private VBindingDomainExtension createCountryColumnExtension() {
+	return new TableViewerColumnExtension("country", DomainSymbols.CountryByIsoCode, "Country", 40);
+}
+
+private VBindingDomainExtension createCountryColumnEditExtension() {
+	return new TableViewerColumnEditExtension("country", new TableViewerColumnEditExtensionCallback() {
+		public Control createEditControl(IObservableValue selectionHolder, Composite parent) {
+			TextViewer textViewer = new TextViewer(parent, SWT.NONE | SWT.SINGLE);
+			
+			Activator.getBindingFactory().createTextBinding(getCustomEditingContext().getBindingContext(), 
+					textViewer, 
+					selectionHolder, "country", 
+					Activator.getBindingFactory().copyExtend(DomainSymbols.CountryByIsoCode,
+							new SelectionManagementExtension("country"),		// selection path is relative to the Address bean
+							new DomainContextExtension(new CountryByIsoCodeDomainFactory.Context() {
+								@Override
+								public Country getCountry(String isoCode) {
+									if (isoCode.equals("USA")) return null; 
+									return CountryByIsoCodeDomainFactory.getDefaultContext().getCountry(isoCode);
+								}
+								@Override
+								public Iterator<Country> getAvailableCountries(String startingWithIsoCode) {
+									Collection<Country> countries = SampleCorePlugin.getCoreService().getAvailableCountries();
+									Collection<Country> withoutUSA = new ArrayList<Country>(countries.size());
+									for (Country c : countries)
+										if (!c.getIsoCode().equals("USA"))
+											withoutUSA.add(c);
+									return withoutUSA.iterator();
+								}
+							})),
+					new TextBindingDetails(SWT.Modify));
+
+			return textViewer.getTextWidget();
+		}
+	});
+}
+
+private VBindingDomainExtension createCountryColumnImageExtension() {
+	return new TableViewerColumnImageExtension("country", new TableViewerColumnImageCallback() {
+		public ImageDescriptor getImageDescriptor(Object element, Object value) {
+			if (value == null) return null;
+			return Activator.getImageDescriptor("icons/country.png");
 		}
 	});
 }

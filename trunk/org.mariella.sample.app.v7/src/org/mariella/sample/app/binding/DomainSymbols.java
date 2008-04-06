@@ -1,13 +1,14 @@
 package org.mariella.sample.app.binding;
 
 public enum DomainSymbols {
-FirstName,
-LastName,
-Gender,
-MaritalStatus,
-MaritalStatusAsText,
 Boolean,
-Street, 
+CountryByIsoCode,
+FirstName,
+Gender,
+LastName,
+MaritalStatus,
+MaritalStatusAsText, 
+Street,
 ZipCode
 
 

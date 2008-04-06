@@ -14,7 +14,7 @@ import org.osgi.framework.BundleContext;
 
 public class Activator extends AbstractUIPlugin {
 
-public static final String PLUGIN_ID = "org.mariella.sample.app";
+public static final String PLUGIN_ID = "org.mariella.sample.app.v7";
 
 private static Activator plugin;
 
