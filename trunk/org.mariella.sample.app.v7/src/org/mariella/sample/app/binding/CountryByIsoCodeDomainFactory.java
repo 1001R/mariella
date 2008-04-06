@@ -22,7 +22,7 @@ Country getCountry(String isoCode);
 }
 
 // if no context is given, this default implementation is used
-static class DefaultContext implements Context {
+public static class DefaultContext implements Context {
 @Override
 public Iterator<Country> getAvailableCountries(String startingWithIsoCode) {	
 	return SampleCorePlugin.getCoreService().getCountriesStartingWithIsoCode(startingWithIsoCode).iterator();
@@ -60,8 +60,8 @@ VBindingDomain createDomain() {
 					Iterator<Country> countries = context.getAvailableCountries(word);
 					while (countries.hasNext()) {
 						Country country = countries.next();
-						builder.setWord(country.getIsoCode());
-						builder.setImage(Activator.getImage("icons/country.png"));
+						builder.setWord(country == null ? "not given" : country.getIsoCode());
+						builder.setImage(country == null ? null : Activator.getImage("icons/country.png"));
 						builder.addProposal();
 					}
 				}
@@ -70,10 +70,6 @@ VBindingDomain createDomain() {
 	});
 	addDefaultTextViewerExtensions(domain);
 	return domain;
-}
-
-public static Context getDefaultContext() {
-	return new DefaultContext();
 }
 
 Context getContext(Context explicitContext) {

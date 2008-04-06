@@ -2,7 +2,9 @@ package org.mariella.sample.app.person;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.jface.action.Action;
@@ -224,20 +226,11 @@ private VBindingDomainExtension createCountryColumnEditExtension() {
 					selectionHolder, "country", 
 					Activator.getBindingFactory().copyExtend(DomainSymbols.CountryByIsoCode,
 							new SelectionManagementExtension("country"),		// selection path is relative to the Address bean
-							new DomainContextExtension(new CountryByIsoCodeDomainFactory.Context() {
-								@Override
-								public Country getCountry(String isoCode) {
-									if (isoCode.equals("USA")) return null; 
-									return CountryByIsoCodeDomainFactory.getDefaultContext().getCountry(isoCode);
-								}
-								@Override
+							new DomainContextExtension(new CountryByIsoCodeDomainFactory.DefaultContext() {
 								public Iterator<Country> getAvailableCountries(String startingWithIsoCode) {
-									Collection<Country> countries = SampleCorePlugin.getCoreService().getAvailableCountries();
-									Collection<Country> withoutUSA = new ArrayList<Country>(countries.size());
-									for (Country c : countries)
-										if (!c.getIsoCode().equals("USA"))
-											withoutUSA.add(c);
-									return withoutUSA.iterator();
+									List<Country> countries = new ArrayList<Country>(SampleCorePlugin.getCoreService().getAvailableCountries());
+									countries.add(0, null);
+									return countries.iterator();
 								}
 							})),
 					new TextBindingDetails(SWT.Modify));
