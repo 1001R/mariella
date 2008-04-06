@@ -1,6 +1,7 @@
 package org.mariella.sample.core;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -131,6 +132,24 @@ public void removePerson(Person person) {
 	for (Iterator<Person> it = persons.iterator(); it.hasNext();)
 		if (it.next().getId().equals(person.getId()))
 			it.remove();
+}
+
+public Collection<Country> getCountriesStartingWithIsoCode(String isoCodePattern) {
+	isoCodePattern = isoCodePattern.toUpperCase();
+
+	Collection<Country> result = new ArrayList<Country>();
+	for (Country c : countries) {
+		if (c.getIsoCode().startsWith(isoCodePattern))
+			result.add(c);
+	}
+	return result;
+}
+
+public Country getCountry(String isoCode) {
+	for (Country c : countries)
+		if (c.getIsoCode().equals(isoCode))
+				return c;
+	return null;
 }
 
 }
