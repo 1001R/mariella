@@ -30,7 +30,7 @@ public AbstractVResourceManager() {
 public void initialize() {}
 
 public void removeReferrer(Object referrer) {
-	for (VResourceRef ref : referrersMap.keySet()) {
+	for (VResourceRef ref : new ArrayList<VResourceRef>(referrersMap.keySet())) {
 		removeReferrer(ref, referrer);
 	}
 }
@@ -39,6 +39,8 @@ public void removeReferrer(VResourceRef ref, Object referrer) {
 	List<Object> referrers = referrersMap.get(ref);
 	if (referrers != null) {
 		referrers.remove(referrer);
+		if (referrers.size() == 0)
+			referrersMap.remove(ref);
 		if (referrers.size() == 0) {
 			VResource resource = resourceMap.remove(ref);
 			resourceRefInstanceMap.remove(ref);
@@ -127,7 +129,7 @@ public VResource getResource(VResourceRef ref) {
 
 public void putResource(VResourceRef ref, VResource resource) {
 	resource.setRef(ref);
-	boolean isNew = !resourceMap.containsKey(ref);
+	boolean isNew = resourceMap.get(ref) == null;
 	resourceMap.put(ref, resource);
 	resourceRefInstanceMap.put(ref, ref);
 	if (ref.getRefId() > lastRefId)
