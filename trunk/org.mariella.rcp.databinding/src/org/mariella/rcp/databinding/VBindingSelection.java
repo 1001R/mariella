@@ -83,4 +83,8 @@ public boolean isEmpty() {
 	return origin == null ? true : origin.isEmpty();
 }
 
+public IStructuredSelection getOrigin() {
+	return origin;
+}
+
 }

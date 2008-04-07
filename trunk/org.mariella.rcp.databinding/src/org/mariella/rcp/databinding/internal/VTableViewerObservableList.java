@@ -57,7 +57,7 @@ public VTableViewerObservableList(VBindingContext bindingContext, TableViewer ta
 
 				VBindingSelection selection = getSelection();
 				if (selection != null)
-					((VDataBindingSelectionProvider)VTableViewerObservableList.this.bindingContext.getSelectionProvider()).fireSelectionChanged(getSelection());
+					((VDataBindingSelectionProvider)VTableViewerObservableList.this.bindingContext.getSelectionProvider()).fireSelectionChanged(selection);
 			} finally {
 				updatingSelection = false;
 			}
@@ -186,7 +186,7 @@ public VBindingSelection getSelection() {
 	if (selection.isEmpty()) return null;
 	
 	return new VBindingSelection(this, 
-			(IStructuredSelection)tableViewer.getSelection(), 
+			(IStructuredSelection)selection, 
 			new SelectionPath(selectionBasePath, new Object[]{indexOf(selection.getFirstElement())}));
 }
 
