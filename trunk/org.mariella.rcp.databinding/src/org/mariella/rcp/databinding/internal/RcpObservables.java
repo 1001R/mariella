@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DateTime;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.mariella.rcp.databinding.VBindingContext;
 
@@ -39,6 +40,12 @@ public static ISWTObservableValue observeText(VBindingContext ctx, TextViewer te
 
 public static ISWTObservableValue observeText(VBindingContext ctx, Text text, int eventType) {
 	ISWTObservableValue value = new VTextObservableValue(text, eventType);
+	ctx.observablesManager.addObservable(value);
+	return value;
+}
+
+public static ISWTObservableValue observeLabel(VBindingContext ctx, Label label) {
+	ISWTObservableValue value = new LabelObservableValue(label);
 	ctx.observablesManager.addObservable(value);
 	return value;
 }

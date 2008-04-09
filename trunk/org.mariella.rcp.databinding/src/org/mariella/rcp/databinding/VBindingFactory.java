@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DateTime;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.mariella.rcp.databinding.internal.AsyncActionWrapper;
 import org.mariella.rcp.databinding.internal.BindingDomainExtensionDependendBinding;
@@ -235,6 +236,27 @@ public VBinding createTextBinding(VBindingContext dbc, TextViewer textViewer, Ob
 			createModelToTargetText(dbc, domain),
 			domain);
 	dbc.swtObservableStatusDecoratorMap.put(swtObservable, details.statusDecorator);
+	
+	completeBindingCreation(binding, domain);
+	
+	return binding;
+}
+
+public VBinding createLabelBinding(VBindingContext dbc, Label label, Object bean, String propertyPath, Object domainSymbol) {
+	VBindingDomain domain = domainRegistry.getDomain(domainSymbol);
+	return createLabelBinding(dbc, label, bean, propertyPath, domain);
+}
+
+public VBinding createLabelBinding(VBindingContext dbc, Label label, Object bean, String propertyPath, VBindingDomain domain) {
+	ISWTObservableValue swtObservable = RcpObservables.observeLabel(dbc, label);
+	VUpdateValueStrategy textToModel = createTargetTextToModel(dbc, domain);
+	textToModel.swtObservable = swtObservable;
+	VBinding binding = dbc.bindValue(
+			swtObservable,
+			ModelObservables.observeValue(bean, propertyPath, domain.getType()), 
+			textToModel,  
+			createModelToTargetText(dbc, domain),
+			domain);
 	
 	completeBindingCreation(binding, domain);
 	
