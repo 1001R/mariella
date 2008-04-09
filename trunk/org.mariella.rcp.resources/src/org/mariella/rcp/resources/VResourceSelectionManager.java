@@ -88,10 +88,10 @@ public void partActivated(IWorkbenchPart part) {
 }
 
 public void partDeactivated(IWorkbenchPart part) {
-	if (part instanceof IEditorPart)	{	
+	//if (part instanceof IEditorPart)	{	
 		selection = null;
 		fireSelectionChanged();
-	}
+	//}
 }
 
 public void partBroughtToTop(IWorkbenchPart part) {
