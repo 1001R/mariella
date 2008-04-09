@@ -82,4 +82,8 @@ public Object getValueType() {
 	return valueType;
 }
 
+public String getPropertyPath() {
+	return propertyPathSupport.propertyPath;
+}
+
 }
