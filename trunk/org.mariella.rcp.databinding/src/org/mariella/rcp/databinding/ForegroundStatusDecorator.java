@@ -1,6 +1,5 @@
 package org.mariella.rcp.databinding;
 
-import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.databinding.swt.ISWTObservable;
 import org.eclipse.swt.graphics.Color;

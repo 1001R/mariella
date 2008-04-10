@@ -15,7 +15,6 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.EditorPart;
 
 public abstract class AbstractVResourceEditorSupport {
 private static Log log = LogFactory.getLog(AbstractVResourceEditorSupport.class);

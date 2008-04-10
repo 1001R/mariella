@@ -39,7 +39,6 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.mariella.rcp.databinding.VBindingDomain;
 import org.mariella.rcp.databinding.SelectionManagementExtension;
 import org.mariella.rcp.databinding.TableViewerColumnEditExtension;
 import org.mariella.rcp.databinding.TableViewerColumnExtension;
@@ -51,6 +50,7 @@ import org.mariella.rcp.databinding.TableViewerEditExtension;
 import org.mariella.rcp.databinding.TableViewerElementChangeListenerExtension;
 import org.mariella.rcp.databinding.VBinding;
 import org.mariella.rcp.databinding.VBindingContext;
+import org.mariella.rcp.databinding.VBindingDomain;
 import org.mariella.rcp.databinding.VBindingFactory;
 import org.mariella.rcp.databinding.VBindingSelection;
 

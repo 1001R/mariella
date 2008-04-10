@@ -1,7 +1,7 @@
 package org.mariella.rcp.databinding.internal;
 
-import org.mariella.rcp.databinding.VBindingDomainExtension;
 import org.mariella.rcp.databinding.VBinding;
+import org.mariella.rcp.databinding.VBindingDomainExtension;
 
 public class TextViewerClipboardHandlerExtension implements VBindingDomainExtension {
 

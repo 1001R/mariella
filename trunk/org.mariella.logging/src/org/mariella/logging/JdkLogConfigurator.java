@@ -3,6 +3,7 @@ package org.mariella.logging;
 import java.io.IOException;
 import java.net.URL;
 import java.util.logging.LogManager;
+
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.osgi.framework.Bundle;
