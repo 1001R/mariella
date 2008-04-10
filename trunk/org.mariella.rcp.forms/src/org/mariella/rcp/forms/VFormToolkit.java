@@ -137,6 +137,7 @@ public void dispose() {
 	formToolkit.dispose();
 }
 
+@Override
 public boolean equals(Object obj) {
 	return formToolkit.equals(obj);
 }
@@ -161,6 +162,7 @@ public int getOrientation() {
 	return formToolkit.getOrientation();
 }
 
+@Override
 public int hashCode() {
 	return formToolkit.hashCode();
 }
@@ -185,6 +187,7 @@ public void setOrientation(int orientation) {
 	formToolkit.setOrientation(orientation);
 }
 
+@Override
 public String toString() {
 	return formToolkit.toString();
 }

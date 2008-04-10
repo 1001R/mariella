@@ -29,6 +29,7 @@ public ProblemFilterDialog(Shell parentShell, ProblemsView view) {
 	this.view = view;
 }
 
+@Override
 protected void okPressed() {
 	view.preferences.showAllProblems = showAllProblemsRadio.getSelection();
 	view.preferences.shownCategories.clear();
@@ -40,12 +41,14 @@ protected void okPressed() {
 	super.okPressed();
 }
 
+@Override
 protected void configureShell(Shell newShell) {
 	super.configureShell(newShell);
 	newShell.setText("Filters");
 	newShell.setImage(AbstractUIPlugin.imageDescriptorFromPlugin(ProblemsPlugin.PLUGIN_ID, "icons/problems/filter.gif").createImage());
 }
 
+@Override
 protected Control createDialogArea(Composite parent) {
 	Composite composite = new Composite(parent, SWT.NONE);
 	FormLayout layout = new FormLayout();

@@ -11,6 +11,7 @@ public CallbackConverterBuilder(ConversionCallback conversionCallback) {
 	this.conversionCallback = conversionCallback;
 }
 
+@Override
 public IConverter buildFromModelConverter(final VBindingDomain domain) {
 	return new Converter(domain.getType(), String.class) {
 		public Object convert(Object fromObject) {
@@ -19,6 +20,7 @@ public IConverter buildFromModelConverter(final VBindingDomain domain) {
 	};
 }
 
+@Override
 public IConverter buildToModelConverter(final VBindingDomain domain) {
 	return new Converter(String.class, domain.getType()) {
 		public Object convert(Object fromObject) {

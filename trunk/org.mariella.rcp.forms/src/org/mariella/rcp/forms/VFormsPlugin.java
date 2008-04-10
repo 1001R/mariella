@@ -13,12 +13,14 @@ private static JdkLogConfigurator jdkLogConfigurator;
 public VFormsPlugin() {
 }
 
+@Override
 public void start(BundleContext context) throws Exception {
 	super.start(context);
 	plugin = this;
 	jdkLogConfigurator = new JdkLogConfigurator(getBundle());
 }
 
+@Override
 public void stop(BundleContext context) throws Exception {
 	plugin = null;
 	super.stop(context);

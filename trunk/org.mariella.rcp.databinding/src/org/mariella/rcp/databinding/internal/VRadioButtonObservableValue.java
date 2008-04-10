@@ -13,16 +13,19 @@ public VRadioButtonObservableValue(Button button, Object matchingValue) {
 	this.matchingValue = matchingValue;
 }
 
+@Override
 protected boolean isSelectedValue(Object value) {
 	return matchingValue.equals(value);
 }
 
+@Override
 protected Object doGetValue() {
 	if (!button.getSelection()) 
 		return new ImproperValue();
 	return matchingValue;
 }
 
+@Override
 public Object getValueType() {
 	return matchingValue.getClass();
 }

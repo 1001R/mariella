@@ -13,14 +13,17 @@ public ControlVisibleObservableValue(Control control, Composite parentToRedraw) 
 	this.parentToRedraw = parentToRedraw;
 }
 
+@Override
 public Object getValueType() {
 	return Boolean.class;
 }
 
+@Override
 protected Object doGetValue() {
 	return ((Control)getWidget()).isVisible();
 }
 
+@Override
 protected void doSetValue(Object value) {
 	((Control)getWidget()).setVisible((Boolean)value);
 	parentToRedraw.redraw();

@@ -17,14 +17,17 @@ public boolean isResponsibleFor(Control control) {
 }
 
 
+@Override
 protected Object doGetValue() {
 	throw new UnsupportedOperationException();
 }
 
+@Override
 public Object getValueType() {
 	return null;
 }
 
+@Override
 protected void doSetValue(Object value) {
 	textViewerObservable.setEnabled((Boolean)value);
 }

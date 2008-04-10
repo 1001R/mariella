@@ -7,9 +7,11 @@ public class VActionObservable extends AbstractObservableValue implements Enable
 
 class EnabledObservableValueImpl extends AbstractObservableValue implements EnabledObservableValue {
 
+@Override
 protected Object doGetValue() {
 	return action.isEnabled();
 }
+@Override
 protected void doSetValue(Object value) {
 	action.setEnabled((Boolean)value);
 }
@@ -24,6 +26,7 @@ public VActionObservable(Action action) {
 	this.action = action;
 }
 
+@Override
 protected Object doGetValue() {
 	return null;
 }

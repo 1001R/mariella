@@ -8,6 +8,7 @@ public class PassingConverterBuilder extends ConverterBuilder {
 public PassingConverterBuilder() {
 }
 
+@Override
 public IConverter buildFromModelConverter(VBindingDomain domain) {
 	return new Converter(domain.getType(), domain.getType()) {
 		public Object convert(Object fromObject) {
@@ -16,6 +17,7 @@ public IConverter buildFromModelConverter(VBindingDomain domain) {
 	};
 }
 
+@Override
 public IConverter buildToModelConverter(VBindingDomain domain) {
 	return new Converter(domain.getType(), domain.getType()) {
 		public Object convert(Object fromObject) {

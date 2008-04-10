@@ -72,8 +72,10 @@ public ProblemResourceOpenHandler getResourceOpenHandler() {
 
 public abstract String getDescription();
 
+@Override
 public abstract boolean equals(Object obj);
 
+@Override
 public abstract int hashCode();
 
 }

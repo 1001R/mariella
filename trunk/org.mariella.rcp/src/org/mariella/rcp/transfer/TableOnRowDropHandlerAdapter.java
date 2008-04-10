@@ -38,6 +38,7 @@ public TableOnRowDropHandlerAdapter(TableViewer tableViewer, TableOnRowDropHandl
 		addHandler(h);
 }
 
+@Override
 public void drop(DropTargetEvent evt) {
 	if (targetElement != null)
 		tableViewer.setSelection(new StructuredSelection(targetElement));
@@ -79,6 +80,7 @@ private Object handleDropElementOnEmptySelection(Object dropObject) {
 	return null;
 }
 
+@Override
 public void dragOver(DropTargetEvent evt) {
 	targetElement = null;
 	Point point = tableViewer.getTable().toControl(evt.x, evt.y);
@@ -87,6 +89,7 @@ public void dragOver(DropTargetEvent evt) {
 		targetElement = item.getData();
 }
 
+@Override
 public void dragEnter(DropTargetEvent event) {
 	targetElement = null;
 }

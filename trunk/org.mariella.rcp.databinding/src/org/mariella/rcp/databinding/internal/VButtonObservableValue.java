@@ -8,14 +8,17 @@ public VButtonObservableValue(Button button) {
 	super(button);
 }
 
+@Override
 protected boolean isSelectedValue(Object value) {
 	return Boolean.TRUE.equals(value);
 }
 
+@Override
 public Object doGetValue() {
 	return button.getSelection() ? Boolean.TRUE : Boolean.FALSE;
 }
 
+@Override
 public Object getValueType() {
 	return Boolean.class;
 }

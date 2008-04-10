@@ -88,6 +88,7 @@ public boolean isResponsibleFor(Control control) {
  * @throws ClassCastException
  *             if the value is anything other than a String
  */
+@Override
 protected void doSetApprovedValue(final Object value) {
 	try {
 		updating = true;
@@ -103,6 +104,7 @@ protected void doSetApprovedValue(final Object value) {
  * 
  * @see org.eclipse.core.databinding.observable.value.AbstractVetoableValue#doGetValue()
  */
+@Override
 public Object doGetValue() {
 	return oldValue = text.getText();
 }
@@ -113,10 +115,12 @@ public Object doGetValue() {
  * 
  * @see org.eclipse.core.databinding.observable.value.IObservableValue#getValueType()
  */
+@Override
 public Object getValueType() {
 	return String.class;
 }
 
+@Override
 public void dispose() {
 	if (!text.isDisposed()) {
 		if (updateEventType != SWT.None) {

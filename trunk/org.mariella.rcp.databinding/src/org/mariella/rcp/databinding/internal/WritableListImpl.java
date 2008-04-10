@@ -23,34 +23,42 @@ public WritableListImpl(VBindingContext ctx, List toWrap) {
 	super(toWrap, null);
 }
 
+@Override
 public boolean contains(Object o) {
 	return wrappedList.contains(o);
 }
 
+@Override
 public boolean containsAll(Collection c) {
 	return wrappedList.containsAll(c);
 }
 
+@Override
 public boolean equals(Object o) {
 	return wrappedList.equals(o);
 }
 
+@Override
 public Object get(int index) {
 	return wrappedList.get(index);
 }
 
+@Override
 public int hashCode() {
 	return wrappedList.hashCode();
 }
 
+@Override
 public int indexOf(Object o) {
 	return wrappedList.indexOf(o);
 }
 
+@Override
 public boolean isEmpty() {
 	return wrappedList.isEmpty();
 }
 
+@Override
 public Iterator iterator() {
 	final Iterator wrappedIterator = wrappedList.iterator();
 	return new Iterator() {
@@ -69,10 +77,12 @@ public Iterator iterator() {
 	};
 }
 
+@Override
 public int lastIndexOf(Object o) {
 	return wrappedList.lastIndexOf(o);
 }
 
+@Override
 public ListIterator listIterator(int index) {
 	final ListIterator wrappedIterator = wrappedList.listIterator(index);
 	return new ListIterator() {
@@ -115,22 +125,27 @@ public ListIterator listIterator(int index) {
 	};
 }
 
+@Override
 public int size() {
 	return wrappedList.size();
 }
 
+@Override
 public List subList(int fromIndex, int toIndex) {
 	return wrappedList.subList(fromIndex, toIndex);
 }
 
+@Override
 public Object[] toArray() {
 	return wrappedList.toArray();
 }
 
+@Override
 public Object[] toArray(Object[] a) {
 	return wrappedList.toArray(a);
 }
 
+@Override
 public String toString() {
 	return wrappedList.toString();
 }

@@ -15,10 +15,12 @@ public boolean isResponsibleFor(Control control) {
 	return control == tableViewerObservableList.getTableViewer().getControl();
 }
 
+@Override
 protected Object doGetValue() {
 	throw new UnsupportedOperationException();
 }
 
+@Override
 protected void doSetValue(Object value) {
 	tableViewerObservableList.tableController.setEditable((Boolean)value);
 }

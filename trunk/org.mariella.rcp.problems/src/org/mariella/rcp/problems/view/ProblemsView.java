@@ -28,6 +28,7 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
@@ -57,6 +58,7 @@ class RefreshWorker extends Thread {
 long start = System.currentTimeMillis();
 long refreshRequest = -1L;
 boolean stopRequest;
+@Override
 public void run() {
 	while (!stopRequest) {
 		try {
@@ -73,6 +75,7 @@ public void run() {
 				refreshRequest = -1L;
 			}
 			new UIJob("RefreshProblemsView") {
+				@Override
 				public IStatus runInUIThread(IProgressMonitor monitor) {
 					refreshTree(getProblemManager());
 					return Status.OK_STATUS;
@@ -92,6 +95,7 @@ public RefreshAction(ProblemsView view) {
 	setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(ProblemsPlugin.PLUGIN_ID, "icons/problems/refresh.gif"));
 }
 
+@Override
 public void run() {
 	view.getProblemManager().invalidate();
 }
@@ -110,9 +114,10 @@ public OpenFilterDialogAction(ProblemsView view) {
 	setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(ProblemsPlugin.PLUGIN_ID, "icons/problems/filter.gif"));
 }
 
+@Override
 public void run() {
 	ProblemFilterDialog filterDialog = new ProblemFilterDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), view);
-	if (filterDialog.open() == Dialog.OK)
+	if (filterDialog.open() == Window.OK)
 		view.refreshTree(view.getProblemManager());
 }
 
@@ -271,6 +276,7 @@ public void createPartControl(Composite parent) {
 	refreshWorker.start();
 }
 
+@Override
 public void dispose() {
 	super.dispose();
 	synchronized(refreshWorker) {
@@ -361,6 +367,7 @@ private void buildShownProblems (ProblemManager mgr) {
 	}
 }
 
+@Override
 public void setFocus() {
 	treeViewer.getTree().setFocus();
 }

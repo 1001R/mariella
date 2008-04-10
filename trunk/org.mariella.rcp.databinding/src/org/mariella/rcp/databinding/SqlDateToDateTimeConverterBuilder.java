@@ -12,6 +12,7 @@ public class SqlDateToDateTimeConverterBuilder extends ConverterBuilder {
 public SqlDateToDateTimeConverterBuilder() {
 }
 
+@Override
 public IConverter buildFromModelConverter(VBindingDomain domain) {
 	return new Converter(domain.getType(), Calendar.class) {
 		public Object convert(Object fromObject) {
@@ -25,6 +26,7 @@ public IConverter buildFromModelConverter(VBindingDomain domain) {
 	};
 }
 
+@Override
 public IConverter buildToModelConverter(VBindingDomain domain) {
 	return new Converter(Calendar.class, domain.getType()) {
 		public Object convert(Object fromObject) {

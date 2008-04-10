@@ -14,6 +14,7 @@ private static JdkLogConfigurator jdkLogConfigurator;
 public VDataBindingPlugin() {
 }
 
+@Override
 public void start(BundleContext context) throws Exception {
 	super.start(context);
 	plugin = this;
@@ -21,6 +22,7 @@ public void start(BundleContext context) throws Exception {
 	jdkLogConfigurator = new JdkLogConfigurator(getBundle());
 }
 
+@Override
 public void stop(BundleContext context) throws Exception {
 	plugin = null;
 	super.stop(context);

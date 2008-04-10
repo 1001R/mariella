@@ -14,11 +14,13 @@ public FormPageSelectionExtension(FormEditor formEditor) {
 	this.formEditor = formEditor;
 }
 
+@Override
 public void install(VBindingContext bindingContext) {
 	super.install(bindingContext);
 	bindingContext.setActionBars(formEditor.getEditorSite().getActionBars());
 }
 
+@Override
 public VBindingSelection completeSelectionPath(VBindingSelection selection) {
 	if (formEditor != null && formEditor.getActivePageInstance() == null) return null;
 	String pageId = formEditor.getActivePageInstance().getId();
@@ -31,6 +33,7 @@ public VBindingSelection completeSelectionPath(VBindingSelection selection) {
 	return new VBindingSelection(selection.getTargetObservable(), selection.origin, newPathes);
 }
 
+@Override
 public void dispatchSelection(VDataBindingSelectionDispatchContext dispatchCtx) {
 	Object nextPathToken = dispatchCtx.nextPathToken();
 	if (nextPathToken == null) return;
@@ -54,6 +57,7 @@ public FormEditor getFormEditor() {
 	return formEditor;
 }
 
+@Override
 public void dispose() {}
 
 }

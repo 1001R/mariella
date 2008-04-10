@@ -18,10 +18,12 @@ public boolean isResponsibleFor(Control control) {
 	return control == contentViewer.getControl();
 }
 
+@Override
 protected Object doGetValue() {
 	return contentViewer.getInput();
 }
 
+@Override
 protected void doSetValue(Object value) {
 	contentViewer.setInput(value);
 }

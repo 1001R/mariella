@@ -123,10 +123,12 @@ public boolean isResponsibleFor(Control control) {
 }
 
 
+@Override
 public Object getValueType() {
 	return String.class;
 }
 
+@Override
 protected void doSetApprovedValue(final Object value) {
 	try {
 		updating = true;
@@ -138,10 +140,12 @@ protected void doSetApprovedValue(final Object value) {
 }
 
 
+@Override
 protected Object doGetValue() {
 	return oldValue = text.getText();
 }
 
+@Override
 public void dispose() {
 	if (!text.isDisposed()) {
 		if (updateEventType != SWT.None) {

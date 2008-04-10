@@ -18,6 +18,7 @@ public Object unwrap() {
 	return o;
 }
 
+@Override
 public boolean equals(Object obj) {
 	if (obj == null || obj.getClass() != IdentityWrapper.class) {
 		return false;
@@ -25,6 +26,7 @@ public boolean equals(Object obj) {
 	return o == ((IdentityWrapper) obj).o;
 }
 
+@Override
 public int hashCode() {
 	return System.identityHashCode(o);
 }

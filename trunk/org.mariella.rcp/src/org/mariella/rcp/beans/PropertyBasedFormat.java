@@ -13,11 +13,13 @@ public PropertyBasedFormat(PropertyAccessor propertyAccessor) {
 	this.propertyAccessor = propertyAccessor;
 }
 
+@Override
 public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
 	toAppendTo.append(propertyAccessor.readValue(obj));
 	return toAppendTo;
 }
 
+@Override
 public Object parseObject(String source, ParsePosition pos) {
 	throw new UnsupportedOperationException();
 }

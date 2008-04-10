@@ -54,6 +54,7 @@ public void checkResourceErrorsOnSave(ProblemResource resource) throws ResourceS
 
 private void primInvalidate(final ProblemsProvider providerOrNull) {
 	Job job = new Job("Analysiere Probleme") {
+		@Override
 		public IStatus run(IProgressMonitor monitor) {
 			scanningProblems = true;
 			try {
@@ -79,6 +80,7 @@ private void primInvalidate(final ProblemsProvider providerOrNull) {
 				
 				monitor.setTaskName("Aktualisiere...");
 				UIJob uiJob  = new UIJob("Aktualisiere") {
+					@Override
 					public IStatus runInUIThread(IProgressMonitor monitor) {
 						BusyIndicator.showWhile(Display.getCurrent(), new Runnable() {
 							public void run() {

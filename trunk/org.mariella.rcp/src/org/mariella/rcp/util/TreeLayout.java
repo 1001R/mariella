@@ -68,6 +68,7 @@ public class TreeLayout extends Layout {
 	/*
 	 * (non-Javadoc) Method declared on Layout.
 	 */
+	@Override
 	public Point computeSize(Composite c, int wHint, int hHint, boolean flush) {
 		if (wHint != SWT.DEFAULT && hHint != SWT.DEFAULT) {
 			return new Point(wHint, hHint);
@@ -104,6 +105,7 @@ public class TreeLayout extends Layout {
 	/*
 	 * (non-Javadoc) Method declared on Layout.
 	 */
+	@Override
 	public void layout(Composite c, boolean flush) {
 		// Only do initial layout. Trying to maintain proportions when resizing
 		// is too hard,

@@ -46,6 +46,7 @@ protected void propagateChange(PropertyChangeEvent event) {
     }
 }
 
+@Override
 public void run() {
 	Display.getCurrent().asyncExec(new Runnable() {
 		public void run() {
@@ -56,6 +57,7 @@ public void run() {
 	});
 }
 
+@Override
 public void runWithEvent(final Event event) {
 	run();
 }

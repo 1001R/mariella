@@ -47,6 +47,7 @@ private void initialize() {
 	selectionDispatchingSupport = new SelectionDispatchingObservableSupport(this, new ControlSelectionDecorator(getComboViewer().getControl())); 
 }
 
+@Override
 protected void doSetValue(Object value) {
 	this.value = value;
 	if (!extensionsInstalled)

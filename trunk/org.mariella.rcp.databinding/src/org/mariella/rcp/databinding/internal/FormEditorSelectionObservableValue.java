@@ -16,6 +16,7 @@ public boolean isResponsibleFor(Control control) {
 	return false;
 }
 
+@Override
 protected Object doGetValue() {
 	return null;
 }

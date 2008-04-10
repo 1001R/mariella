@@ -23,27 +23,33 @@ public abstract class AbstractVResourceFormEditor extends FormEditor implements 
 VResourceFormEditorSupport editorSupport = new VResourceFormEditorSupport(this);
 VFormToolkit vFormToolkit = null;
 
+@Override
 protected void addPages() {
 	editorSupport.implementAddPages();
 }
 
+@Override
 public void doSave(IProgressMonitor monitor) {
 	editorSupport.implementDoSave(monitor);
 }
 
+@Override
 public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 	editorSupport.implementInit(site, input);
 }
 
+@Override
 public void dispose() {
 	editorSupport.implementDispose();
 	super.dispose();
 }
 
+@Override
 public void doSaveAs() {
 	throw new UnsupportedOperationException();
 }
 
+@Override
 public boolean isSaveAsAllowed() {
 	return false;
 }
@@ -56,6 +62,7 @@ public final void setDirtyStateChanged() {
 	}
 }
 
+@Override
 public final void setInput(IEditorInput input) {
 	super.setInput(input);
 }
@@ -64,14 +71,17 @@ public final void setSite(IEditorSite site) {
 	super.setSite(site);
 }
 
+@Override
 public final void setPartName(String partName) {
 	super.setPartName(partName);
 }
 
+@Override
 public final void firePropertyChange(int propertyId) {
 	super.firePropertyChange(propertyId);
 }
 
+@Override
 public boolean isDirty() {
 	return editorSupport.isDirty();
 }
@@ -85,11 +95,13 @@ public List<VResourceFormPage> getPages() {
 	return result;
 }
 
+@Override
 protected void configurePage(int index, IFormPage page) throws PartInitException {
 	super.configurePage(index, page);
 	editorSupport.implementConfigurePage(index, page);
 }
 
+@Override
 public final void setFocus() {
 	editorSupport.implementSetFocus();
 }
@@ -103,6 +115,7 @@ void hideTabsIfNeeded() {
 	}
 }
 
+@Override
 protected FormToolkit createToolkit(Display display) {
 	return new FormToolkit(new FormColors(display));
 }

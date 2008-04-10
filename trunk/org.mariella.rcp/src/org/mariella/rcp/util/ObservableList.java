@@ -14,28 +14,34 @@ public ObservableList(List items) {
 	this.items = items;
 }
 
+@Override
 public E get(int index) {
 	return (E)items.get(index);
 }
 
+@Override
 public int size() {
 	return items.size();
 }
 
+@Override
 public boolean addAll(Collection<? extends E> c) {
 	throw new UnsupportedOperationException();
 }
 
+@Override
 public void add(int index, E element) {
 	items.add(index, element);
 	fireElementAdded(index, element);
 	fireModified();
 }
 
+@Override
 public boolean contains(Object o) {
 	return items.contains(o);
 }
 
+@Override
 public boolean remove(Object o) {
 	boolean rv = items.remove(o);
 	fireElementRemoved((E)o);
@@ -43,6 +49,7 @@ public boolean remove(Object o) {
 	return rv;
 }
 
+@Override
 public E remove(int index) {
 	E element = (E) items.remove(index);
 	fireElementRemoved(element);
@@ -50,6 +57,7 @@ public E remove(int index) {
 	return element;
 }
 
+@Override
 public boolean removeAll(Collection c) {
 	throw new UnsupportedOperationException();
 }

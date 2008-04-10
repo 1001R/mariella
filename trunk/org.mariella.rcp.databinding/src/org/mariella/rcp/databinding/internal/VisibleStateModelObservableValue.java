@@ -37,19 +37,23 @@ public VisibleStateModelObservableValue(VisibleCallback visibleCallback, Object 
 	}
 }
 
+@Override
 protected Object doGetValue() {
 	lastVisible = visibleCallback.isVisible();
 	return lastVisible;
 }
 
+@Override
 public Object getValueType() {
 	return Boolean.class;
 }
 
+@Override
 public void revalidate() {
 	fireValueChange(Diffs.createValueDiff(lastVisible, doGetValue()));
 }
 
+@Override
 public void handleValueChange(ValueChangeEvent event) {
 	revalidate();
 }

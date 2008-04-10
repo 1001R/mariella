@@ -18,6 +18,7 @@ private static JdkLogConfigurator jdkLogConfigurator;
 public ProblemsPlugin() {
 }
 
+@Override
 public void start(BundleContext context) throws Exception {
 	super.start(context);
 	plugin = this;
@@ -26,6 +27,7 @@ public void start(BundleContext context) throws Exception {
 	jdkLogConfigurator = new JdkLogConfigurator(getBundle());
 }
 
+@Override
 public void stop(BundleContext context) throws Exception {
 	super.stop(context);
 	plugin = null;

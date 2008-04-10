@@ -260,6 +260,7 @@ private void comboEvent(Event event) {
     }
 }
 
+@Override
 public Point computeSize(int wHint, int hHint, boolean changed) {
     checkWidget();
 
@@ -463,6 +464,7 @@ private void dropDown(boolean drop) {
     dp.setFocus();
 }
 
+@Override
 public Control[] getChildren() {
     checkWidget();
     return new Control[0];
@@ -488,13 +490,15 @@ public int getTextHeight() {
 
 private void initAccessible() {
     getAccessible().addAccessibleListener(new AccessibleAdapter() {
-            public void getHelp(AccessibleEvent e) {
+            @Override
+			public void getHelp(AccessibleEvent e) {
                 e.result = getToolTipText();
             }
         });
 
     getAccessible().addAccessibleControlListener(new AccessibleControlAdapter() {
-            public void getChildAtPoint(AccessibleControlEvent e) {
+            @Override
+			public void getChildAtPoint(AccessibleControlEvent e) {
                 Point testPoint = toControl(new Point(e.x, e.y));
 
                 if (getBounds().contains(testPoint)) {
@@ -502,11 +506,13 @@ private void initAccessible() {
                 }
             }
 
-            public void getChildCount(AccessibleControlEvent e) {
+            @Override
+			public void getChildCount(AccessibleControlEvent e) {
                 e.detail = 0;
             }
 
-            public void getLocation(AccessibleControlEvent e) {
+            @Override
+			public void getLocation(AccessibleControlEvent e) {
                 Rectangle location = getBounds();
                 Point pt = toDisplay(new Point(location.x, location.y));
                 e.x = pt.x;
@@ -515,15 +521,18 @@ private void initAccessible() {
                 e.height = location.height;
             }
 
-            public void getRole(AccessibleControlEvent e) {
+            @Override
+			public void getRole(AccessibleControlEvent e) {
                 e.detail = ACC.ROLE_COMBOBOX;
             }
 
-            public void getState(AccessibleControlEvent e) {
+            @Override
+			public void getState(AccessibleControlEvent e) {
                 e.detail = ACC.STATE_NORMAL;
             }
 
-            public void getValue(AccessibleControlEvent e) {
+            @Override
+			public void getValue(AccessibleControlEvent e) {
                 e.result = textViewer.getTextWidget().getText();
             }
         });
@@ -555,6 +564,7 @@ private boolean isDropped() {
     return popup.getVisible();
 }
 
+@Override
 public boolean isFocusControl() {
     checkWidget();
 
@@ -592,6 +602,7 @@ private void popupEvent(Event event) {
     }
 }
 
+@Override
 public void redraw(int x, int y, int width, int height, boolean all) {
     checkWidget();
 
@@ -631,6 +642,7 @@ public void removeSelectionListener(SelectionListener listener) {
     removeListener(SWT.DefaultSelection, listener);
 }
 
+@Override
 public void setBackground(Color color) {
     super.setBackground(color);
 
@@ -674,12 +686,14 @@ public void setDate(Date date) {
     dp.setDate(date);
 }
 
+@Override
 public boolean setFocus() {
     checkWidget();
 
     return textViewer.getTextWidget().setFocus();
 }
 
+@Override
 public void setFont(Font font) {
     super.setFont(font);
     textViewer.getTextWidget().setFont(font);
@@ -687,6 +701,7 @@ public void setFont(Font font) {
     internalLayout();
 }
 
+@Override
 public void setForeground(Color color) {
     super.setForeground(color);
 
@@ -718,6 +733,7 @@ public void setTextLimit(int limit) {
     textViewer.getTextWidget().setTextLimit(limit);
 }
 
+@Override
 public void setToolTipText(String string) {
     checkWidget();
     super.setToolTipText(string);
@@ -730,6 +746,7 @@ public void setToolTipText(String string) {
  *
  * @param visible visibility state
  */
+@Override
 public void setVisible(boolean visible) {
     super.setVisible(visible);
 
@@ -911,6 +928,7 @@ private void textEvent(Event event) {
  * @author andyglow
  * @param enabled
  */
+@Override
 public void setEnabled(boolean enabled) {
     super.setEnabled(enabled);
     textViewer.getTextWidget().setEnabled(enabled);

@@ -86,6 +86,7 @@ private void hookPropertyChangeListener() {
 		propertyListenSupport.hookListener(propertyChangeListenerTarget);
 }
 
+@Override
 public void dispose() {
 	super.dispose();
 	lastListenerRemoved();

@@ -45,7 +45,7 @@ public VBindingSelection implementGetSelection() {
 	VBindingSelection contextSelection = contextSelectionCallback.getContextSelection();
 	if (contextSelection == null || contextSelection.getSelectionPathes().length == 0) return null;
 	
-	SelectionPath contextSelectionPath = (SelectionPath)contextSelection.getSelectionPathes()[0];
+	SelectionPath contextSelectionPath = contextSelection.getSelectionPathes()[0];
 	return new VBindingSelection(targetObservable, contextSelection.getOrigin(), new SelectionPath(contextSelectionPath.getQualifiers(), basePath));
 }
 

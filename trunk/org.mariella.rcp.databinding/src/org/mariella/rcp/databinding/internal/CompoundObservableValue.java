@@ -24,6 +24,7 @@ public CompoundObservableValue(Object bean, String ... propertyPathes) {
 	}
 }
 
+@Override
 public synchronized void dispose() {
 	super.dispose();
 	for (IObservableValue value : observableValues) {

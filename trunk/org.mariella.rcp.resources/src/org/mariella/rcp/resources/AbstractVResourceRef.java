@@ -29,11 +29,13 @@ public abstract void restoreFromMemento(IMemento memento);
 
 public abstract void storeToMemento(IMemento memento);
 
+@Override
 public boolean equals(Object obj) {
 	if (obj == null || obj.getClass() != this.getClass()) return false;
 	return ((AbstractVResourceRef)obj).refId.equals(refId);
 }
 
+@Override
 public int hashCode() {
 	return refId.hashCode();
 }

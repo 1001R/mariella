@@ -18,6 +18,7 @@ public IntegerFormat(String pattern, DecimalFormatSymbols symbols) {
 	super(pattern, symbols);
 }
 
+@Override
 public Number parse(String text, ParsePosition pos) {
 	Number number = super.parse(text, pos);
 	if (!(number instanceof Integer)) 

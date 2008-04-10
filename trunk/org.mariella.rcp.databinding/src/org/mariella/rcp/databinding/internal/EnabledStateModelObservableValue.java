@@ -30,6 +30,7 @@ public EnabledStateModelObservableValue(EnabledCallback enabledCallback, Object 
 	}
 }
 
+@Override
 public synchronized void dispose() {
 	super.dispose();
 	for (int i=0; i<listenerSupportList.size(); i++) {
@@ -39,6 +40,7 @@ public synchronized void dispose() {
 	}
 }
 
+@Override
 protected Object doGetValue() {
 	lastEnabled = enabledCallback.isEnabled();
 	return lastEnabled;

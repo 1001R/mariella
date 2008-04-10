@@ -15,6 +15,7 @@ abstract class GlobalClipboardAction extends Action {
 GlobalClipboardAction() {
 	setEnabled(true);
 }
+@Override
 public final void run() {
 	ISelection selection = bindingContext.getSelectionProvider().getSelection();
 	ClipboardSupportingObservable observable = getClipboardSupportingObservable(selection);
@@ -25,24 +26,28 @@ abstract void implementAction(ClipboardSupportingObservable observable);
 }
 
 class CutAction extends GlobalClipboardAction {
+@Override
 void implementAction(ClipboardSupportingObservable observable) {
 	observable.doCut();
 }
 }
 	
 class CopyAction extends GlobalClipboardAction {
+@Override
 void implementAction(ClipboardSupportingObservable observable) {
 	observable.doCopy();
 }
 }
 
 class PasteAction extends GlobalClipboardAction {
+@Override
 void implementAction(ClipboardSupportingObservable observable) {
 	observable.doPaste();
 }
 }
 
 class DeleteAction extends GlobalClipboardAction {
+@Override
 void implementAction(ClipboardSupportingObservable observable) {
 	observable.doDelete();
 }

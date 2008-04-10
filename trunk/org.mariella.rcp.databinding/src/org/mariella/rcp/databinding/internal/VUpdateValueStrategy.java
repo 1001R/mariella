@@ -25,6 +25,7 @@ public VUpdateValueStrategy(VBindingContext dbc) {
 	this.dbc = dbc;
 }
 
+@Override
 protected IStatus doSet(IObservableValue observableValue, Object value) {
 	try {
 		observableValue.setValue(value);
@@ -34,6 +35,7 @@ protected IStatus doSet(IObservableValue observableValue, Object value) {
 	return Status.OK_STATUS;
 }
 
+@Override
 public Object convert(Object value) {
 	conversionError = null;
 	try {
@@ -45,6 +47,7 @@ public Object convert(Object value) {
 	}
 }
 
+@Override
 public IStatus validateAfterConvert(Object value) {
 	IStatus status;
 	if (conversionError != null)

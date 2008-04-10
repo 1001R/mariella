@@ -57,16 +57,19 @@ private void hookPropertyChangeListener() {
 
 
 
+@Override
 public synchronized void dispose() {
 	if (propertyPathSupport.object instanceof IObservableValue)
 		((IObservableValue)propertyPathSupport.object).removeValueChangeListener(objectChangeListener);
 	super.dispose();
 }
 
+@Override
 protected Object doGetValue() {
 	return propertyPathSupport.implementDoGetValue();
 }
 
+@Override
 protected void doSetValue(Object value) {
 	updating = true;
 	try {

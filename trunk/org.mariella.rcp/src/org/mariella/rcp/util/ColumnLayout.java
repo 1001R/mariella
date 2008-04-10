@@ -25,6 +25,7 @@ public ColumnLayout(int margin, int spacing) {
 	this.spacing = spacing;
 }
 
+@Override
 protected Point computeSize(Composite composite, int wHint, int hHint,
 		boolean flushCache) {
 	Control children[] = composite.getChildren();
@@ -41,6 +42,7 @@ protected Point computeSize(Composite composite, int wHint, int hHint,
 	return new Point(width + 2 * margin, height + 2 * margin);
 }
 
+@Override
 protected void layout(Composite composite, boolean flushCache) {
 	Control children[] = composite.getChildren();
 	if (flushCache || sizes == null || sizes.length != children.length) {

@@ -14,12 +14,14 @@ public VTableViewerListBindingImpl(IObservableList target, IObservableList model
 	super(target, model, targetToModelStrategy, modelToTargetStrategy);
 }
 
+@Override
 public void updateModelToTarget() {
 	if (!extensionsInstalled) return;
 
 	super.updateModelToTarget();
 }
 
+@Override
 public void updateTargetToModel() {}
 
 public void extensionsInstalled() {

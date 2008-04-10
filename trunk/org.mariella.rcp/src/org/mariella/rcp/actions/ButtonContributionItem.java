@@ -99,6 +99,7 @@ private void handleWidgetDispose(Event e) {
 	}
 }
 
+@Override
 public void update(String propertyName) {
 	if (button != null) {
 		// determine what to do

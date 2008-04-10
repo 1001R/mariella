@@ -14,6 +14,7 @@ public void install(final VBinding binding) {
 	
 	final ITextViewer textViewer = getTextViewer(binding);
 	textViewer.getTextWidget().addFocusListener(new FocusAdapter() {
+		@Override
 		public void focusGained(FocusEvent e) {
 			Display.getCurrent().asyncExec(new Runnable() {
 				public void run() {
@@ -24,6 +25,7 @@ public void install(final VBinding binding) {
 				}
 			});
 		}
+		@Override
 		public void focusLost(FocusEvent e) {
 			Display.getCurrent().asyncExec(new Runnable() {
 				public void run() {

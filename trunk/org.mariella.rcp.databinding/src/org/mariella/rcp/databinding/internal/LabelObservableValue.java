@@ -19,10 +19,12 @@ public boolean isResponsibleFor(Control control) {
 }
 
 
+@Override
 protected void doSetApprovedValue(final Object value) {
 	label.setText(value == null ? "" : value.toString()); //$NON-NLS-1$
 }
 
+@Override
 public Object doGetValue() {
 	return label.getText();
 }
@@ -33,6 +35,7 @@ public Object doGetValue() {
  * 
  * @see org.eclipse.core.databinding.observable.value.IObservableValue#getValueType()
  */
+@Override
 public Object getValueType() {
 	return String.class;
 }

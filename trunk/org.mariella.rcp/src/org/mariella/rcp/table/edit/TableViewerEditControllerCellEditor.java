@@ -55,6 +55,7 @@ public int marginHeight = 0;
 	 */
 	public Control topControl;
 
+@Override
 protected Point computeSize(Composite composite, int wHint, int hHint, boolean flushCache) {
 Control children[] = composite.getChildren();
 int maxWidth = 0;
@@ -71,10 +72,12 @@ if (hHint != SWT.DEFAULT) height = hHint;
 return new Point(width, height);
 }
 
+@Override
 protected boolean flushCache(Control control) {
 return true;
 }
 
+@Override
 protected void layout(Composite composite, boolean flushCache) {
 Control children[] = composite.getChildren();
 Rectangle rect = composite.getClientArea();
@@ -104,6 +107,7 @@ return string.substring (index + 1, string.length ());
 *
 * @return a string representation of the layout
 */
+@Override
 public String toString () {
 	String string = getName ()+" {";
 	if (marginWidth != 0) string += "marginWidth="+marginWidth+" ";
@@ -135,6 +139,7 @@ public TableViewerEditControllerCellEditor(TableViewerEditController controller,
 	this.callback = callback;
 }
 
+@Override
 protected final Control createControl(Composite parent) {
 	stackComposite = new Composite(parent, SWT.NONE);
 	stackLayout = new StackLayoutImpl();
@@ -144,6 +149,7 @@ protected final Control createControl(Composite parent) {
 	
 	disabledStateLabel = new Label(stackComposite, SWT.NONE);
 	disabledStateLabel.addMouseListener(new MouseAdapter() {
+		@Override
 		public void mouseDoubleClick(MouseEvent e) {
 			setEditMode(true);
 		}
@@ -155,11 +161,13 @@ protected final Control createControl(Composite parent) {
 	editorControl = createEditorControl(stackComposite);
 	
 	editorControl.addMouseListener(new MouseAdapter() {
+		@Override
 		public void mouseDoubleClick(MouseEvent e) {
 			setEditMode(true);
 		}
 	});
 	editorControl.addKeyListener(new KeyAdapter() {
+		@Override
 		public void keyPressed(KeyEvent e) {
 			if (e.keyCode == SWT.F2)
 				setEditMode(true);
@@ -169,6 +177,7 @@ protected final Control createControl(Composite parent) {
 	return stackComposite;
 }
 
+@Override
 protected final void doSetValue(Object value) {
 	disabledStateLabel.setText(callback.valueToText(value));
 	doSetEditorValue(value);
@@ -194,6 +203,7 @@ public final void activate() {
 	super.activate();
 }
 
+@Override
 public final void deactivate() {
 	super.deactivate();
 	controller.deactivated(this);

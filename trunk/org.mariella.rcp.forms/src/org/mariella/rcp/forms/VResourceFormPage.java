@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.FormPage;
@@ -24,6 +23,7 @@ public VResourceFormPage(FormEditor editor, String id, String title) {
 	super(editor, id, title);
 }
 
+@Override
 protected final void createFormContent(IManagedForm managedForm) {
 	implementCreateFormContent(managedForm);
 	refresh(false);
@@ -55,6 +55,7 @@ public void setSelectionProvider(ISelectionProvider selectionProvider) {
 	this.selectionProvider = selectionProvider;
 }
 
+@Override
 public void setActive(boolean active) {
 	boolean oldActive = isActive();
 	super.setActive(active);
@@ -67,6 +68,7 @@ public void setActive(boolean active) {
 	}
 }
 
+@Override
 public void setFocus() {
 	if (resourceSectionParts.size() > 0)
 		resourceSectionParts.get(0).setFocus();

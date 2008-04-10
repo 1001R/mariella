@@ -72,6 +72,7 @@ private void initialize() {
 	dropDownButton.addSelectionListener(buttonListener);
 }
 
+@Override
 public void dispose() {
 	dropDownButton.removeSelectionListener(buttonListener);
 	super.dispose();
@@ -96,6 +97,7 @@ void openPopup() {
 	Point popupLocation = new Point(textPos.x, textPos.y+textBounds.height); 
 	popup.setLocation(popupLocation);
 	datePicker.addFocusListener(new FocusAdapter() {
+		@Override
 		public void focusLost(FocusEvent e) {
 			popup.setVisible(false);
 			popup.dispose();
@@ -106,6 +108,7 @@ void openPopup() {
 		datePicker.setDate(date);
 	}
 	datePicker.addSelectionListener(new SelectionAdapter() {
+		@Override
 		public void widgetSelected(SelectionEvent e) {
 			textViewer.getDocument().set(dateFormat.format(datePicker.getDate()));
 			closePopup(popup);
@@ -113,6 +116,7 @@ void openPopup() {
 	});
 	textViewer.getTextWidget().setFocus();
 	textViewer.getTextWidget().addFocusListener(new FocusAdapter() {
+		@Override
 		public void focusLost(FocusEvent e) {
 			System.out.println("focus lost");
 			closePopup(popup);

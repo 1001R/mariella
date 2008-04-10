@@ -70,6 +70,7 @@ public boolean isResponsibleFor(Control control) {
 }
 
 
+@Override
 protected int doGetSize() {
 	if (tableViewer.getInput() == null) return 0;
 	return ((IStructuredContentProvider)tableViewer.getContentProvider()).getElements(tableViewer.getInput()).length;
@@ -83,10 +84,12 @@ int getIndexOfElement(Object element) {
 	return -1;
 }
 
+@Override
 public Object get(int index) {
 	return ((IStructuredContentProvider)tableViewer.getContentProvider()).getElements(tableViewer.getInput())[index];
 }
 
+@Override
 public void add(int index, Object element) {
 	// update slave list
 	((List)tableViewer.getInput()).add(index, element);
@@ -94,6 +97,7 @@ public void add(int index, Object element) {
 	tableViewer.insert(element, index);
 }
 
+@Override
 public boolean remove(Object o) {
 	// update slave list
 	((List)tableViewer.getInput()).remove(o);
@@ -102,6 +106,7 @@ public boolean remove(Object o) {
 	return true;
 }
 
+@Override
 public synchronized void dispose() {
 	for (Object o : this.input) {
 		removeElementChangedListener(o);
@@ -130,6 +135,7 @@ private void removeElementChangedListener(Object o) {
 	}
 }
 
+@Override
 public Object remove(int index) {
 	// update slave list
 	Object removed = ((List)tableViewer.getInput()).remove(index);
@@ -186,7 +192,7 @@ public VBindingSelection getSelection() {
 	if (selection.isEmpty()) return null;
 	
 	return new VBindingSelection(this, 
-			(IStructuredSelection)selection, 
+			selection, 
 			new SelectionPath(selectionBasePath, new Object[]{indexOf(selection.getFirstElement())}));
 }
 

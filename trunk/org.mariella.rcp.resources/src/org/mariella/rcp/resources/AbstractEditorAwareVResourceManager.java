@@ -45,6 +45,7 @@ public boolean removeResource(VResourceRef ref)	throws VResourceSaveException {
 	return removeResource(resource);
 }
 
+@Override
 public boolean removeResource(VResource resource)	throws VResourceSaveException {
 	String name = "'" + resource.getName() + "'";
 	if (!MessageDialog.openConfirm(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), name + "wirklich löschen?", "Wollen Sie " + name + " wirklich löschen?"))

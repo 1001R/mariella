@@ -597,6 +597,7 @@ void setRowColumn(TableItem row, TableColumn column, boolean notify) {
 	}
 }
 
+@Override
 public void setVisible(boolean visible) {
 	checkWidget();
 	if (visible)
@@ -679,6 +680,7 @@ public TableItem getRow() {
 	return row;
 }
 
+@Override
 public void setBackground(Color color) {
 	if (color == null)
 		color = getDisplay().getSystemColor(BACKGROUND);
@@ -686,6 +688,7 @@ public void setBackground(Color color) {
 	redraw();
 }
 
+@Override
 public void setForeground(Color color) {
 	if (color == null)
 		color = getDisplay().getSystemColor(FOREGROUND);
@@ -745,6 +748,7 @@ public void setSelection(TableItem row, int column) {
 	setRowColumn(table.indexOf(row), column, false);
 }
 
+@Override
 public boolean forceFocus() {
 	return false;
 }

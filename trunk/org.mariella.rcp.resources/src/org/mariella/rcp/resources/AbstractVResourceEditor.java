@@ -11,27 +11,33 @@ public abstract class AbstractVResourceEditor extends EditorPart implements VRes
 
 VResourceEditorSupport editorSupport = new VResourceEditorSupport(this);
 
+@Override
 public final void createPartControl(Composite parent) {
 	editorSupport.implementCreatePartControl(parent);
 }
 
+@Override
 public final void dispose() {
 	super.dispose();
 	editorSupport.implementDispose();
 }
 
+@Override
 public final void doSave(IProgressMonitor monitor) {
 	editorSupport.implementDoSave(monitor);
 }
 
+@Override
 public final void init(IEditorSite site, IEditorInput input) throws PartInitException {
 	editorSupport.implementInit(site, input);
 }
 
+@Override
 public boolean isDirty() {
 	return editorSupport.isDirty();
 }
 
+@Override
 public final void setFocus() {
 	editorSupport.implementSetFocus();
 }
@@ -42,12 +48,14 @@ public void activated() {}
 
 public void deactivated() {}
 
+@Override
 public void doSaveAs() {
 	throw new UnsupportedOperationException();
 }
 
 public abstract boolean hasUserEditorAccess();
 
+@Override
 public boolean isSaveAsAllowed() {
 	return false;
 }
@@ -56,14 +64,17 @@ public void implementDispose() {}
 
 public void implementInit() {}
 
+@Override
 public void setInput(IEditorInput input) {
 	super.setInput(input);
 }
 
+@Override
 public void setPartName(String partName) {
 	super.setPartName(partName);
 }
 
+@Override
 public void firePropertyChange(int propertyId) {
 	super.firePropertyChange(propertyId);
 }

@@ -65,10 +65,12 @@ protected Control createEditorControl(Composite parent) {
 		}
 	});
 	textViewer.getTextWidget().addFocusListener(new FocusAdapter() {
+		@Override
 		public void focusLost(FocusEvent e) {
 			if (!contentAssistantOpen)
 				TextViewerCellEditor.this.focusLost();
 		}
+		@Override
 		public void focusGained(FocusEvent e) {
 			TextViewerCellEditor.this.focusGained();
 		}
@@ -98,6 +100,7 @@ protected Control createEditorControl(Composite parent) {
 		}
 	});
 	textViewer.getTextWidget().addKeyListener(new KeyAdapter() {
+		@Override
 		public void keyPressed(KeyEvent e) {
 			if (e.stateMask == SWT.CTRL && e.character == ' ') {
 				if (!isEditMode())
@@ -122,6 +125,7 @@ protected Control createEditorControl(Composite parent) {
 }
 
 
+@Override
 protected Object doGetValue() {
 	Document doc = (Document)textViewer.getDocument();
 	try {
@@ -132,10 +136,12 @@ protected Object doGetValue() {
 	}
 }
 
+@Override
 protected void doSetFocus() {
 	textViewer.getTextWidget().setFocus();
 }
 
+@Override
 protected void doSetEditorValue(Object value) {
 	lastValue = value;
 	String text = callback.valueToText(value);
@@ -167,6 +173,7 @@ protected void focusGained() {
 	hasFocus = true;
 }
 
+@Override
 protected void focusLost() {
 	if (textViewer == null || textViewer.getTextWidget() == null || textViewer.getTextWidget().isDisposed()) return;
 	hasFocus = false;

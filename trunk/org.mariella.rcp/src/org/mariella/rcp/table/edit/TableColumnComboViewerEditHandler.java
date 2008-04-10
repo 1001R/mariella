@@ -16,6 +16,7 @@ public TableColumnComboViewerEditHandler(IStructuredContentProvider contentProvi
 	this.callback = callback;
 }
 
+@Override
 public CellEditor createCellEditor(TableViewerEditController controller) {
 	ComboViewerCellEditor editor = new ComboViewerCellEditor(controller, contentProvider, labelProvider, callback);
 	return editor;

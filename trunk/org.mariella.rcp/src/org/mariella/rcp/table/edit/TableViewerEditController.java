@@ -187,6 +187,7 @@ public void fireContentModified() {
 public void initialize() {
 	((DefaultStructuredContentProvider)tableViewer.getContentProvider()).setEditController(this);
 	tableViewer.getTable().addMouseListener(new MouseAdapter() {
+		@Override
 		public void mouseDoubleClick(MouseEvent e) {
 			if (curCellEditor != null)
 				curCellEditor.setEditMode(true);

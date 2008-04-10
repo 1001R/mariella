@@ -36,6 +36,7 @@ public boolean isResponsibleFor(Control control) {
 	return control == button;
 }
 
+@Override
 public void doSetValue(final Object value) {
 	Object oldSelectionValue = selectionValue;
 	selectionValue = value;
@@ -45,6 +46,7 @@ public void doSetValue(final Object value) {
 
 protected abstract boolean isSelectedValue(Object value);
 
+@Override
 public synchronized void dispose() {
 	super.dispose();
 

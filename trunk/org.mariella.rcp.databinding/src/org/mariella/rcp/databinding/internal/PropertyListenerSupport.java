@@ -48,7 +48,7 @@ public PropertyListenerSupport(final PropertyChangeListener listener,
 public void hookListener(Object target) {
 	if (target != null) {
 		if (processListener(
-				"addPropertyChangeListener", target)) { //$NON-NLS-1$ //$NON-NLS-2$
+				"addPropertyChangeListener", target)) { //$NON-NLS-1$ 
 			elementsListenedTo.add(new IdentityWrapper(target));
 		}
 	}
@@ -91,7 +91,7 @@ public void unhookListener(Object target) {
 		target = ((IdentityWrapper) target).unwrap();
 
 	if (processListener(
-			"removePropertyChangeListener", target)) { //$NON-NLS-1$//$NON-NLS-2$
+			"removePropertyChangeListener", target)) { //$NON-NLS-1$
 		elementsListenedTo.remove(new IdentityWrapper(target));
 	}
 }

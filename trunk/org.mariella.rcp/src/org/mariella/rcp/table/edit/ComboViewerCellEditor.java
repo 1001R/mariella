@@ -43,6 +43,7 @@ public ComboViewerCellEditor(TableViewerEditController controller, IStructuredCo
     create(controller.tableViewer.getTable());
 }
 
+@Override
 protected Control createEditorControl(Composite parent) {
 	int style = getStyle();
 	style = style | SWT.DROP_DOWN;
@@ -64,17 +65,20 @@ protected Control createEditorControl(Composite parent) {
 		}
 	});
 	combo.addSelectionListener(new SelectionAdapter() {
-        public void widgetSelected(SelectionEvent e) {
+        @Override
+		public void widgetSelected(SelectionEvent e) {
         	if (!isEditMode()) return;
         	
             selectedValue = readCurrentComboValue();
         }
     });
 	combo.addFocusListener(new FocusAdapter() {
+		@Override
 		public void focusGained(FocusEvent e) {
 			hasFocus = false;
 		}
-        public void focusLost(FocusEvent e) {
+        @Override
+		public void focusLost(FocusEvent e) {
         	hasFocus = false;
             ComboViewerCellEditor.this.focusLost();
         }
@@ -97,6 +101,7 @@ protected Control createEditorControl(Composite parent) {
 		}
 	});
 	combo.addKeyListener(new KeyAdapter() {
+		@Override
 		public void keyPressed(KeyEvent e) {
 			if (e.stateMask == 0 && e.character != 0 && e.character != '\t') {
 				setEditMode(true);
@@ -134,6 +139,7 @@ boolean isFirstItemSelected() {
 	return comboViewer.getCombo().getSelectionIndex() == 0;
 }
 
+@Override
 protected Object doGetValue() {
 	return selectedValue;
 }
@@ -145,10 +151,12 @@ Object readCurrentComboValue() {
 		return comboViewer.getCombo().getText();
 }
 
+@Override
 protected void doSetFocus() {
 	comboViewer.getCombo().setFocus();
 }
 
+@Override
 protected void doSetEditorValue(Object value) {
 	selectedValue = value;
 	lastValue = value;
@@ -181,6 +189,7 @@ public void setContentProvider(IStructuredContentProvider contentProvider) {
 	this.contentProvider = contentProvider;
 }
 
+@Override
 protected void focusLost() {
     if (isActivated()) {
         deactivate();

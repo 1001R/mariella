@@ -16,6 +16,7 @@ ProposalImpl(String value, Image image, int replacementOffset, int replacementLe
 	super(value, replacementOffset, replacementLength, value.length());
 	this.image = image;
 }
+@Override
 public Image getImage() {
 	return image;
 }

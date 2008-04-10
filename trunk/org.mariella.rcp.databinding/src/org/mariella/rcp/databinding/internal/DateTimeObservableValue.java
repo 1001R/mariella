@@ -46,22 +46,24 @@ public boolean isResponsibleFor(Control control) {
 	return control == dateTime;
 }
 
+@Override
 public Object getValueType() {
 	return Calendar.class;
 }
 
+@Override
 protected void doSetApprovedValue(Object value) {
 	try {
 		updating = true;
 		Calendar cal = value == null ? new GregorianCalendar() : (Calendar)value;
 		if ((dateTime.getStyle() & SWT.DATE) == SWT.DATE) {
-			dateTime.setYear(cal.get(GregorianCalendar.YEAR));
-			dateTime.setMonth(cal.get(GregorianCalendar.MONTH));
-			dateTime.setDay(cal.get(GregorianCalendar.DAY_OF_MONTH));
+			dateTime.setYear(cal.get(Calendar.YEAR));
+			dateTime.setMonth(cal.get(Calendar.MONTH));
+			dateTime.setDay(cal.get(Calendar.DAY_OF_MONTH));
 		}
 		if ((dateTime.getStyle() & SWT.TIME) == SWT.TIME) {
-			dateTime.setHours(cal.get(GregorianCalendar.HOUR_OF_DAY));
-			dateTime.setMinutes(cal.get(GregorianCalendar.MINUTE));
+			dateTime.setHours(cal.get(Calendar.HOUR_OF_DAY));
+			dateTime.setMinutes(cal.get(Calendar.MINUTE));
 		}
 		oldValue = cal;
 	} finally {
@@ -69,6 +71,7 @@ protected void doSetApprovedValue(Object value) {
 	}
 }
 
+@Override
 protected Object doGetValue() {
 	return readCalendarValue();
 }
@@ -94,13 +97,13 @@ public VBindingSelection getSelection() {
 private Calendar readCalendarValue() {
 	GregorianCalendar cal = new GregorianCalendar();
 	if ((dateTime.getStyle() & SWT.DATE) == SWT.DATE) {
-		cal.set(GregorianCalendar.YEAR, dateTime.getYear());
-		cal.set(GregorianCalendar.MONTH, dateTime.getMonth());
-		cal.set(GregorianCalendar.DAY_OF_MONTH, dateTime.getDay());
+		cal.set(Calendar.YEAR, dateTime.getYear());
+		cal.set(Calendar.MONTH, dateTime.getMonth());
+		cal.set(Calendar.DAY_OF_MONTH, dateTime.getDay());
 	}
 	if ((dateTime.getStyle() & SWT.TIME) == SWT.TIME) {
-		cal.set(GregorianCalendar.HOUR_OF_DAY, dateTime.getHours());
-		cal.set(GregorianCalendar.MINUTE, dateTime.getMinutes());
+		cal.set(Calendar.HOUR_OF_DAY, dateTime.getHours());
+		cal.set(Calendar.MINUTE, dateTime.getMinutes());
 	}
 	return cal;
 }

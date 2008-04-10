@@ -12,6 +12,7 @@ public TimestampFormat(String pattern) {
 	super(pattern);
 }
 
+@Override
 public Date parse(String text, ParsePosition pos) {
 	Date date = super.parse(text, pos);
 	if (date == null) return null;

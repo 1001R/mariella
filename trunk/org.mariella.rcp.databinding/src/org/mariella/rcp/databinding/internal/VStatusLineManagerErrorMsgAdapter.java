@@ -12,6 +12,7 @@ public VStatusLineManagerErrorMsgAdapter(IStatusLineManager mgr) {
 	this.statusLineMgr = mgr;
 }
 
+@Override
 protected Object doGetValue() {
 	throw new UnsupportedOperationException();
 }
@@ -20,6 +21,7 @@ public Object getValueType() {
 	return String.class;
 }
 
+@Override
 protected void doSetValue(Object value) {
 	if ("OK".equals(value))
 		statusLineMgr.setErrorMessage("");

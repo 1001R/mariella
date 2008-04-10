@@ -88,7 +88,7 @@ public IObservableValue createPropertyObservable(VBindingContext dbc, Object bea
 }
 
 public VBinding createSingleSelectionBinding(VBindingContext dbc, StructuredViewer structuredViewer, Object bean, String propertyPath, Object domainSymbol) {
-	VBindingDomain domain = (VBindingDomain)domainRegistry.getDomain(domainSymbol);
+	VBindingDomain domain = domainRegistry.getDomain(domainSymbol);
 	return createSingleSelectionBinding(dbc, structuredViewer, bean, propertyPath, domain);
 }
 
@@ -104,7 +104,7 @@ public VBinding createSingleSelectionBinding(VBindingContext dbc, StructuredView
 }
 
 public VBinding createComboViewerBinding(VBindingContext dbc, ComboViewer comboViewer, Object bean, String propertyPath, Object domainSymbol) {
-	VBindingDomain domain = (VBindingDomain)domainRegistry.getDomain(domainSymbol);
+	VBindingDomain domain = domainRegistry.getDomain(domainSymbol);
 	return createComboViewerBinding(dbc, comboViewer, bean, propertyPath, domain);
 }
 
@@ -120,7 +120,7 @@ public VBinding createComboViewerBinding(VBindingContext dbc, ComboViewer comboV
 }
 
 public VBinding createButtonBinding(VBindingContext dbc, Button button, Object bean, String propertyPath, Object domainSymbol) {
-	VBindingDomain domain = (VBindingDomain)domainRegistry.getDomain(domainSymbol);
+	VBindingDomain domain = domainRegistry.getDomain(domainSymbol);
 	return createButtonBinding(dbc, button, bean, propertyPath, domain);
 }
 
@@ -159,7 +159,7 @@ public VBinding createControlVisibleBinding(VBindingContext dbc, Control control
 }
 
 public VBinding createRadioSetBinding(VBindingContext dbc, Button[] buttons, Object bean, String propertyPath, Object domainSymbol) {
-	VBindingDomain domain = (VBindingDomain)domainRegistry.getDomain(domainSymbol);
+	VBindingDomain domain = domainRegistry.getDomain(domainSymbol);
 	return createRadioSetBinding(dbc, buttons, bean, propertyPath, domain);
 }
 
@@ -192,7 +192,7 @@ public VBinding createRadioSetBinding(VBindingContext dbc, Button[] buttons, Obj
 
 @Deprecated
 public VBinding[] createRadioSetBindings(VBindingContext dbc, Button[] buttons, Object[] values, Object bean, String propertyPath, Object domainSymbol) {
-	VBindingDomain domain = (VBindingDomain)domainRegistry.getDomain(domainSymbol);
+	VBindingDomain domain = domainRegistry.getDomain(domainSymbol);
 	return createRadioSetBindings(dbc, buttons, values, bean, propertyPath, domain);
 }
 
@@ -311,7 +311,7 @@ public VBinding createDateTimeBinding(VBindingContext dbc, DateTime dateTime, Ob
 
 
 public VBinding createTableViewerListBinding(VBindingContext dbc, TableViewer tableViewer, Object bean, String propertyPath, Object domainSymbol) {
-	VBindingDomain domain = (VBindingDomain)domainRegistry.getDomain(domainSymbol);
+	VBindingDomain domain = domainRegistry.getDomain(domainSymbol);
 	return createTableViewerListBinding(dbc, tableViewer, bean, propertyPath, domain);
 }
 

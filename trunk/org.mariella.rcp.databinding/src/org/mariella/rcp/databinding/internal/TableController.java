@@ -116,6 +116,7 @@ public void install(TableViewerEditExtension tableViewerEditExtension) {
 	cursorEditor.grabVertical=true;
 	
 	tableCursor.addSelectionListener(new SelectionAdapter() {
+		@Override
 		public void widgetSelected(SelectionEvent e) {
 			if (!editable) return;
 			for (Control c : editCompositeMap.values()) c.setVisible(false);
@@ -137,6 +138,7 @@ public void install(TableViewerEditExtension tableViewerEditExtension) {
 			});
 			
 		}
+		@Override
 		public void widgetDefaultSelected(SelectionEvent e) {
 		}
 	});

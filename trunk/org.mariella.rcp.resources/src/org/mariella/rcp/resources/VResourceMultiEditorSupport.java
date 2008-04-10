@@ -17,6 +17,7 @@ public void implementCreatePages() {
 	refresh(false);
 }
 
+@Override
 public void implementInit(IEditorSite site, IEditorInput input) throws PartInitException {
 	super.implementInit(site, input);
 	editorPart.getSite().setSelectionProvider(new MultiPageSelectionProvider((MultiPageEditorPart)editorPart));

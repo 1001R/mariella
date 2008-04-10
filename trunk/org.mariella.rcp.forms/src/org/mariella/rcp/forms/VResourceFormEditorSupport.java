@@ -30,10 +30,12 @@ void hideTabsIfNeeded() {
 }
 
 
+@Override
 public void implementInit(IEditorSite site, IEditorInput input) throws PartInitException {
 	super.implementInit(site, input);
 }
 
+@Override
 public void setDirty() {
 	if (refreshing) return;
 	
@@ -46,6 +48,7 @@ public void implementConfigurePage(int index, IFormPage page) {
 	((VResourceFormPage)page).setCustomEditingContext(customEditingContext);
 }
 
+@Override
 public void implementSetFocus() {
 	Display.getCurrent().asyncExec(new Runnable() {
 		public void run() {

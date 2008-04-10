@@ -34,6 +34,7 @@ public class PluginLogHandler extends Handler {
 	private ConsoleHandler consoleHandler = new ConsoleHandler();
 	private String symbolicName;
 	
+	@Override
 	public void publish(LogRecord record) {
 		consoleHandler.publish(record);
 		
@@ -161,10 +162,12 @@ public class PluginLogHandler extends Handler {
 		this.symbolicName = symbolicName;
 	}
 
+	@Override
 	public void flush() {
 		// no buffer to flush
 	}
 
+	@Override
 	public void close() throws SecurityException {
 		// no resources to close
 	}

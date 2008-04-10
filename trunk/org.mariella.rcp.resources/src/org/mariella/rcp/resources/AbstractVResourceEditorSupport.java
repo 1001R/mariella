@@ -5,6 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IPerspectiveDescriptor;
@@ -79,7 +80,7 @@ public void setDirty() {
 	if (refreshing) return;
 	
 	dirty = true;
-	editorPart.firePropertyChange(EditorPart.PROP_DIRTY);
+	editorPart.firePropertyChange(IEditorPart.PROP_DIRTY);
 	
 }
 
@@ -95,7 +96,7 @@ public void implementDoSave(IProgressMonitor monitor) {
 	}
 	refresh(false);
 	resetDirty();
-	editorPart.firePropertyChange(EditorPart.PROP_DIRTY);
+	editorPart.firePropertyChange(IEditorPart.PROP_DIRTY);
 }
 
 public void resetDirty() {

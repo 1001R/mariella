@@ -17,14 +17,16 @@ public ForegroundStatusDecorator(Color errorColor) {
 	this.errorColor = errorColor;
 }
 
+@Override
 protected void initializeFor(Control control) {
 	originColor = control.getForeground();
 	originTooltip = control.getToolTipText();
 }
 
+@Override
 public void decorateStatus(ISWTObservable observable, IStatus validationStatus) {
 	
-	if (validationStatus.getSeverity() == ValidationStatus.ERROR) {
+	if (validationStatus.getSeverity() == IStatus.ERROR) {
 		((Control)observable.getWidget()).setForeground(errorColor);
 		((Control)observable.getWidget()).setToolTipText(validationStatus.getMessage());
 	} else {

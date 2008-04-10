@@ -46,6 +46,7 @@ public VBindingContext getBindingContext() {
 	return bindingContext;
 }
 
+@Override
 public String toString() {
 	return "Binding for domain: " + domain.getSymbol();
 }

@@ -28,6 +28,7 @@ public TableDropHandlerAdapter(TableViewer tableViewer, TableDropHandler ... han
 		addHandler(h);
 }
 
+@Override
 public void drop(DropTargetEvent evt) {
 	List modifiedElements = handleDrop(evt.data);
 	for (Object targetElement : modifiedElements) {
@@ -65,9 +66,11 @@ private Collection<Object> resolveDropObjects(Object dropObject) {
 	}
 }
 
+@Override
 public void dragOver(DropTargetEvent evt) {
 }
 
+@Override
 public void dragEnter(DropTargetEvent event) {
 }
 

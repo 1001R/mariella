@@ -44,6 +44,7 @@ public void installContentAssistant() {
 	contentAssistant.install(textViewer);
 	
 	textViewer.getTextWidget().addKeyListener(new KeyAdapter() {
+		@Override
 		public void keyPressed(KeyEvent e) {
 			if (e.stateMask == SWT.CTRL && e.character == ' ' || Character.isLetterOrDigit(e.character)) {
 				showCompletionsIfPossible();
