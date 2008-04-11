@@ -87,7 +87,7 @@ public void setSelectionTargetControl(Control control) {
 
 public void installLabelProviderExtension(ComboViewerLabelProviderExtension extension, VBinding binding) {
 	if (extension.getDomain() == null)
-		extension.setDomain(binding.getBindingContext().getDataBindingFactory().getDomainRegistry().getDomain(extension.getDomainSymbol()));
+		extension.setDomain(binding.getBindingContext().getBindingFactory().getDomainRegistry().getDomain(extension.getDomainSymbol()));
 	this.labelProviderExtension = extension;
 	getComboViewer().setLabelProvider(this);
 }

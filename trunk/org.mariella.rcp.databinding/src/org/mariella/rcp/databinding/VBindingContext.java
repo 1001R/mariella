@@ -29,7 +29,7 @@ import org.mariella.rcp.databinding.internal.VTargetObservable;
 
 public class VBindingContext {
 
-VBindingFactory dataBindingFactory;
+VBindingFactory bindingFactory;
 public ObservablesManager observablesManager = new ObservablesManager();
 private TraverseHandler traverseHandler = new TraverseHandler();
 VDataBindingSelectionProvider selectionProvider = new VDataBindingSelectionProvider(this);
@@ -42,7 +42,7 @@ private IActionBars actionBars;
 GlobalClipboardActionsHandler globalClipboardActionsHandler;
 
 VBindingContext(VBindingFactory dataBindingFactory) {
-	this.dataBindingFactory = dataBindingFactory;
+	this.bindingFactory = dataBindingFactory;
 	bindingContext = new DataBindingContext();
 	globalClipboardActionsHandler = new GlobalClipboardActionsHandler(this);
 }
@@ -103,8 +103,8 @@ private final Binding createListBinding(IObservableList targetObservableList,
 	return result;
 }
 
-public VBindingFactory getDataBindingFactory() {
-	return dataBindingFactory;
+public VBindingFactory getBindingFactory() {
+	return bindingFactory;
 }
 
 public TraverseHandler getTraverseHandler() {

@@ -94,7 +94,7 @@ private void setTableViewer(TableViewer tableViewer) {
 
 public void install(TableViewerColumnExtension columnExtension, VBinding binding) {
 	if (columnExtension.getDomain() == null)
-		columnExtension.setDomain(binding.getBindingContext().getDataBindingFactory().getDomainRegistry().getDomain(columnExtension.getDomainSymbol()));
+		columnExtension.setDomain(binding.getBindingContext().getBindingFactory().getDomainRegistry().getDomain(columnExtension.getDomainSymbol()));
 	columnExtensions.add(columnExtension);
 	tableLayout.addColumnData(new ColumnWeightData(columnExtension.getWeight()));
 	TableColumn tableCol = new TableColumn(tableViewer.getTable(), SWT.ITALIC);
@@ -214,9 +214,9 @@ public void install(TableViewerColumnEditExtension columnEditExtension) {
 			return domain;
 		}
 	};
-	bindingContext.getDataBindingFactory().addCallback(factoryCallback);
+	bindingContext.getBindingFactory().addCallback(factoryCallback);
 	final Control editControl = columnEditExtension.getCallback().createEditControl(selectionHolder, editControlComposite);
-	bindingContext.getDataBindingFactory().removeCallback(factoryCallback);
+	bindingContext.getBindingFactory().removeCallback(factoryCallback);
 	FormData formData = new FormData();
 	formData.top= new FormAttachment(0);
 	formData.left = new FormAttachment(0);

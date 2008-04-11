@@ -31,7 +31,7 @@ public GlobalEnabledRuleExtension(EnabledCallback globalEnabledCallback) {
 
 
 public void install(VBindingContext bindingContext) {
-	bindingContext.dataBindingFactory.addCallback(dataBindingFactoryCallback);
+	bindingContext.bindingFactory.addCallback(dataBindingFactoryCallback);
 }
 
 public void dispose() {
