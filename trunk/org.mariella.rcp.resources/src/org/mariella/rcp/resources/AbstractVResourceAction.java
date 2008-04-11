@@ -50,7 +50,6 @@ public void dispose() {
 public void selectionChanged(VResourceSelectionEvent event) {
 	this.selectedPart = event.getSelection().getPart();
 	this.selectedItems = event.getSelection().getSelectedItems();
-	System.out.println("SELECTION CHANGED " + selectedItems);
 	setEnabled(calculateEnabled());
 }
 
