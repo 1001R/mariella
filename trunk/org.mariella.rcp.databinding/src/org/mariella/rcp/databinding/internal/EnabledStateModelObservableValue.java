@@ -1,42 +1,40 @@
 package org.mariella.rcp.databinding.internal;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.List;
-
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.databinding.observable.Diffs;
-import org.eclipse.core.databinding.observable.value.AbstractObservableValue;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.core.databinding.observable.value.IValueChangeListener;
+import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
+import org.mariella.rcp.databinding.AbstractEnabledCallback;
 import org.mariella.rcp.databinding.EnabledCallback;
 
-public class EnabledStateModelObservableValue extends AbstractObservableValue implements PropertyChangeListener {
+public class EnabledStateModelObservableValue extends CompoundObservableValue implements IValueChangeListener {
+static Log log = LogFactory.getLog(EnabledStateModelObservableValue.class); 
 
 Boolean lastEnabled = null;
 EnabledCallback enabledCallback;
-List<PropertyListenerSupport> listenerSupportList = new ArrayList<PropertyListenerSupport>();
-List<Object> listenedBeans = new ArrayList<Object>();
 
 public EnabledStateModelObservableValue(EnabledCallback enabledCallback, Object bean, String ... propertyPathes) {
+	super(bean, propertyPathes);
 	this.enabledCallback = enabledCallback;
-	for (String path : propertyPathes) {
-		PropertyPathSupport ps = new PropertyPathSupport();
-		ps.propertyPath = path;
-		ps.object = bean;
-		ps.initialize();
-		Object target = ps.readTargetObject();
-		PropertyListenerSupport listenerSupp = new PropertyListenerSupport(this, ps.getLastPathComponent());
-		listenerSupp.hookListener(target);
-		listenedBeans.add(target);
-	}
-}
-
-@Override
-public synchronized void dispose() {
-	super.dispose();
-	for (int i=0; i<listenerSupportList.size(); i++) {
-		PropertyListenerSupport listenerSupp = listenerSupportList.get(i);
-		Object target = listenedBeans.get(i);
-		listenerSupp.unhookListener(target);
+	if (this.enabledCallback == null) {
+		// given enabled callback is null -> interpret values of propertyPathes as the enabled state
+		this.enabledCallback = new AbstractEnabledCallback() {
+			public boolean isEnabled() {
+				for (IObservableValue obsValue : observableValues) {
+					PropertyPathObservableValue pValue = (PropertyPathObservableValue)obsValue;
+					Object value = obsValue.getValue();
+					if (value != null && !(value instanceof Boolean)) {
+						log.error("bean " + obsValue + "; property " + pValue.getPropertyPath() + " did not evaluate to boolean" );
+						return false;
+					}
+					if (value == null || !((Boolean)value).booleanValue())
+						return false;
+				}
+				return true;
+			}
+		}; 
 	}
 }
 
@@ -46,15 +44,18 @@ protected Object doGetValue() {
 	return lastEnabled;
 }
 
+@Override
 public Object getValueType() {
 	return Boolean.class;
 }
 
+@Override
 public void revalidate() {
 	fireValueChange(Diffs.createValueDiff(lastEnabled, doGetValue()));
 }
 
-public void propertyChange(PropertyChangeEvent evt) {
+@Override
+public void handleValueChange(ValueChangeEvent event) {
 	revalidate();
 }
 
