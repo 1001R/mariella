@@ -46,10 +46,10 @@ public void invalidate() {
 	primInvalidate(null);
 }
 
-public void checkResourceErrorsOnSave(ProblemResource resource) throws ResourceSaveErrorsException {
+public void checkResourceErrors(ProblemResource resource) throws ResourceErrorsException {
 	invalidate(resource);
 	if (hasErrors(resource))
-		throw new ResourceSaveErrorsException(resource);
+		throw new ResourceErrorsException(resource);
 }
 
 private void primInvalidate(final ProblemsProvider providerOrNull) {
