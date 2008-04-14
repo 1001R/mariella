@@ -42,7 +42,7 @@ public VResourceSelectionManager(IWorkbenchWindow window) {
 public void addSelectionListener(VResourceSelectionListener l) {
 	selectionListeners.add(l);
 	if (part != null && selection != null) {
-		VResourceSelectionEvent event = new VResourceSelectionEvent(part, new VResourceSelection(part, selection));
+		VResourceSelectionEvent event = new VResourceSelectionEvent(part, new VResourceSelection(part, selection), false);
 		l.selectionChanged(event);
 	}
 }
@@ -70,7 +70,7 @@ public void selectionChanged(IWorkbenchPart part, ISelection iSelection) {
 			}
 		}
 	}
-	fireSelectionChanged();
+	fireSelectionChanged(false);
 }
 
 public void partActivated(IWorkbenchPart part) {
@@ -83,15 +83,13 @@ public void partActivated(IWorkbenchPart part) {
 			this.selection= new ArrayList<VManagedSelectionItem>();
 			this.selection.add((VManagedSelectionItem)input);
 		}
-		fireSelectionChanged();
+		fireSelectionChanged(false);
 	}
 }
 
 public void partDeactivated(IWorkbenchPart part) {
-	//if (part instanceof IEditorPart)	{	
-		selection = null;
-		fireSelectionChanged();
-	//}
+	selection = null;
+	fireSelectionChanged(true);
 }
 
 public void partBroughtToTop(IWorkbenchPart part) {
@@ -104,10 +102,12 @@ public void partClosed(IWorkbenchPart part) {
 public void partOpened(IWorkbenchPart part) {
 }
 
-private void fireSelectionChanged() {
+private void fireSelectionChanged(boolean onDeactivatePart) {
 	if (hasSelectionChanged()) {
 		lastSelection = selection == null ? null : new ArrayList<VManagedSelectionItem>(selection);
-		VResourceSelectionEvent event = new VResourceSelectionEvent(part,  new VResourceSelection(part, selection == null ? Collections.EMPTY_LIST : selection));
+		VResourceSelectionEvent event = new VResourceSelectionEvent(part,  
+				new VResourceSelection(part, selection == null ? Collections.EMPTY_LIST : selection),
+				onDeactivatePart);
 		for (VResourceSelectionListener l : selectionListeners)
 			l.selectionChanged(event);
 	}
@@ -133,7 +133,7 @@ public void setSelection(VManagedSelectionItem item) {
 	selection = new ArrayList<VManagedSelectionItem>();
 	selection.add(item);
 	
-	fireSelectionChanged();
+	fireSelectionChanged(false);
 }
 
 public List<VManagedSelectionItem> getSelection() {
