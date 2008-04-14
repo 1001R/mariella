@@ -59,4 +59,8 @@ public void implementSetFocus() {
 	});
 }
 
+void setRefreshing(boolean refreshing) {
+	this.refreshing = refreshing;
+}
+
 }

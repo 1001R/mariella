@@ -16,4 +16,6 @@ void setPartName(String name);
 
 VResourceEditorCustomizationCallback createCustomizationCallback();
 
+void setRefreshing(boolean refreshing);
+
 }
