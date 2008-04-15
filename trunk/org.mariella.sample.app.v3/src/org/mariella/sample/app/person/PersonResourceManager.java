@@ -48,7 +48,7 @@ protected VResource implementBuildResource(Object persistentId) {
 
 @Override
 protected Object implementSaveResource(VResource resource) throws VResourceSaveException {
-	ProblemsPlugin.getProblemManager().checkResourceErrorsOnSave(((PersonResource)resource).getProblemResource());
+	ProblemsPlugin.getProblemManager().checkResourceErrors(((PersonResource)resource).getProblemResource());
 
 	Person person = ((PersonResource)resource).getPerson();
 	SampleCorePlugin.getCoreService().savePerson(person);
