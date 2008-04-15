@@ -31,4 +31,12 @@ void aboutToSave();
 void setResourceEditorPart(VResourceEditorPart editorPart);
 
 Object createCustomEditingContext();
+
+/**
+ * Implementations must true if it can handle the exception 
+ * 
+ * @param ex
+ * @return
+ */
+boolean handleVResourceSaveException(VResourceSaveException ex);
 }

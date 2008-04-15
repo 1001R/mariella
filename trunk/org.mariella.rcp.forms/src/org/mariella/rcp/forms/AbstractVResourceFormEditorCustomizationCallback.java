@@ -1,6 +1,7 @@
 package org.mariella.rcp.forms;
 
 import org.mariella.rcp.resources.VResourceEditorPart;
+import org.mariella.rcp.resources.VResourceSaveException;
 
 public abstract class AbstractVResourceFormEditorCustomizationCallback implements VResourceFormEditorCustomizationCallback {
 
@@ -32,6 +33,11 @@ public void setResourceEditorPart(VResourceEditorPart editorPart) {
 
 public Object createCustomEditingContext() {
 	return null;
+}
+
+@Override
+public boolean handleVResourceSaveException(VResourceSaveException ex) {
+	return false;
 }
 
 }

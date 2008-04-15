@@ -88,14 +88,21 @@ public void implementDoSave(IProgressMonitor monitor) {
 		customizationCallback.aboutToSave();
 		customizationCallback.getResourceManager().saveResource(PlatformUI.getWorkbench().getActiveWorkbenchWindow(), customizationCallback.getResource());
 		editorPart.setPartName(getEditorInput().getName());
-	} catch (Exception e) {
-		log.debug("Could not save resource", e);
-		MessageDialog.openError(editorPart.getSite().getShell(), "Resource kann nicht gespeichert werden", e.getMessage());
+	} catch (VResourceSaveException e) {
+		handleVResourceSaveException(e);
 		return;
 	}
 	refresh(false);
 	resetDirty();
 	editorPart.firePropertyChange(IEditorPart.PROP_DIRTY);
+}
+
+protected void handleVResourceSaveException(VResourceSaveException ex) {
+	if (customizationCallback.handleVResourceSaveException(ex))
+		return;
+	
+	log.debug("Could not save resource", ex);
+	MessageDialog.openError(editorPart.getSite().getShell(), "Resource kann nicht gespeichert werden", ex.getMessage());
 }
 
 public void resetDirty() {
