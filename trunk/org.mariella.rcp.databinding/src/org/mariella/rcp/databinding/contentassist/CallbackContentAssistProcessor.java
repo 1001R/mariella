@@ -12,6 +12,7 @@ public class CallbackContentAssistProcessor extends AbstractContentAssistProcess
 
 class ProposalImpl extends AbstractCompletionProposal {
 Image image;
+String displayString;
 ProposalImpl(String value, Image image, int replacementOffset, int replacementLength) {
 	super(value, replacementOffset, replacementLength, value.length());
 	this.image = image;
@@ -19,6 +20,10 @@ ProposalImpl(String value, Image image, int replacementOffset, int replacementLe
 @Override
 public Image getImage() {
 	return image;
+}
+@Override
+public String getDisplayString() {
+	return displayString;
 }
 }
 
@@ -29,6 +34,7 @@ int offset;
 int replacementOffset;
 List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
 String curWord = null;
+String curDisplayString = null;
 Image curImage = null;
 public void setWord(String word) {
 	this.curWord = word;
@@ -38,8 +44,11 @@ public void setImage(Image image) {
 }
 public void addProposal() {
 	ProposalImpl proposal = new ProposalImpl(curWord, curImage, replacementOffset, word.length());
+	if (curDisplayString != null)
+		proposal.displayString = curDisplayString;
 	proposals.add(proposal);
 	curWord = null;
+	curDisplayString = null;
 	curImage  = null;
 }
 ICompletionProposal[] build() {
@@ -49,6 +58,9 @@ ICompletionProposal[] build() {
 	callback.addEntries(this, word);
 	ICompletionProposal[] array = new ICompletionProposal[proposals.size()];
 	return proposals.toArray(array);
+}
+public void setDisplayString(String displayString) {
+	this.curDisplayString = displayString;
 }
 }
 
