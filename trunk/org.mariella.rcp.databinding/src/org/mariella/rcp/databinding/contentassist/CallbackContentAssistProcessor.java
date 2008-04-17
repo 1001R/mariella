@@ -46,6 +46,8 @@ public void addProposal() {
 	ProposalImpl proposal = new ProposalImpl(curWord, curImage, replacementOffset, word.length());
 	if (curDisplayString != null)
 		proposal.displayString = curDisplayString;
+	else
+		proposal.displayString = curWord;
 	proposals.add(proposal);
 	curWord = null;
 	curDisplayString = null;
