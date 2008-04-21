@@ -76,15 +76,11 @@ public CallbackContentAssistProcessor(Callback callback) {
 	this.callback = callback;
 }
 
-public boolean hasProposals(ITextViewer viewer, int offset) {
-	return computeCompletionProposals(viewer, offset).length > 0;
-}
-
-public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer, int offset) {
+@Override
+protected ICompletionProposal[] buildProposals(ITextViewer viewer, int offset) {
 	ProposalsBuilder builder = new ProposalsBuilder();
 	builder.textViewer = viewer;
 	builder.offset = offset;
 	return builder.build();
 }
-
 }

@@ -12,7 +12,7 @@ import org.eclipse.jface.text.contentassist.IContextInformationValidator;
 public abstract class AbstractContentAssistProcessor implements VContentAssistProcessor {
 protected String lastError = null;
 protected IContextInformationValidator contextInfoValidator = new ContextInformationValidator(this);
-
+private ICompletionProposal[] currentProposals;
 
 protected ICompletionProposal[] buildProposals(List<String> suggestions, String replacedWord, int offset) {
 	ICompletionProposal[] proposals = new ICompletionProposal[suggestions.size()];
@@ -47,6 +47,18 @@ public IContextInformationValidator getContextInformationValidator() {
 
 public String getErrorMessage() {
 	return lastError;
+}
+
+public final boolean initializeProposals(ITextViewer viewer, int offset) {
+	currentProposals = buildProposals(viewer, offset);
+	return currentProposals.length > 0;
+}
+
+protected abstract ICompletionProposal[] buildProposals(ITextViewer viewer, int offset);
+
+@Override
+public final ICompletionProposal[] computeCompletionProposals(ITextViewer viewer, int offset) {
+	return currentProposals;
 }
 
 }
