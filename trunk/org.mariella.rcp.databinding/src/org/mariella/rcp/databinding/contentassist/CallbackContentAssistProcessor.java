@@ -78,6 +78,7 @@ public CallbackContentAssistProcessor(Callback callback) {
 
 @Override
 protected ICompletionProposal[] buildProposals(ITextViewer viewer, int offset) {
+	System.out.println(viewer.getDocument().get() + " / " + offset);
 	ProposalsBuilder builder = new ProposalsBuilder();
 	builder.textViewer = viewer;
 	builder.offset = offset;

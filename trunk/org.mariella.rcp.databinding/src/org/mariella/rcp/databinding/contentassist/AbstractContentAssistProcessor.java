@@ -49,6 +49,11 @@ public String getErrorMessage() {
 	return lastError;
 }
 
+/**
+ * Called before the content assistant opens to see if proposals are available.
+ * returns true if proposals are available
+ * 
+ */
 public final boolean initializeProposals(ITextViewer viewer, int offset) {
 	currentProposals = buildProposals(viewer, offset);
 	return currentProposals.length > 0;
@@ -56,9 +61,18 @@ public final boolean initializeProposals(ITextViewer viewer, int offset) {
 
 protected abstract ICompletionProposal[] buildProposals(ITextViewer viewer, int offset);
 
+/**
+ * Looks if proposals have already been initialized by a call to initializeProposals(...).
+ * If not, build the proposals. 
+ * 
+ */
 @Override
 public final ICompletionProposal[] computeCompletionProposals(ITextViewer viewer, int offset) {
-	return currentProposals;
+	if (currentProposals == null)
+		currentProposals = buildProposals(viewer, offset);
+	ICompletionProposal[] proposals = currentProposals;
+	currentProposals = null;
+	return proposals;
 }
 
 }
