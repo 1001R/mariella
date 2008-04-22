@@ -1,9 +1,7 @@
 package org.mariella.rcp.databinding.contentassist;
 
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.jface.text.ITextListener;
 import org.eclipse.jface.text.ITextViewer;
-import org.eclipse.jface.text.TextEvent;
 import org.eclipse.jface.text.contentassist.ContentAssistEvent;
 import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.ICompletionListener;
@@ -47,7 +45,7 @@ public void installContentAssistant() {
 	textViewer.getTextWidget().addKeyListener(new KeyAdapter() {
 		@Override
 		public void keyPressed(KeyEvent e) {
-			if (e.stateMask == SWT.CTRL && e.character == ' ' || Character.isLetterOrDigit(e.character)) {
+			if (!contentAssistantOpen && (e.stateMask == SWT.CTRL && e.character == ' ' || Character.isLetterOrDigit(e.character))) {
 				showCompletionsIfPossible();
 				return;
 			}
