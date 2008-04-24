@@ -14,6 +14,10 @@ public SelectionPath(Object[] qualifiers, Object ... qualifiers2) {
 	System.arraycopy(qualifiers2, 0, this.qualifiers, qualifiers.length, qualifiers2.length);
 }
 
+public SelectionPath(SelectionPath path, Object ... qualifiers2) {
+	this(path.qualifiers, qualifiers2);
+}
+
 public Object[] getQualifiers() {
 	return qualifiers;
 }
