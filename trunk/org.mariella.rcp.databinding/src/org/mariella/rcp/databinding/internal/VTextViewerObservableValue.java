@@ -218,7 +218,7 @@ void fireSelectionChanged() {
 	VBindingSelection selection = getSelection();
 	if (selection == null) return;
 	
-	VDataBindingSelectionProvider selectionProvider = (VDataBindingSelectionProvider)bindingContext.getSelectionProvider(); 
+	VBindingSelectionProvider selectionProvider = (VBindingSelectionProvider)bindingContext.getSelectionProvider(); 
 	selectionProvider.fireSelectionChanged(selection);
 }
 

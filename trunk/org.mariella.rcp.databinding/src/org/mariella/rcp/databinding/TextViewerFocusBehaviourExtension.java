@@ -5,6 +5,7 @@ import org.eclipse.swt.custom.ST;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.widgets.Display;
+import org.mariella.rcp.databinding.internal.InternalBindingContext;
 import org.mariella.rcp.databinding.internal.VTextViewerObservableValue;
 
 public class TextViewerFocusBehaviourExtension implements VBindingDomainExtension {
@@ -20,7 +21,7 @@ public void install(final VBinding binding) {
 				public void run() {
 					if (textViewer != null && textViewer.getTextWidget() != null && !textViewer.getTextWidget().isDisposed()) { 
 						textViewer.getTextWidget().invokeAction(ST.SELECT_ALL);
-						binding.getBindingContext().globalClipboardActionsHandler.validateActions();
+						((InternalBindingContext)binding.getBindingContext()).getMainContext().globalClipboardActionsHandler.validateActions();
 					}
 				}
 			});
@@ -31,7 +32,7 @@ public void install(final VBinding binding) {
 				public void run() {
 					if (textViewer != null && textViewer.getTextWidget() != null && !textViewer.getTextWidget().isDisposed()) {
 						textViewer.getTextWidget().setSelection(0,0);
-						binding.getBindingContext().globalClipboardActionsHandler.validateActions();
+						((InternalBindingContext)binding.getBindingContext()).getMainContext().globalClipboardActionsHandler.validateActions();
 					}
 				}
 			});

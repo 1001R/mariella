@@ -284,7 +284,7 @@ void handleTraverse(final Event event) {
 	case SWT.TRAVERSE_TAB_PREVIOUS:
 		if (!moveCursorLeftRight(-1))
 			// back move has to be started from table widget, otherwise we run into our tableFocusIn(...) method
-			bindingContext.getTraverseHandler().incrementFocusControl(table, -1);
+			((InternalBindingContext)bindingContext).getMainContext().getTraverseHandler().incrementFocusControl(table, -1);
 		event.doit = false;
 		break;
 	}
@@ -450,19 +450,26 @@ void paint(Event event) {
 }
 
 void tableFocusIn(Event event) {
-	if (isDisposed())
-		return;
-	if (isVisible()) {
-		setFocus();
-		if (row == null && column == null) {
-			if (table.getItemCount() > 0) {
-				tableViewer.setSelection(new StructuredSelection(tableViewer.getElementAt(0)));
-				setRowColumn(0, -1, true);
-				moveCursorLeftRight(+1);
-				//
+	// process focus in event later, because tableMouseIn may overrule behaviour
+	Display.getCurrent().asyncExec(new Runnable() {
+		@Override
+		public void run() {
+			System.out.println("tableFocusIn");
+			if (isDisposed())
+				return;
+			if (isVisible()) {
+				setFocus();
+				if (row == null && column == null) {
+					if (table.getItemCount() > 0) {
+						tableViewer.setSelection(new StructuredSelection(tableViewer.getElementAt(0)));
+						setRowColumn(0, -1, true);
+						moveCursorLeftRight(+1);
+					}
+				}
 			}
 		}
-	}
+	
+	});
 }
 
 /**
@@ -493,6 +500,7 @@ void mouseDown(Event event) {
 }
 
 void tableMouseDown(Event event) {
+	System.out.println("tableMouseDown");
 	if (isDisposed() || !isVisible())
 		return;
 	Point pt = new Point(event.x, event.y);

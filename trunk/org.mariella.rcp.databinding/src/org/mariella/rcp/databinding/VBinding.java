@@ -16,11 +16,11 @@ private VBindingDomain domain;
 private Binding[] bindings;
 private List<DisposeListener> disposeListeners = new ArrayList<DisposeListener>();
 
-VBinding(VBindingContext bindingContext, Binding binding, VBindingDomain domain) {
+public VBinding(VBindingContext bindingContext, Binding binding, VBindingDomain domain) {
 	this(bindingContext, new Binding[]{binding}, domain);
 }
 
-VBinding(VBindingContext bindingContext, Binding[] bindings, VBindingDomain domain) {
+public VBinding(VBindingContext bindingContext, Binding[] bindings, VBindingDomain domain) {
 	this.bindingContext = bindingContext;
 	this.bindings = bindings;
 	this.domain = domain;

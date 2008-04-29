@@ -55,7 +55,7 @@ public IStatus validateAfterConvert(Object value) {
 	else
 		status = super.validateAfterConvert(value);
 	if (swtObservable != null) {
-		SWTObservableStatusDecorator statusDecorator = dbc.swtObservableStatusDecoratorMap.get(swtObservable);
+		SWTObservableStatusDecorator statusDecorator = ((InternalBindingContext)dbc).getMainContext().swtObservableStatusDecoratorMap.get(swtObservable);
 		if (statusDecorator != null)
 			statusDecorator.decorateStatus(swtObservable, status);
 	}

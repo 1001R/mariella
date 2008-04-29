@@ -41,13 +41,13 @@ public void install(VBinding binding) {
 		if (!(observable instanceof EnabledObservableValueFactory))
 			throw new IllegalStateException();
 		if (bean == null || dependencyPropertyPathes == null) {
-			binding.getBindingContext().bindingFactory.createEnabledBinding(
+			binding.getBindingContext().getBindingFactory().createEnabledBinding(
 					binding.getBindingContext(),
 					(EnabledObservableValueFactory)observable,
 					enabledCallback
 					);
 		} else {
-			binding.getBindingContext().bindingFactory.createEnabledBinding(
+			binding.getBindingContext().getBindingFactory().createEnabledBinding(
 					binding.getBindingContext(),
 					(EnabledObservableValueFactory)observable,
 					bean,

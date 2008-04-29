@@ -3,6 +3,7 @@ package org.mariella.rcp.databinding;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.eclipse.ui.forms.editor.FormEditor;
+import org.mariella.rcp.databinding.internal.InternalBindingContext;
 import org.mariella.rcp.databinding.internal.VDataBindingSelectionDispatchContext;
 
 public class FormPageSelectionExtension extends ContextSelectionManagementExtension {
@@ -17,7 +18,7 @@ public FormPageSelectionExtension(FormEditor formEditor) {
 @Override
 public void install(VBindingContext bindingContext) {
 	super.install(bindingContext);
-	bindingContext.setActionBars(formEditor.getEditorSite().getActionBars());
+	((InternalBindingContext)bindingContext).getMainContext().setActionBars(formEditor.getEditorSite().getActionBars());
 }
 
 @Override

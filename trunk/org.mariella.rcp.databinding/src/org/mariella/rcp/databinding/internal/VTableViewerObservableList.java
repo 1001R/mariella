@@ -57,7 +57,7 @@ public VTableViewerObservableList(VBindingContext bindingContext, TableViewer ta
 
 				VBindingSelection selection = getSelection();
 				if (selection != null)
-					((VDataBindingSelectionProvider)VTableViewerObservableList.this.bindingContext.getSelectionProvider()).fireSelectionChanged(selection);
+					((VBindingSelectionProvider)VTableViewerObservableList.this.bindingContext.getSelectionProvider()).fireSelectionChanged(selection);
 			} finally {
 				updatingSelection = false;
 			}

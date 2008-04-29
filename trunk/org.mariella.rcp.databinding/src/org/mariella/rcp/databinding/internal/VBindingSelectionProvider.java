@@ -19,9 +19,9 @@ import org.mariella.rcp.databinding.VBinding;
 import org.mariella.rcp.databinding.VBindingContext;
 import org.mariella.rcp.databinding.VBindingSelection;
 
-public class VDataBindingSelectionProvider implements ISelectionProvider {
+public class VBindingSelectionProvider implements ISelectionProvider {
 @SuppressWarnings("unused")
-private static Log log = LogFactory.getLog(VDataBindingSelectionProvider.class);
+private static Log log = LogFactory.getLog(VBindingSelectionProvider.class);
 
 @SuppressWarnings("unused")
 private VBindingContext bindingContext;
@@ -30,7 +30,7 @@ private List<VBinding> managedBindings = new ArrayList<VBinding>();
 List<ContextSelectionManagementExtension> contextSelectionManagementExtensions = new ArrayList<ContextSelectionManagementExtension>();
 private ISelectionProvider delegateSelectionProvider = null;
 
-public VDataBindingSelectionProvider(VBindingContext dbc) {
+public VBindingSelectionProvider(VBindingContext dbc) {
 	this.bindingContext = dbc;
 }
 

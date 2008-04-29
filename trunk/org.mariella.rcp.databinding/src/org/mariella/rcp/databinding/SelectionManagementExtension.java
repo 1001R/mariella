@@ -3,7 +3,7 @@ package org.mariella.rcp.databinding;
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.swt.widgets.Control;
 import org.mariella.rcp.databinding.internal.SelectionAwareObservable;
-import org.mariella.rcp.databinding.internal.VDataBindingSelectionProvider;
+import org.mariella.rcp.databinding.internal.VBindingSelectionProvider;
 
 public class SelectionManagementExtension implements VBindingDomainExtension {
 
@@ -26,7 +26,7 @@ public SelectionManagementExtension(Object[] rootQualifiers1, Object[] rootQuali
 }
 
 public void install(VBinding binding) {
-	((VDataBindingSelectionProvider)binding.getBindingContext().getDataBindingSelectionProvider()).addManagedBinding(binding);
+	((VBindingSelectionProvider)binding.getBindingContext().getDataBindingSelectionProvider()).addManagedBinding(binding);
 
 	for (Binding b : binding.getBindings()) {
 		((SelectionAwareObservable)b.getTarget()).setSelectionBasePath(rootQualifiers);

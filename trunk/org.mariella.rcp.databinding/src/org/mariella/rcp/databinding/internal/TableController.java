@@ -79,7 +79,7 @@ private List<Runnable> onExtensionInstalledCommands = new ArrayList<Runnable>();
 public static TableController createTableController(VBindingContext dbc, TableViewer tableViewer) {
 	TableController controller = new TableController();
 	controller.bindingContext = dbc;
-	dbc.tableControllerMap.put(tableViewer, controller);
+	((InternalBindingContext)dbc).getMainContext().tableControllerMap.put(tableViewer, controller);
 	controller.setTableViewer(tableViewer);
 	return controller;
 }
@@ -183,7 +183,7 @@ public boolean isEditable(int columnIndex) {
 public boolean blockDefaultTraversing(int columnIndex) {
 	String propertyPath = columnExtensions.get(columnIndex).getPropertyPath();
 	Control editControl = editControlMap.get(propertyPath);
-	List<VTargetObservable> observables = bindingContext.getObservablesFor(editControl);
+	List<VTargetObservable> observables = ((InternalBindingContext)bindingContext).getMainContext().getObservablesFor(editControl);
 	for (VTargetObservable observable : observables)
 		if (observable.blockDefaultTraversing())
 			return true;
