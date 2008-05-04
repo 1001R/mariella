@@ -31,12 +31,10 @@ public void setResourceEditorPart(VResourceEditorPart editorPart) {
 	this.formEditor = (AbstractVResourceFormEditor)editorPart;
 }
 
-@Override
 public Object createCustomEditingContext() {
 	return null;
 }
 
-@Override
 public boolean handleVResourceSaveException(VResourceSaveException ex) {
 	return false;
 }

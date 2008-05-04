@@ -127,7 +127,6 @@ public VFormToolkit getVFormToolkit() {
 	return vFormToolkit;
 }
 
-@Override
 public void setRefreshing(boolean refreshing) {
 	editorSupport.setRefreshing(refreshing);
 }
