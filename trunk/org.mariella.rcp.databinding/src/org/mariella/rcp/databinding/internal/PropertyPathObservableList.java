@@ -14,6 +14,7 @@ import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.IValueChangeListener;
 import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
 import org.mariella.rcp.databinding.VBindingContext;
+import org.mariella.rcp.databinding.VBindingContextObserver;
 
 public class PropertyPathObservableList extends ObservableList implements VBindingContextObserver {
 
