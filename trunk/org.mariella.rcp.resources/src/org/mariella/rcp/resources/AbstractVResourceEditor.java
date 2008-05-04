@@ -91,7 +91,6 @@ public void setSite(IEditorSite site) {
 	super.setSite(site);
 }
 
-@Override
 public void setRefreshing(boolean refreshing) {
 	editorSupport.refreshing = refreshing;
 }
