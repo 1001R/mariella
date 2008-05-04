@@ -66,7 +66,6 @@ protected abstract ICompletionProposal[] buildProposals(ITextViewer viewer, int 
  * If not, build the proposals. 
  * 
  */
-@Override
 public final ICompletionProposal[] computeCompletionProposals(ITextViewer viewer, int offset) {
 	if (currentProposals == null)
 		currentProposals = buildProposals(viewer, offset);

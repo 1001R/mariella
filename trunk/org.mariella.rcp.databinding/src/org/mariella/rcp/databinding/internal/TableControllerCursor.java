@@ -452,7 +452,6 @@ void paint(Event event) {
 void tableFocusIn(Event event) {
 	// process focus in event later, because tableMouseIn may overrule behaviour
 	Display.getCurrent().asyncExec(new Runnable() {
-		@Override
 		public void run() {
 			System.out.println("tableFocusIn");
 			if (isDisposed())

@@ -156,7 +156,6 @@ public List<VTargetObservable> getObservablesFor(Control control) {
 	return result;
 }
 
-@Override
 public MainBindingContext getMainContext() {
 	return this;
 }

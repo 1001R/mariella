@@ -53,32 +53,26 @@ public boolean isEmptySelectionPathes() {
 	return selectionPathes.length == 0;
 }
 
-@Override
 public Object getFirstElement() {
 	return origin == null ? null : origin.getFirstElement();
 }
 
-@Override
 public Iterator iterator() {
 	return origin == null ? Collections.EMPTY_LIST.iterator() : origin.iterator();
 }
 
-@Override
 public int size() {
 	return origin == null ? 0 : origin.size();
 }
 
-@Override
 public Object[] toArray() {
 	return origin == null ? new Object[0] : origin.toArray();
 }
 
-@Override
 public List toList() {
 	return origin == null ? Collections.EMPTY_LIST : origin.toList();
 }
 
-@Override
 public boolean isEmpty() {
 	return origin == null ? true : origin.isEmpty();
 }
