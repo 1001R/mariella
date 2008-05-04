@@ -125,7 +125,11 @@ int getListIndex(String token) {
 private PropertyDescriptor getPropertyDescriptor(Object target, String propertyName) {
 	propertyName = removeIndexBrackets(propertyName);
 	Class clazz = target.getClass();
-	return getPropertyDescriptor(clazz, propertyName);
+	if(clazz.getSuperclass().isEnum()) {
+		return getPropertyDescriptor(clazz.getSuperclass(), propertyName);
+	} else {
+		return getPropertyDescriptor(clazz, propertyName);
+	}
 }
 
 private PropertyDescriptor getPropertyDescriptor(Class clazz, String propertyName) {
