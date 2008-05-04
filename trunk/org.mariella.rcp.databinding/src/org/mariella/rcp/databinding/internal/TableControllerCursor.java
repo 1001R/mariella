@@ -453,7 +453,6 @@ void tableFocusIn(Event event) {
 	// process focus in event later, because tableMouseIn may overrule behaviour
 	Display.getCurrent().asyncExec(new Runnable() {
 		public void run() {
-			System.out.println("tableFocusIn");
 			if (isDisposed())
 				return;
 			if (isVisible()) {
@@ -499,7 +498,6 @@ void mouseDown(Event event) {
 }
 
 void tableMouseDown(Event event) {
-	System.out.println("tableMouseDown");
 	if (isDisposed() || !isVisible())
 		return;
 	Point pt = new Point(event.x, event.y);
