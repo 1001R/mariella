@@ -22,6 +22,7 @@ import org.eclipse.ui.IActionBars;
 import org.mariella.rcp.databinding.SWTObservableStatusDecorator;
 import org.mariella.rcp.databinding.TraverseHandler;
 import org.mariella.rcp.databinding.VBinding;
+import org.mariella.rcp.databinding.VBindingContext;
 import org.mariella.rcp.databinding.VBindingContextObserver;
 import org.mariella.rcp.databinding.VBindingDomain;
 import org.mariella.rcp.databinding.VBindingFactory;
@@ -158,6 +159,11 @@ public List<VTargetObservable> getObservablesFor(Control control) {
 
 public MainBindingContext getMainContext() {
 	return this;
+}
+
+@Override
+public VBindingContext createSubBindingContext() {
+	return new SubBindingContext(this);
 }
 
 }

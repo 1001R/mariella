@@ -85,7 +85,7 @@ public PropertyPathObservableList(VBindingContext bindingContext, Realm realm, O
 	this.propertyListenSupport = new PropertyListenerSupport(propertyChangeListener, propertyPathSupport.getLastPathComponent());
 
 	updateWrappedList();
-	this.bindingContext.getMainContext().addObserver(this);
+	this.bindingContext.addObserver(this);
 }
 
 private void updateWrappedList() {

@@ -4,6 +4,8 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 
 public interface VBindingContext {
 
+void addObserver(VBindingContextObserver observer);
+
 ISelectionProvider getSelectionProvider();
 
 VBindingFactory getBindingFactory();
@@ -16,5 +18,6 @@ void updateTargets();
 
 void setDelegateSelectionProvider(ISelectionProvider delegateProvider);
 
+VBindingContext createSubBindingContext();
 
 }
