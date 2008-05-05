@@ -36,6 +36,8 @@ void reload(VResourceRef ref);
 
 boolean removeResource(VResource resource) throws VResourceSaveException;
 
+boolean removeResource(VResourceRef ref) throws VResourceSaveException;
+
 void saveResource(IWorkbenchWindow window, VResource resource) throws VResourceSaveException;
 
 void saveResource(VResource resource) throws VResourceSaveException;

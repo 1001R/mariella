@@ -32,6 +32,13 @@ public abstract void storeToMemento(IMemento memento);
 @Override
 public boolean equals(Object obj) {
 	if (obj == null || obj.getClass() != this.getClass()) return false;
+	if(persistentId != null) {
+		if(((AbstractVResourceRef)obj).getPersistentId() != null) {
+			return ((AbstractVResourceRef)obj).getPersistentId().equals(persistentId);
+		} else {
+			return false;
+		}
+	}
 	return ((AbstractVResourceRef)obj).refId.equals(refId);
 }
 

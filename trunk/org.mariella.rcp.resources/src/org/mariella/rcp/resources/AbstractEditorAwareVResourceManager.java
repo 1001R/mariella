@@ -11,12 +11,15 @@ import org.eclipse.ui.PlatformUI;
 
 public abstract class AbstractEditorAwareVResourceManager extends AbstractVResourceManager {
 
-String editorId;
-String elementFactoryId;
+private String editorId;
+private String elementFactoryId;
 
 public AbstractEditorAwareVResourceManager(String editorId, String elementFactoryId) {
 	this.editorId = editorId;
 	this.elementFactoryId = elementFactoryId;
+}
+
+public AbstractEditorAwareVResourceManager() {
 }
 
 public void openEditor(final IWorkbenchWindow window, final Object persistentId) {
@@ -73,6 +76,22 @@ public boolean removeResource(VResource resource)	throws VResourceSaveException 
 }
 
 public abstract IEditorInput getEditorInput(VResource resource);
+
+public String getEditorId() {
+	return editorId;
+}
+
+public void setEditorId(String editorId) {
+	this.editorId = editorId;
+}
+
+public String getElementFactoryId() {
+	return elementFactoryId;
+}
+
+public void setElementFactoryId(String elementFactoryId) {
+	this.elementFactoryId = elementFactoryId;
+}
 
 
 	

@@ -64,6 +64,9 @@ public boolean removeResource(VResource resource) throws VResourceSaveException 
 	return true;
 }
 
+public boolean removeResource(VResourceRef ref) throws VResourceSaveException {
+	return removeResource(getResource(ref));
+}
 
 public Collection<VResourceRef> getRefs() {
 	return resourceMap.keySet();

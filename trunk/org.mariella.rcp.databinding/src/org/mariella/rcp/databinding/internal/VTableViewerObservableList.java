@@ -21,9 +21,10 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Widget;
 import org.mariella.rcp.databinding.SelectionPath;
 import org.mariella.rcp.databinding.VBindingContext;
+import org.mariella.rcp.databinding.VBindingContextObserver;
 import org.mariella.rcp.databinding.VBindingSelection;
 
-public class VTableViewerObservableList extends AbstractObservableList implements ISWTObservable, SelectionAwareObservable, EnabledObservableValueFactory, VTargetObservable, VDataBindingSelectionDispatcher {
+public class VTableViewerObservableList extends AbstractObservableList implements ISWTObservable, SelectionAwareObservable, EnabledObservableValueFactory, VTargetObservable, VDataBindingSelectionDispatcher, VBindingContextObserver {
 
 VBindingContext bindingContext;
 TableViewer tableViewer;
@@ -35,6 +36,7 @@ List<PropertyListenerSupport> elementPropertyListenerSupportList = new ArrayList
 Map<Object,Object> elementListenerTargetToElementMap = new HashMap<Object, Object>();
 List input;
 boolean offsetSelection = false;
+IStructuredSelection selectionOnUpdateTargets = null;
 
 PropertyChangeListener elementPropertyChangeListener = new PropertyChangeListener() {
 	public void propertyChange(PropertyChangeEvent evt) {
@@ -47,6 +49,7 @@ public VTableViewerObservableList(VBindingContext bindingContext, TableViewer ta
 	super(SWTObservables.getRealm(tableViewer.getControl().getDisplay()));
 	this.bindingContext = bindingContext;
 	this.tableViewer = tableViewer;
+	bindingContext.
 	
 	tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 		public void selectionChanged(SelectionChangedEvent event) {
@@ -248,6 +251,17 @@ public boolean blockDefaultTraversing() {
 
 public void setOffsetSelection(boolean offsetSelection) {
 	this.offsetSelection = offsetSelection;
+}
+
+
+public void aboutToUpdateModelToTarget() {
+	selectionOnUpdateTargets = (IStructuredSelection) tableViewer.getSelection();
+}
+
+public void finishedUpdateModelToTarget() {
+	if (selectionOnUpdateTargets != null) {
+		tableViewer.setSelection(selectionOnUpdateTargets);
+	}
 }
 
 }

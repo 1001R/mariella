@@ -135,4 +135,6 @@ public void aboutToUpdateModelToTarget() {
 	updateWrappedList();
 }
 
+public void finishedUpdateModelToTarget() {}
+
 }
