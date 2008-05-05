@@ -49,7 +49,7 @@ public VTableViewerObservableList(VBindingContext bindingContext, TableViewer ta
 	super(SWTObservables.getRealm(tableViewer.getControl().getDisplay()));
 	this.bindingContext = bindingContext;
 	this.tableViewer = tableViewer;
-	bindingContext.
+	bindingContext.addObserver(this);
 	
 	tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 		public void selectionChanged(SelectionChangedEvent event) {
