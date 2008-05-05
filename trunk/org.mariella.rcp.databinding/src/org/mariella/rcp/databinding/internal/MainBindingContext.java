@@ -124,6 +124,8 @@ public void updateTargets() {
 	for (VBindingContextObserver o : observers)
 		o.aboutToUpdateModelToTarget();
 	bindingContext.updateTargets();
+	for (VBindingContextObserver o : observers)
+		o.finishedUpdateModelToTarget();
 }
 
 public void dispose() {
@@ -161,7 +163,6 @@ public MainBindingContext getMainContext() {
 	return this;
 }
 
-@Override
 public VBindingContext createSubBindingContext() {
 	return new SubBindingContext(this);
 }
