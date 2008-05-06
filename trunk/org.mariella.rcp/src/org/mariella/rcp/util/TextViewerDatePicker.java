@@ -460,7 +460,13 @@ private void dropDown(boolean drop) {
     int width = Math.max(comboSize.x, listRect.width + 2);
     popup.setBounds(point.x, point.y + comboSize.y, width,
         listRect.height + 2);
+    try {
+        dp.setDate(getFormat().parse(textViewer.getTextWidget().getText()));
+    } catch (ParseException pe) {
+        dp.setDate(null);
+    }
     popup.setVisible(true);
+
     dp.setFocus();
 }
 
