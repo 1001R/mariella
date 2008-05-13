@@ -57,6 +57,8 @@ void showCompletionsIfPossible() {
 	if (!enabled) return;
 	textViewer.getTextWidget().getDisplay().asyncExec(new Runnable() {
 		public void run() {
+			if (!textViewer.getTextWidget().isFocusControl()) return;
+			
 			if (contentAssistProcessor.initializeProposals(textViewer, textViewer.getSelectedRange().x))
 				contentAssistant.showPossibleCompletions();
 		}
