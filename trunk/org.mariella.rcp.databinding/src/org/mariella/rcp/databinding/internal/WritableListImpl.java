@@ -1,9 +1,11 @@
 package org.mariella.rcp.databinding.internal;
 
 import java.util.Collection;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
 
 import org.eclipse.core.databinding.observable.list.WritableList;
 import org.mariella.rcp.databinding.VBindingContext;
@@ -15,6 +17,101 @@ import org.mariella.rcp.databinding.VBindingContext;
  *
  */
 public class WritableListImpl extends WritableList {
+
+private class Itr implements Iterator {
+/**
+ * Index of element to be returned by subsequent call to next.
+ */
+int cursor = 0;
+
+/**
+ * Index of element returned by most recent call to next or previous. Reset to
+ * -1 if this element is deleted by a call to remove.
+ */
+int lastRet = -1;
+
+public boolean hasNext() {
+	return cursor != size();
+}
+
+public Object next() {
+	try {
+		Object next = get(cursor);
+		lastRet = cursor++;
+		return next;
+	} catch (IndexOutOfBoundsException e) {
+		throw new NoSuchElementException();
+	}
+}
+
+public void remove() {
+	if (lastRet == -1)
+		throw new IllegalStateException();
+
+	try {
+		WritableListImpl.this.remove(lastRet);
+		if (lastRet < cursor)
+			cursor--;
+		lastRet = -1;
+	} catch (IndexOutOfBoundsException e) {
+		throw new ConcurrentModificationException();
+	}
+}
+}
+
+
+
+private class ListItr extends Itr implements ListIterator {
+ListItr(int index) {
+	cursor = index;
+}
+
+public boolean hasPrevious() {
+	return cursor != 0;
+}
+
+public Object previous() {
+	try {
+		int i = cursor - 1;
+		Object previous = get(i);
+		lastRet = cursor = i;
+		return previous;
+	} catch (IndexOutOfBoundsException e) {
+		throw new NoSuchElementException();
+	}
+}
+
+public int nextIndex() {
+	return cursor;
+}
+
+public int previousIndex() {
+	return cursor - 1;
+}
+
+public void set(Object e) {
+	if (lastRet == -1)
+		throw new IllegalStateException();
+
+	try {
+		WritableListImpl.this.set(lastRet, e);
+	} catch (IndexOutOfBoundsException ex) {
+		throw new ConcurrentModificationException();
+	}
+}
+
+public void add(Object e) {
+
+	try {
+		WritableListImpl.this.add(cursor++, e);
+		lastRet = -1;
+	} catch (IndexOutOfBoundsException ex) {
+		throw new ConcurrentModificationException();
+	}
+}
+}
+
+
 
 public WritableListImpl(VBindingContext ctx) {
 }
@@ -60,21 +157,7 @@ public boolean isEmpty() {
 
 @Override
 public Iterator iterator() {
-	final Iterator wrappedIterator = wrappedList.iterator();
-	return new Iterator() {
-
-		public void remove() {
-			throw new UnsupportedOperationException();
-		}
-
-		public boolean hasNext() {
-			return wrappedIterator.hasNext();
-		}
-
-		public Object next() {
-			return wrappedIterator.next();
-		}
-	};
+	return new Itr();
 }
 
 @Override
@@ -84,45 +167,7 @@ public int lastIndexOf(Object o) {
 
 @Override
 public ListIterator listIterator(int index) {
-	final ListIterator wrappedIterator = wrappedList.listIterator(index);
-	return new ListIterator() {
-
-		public int nextIndex() {
-			return wrappedIterator.nextIndex();
-		}
-
-		public int previousIndex() {
-			return wrappedIterator.previousIndex();
-		}
-
-		public void remove() {
-			throw new UnsupportedOperationException();
-		}
-
-		public boolean hasNext() {
-			return wrappedIterator.hasNext();
-		}
-
-		public boolean hasPrevious() {
-			return wrappedIterator.hasPrevious();
-		}
-
-		public Object next() {
-			return wrappedIterator.next();
-		}
-
-		public Object previous() {
-			return wrappedIterator.previous();
-		}
-
-		public void add(Object o) {
-			throw new UnsupportedOperationException();
-		}
-
-		public void set(Object o) {
-			throw new UnsupportedOperationException();
-		}
-	};
+	return new ListItr(index);
 }
 
 @Override
