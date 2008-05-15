@@ -131,4 +131,8 @@ public void setRefreshing(boolean refreshing) {
 	editorSupport.setRefreshing(refreshing);
 }
 
+public VResourceFormEditorSupport getEditorSupport() {
+	return editorSupport;
+}
+
 }

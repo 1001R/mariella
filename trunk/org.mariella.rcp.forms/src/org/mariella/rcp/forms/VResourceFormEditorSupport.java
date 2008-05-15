@@ -63,4 +63,8 @@ void setRefreshing(boolean refreshing) {
 	this.refreshing = refreshing;
 }
 
+public Object getCustomEditingContext() {
+	return customEditingContext;
+}
+
 }
