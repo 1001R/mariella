@@ -73,4 +73,8 @@ public void setFocus() {
 	if (resourceSectionParts.size() > 0)
 		resourceSectionParts.get(0).setFocus();
 }
+
+public VFormToolkit getVFormToolkit() {
+	return ((AbstractVResourceFormEditor)getEditor()).getVFormToolkit();
+}
 }
