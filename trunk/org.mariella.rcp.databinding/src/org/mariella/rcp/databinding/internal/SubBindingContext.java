@@ -7,6 +7,7 @@ import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateValueStrategy;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.ui.IActionBars;
 import org.mariella.rcp.databinding.VBinding;
 import org.mariella.rcp.databinding.VBindingContext;
 import org.mariella.rcp.databinding.VBindingContextObserver;
@@ -75,6 +76,11 @@ public void updateTargets() {
 }
 
 public VBindingContext createSubBindingContext() {
+	throw new UnsupportedOperationException("Currently not to use for sub binding contexts.");
+}
+
+@Override
+public void setActionBars(IActionBars actionBars) {
 	throw new UnsupportedOperationException("Currently not to use for sub binding contexts.");
 }
 

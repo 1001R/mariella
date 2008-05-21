@@ -1,6 +1,7 @@
 package org.mariella.rcp.databinding;
 
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.ui.IActionBars;
 
 public interface VBindingContext {
 
@@ -19,5 +20,7 @@ void updateTargets();
 void setDelegateSelectionProvider(ISelectionProvider delegateProvider);
 
 VBindingContext createSubBindingContext();
+
+void setActionBars(IActionBars actionBars);
 
 }
