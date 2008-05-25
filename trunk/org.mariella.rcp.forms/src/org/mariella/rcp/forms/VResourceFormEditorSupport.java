@@ -1,6 +1,8 @@
 package org.mariella.rcp.forms;
 
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
@@ -53,10 +55,20 @@ public void implementSetFocus() {
 	Display.getCurrent().asyncExec(new Runnable() {
 		public void run() {
 			IFormPage activePage = ((AbstractVResourceFormEditor)editorPart).getActivePageInstance();
-			if (activePage != null && !activePage.getPartControl().isFocusControl())
+			if (activePage != null && !isChild(activePage.getPartControl(), Display.getCurrent().getFocusControl()))
 				activePage.setFocus();
 		}
 	});
+}
+
+boolean isChild(Control childOf, Control focusControl) {
+	if (focusControl == null) return false;
+	Control parent = focusControl;
+	while (parent != null) {
+		if (parent == childOf) return true;
+		parent = parent.getParent();
+	}
+	return false;
 }
 
 void setRefreshing(boolean refreshing) {
