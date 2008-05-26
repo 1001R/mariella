@@ -24,7 +24,7 @@ public VResourceFormPage(FormEditor editor, String id, String title) {
 }
 
 @Override
-protected final void createFormContent(IManagedForm managedForm) {
+protected void createFormContent(IManagedForm managedForm) {
 	implementCreateFormContent(managedForm);
 	refresh(false);
 }
