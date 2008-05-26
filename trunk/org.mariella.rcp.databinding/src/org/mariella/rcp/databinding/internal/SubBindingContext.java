@@ -79,7 +79,6 @@ public VBindingContext createSubBindingContext() {
 	throw new UnsupportedOperationException("Currently not to use for sub binding contexts.");
 }
 
-@Override
 public void setActionBars(IActionBars actionBars) {
 	throw new UnsupportedOperationException("Currently not to use for sub binding contexts.");
 }
