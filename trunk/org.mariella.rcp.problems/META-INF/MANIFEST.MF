@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: VResources Problems Plug-in
 Bundle-SymbolicName: org.mariella.rcp.problems;singleton:=true
-Bundle-Version: 1.0.9
+Bundle-Version: 1.1.0
 Bundle-Activator: org.mariella.rcp.problems.ProblemsPlugin
 Bundle-Vendor: CSD
 Require-Bundle: org.eclipse.ui,
