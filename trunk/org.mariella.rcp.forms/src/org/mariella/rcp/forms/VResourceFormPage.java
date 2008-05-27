@@ -60,6 +60,7 @@ public void setActive(boolean active) {
 	boolean oldActive = isActive();
 	super.setActive(active);
 	if (active != oldActive) {
+		activated(active);
 		Display.getCurrent().asyncExec(new Runnable() {
 			public void run() {
 				setFocus();
@@ -67,6 +68,8 @@ public void setActive(boolean active) {
 		});
 	}
 }
+
+protected void activated(boolean active) {}
 
 @Override
 public void setFocus() {
