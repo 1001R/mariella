@@ -155,7 +155,23 @@ public class DatePicker extends Composite {
 		}
 
 		private String getDayName(int day) {
-			return dateSymbols.getShortWeekdays()[day];
+			switch (day) {
+			case 0:	// Monday
+				return dateSymbols.getShortWeekdays()[2];
+			case 1:
+				return dateSymbols.getShortWeekdays()[3];
+			case 2:
+				return dateSymbols.getShortWeekdays()[4];
+			case 3:
+				return dateSymbols.getShortWeekdays()[5];
+			case 4:
+				return dateSymbols.getShortWeekdays()[6];
+			case 5:
+				return dateSymbols.getShortWeekdays()[7];
+			case 6:
+				return dateSymbols.getShortWeekdays()[1];
+			}
+			throw new IllegalArgumentException();
 		}
 
 		private Point getDayPoint(int day) {
@@ -272,7 +288,7 @@ public class DatePicker extends Composite {
 				if (i == 6) {
 					gc.setForeground(display.getSystemColor(SWT.COLOR_RED));
 				}
-				drawTextImage(gc, getDayName(1 + i), x, 0, colSize, rowSize);
+				drawTextImage(gc, getDayName(i), x, 0, colSize, rowSize);
 				x += colSize;
 			}
 
