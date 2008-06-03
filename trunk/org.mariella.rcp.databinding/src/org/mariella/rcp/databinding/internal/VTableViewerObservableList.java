@@ -264,4 +264,10 @@ public void finishedUpdateModelToTarget() {
 	}
 }
 
+@Override
+public void aboutToDispose() {
+	// TODO Auto-generated method stub
+	
+}
+
 }
