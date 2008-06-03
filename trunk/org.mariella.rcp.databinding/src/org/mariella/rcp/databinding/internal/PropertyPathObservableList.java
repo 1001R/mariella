@@ -135,6 +135,8 @@ public void aboutToUpdateModelToTarget() {
 	updateWrappedList();
 }
 
+public void aboutToDispose() {}
+
 public void finishedUpdateModelToTarget() {}
 
 }

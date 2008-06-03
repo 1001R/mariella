@@ -129,6 +129,9 @@ public void updateTargets() {
 }
 
 public void dispose() {
+	for (VBindingContextObserver o : observers)
+		o.aboutToDispose();
+	
 	globalClipboardActionsHandler.dispose();
 	bindingContext.dispose();
 	observablesManager.dispose();

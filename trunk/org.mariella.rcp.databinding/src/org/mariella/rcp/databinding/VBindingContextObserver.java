@@ -4,6 +4,8 @@ public interface VBindingContextObserver {
 
 void aboutToUpdateModelToTarget();
 
+void aboutToDispose();
+
 void finishedUpdateModelToTarget();
 
 }
