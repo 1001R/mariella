@@ -187,8 +187,8 @@ public static PropertyDescriptor fetchPropertyDescriptor(BeanInfo beanInfo, Stri
 
 //TODO make it customizable if property types are determined in a static or a dynamic way
 Class getPropertyType() {
-	if (object instanceof VStructuredViewerSingleSelectionObservableValue) {
-		return getStaticPropertyType(((VStructuredViewerSingleSelectionObservableValue)object).targetType);
+	if (object instanceof VStructuredViewerSelectionObservableValue) {
+		return getStaticPropertyType(((VStructuredViewerSelectionObservableValue)object).targetType);
 	}
 	Object targetObject = readTargetObject();
 	if (targetObject == null) return Object.class;

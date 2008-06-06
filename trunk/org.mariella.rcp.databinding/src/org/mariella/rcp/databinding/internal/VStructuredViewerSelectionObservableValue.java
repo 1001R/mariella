@@ -11,19 +11,19 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Control;
 import org.mariella.rcp.databinding.ValueSetExtension;
 
-public class VStructuredViewerSingleSelectionObservableValue extends AbstractObservableValue implements ValueSetAwareObservable, VTargetObservable {
+public class VStructuredViewerSelectionObservableValue extends AbstractObservableValue implements ValueSetAwareObservable, VTargetObservable {
 
 private IObservableValue nested;
 private StructuredViewer structuredViewer;
 Class targetType = null;
 Object value;
 
-public VStructuredViewerSingleSelectionObservableValue(IObservableValue nested, StructuredViewer structedViewer) {
+public VStructuredViewerSelectionObservableValue(IObservableValue nested, StructuredViewer structedViewer) {
 	this.nested = nested;
 	this.structuredViewer = structedViewer;
 }
 
-public VStructuredViewerSingleSelectionObservableValue(IObservableValue nested, StructuredViewer structedViewer, Class targetType) {
+public VStructuredViewerSelectionObservableValue(IObservableValue nested, StructuredViewer structedViewer, Class targetType) {
 	this.nested = nested;
 	this.structuredViewer = structedViewer;
 	this.targetType = targetType;

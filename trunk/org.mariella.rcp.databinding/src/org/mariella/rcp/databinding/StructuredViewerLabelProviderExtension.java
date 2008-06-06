@@ -5,7 +5,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
 import org.mariella.rcp.databinding.internal.PropertyPathSupport;
-import org.mariella.rcp.databinding.internal.VStructuredViewerSingleSelectionObservableValue;
+import org.mariella.rcp.databinding.internal.VStructuredViewerSelectionObservableValue;
 
 public class StructuredViewerLabelProviderExtension implements VBindingDomainExtension {
 
@@ -29,7 +29,7 @@ public void install(VBinding binding) {
 	if (domain == null)
 		domain = binding.getBindingContext().getBindingFactory().getDomainRegistry().getDomain(domainSymbol);
 	converter = domain.getConverterBuilder().buildFromModelConverter(domain); 
-	((VStructuredViewerSingleSelectionObservableValue)binding.getBinding().getTarget()).getStructuredViewer().setLabelProvider(new ILabelProvider() {
+	((VStructuredViewerSelectionObservableValue)binding.getBinding().getTarget()).getStructuredViewer().setLabelProvider(new ILabelProvider() {
 		@Override
 		public void removeListener(ILabelProviderListener listener) {}
 	

@@ -4,6 +4,7 @@ import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.databinding.swt.ISWTObservableValue;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.databinding.viewers.ViewersObservables;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.TextViewer;
@@ -16,6 +17,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DateTime;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.mariella.rcp.databinding.VBindingContext;
@@ -61,13 +63,34 @@ public static ISWTObservableValue observeDateTime(VBindingContext ctx, DateTime 
 }
 
 public static IObservableValue observeSingleSelection(VBindingContext ctx, StructuredViewer structuredViewer) {
-	IObservableValue value = new VStructuredViewerSingleSelectionObservableValue(ViewersObservables.observeSingleSelection(structuredViewer), structuredViewer);
+	IObservableValue value = new VStructuredViewerSelectionObservableValue(ViewersObservables.observeSingleSelection(structuredViewer), structuredViewer);
 	((InternalBindingContext)ctx).getMainContext().observablesManager.addObservable(value);
 	return value;
 }
 
 public static IObservableValue observeSingleSelection(VBindingContext ctx, StructuredViewer structuredViewer, Class targetType) {
-	IObservableValue value = new VStructuredViewerSingleSelectionObservableValue(ViewersObservables.observeSingleSelection(structuredViewer), structuredViewer, targetType);
+	IObservableValue value = new VStructuredViewerSelectionObservableValue(ViewersObservables.observeSingleSelection(structuredViewer), structuredViewer, targetType);
+	((InternalBindingContext)ctx).getMainContext().observablesManager.addObservable(value);
+	return value;
+}
+
+public static IObservableValue observeMultiSelection(VBindingContext ctx, StructuredViewer structuredViewer) {
+	IObservableValue value = new VStructuredViewerSelectionObservableValue(
+			new SelectionProviderMultiSelectionObservableValue(
+					SWTObservables.getRealm(Display.getDefault()),
+					structuredViewer),
+			structuredViewer);
+	((InternalBindingContext)ctx).getMainContext().observablesManager.addObservable(value);
+	return value;
+}
+
+public static IObservableValue observeMultiSelection(VBindingContext ctx, StructuredViewer structuredViewer, Class targetType) {
+	IObservableValue value = new VStructuredViewerSelectionObservableValue(
+			new SelectionProviderMultiSelectionObservableValue(
+					SWTObservables.getRealm(Display.getDefault()),
+					structuredViewer),
+			structuredViewer,
+			targetType);
 	((InternalBindingContext)ctx).getMainContext().observablesManager.addObservable(value);
 	return value;
 }

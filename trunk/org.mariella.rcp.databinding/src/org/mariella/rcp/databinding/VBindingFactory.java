@@ -356,6 +356,22 @@ public VBinding createSingleSelectionBinding(VBindingContext dbc, StructuredView
 	return binding;
 }
 
+public VBinding createMultiSelectionBinding(VBindingContext dbc, StructuredViewer structuredViewer, Object bean, String propertyPath, Object domainSymbol) {
+	VBindingDomain domain = domainRegistry.getDomain(domainSymbol);
+	return createMultiSelectionBinding(dbc, structuredViewer, bean, propertyPath, domain);
+}
+
+public VBinding createMultiSelectionBinding(VBindingContext dbc, StructuredViewer structuredViewer, Object bean, String propertyPath, VBindingDomain domain) {
+	VBinding binding =((InternalBindingContext)dbc).bindValue(RcpObservables.observeMultiSelection(dbc, structuredViewer), 
+			ModelObservables.observeValue(bean, propertyPath, domain.getType()), 
+			createTargetTextToModel(dbc, domain),  
+			createModelToTargetText(dbc, domain),
+			domain);
+	
+	completeBindingCreation(binding, domain);
+	return binding;
+}
+
 public void createStatusBarErrorBinding(VBindingContext dbc, IStatusLineManager mgr) {
 	((InternalBindingContext)dbc).bindValue(new VStatusLineManagerErrorMsgAdapter(mgr), 
 			new AggregateValidationStatus(((InternalBindingContext)dbc).getMainContext().getBindingContext().getBindings(), AggregateValidationStatus.MERGED), 
