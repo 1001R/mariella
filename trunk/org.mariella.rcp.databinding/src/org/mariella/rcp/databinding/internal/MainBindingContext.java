@@ -15,6 +15,7 @@ import org.eclipse.core.databinding.observable.IObservable;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.jface.databinding.swt.ISWTObservable;
+import org.eclipse.jface.viewers.AbstractListViewer;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.Control;
@@ -37,6 +38,7 @@ public VBindingSelectionProvider selectionProvider = new VBindingSelectionProvid
 public DataBindingContext bindingContext;
 public Map<ISWTObservable,SWTObservableStatusDecorator> swtObservableStatusDecoratorMap = new HashMap<ISWTObservable, SWTObservableStatusDecorator>();
 public Map<TableViewer,TableController> tableControllerMap = new HashMap<TableViewer, TableController>();
+public Map<AbstractListViewer,ListViewerController> listViewerControllerMap = new HashMap<AbstractListViewer,ListViewerController>();
 private List<VBinding> bindings = new ArrayList<VBinding>();
 private List<VBindingContextObserver> observers = new ArrayList<VBindingContextObserver>();
 private IActionBars actionBars;
@@ -89,8 +91,8 @@ private final Binding createListBinding(IObservableList targetObservableList,
 		UpdateListStrategy targetToModel, UpdateListStrategy modelToTarget) {
 	ListBinding result; 	
 
-	if (targetObservableList instanceof VTableViewerObservableList) {
-		result = new VTableViewerListBindingImpl(targetObservableList,
+	if (targetObservableList instanceof VStructuredViewerObservableList) {
+		result = new VStructuredViewerListBindingImpl(targetObservableList,
 				modelObservableList, 
 				targetToModel,
 				modelToTarget);

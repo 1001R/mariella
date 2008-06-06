@@ -54,7 +54,7 @@ import org.mariella.rcp.databinding.VBindingDomain;
 import org.mariella.rcp.databinding.VBindingFactory;
 import org.mariella.rcp.databinding.VBindingSelection;
 
-public class TableController implements ITableLabelProvider, ITableFontProvider {
+public class TableController extends StructuredViewerController implements ITableLabelProvider, ITableFontProvider {
 
 private LocalResourceManager resourceManager = new LocalResourceManager(JFaceResources.getResources());
 private IObservableValue selectionHolder;
@@ -171,7 +171,7 @@ public void install(TableViewerEditExtension tableViewerEditExtension) {
  * 
  * @return
  */
-boolean hookElementChangeListeners() {
+public boolean hookElementChangeListeners() {
 	return hookElementChangeListeners || cursorEditor != null;	// either if explicitly said with TableViewerElementChangeListenerExtension or if edit extension installed
 }
 

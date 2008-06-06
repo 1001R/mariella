@@ -12,7 +12,7 @@ public VTableViewerEnabledObservableValue(VTableViewerObservableList tableViewer
 }
 
 public boolean isResponsibleFor(Control control) {
-	return control == tableViewerObservableList.getTableViewer().getControl();
+	return control == tableViewerObservableList.getViewer().getControl();
 }
 
 @Override
@@ -22,7 +22,7 @@ protected Object doGetValue() {
 
 @Override
 protected void doSetValue(Object value) {
-	tableViewerObservableList.tableController.setEditable((Boolean)value);
+	((TableController)tableViewerObservableList.controller).setEditable((Boolean)value);
 }
 
 public Object getValueType() {

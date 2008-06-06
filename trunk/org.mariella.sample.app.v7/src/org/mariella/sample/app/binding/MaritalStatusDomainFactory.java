@@ -3,8 +3,8 @@ package org.mariella.sample.app.binding;
 import java.util.Arrays;
 import java.util.List;
 
-import org.mariella.rcp.databinding.ComboViewerLabelProviderExtension;
 import org.mariella.rcp.databinding.PassingConverterBuilder;
+import org.mariella.rcp.databinding.StructuredViewerLabelProviderExtension;
 import org.mariella.rcp.databinding.VBindingDomain;
 import org.mariella.rcp.databinding.ValueSetExtension;
 
@@ -34,7 +34,7 @@ VBindingDomain createDomain() {
 				}
 			},
 			// and one extension responsible for providing the ILabelProvider to the ComboViewer:
-			new ComboViewerLabelProviderExtension(
+			new StructuredViewerLabelProviderExtension(
 					"this", 		// "this" property refers to the Character value itself
 					DomainSymbols.MaritalStatusAsText		// We reuse the MaritalStatusAsText domain for the label provider  
 			));

@@ -7,7 +7,7 @@ import org.eclipse.jface.databinding.swt.ISWTObservableValue;
 import org.eclipse.jface.databinding.viewers.ViewersObservables;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.TextViewer;
-import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.AbstractListViewer;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.events.TraverseEvent;
@@ -72,20 +72,14 @@ public static IObservableValue observeSingleSelection(VBindingContext ctx, Struc
 	return value;
 }
 
-public static IObservableValue observeComboViewer(VBindingContext ctx, ComboViewer comboViewer) {
-	IObservableValue value = new VComboViewerObservableValue(ViewersObservables.observeSingleSelection(comboViewer), comboViewer);
-	((InternalBindingContext)ctx).getMainContext().observablesManager.addObservable(value);
-	return value;
-}
-
-public static IObservableValue observeComboViewer(VBindingContext ctx, ComboViewer comboViewer, Class targetType) {
-	IObservableValue value = new VComboViewerObservableValue(ViewersObservables.observeSingleSelection(comboViewer), comboViewer, targetType);
-	((InternalBindingContext)ctx).getMainContext().observablesManager.addObservable(value);
-	return value;
-}
-
 public static IObservableList observeTableViewer(VBindingContext ctx, TableViewer tableViewer, Class type) {
 	IObservableList value = new VTableViewerObservableList(ctx, tableViewer, type);
+	((InternalBindingContext)ctx).getMainContext().observablesManager.addObservable(value);
+	return value;
+}
+
+public static IObservableList observeListViewer(VBindingContext ctx, AbstractListViewer listViewer, Class type) {
+	IObservableList value = new VListViewerObservableList(ctx, listViewer, type);
 	((InternalBindingContext)ctx).getMainContext().observablesManager.addObservable(value);
 	return value;
 }

@@ -35,6 +35,11 @@ public VBindingDomain(Object symbol, Class type, VBindingDomainExtension ... ext
 	setExtensions(extensions);
 }
 
+public VBindingDomain(Class type, VBindingDomainExtension ... extensions) {
+	this("internal", type);
+	setExtensions(extensions);
+}
+
 public VBindingDomain(Object symbol, Class type, ConverterBuilder converterBuilder, VBindingDomainExtension ... extensions) {
 	this(symbol, type);
 	this.converterBuilder = converterBuilder;

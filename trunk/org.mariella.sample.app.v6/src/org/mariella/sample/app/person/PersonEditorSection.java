@@ -106,7 +106,7 @@ private void addMaritalStatus(Composite parent) {
 	gridData.horizontalSpan = 2;
 	comboViewer.getControl().setLayoutData(gridData);
 
-	Activator.getBindingFactory().createComboViewerBinding(getCustomEditingContext().getBindingContext(), 
+	Activator.getBindingFactory().createSingleSelectionBinding(getCustomEditingContext().getBindingContext(), 
 			comboViewer, 
 			getCustomEditingContext().getPersonResource().getPerson(), "maritalStatus", 
 			DomainSymbols.MaritalStatus);
