@@ -3,9 +3,9 @@ package org.mariella.sample.app.binding;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.mariella.rcp.databinding.TextViewerFocusBehaviourExtension;
 import org.mariella.rcp.databinding.VBindingDomain;
 import org.mariella.rcp.databinding.VBindingDomainRegistry;
-import org.mariella.rcp.databinding.TextViewerFocusBehaviourExtension;
 import org.mariella.rcp.databinding.VBindingFactory;
 
 public abstract class SampleBindingDomainFactory {
