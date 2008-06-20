@@ -9,24 +9,33 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Control;
+import org.mariella.rcp.databinding.VBindingSelection;
 import org.mariella.rcp.databinding.ValueSetExtension;
 
-public class VStructuredViewerSelectionObservableValue extends AbstractObservableValue implements ValueSetAwareObservable, VTargetObservable {
+public class VStructuredViewerSelectionObservableValue extends AbstractObservableValue implements ValueSetAwareObservable, VTargetObservable,
+	EnabledObservableValueFactory, SelectionAwareObservable {
 
 private IObservableValue nested;
 private StructuredViewer structuredViewer;
 Class targetType = null;
 Object value;
+private SelectionDispatchingObservableSupport selectionDispatchingSupport;
 
 public VStructuredViewerSelectionObservableValue(IObservableValue nested, StructuredViewer structedViewer) {
 	this.nested = nested;
 	this.structuredViewer = structedViewer;
+	initialize();
 }
 
 public VStructuredViewerSelectionObservableValue(IObservableValue nested, StructuredViewer structedViewer, Class targetType) {
 	this.nested = nested;
 	this.structuredViewer = structedViewer;
 	this.targetType = targetType;
+	initialize();
+}
+
+private void initialize() {
+	selectionDispatchingSupport = new SelectionDispatchingObservableSupport(this, new ControlSelectionDecorator(structuredViewer.getControl())); 
 }
 
 @Override
@@ -110,7 +119,6 @@ public void installValueSetExtension(final ValueSetExtension ext) {
 
 @Override
 public boolean blockDefaultTraversing() {
-	// TODO Auto-generated method stub
 	return false;
 }
 
@@ -122,6 +130,47 @@ public void extensionsInstalled() {
 @Override
 public boolean isResponsibleFor(Control control) {
 	return structuredViewer.getControl() == control;
+}
+
+@Override
+public EnabledObservableValue createEnabledObservableValue() {
+	return new DefaultEnabledObservableValue(structuredViewer.getControl());
+}
+
+@Override
+public VBindingSelection getSelection() {
+	if (structuredViewer != null && structuredViewer.getControl() != null && !structuredViewer.getControl().isDisposed() && 
+			structuredViewer.getControl().isFocusControl()) {
+		VBindingSelection selection  = selectionDispatchingSupport.implementGetSelection();
+		return selection;
+	}
+	return null;
+}
+
+@Override
+public VDataBindingSelectionDispatcher getSelectionDispatcher() {
+	return selectionDispatchingSupport;
+}
+
+@Override
+public void setContextSelectionCallback(GetContextSelectionCallback getContextSelectionCallback) {
+	selectionDispatchingSupport.setContextSelectionCallback(getContextSelectionCallback);
+}
+
+@Override
+public void setOffsetSelection(boolean offsetSelection) {
+	selectionDispatchingSupport.setOffsetSelection(offsetSelection);
+}
+
+@Override
+public void setSelectionBasePath(Object[] path) {
+	selectionDispatchingSupport.implementSetSelectionBasePath(path);
+}
+
+@Override
+public void setSelectionTargetControl(Control control) {
+	// TODO Auto-generated method stub
+	
 }
 
 }
