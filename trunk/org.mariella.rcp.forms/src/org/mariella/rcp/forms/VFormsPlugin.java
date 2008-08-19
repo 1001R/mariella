@@ -1,14 +1,17 @@
 package org.mariella.rcp.forms;
 
+import java.util.logging.Logger;
+
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.mariella.logging.JdkLogConfigurator;
 import org.osgi.framework.BundleContext;
 
 public class VFormsPlugin extends AbstractUIPlugin {
 
 public static final String PLUGIN_ID = "org.mariella.rcp.forms";
+
+public static final Logger logger = Logger.getLogger(PLUGIN_ID);
+
 private static VFormsPlugin plugin;
-private static JdkLogConfigurator jdkLogConfigurator;
 
 public VFormsPlugin() {
 }
@@ -17,7 +20,6 @@ public VFormsPlugin() {
 public void start(BundleContext context) throws Exception {
 	super.start(context);
 	plugin = this;
-	jdkLogConfigurator = new JdkLogConfigurator(getBundle());
 }
 
 @Override
@@ -28,10 +30,6 @@ public void stop(BundleContext context) throws Exception {
 
 public static VFormsPlugin getDefault() {
 	return plugin;
-}
-
-public static JdkLogConfigurator getJdkLogConfigurator() {
-	return jdkLogConfigurator;
 }
 
 }

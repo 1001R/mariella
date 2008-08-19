@@ -18,6 +18,4 @@ Export-Package: org.mariella.rcp,
  org.mariella.rcp.table.edit,
  org.mariella.rcp.transfer,
  org.mariella.rcp.util
-Import-Package:  org.apache.commons.logging,
- org.mariella.logging
 

@@ -10,14 +10,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.mariella.rcp.databinding.VDataBindingPlugin;
 
 // TODO Index Brackes are currently not allowed at the end of the path. 
 public class PropertyPathSupport {
-static Log log = LogFactory.getLog(PropertyPathSupport.class);
 
 static class UndefinedPropertyDescriptor extends PropertyDescriptor {
 public UndefinedPropertyDescriptor(String propertyName) throws IntrospectionException {
@@ -59,13 +58,13 @@ public void implementDoSetValue(Object value) {
 		if (propertyPath.equals("this"))
 			throw new IllegalStateException("A 'this' property cannot be written");
 		if (propDescr.getWriteMethod() == null) {
-			if (log.isDebugEnabled())
-				log.debug("Cannot set value because property " + propDescr.getName() + " has no write method");
+			if (VDataBindingPlugin.logger.isLoggable(Level.FINE))
+				VDataBindingPlugin.logger.log(Level.FINE, "Cannot set value because property " + propDescr.getName() + " has no write method");
 			return;
 		}
 		propDescr.getWriteMethod().invoke(targetObject, value);
 	} catch (Exception e) {
-		log.error("Could not invoke writeMethod of property " + propertyPath, e);
+		VDataBindingPlugin.logger.severe("Target object is null (" + "IObservableValue " + object + " returned null)");
 		throw new RuntimeException(e);
 	}
 }
@@ -74,12 +73,12 @@ Object readTargetObject() {
 	Object element = null;
 	if (object instanceof IObservableValue) {
 		element = ((IObservableValue)object).getValue();
-		if (element == null && log.isDebugEnabled())
-			log.debug("Target object is null (" + "IObservableValue " + object + " returned null)");
+		if (element == null && VDataBindingPlugin.logger.isLoggable(Level.FINE))
+			VDataBindingPlugin.logger.log(Level.FINE, "Target object is null (" + "IObservableValue " + object + " returned null)");
 	} else {
 		element = object;
-		if (element == null && log.isDebugEnabled())
-			log.debug("Target object is null");
+		if (element == null && VDataBindingPlugin.logger.isLoggable(Level.FINE))
+			VDataBindingPlugin.logger.log(Level.FINE, "Target object is null");
 	}
 	if (element == null) {
 		return null;
@@ -89,8 +88,8 @@ Object readTargetObject() {
 		String pathToken = pathTokens.get(i);
 		PropertyDescriptor propDescr = getPropertyDescriptor(element, pathToken);
 		if (propDescr.getReadMethod() == null) {
-			if (log.isDebugEnabled())
-				log.debug("Target object is null, because property " + propDescr.getName() + " has no read method");
+			if (VDataBindingPlugin.logger.isLoggable(Level.FINE))
+				VDataBindingPlugin.logger.log(Level.FINE, "Target object is null, because property " + propDescr.getName() + " has no read method");
 
 			element = null;
 			break;
@@ -108,8 +107,8 @@ Object readTargetObject() {
 			element = ((List)element).get(listIndex);
 		}
 	}
-	if (element == null && log.isDebugEnabled())
-		log.debug("Target object is null");
+	if (element == null && VDataBindingPlugin.logger.isLoggable(Level.FINE))
+		VDataBindingPlugin.logger.log(Level.FINE, "Target object is null");
 	return element;
 }
 
@@ -134,7 +133,7 @@ private PropertyDescriptor getPropertyDescriptor(Object target, String propertyN
 
 private PropertyDescriptor getPropertyDescriptor(Class clazz, String propertyName) {
 	if (clazz == null) {
-		log.error("Class is null");
+		VDataBindingPlugin.logger.log(Level.SEVERE, "Class is null");
 		throw new IllegalArgumentException();
 	}
 	PropertyDescriptor prop = cachedPropertyDescriptorMap.get(clazz);
@@ -177,8 +176,8 @@ public static PropertyDescriptor fetchPropertyDescriptor(BeanInfo beanInfo, Stri
 		if (prop.getName().equals(propertyName))
 			return prop;
 	try {
-		if (log.isDebugEnabled())
-			log.debug("Property named " + propertyName + " does not exist for bean " + beanInfo.getBeanDescriptor().getName());
+		if (VDataBindingPlugin.logger.isLoggable(Level.FINE))
+			VDataBindingPlugin.logger.log(Level.FINE, "Property named " + propertyName + " does not exist for bean " + beanInfo.getBeanDescriptor().getName());
 		return new UndefinedPropertyDescriptor(propertyName);
 	} catch (IntrospectionException e) {
 		throw new RuntimeException(e);

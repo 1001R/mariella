@@ -1,15 +1,17 @@
 package org.mariella.rcp.databinding;
 
+import java.util.logging.Logger;
+
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.mariella.logging.JdkLogConfigurator;
 import org.osgi.framework.BundleContext;
 
 public class VDataBindingPlugin extends AbstractUIPlugin {
 
 public static final String PLUGIN_ID = "org.mariella.rcp.databinding";
 
+public static final Logger logger = Logger.getLogger(PLUGIN_ID);
+
 private static VDataBindingPlugin plugin;
-private static JdkLogConfigurator jdkLogConfigurator;
 
 public VDataBindingPlugin() {
 }
@@ -18,8 +20,6 @@ public VDataBindingPlugin() {
 public void start(BundleContext context) throws Exception {
 	super.start(context);
 	plugin = this;
-
-	jdkLogConfigurator = new JdkLogConfigurator(getBundle());
 }
 
 @Override
@@ -30,10 +30,6 @@ public void stop(BundleContext context) throws Exception {
 
 public static VDataBindingPlugin getDefault() {
 	return plugin;
-}
-
-public static JdkLogConfigurator getJdkLogConfigurator() {
-	return jdkLogConfigurator;
 }
 
 }

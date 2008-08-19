@@ -1,16 +1,16 @@
 package org.mariella.rcp.databinding.internal;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Level;
+
 import org.eclipse.core.databinding.observable.Diffs;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.IValueChangeListener;
 import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
 import org.mariella.rcp.databinding.AbstractEnabledCallback;
 import org.mariella.rcp.databinding.EnabledCallback;
+import org.mariella.rcp.databinding.VDataBindingPlugin;
 
 public class EnabledStateModelObservableValue extends CompoundObservableValue implements IValueChangeListener {
-static Log log = LogFactory.getLog(EnabledStateModelObservableValue.class); 
 
 Boolean lastEnabled = null;
 EnabledCallback enabledCallback;
@@ -26,7 +26,7 @@ public EnabledStateModelObservableValue(EnabledCallback enabledCallback, Object 
 					PropertyPathObservableValue pValue = (PropertyPathObservableValue)obsValue;
 					Object value = obsValue.getValue();
 					if (value != null && !(value instanceof Boolean)) {
-						log.error("bean " + obsValue + "; property " + pValue.getPropertyPath() + " did not evaluate to boolean" );
+						VDataBindingPlugin.logger.log(Level.SEVERE, "bean " + obsValue + "; property " + pValue.getPropertyPath() + " did not evaluate to boolean" );
 						return false;
 					}
 					if (value == null || !((Boolean)value).booleanValue())

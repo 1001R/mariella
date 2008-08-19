@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.jface.viewers.ISelection;
@@ -20,8 +18,6 @@ import org.mariella.rcp.databinding.VBindingContext;
 import org.mariella.rcp.databinding.VBindingSelection;
 
 public class VBindingSelectionProvider implements ISelectionProvider {
-@SuppressWarnings("unused")
-private static Log log = LogFactory.getLog(VBindingSelectionProvider.class);
 
 @SuppressWarnings("unused")
 private VBindingContext bindingContext;

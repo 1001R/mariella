@@ -1,7 +1,5 @@
 package org.mariella.rcp.databinding.internal;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.databinding.observable.Diffs;
 import org.eclipse.jface.internal.databinding.provisional.swt.AbstractSWTVetoableValue;
 import org.eclipse.jface.text.DocumentEvent;
@@ -25,7 +23,6 @@ import org.mariella.rcp.databinding.contentassist.ContentAssistantController;
 
 public class VTextViewerObservableValue extends AbstractSWTVetoableValue implements SelectionAwareObservable, EnabledObservableValueFactory, 
 	VTargetObservable, ClipboardSupportingObservable {
-static Log log = LogFactory.getLog(VTextViewerObservableValue.class);
 
 private static final int[] validUpdateEventTypes = new int[] { SWT.Modify,
 	SWT.FocusOut, SWT.NONE };

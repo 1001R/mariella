@@ -2,10 +2,10 @@ package org.mariella.rcp.resources;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
-import org.mariella.logging.JdkLogConfigurator;
 import org.osgi.framework.BundleContext;
 
 public class VResourcesPlugin extends AbstractUIPlugin {
@@ -13,11 +13,12 @@ public class VResourcesPlugin extends AbstractUIPlugin {
 // The plug-in ID
 public static final String PLUGIN_ID = "org.mariella.rcp.vresources";
 
+public static final Logger logger = Logger.getLogger(PLUGIN_ID);
+
 private static VResourcesPlugin plugin;
 private static VResourcePool resourcePool;
 private static VResourceManagerRegistry resourceManagerRegistry;
 private static Map<IWorkbenchWindow,VResourceSelectionManager> resouceSelectionManagerMap = new HashMap<IWorkbenchWindow, VResourceSelectionManager>();
-private static JdkLogConfigurator jdkLogConfigurator;
 
 public VResourcesPlugin() {
 }
@@ -28,7 +29,6 @@ public void start(BundleContext context) throws Exception {
 	plugin = this;
 	resourcePool = new VResourcePool();
 	resourceManagerRegistry = new VResourceManagerRegistry();
-	jdkLogConfigurator = new JdkLogConfigurator(getBundle());
 }
 
 @Override
@@ -59,10 +59,6 @@ public static void initializeForWindow(IWorkbenchWindow window) {
 
 public static VResourceManagerRegistry getResourceManagerRegistry() {
 	return resourceManagerRegistry;
-}
-
-public static JdkLogConfigurator getJdkLogConfigurator() {
-	return jdkLogConfigurator;
 }
 
 }

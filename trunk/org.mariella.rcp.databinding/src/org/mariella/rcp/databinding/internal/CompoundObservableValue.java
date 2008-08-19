@@ -3,15 +3,12 @@ package org.mariella.rcp.databinding.internal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.databinding.observable.value.AbstractObservableValue;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.IValueChangeListener;
 import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
 
 public abstract class CompoundObservableValue extends AbstractObservableValue implements IValueChangeListener {
-static Log log = LogFactory.getLog(CompoundObservableValue.class);
 
 List<IObservableValue> observableValues;
 

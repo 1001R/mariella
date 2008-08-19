@@ -12,9 +12,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jface.databinding,
  org.eclipse.jface.text,
  org.apache.commons.validator,
- org.eclipse.ui.forms,
- org.mariella.logging
+ org.eclipse.ui.forms
 Eclipse-LazyStart: true
 Export-Package: org.mariella.rcp.databinding,
  org.mariella.rcp.databinding.contentassist
-Import-Package:  org.apache.commons.logging
+

@@ -1,7 +1,7 @@
 package org.mariella.rcp.resources;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Level;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IEditorInput;
@@ -17,7 +17,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
 public abstract class AbstractVResourceEditorSupport {
-private static Log log = LogFactory.getLog(AbstractVResourceEditorSupport.class);
 
 protected VResourceEditorPart editorPart;
 protected VResourceEditorCustomizationCallback customizationCallback;
@@ -100,8 +99,8 @@ public void implementDoSave(IProgressMonitor monitor) {
 protected void handleVResourceSaveException(VResourceSaveException ex) {
 	if (customizationCallback.handleVResourceSaveException(ex))
 		return;
-	
-	log.debug("Could not save resource", ex);
+	if (VResourcesPlugin.logger.isLoggable(Level.FINE))
+		VResourcesPlugin.logger.log(Level.FINE, "Could not save resource", ex);
 	MessageDialog.openError(editorPart.getSite().getShell(), "Resource kann nicht gespeichert werden", ex.getMessage());
 }
 

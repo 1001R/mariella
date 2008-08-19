@@ -1,12 +1,11 @@
 package org.mariella.rcp.databinding;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.util.logging.Level;
+
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.mariella.rcp.databinding.internal.VDataBindingSelectionDispatchContext;
 
 public class FormPageSelectionExtension extends ContextSelectionManagementExtension {
-static Log log = LogFactory.getLog(FormPageSelectionExtension.class);
 
 FormEditor formEditor;
 
@@ -33,14 +32,14 @@ public void dispatchSelection(VDataBindingSelectionDispatchContext dispatchCtx) 
 	if (nextPathToken == null) return;
 	
 	if (!(nextPathToken instanceof String)) {
-		if (log.isDebugEnabled()) log.debug("Cannot dispatch selection because path token is not a valid page id (not a String): " + nextPathToken);
+		if (VDataBindingPlugin.logger.isLoggable(Level.FINE)) VDataBindingPlugin.logger.log(Level.FINE, "Cannot dispatch selection because path token is not a valid page id (not a String): " + nextPathToken);
 		return;
 	}
 	String newPageId = (String)nextPathToken;
 	boolean pageChange = !formEditor.getActivePageInstance().getId().equals(newPageId);
 	if (pageChange) {
 		if (formEditor.setActivePage(newPageId) == null) {
-			if (log.isDebugEnabled()) log.debug("Cannot dispatch selection because there is no page having the id: " + newPageId);
+			if (VDataBindingPlugin.logger.isLoggable(Level.FINE)) VDataBindingPlugin.logger.log(Level.FINE, "Cannot dispatch selection because there is no page having the id: " + newPageId);
 			return;
 		}
 	}

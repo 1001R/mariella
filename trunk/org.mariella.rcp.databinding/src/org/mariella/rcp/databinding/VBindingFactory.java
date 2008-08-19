@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.eclipse.core.databinding.AggregateValidationStatus;
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.core.databinding.UpdateListStrategy;
@@ -69,8 +67,6 @@ public static class DefaultBean {
 public void addPropertyChangeListener(PropertyChangeListener l) {}
 public void removePropertyChangeListener(PropertyChangeListener l) {}
 }
-	
-static Log log = LogFactory.getLog(VBindingFactory.class);
 
 private List<Callback> callbacks = new ArrayList<Callback>();
 private VBindingDomainRegistry domainRegistry;
