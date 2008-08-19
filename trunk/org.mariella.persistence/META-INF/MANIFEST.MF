@@ -14,3 +14,4 @@ Export-Package: at.hts.persistence.database,
 Bundle-Activator: at.hts.persistence.runtime.MariellaPersistence
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.4.0"
 Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

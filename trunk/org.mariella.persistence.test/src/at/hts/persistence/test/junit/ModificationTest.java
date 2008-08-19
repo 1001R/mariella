@@ -141,6 +141,7 @@ public void testPersistor() throws Exception {
 }
 
 @Test
+@SuppressWarnings("unchecked")
 public void testLoader() throws Exception {
 	ClusterDescription cd = new ClusterDescription();
 	cd.setRootDescription(schemaDescription.getClassDescription(Person.class.getName()));
@@ -175,6 +176,7 @@ public void testLoader() throws Exception {
 }
 
 @Test
+@SuppressWarnings("unchecked")
 public void testLoader2() throws Exception {
 	ClusterDescription cd = new ClusterDescription();
 	cd.setRootDescription(schemaDescription.getClassDescription(Person.class.getName()));
