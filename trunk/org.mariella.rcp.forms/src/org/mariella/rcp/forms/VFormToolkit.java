@@ -31,7 +31,7 @@ public class VFormToolkit implements ControlFactory {
 
 FormToolkit formToolkit;
 
-VFormToolkit(FormToolkit formToolkit) {
+public VFormToolkit(FormToolkit formToolkit) {
 	this.formToolkit = formToolkit;
 }
 
