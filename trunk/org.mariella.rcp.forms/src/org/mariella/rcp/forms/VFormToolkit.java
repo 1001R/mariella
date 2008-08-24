@@ -99,6 +99,7 @@ public ScrolledForm createScrolledForm(Composite parent) {
 	return formToolkit.createScrolledForm(parent);
 }
 
+@Override
 public Section createSection(Composite parent, int sectionStyle) {
 	Section section = formToolkit.createSection(parent, sectionStyle);
 	formToolkit.paintBordersFor(section);

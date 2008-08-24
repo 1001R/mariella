@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
+import org.eclipse.ui.forms.widgets.Section;
 
 public class DialogControlFactory implements ControlFactory {
 
@@ -82,7 +83,7 @@ public Text createText(Composite parent, String value) {
 	return createText(parent, value, SWT.BORDER);
 }
 
-public TextViewer createTextViewer(Composite parent, int style) {
+public TextViewer createTextViewer(Composite parent, int style, boolean dontPaintBorders) {
 	final TextViewer textViewer = new TextViewer(parent, style);
 	Document doc = new Document();
 	doc.addDocumentListener(new IDocumentListener() {
@@ -95,6 +96,9 @@ public TextViewer createTextViewer(Composite parent, int style) {
 	textViewer.setDocument(doc);
 	return textViewer;
 }
+public TextViewer createTextViewer(Composite parent, int style) {
+	return createTextViewer(parent, style, false);
+}
 
 public ComboViewer createComboViewer(Composite parent, int style) {
 	final ComboViewer comboViewer = new ComboViewer(parent, style);
@@ -105,4 +109,9 @@ public Tree createTree(Composite parent, int style) {
 	return new Tree(parent, style);
 }
 
+@Override
+public Section createSection(Composite parent, int sectionStyle) {
+	Section section = new Section(parent, sectionStyle);
+	return section;
+}
 }

@@ -111,4 +111,8 @@ void replaceExtension(EnabledRuleExtension existingEnabledExt, EnabledRuleExtens
 	}
 }
 
+public VBindingDomain copyExtend(VBindingDomainExtension ... exts) {
+	return new VBindingDomain(this, exts);
+}
+
 }
