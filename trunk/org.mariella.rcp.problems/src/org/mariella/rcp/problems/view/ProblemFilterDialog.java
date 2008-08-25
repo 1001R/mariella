@@ -22,22 +22,22 @@ private Button showAllProblemsRadio;
 private Button showProblemsOfSelectedResourceRadio;
 private Button showErrorsCheckbox;
 private Button showWarningsCheckbox;
-private ProblemsView view;
+private ProblemsControl control;
 
-public ProblemFilterDialog(Shell parentShell, ProblemsView view) {
+public ProblemFilterDialog(Shell parentShell, ProblemsControl control) {
 	super(parentShell);
-	this.view = view;
+	this.control = control;
 }
 
 @Override
 protected void okPressed() {
-	view.preferences.showAllProblems = showAllProblemsRadio.getSelection();
-	view.preferences.shownCategories.clear();
+	control.preferences.showAllProblems = showAllProblemsRadio.getSelection();
+	control.preferences.shownCategories.clear();
 	if (showErrorsCheckbox.getSelection())
-		view.preferences.shownCategories.add(ProblemCategory.ERROR);
+		control.preferences.shownCategories.add(ProblemCategory.ERROR);
 	if (showWarningsCheckbox.getSelection())
-		view.preferences.shownCategories.add(ProblemCategory.WARNING);
-	view.preferences.save();
+		control.preferences.shownCategories.add(ProblemCategory.WARNING);
+	control.preferences.save();
 	super.okPressed();
 }
 
@@ -83,10 +83,10 @@ private Composite createCategoryFilterComposite(Composite composite) {
 	
 	showWarningsCheckbox = new Button(group, SWT.CHECK);
 	showWarningsCheckbox.setText(Messages.getString("ProblemFilterDialog.showWarnings")); //$NON-NLS-1$
-	showWarningsCheckbox.setSelection(view.preferences.shownCategories.contains(ProblemCategory.WARNING));
+	showWarningsCheckbox.setSelection(control.preferences.shownCategories.contains(ProblemCategory.WARNING));
 	showErrorsCheckbox = new Button(group, SWT.CHECK);
 	showErrorsCheckbox.setText(Messages.getString("ProblemFilterDialog.showErrors")); //$NON-NLS-1$
-	showErrorsCheckbox.setSelection(view.preferences.shownCategories.contains(ProblemCategory.ERROR));
+	showErrorsCheckbox.setSelection(control.preferences.shownCategories.contains(ProblemCategory.ERROR));
 	
 	return group;
 }
@@ -98,10 +98,10 @@ private Composite createPrimaryFilterComposite(Composite composite) {
 	
 	showAllProblemsRadio = new Button(group, SWT.RADIO);
 	showAllProblemsRadio.setText(Messages.getString("ProblemFilterDialog.showAllProblems")); //$NON-NLS-1$
-	showAllProblemsRadio.setSelection(view.preferences.showAllProblems);
+	showAllProblemsRadio.setSelection(control.preferences.showAllProblems);
 	showProblemsOfSelectedResourceRadio = new Button(group, SWT.RADIO);
 	showProblemsOfSelectedResourceRadio.setText(Messages.getString("ProblemFilterDialog.showProblemsOfSelection")); //$NON-NLS-1$
-	showProblemsOfSelectedResourceRadio.setSelection(!view.preferences.showAllProblems);
+	showProblemsOfSelectedResourceRadio.setSelection(!control.preferences.showAllProblems);
 	
 	return group;
 }
