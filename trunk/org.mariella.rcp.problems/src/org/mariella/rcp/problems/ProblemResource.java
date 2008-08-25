@@ -41,7 +41,7 @@ public IMemento getEditorMemento() {
 		} catch (ParserConfigurationException e) {
 			throw new RuntimeException(e);
 		}
-		Element el = doc.createElement("root");
+		Element el = doc.createElement("root"); //$NON-NLS-1$
 		doc.appendChild(el);
 		editorMemento = new XMLMemento(doc, el);
 	}

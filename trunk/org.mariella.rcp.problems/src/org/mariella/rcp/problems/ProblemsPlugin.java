@@ -10,7 +10,7 @@ import org.osgi.framework.BundleContext;
 
 public class ProblemsPlugin extends AbstractUIPlugin {
 
-public static final String PLUGIN_ID = "org.mariella.rcp.problems";
+public static final String PLUGIN_ID = "org.mariella.rcp.problems"; //$NON-NLS-1$
 
 public static final Logger logger = Logger.getLogger(PLUGIN_ID);
 

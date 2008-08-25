@@ -53,13 +53,13 @@ public void checkResourceErrors(ProblemResource resource) throws ResourceErrorsE
 }
 
 private void primInvalidate(final ProblemsProvider providerOrNull) {
-	Job job = new Job("Analysiere Probleme") {
+	Job job = new Job(Messages.getString("ProblemManager.analyzingProblems")) { //$NON-NLS-1$
 		@Override
 		public IStatus run(IProgressMonitor monitor) {
 			scanningProblems = true;
 			try {
 				synchronized(ProblemManager.this) {
-					monitor.beginTask("Analysiere Probleme", (providerOrNull != null ? 1 : providers.size())+2);
+					monitor.beginTask(Messages.getString("ProblemManager.analyzingProblems"), (providerOrNull != null ? 1 : providers.size())+2); //$NON-NLS-1$
 					if (providerOrNull == null)
 						problemList.clear();
 					else
@@ -72,14 +72,14 @@ private void primInvalidate(final ProblemsProvider providerOrNull) {
 					}
 					monitor.worked(1);
 					for (ProblemResource res : problemResources) {
-						monitor.setTaskName("Suche Probleme für " + res.getDescription());
+						monitor.setTaskName(Messages.getString("ProblemManager.searchingProblemsFor") + res.getDescription()); //$NON-NLS-1$
 						res.getProvider().addProblems(ProblemManager.this, res);
 						monitor.worked(1);
 					}
 				}
 				
-				monitor.setTaskName("Aktualisiere...");
-				UIJob uiJob  = new UIJob("Aktualisiere") {
+				monitor.setTaskName(Messages.getString("ProblemManager.Refreshing")); //$NON-NLS-1$
+				UIJob uiJob  = new UIJob("RefreshingProblemsJob") { //$NON-NLS-1$
 					@Override
 					public IStatus runInUIThread(IProgressMonitor monitor) {
 						BusyIndicator.showWhile(Display.getCurrent(), new Runnable() {

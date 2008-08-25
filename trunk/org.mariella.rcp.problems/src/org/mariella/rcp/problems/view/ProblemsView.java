@@ -73,7 +73,7 @@ public void run() {
 			synchronized(this) {
 				refreshRequest = -1L;
 			}
-			new UIJob("RefreshProblemsView") {
+			new UIJob("RefreshProblemsView") { //$NON-NLS-1$
 				@Override
 				public IStatus runInUIThread(IProgressMonitor monitor) {
 					refreshTree(getProblemManager());
@@ -90,8 +90,8 @@ public static final String ID = RefreshAction.class.getName();
 ProblemsView view;
 public RefreshAction(ProblemsView view) {
 	this.view = view;
-	setText("Aktualisieren");
-	setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(ProblemsPlugin.PLUGIN_ID, "icons/problems/refresh.gif"));
+	setText(Messages.getString("ProblemsView.refresh")); //$NON-NLS-1$
+	setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(ProblemsPlugin.PLUGIN_ID, "icons/problems/refresh.gif")); //$NON-NLS-1$
 }
 
 @Override
@@ -109,8 +109,8 @@ public static final String ID = OpenFilterDialogAction.class.getName();
 ProblemsView view;
 public OpenFilterDialogAction(ProblemsView view) {
 	this.view = view;
-	setText("Filter konfigurieren");
-	setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(ProblemsPlugin.PLUGIN_ID, "icons/problems/filter.gif"));
+	setText(Messages.getString("ProblemsView.configureFilter")); //$NON-NLS-1$
+	setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(ProblemsPlugin.PLUGIN_ID, "icons/problems/filter.gif")); //$NON-NLS-1$
 }
 
 @Override
@@ -129,14 +129,14 @@ class LabelProvider implements ITableLabelProvider {
 	public Image getColumnImage(Object element, int columnIndex) {
 		if (columnIndex == 0) {
 			if (element instanceof ProblemCategory)
-				return (Image)resourceManager.get(AbstractUIPlugin.imageDescriptorFromPlugin(ProblemsPlugin.PLUGIN_ID, "icons/problems/category.gif"));
+				return (Image)resourceManager.get(AbstractUIPlugin.imageDescriptorFromPlugin(ProblemsPlugin.PLUGIN_ID, "icons/problems/category.gif")); //$NON-NLS-1$
 			else if (element instanceof Problem) {
 				Problem problem = (Problem)element;
 				switch(problem.getCategory()) {
 				case ERROR:
-					return (Image)resourceManager.get(AbstractUIPlugin.imageDescriptorFromPlugin(ProblemsPlugin.PLUGIN_ID, "icons/problems/error.gif"));
+					return (Image)resourceManager.get(AbstractUIPlugin.imageDescriptorFromPlugin(ProblemsPlugin.PLUGIN_ID, "icons/problems/error.gif")); //$NON-NLS-1$
 				case WARNING:
-					return (Image)resourceManager.get(AbstractUIPlugin.imageDescriptorFromPlugin(ProblemsPlugin.PLUGIN_ID, "icons/problems/warning.gif"));
+					return (Image)resourceManager.get(AbstractUIPlugin.imageDescriptorFromPlugin(ProblemsPlugin.PLUGIN_ID, "icons/problems/warning.gif")); //$NON-NLS-1$
 				}
 			}
 		}
@@ -151,9 +151,9 @@ class LabelProvider implements ITableLabelProvider {
 				ProblemCategory cat = (ProblemCategory)element;
 				switch (cat) {
 				case ERROR:
-					return "Fehler";
+					return Messages.getString("ProblemsView.errors"); //$NON-NLS-1$
 				case WARNING:
-					return "Warnungen";
+					return Messages.getString("ProblemsView.warnings"); //$NON-NLS-1$
 				}
 				throw new IllegalArgumentException();
 			} else {
@@ -164,7 +164,7 @@ class LabelProvider implements ITableLabelProvider {
 			if (element instanceof Problem)
 				return ((Problem)element).getResource().getDescription();
 			else
-				return "";
+				return ""; //$NON-NLS-1$
 		}
 		throw new IllegalArgumentException();
 	}
@@ -250,10 +250,10 @@ public void createPartControl(Composite parent) {
 	//tree.setLinesVisible(true);
 	
 	TreeColumn description = new TreeColumn(tree, SWT.NONE);
-	description.setText("Beschreibung");
+	description.setText(Messages.getString("ProblemsView.description")); //$NON-NLS-1$
 
 	TreeColumn resourceDescription = new TreeColumn(tree, SWT.NONE);
-	resourceDescription.setText("Resource");
+	resourceDescription.setText(Messages.getString("ProblemsView.resource")); //$NON-NLS-1$
 
 	tree.setHeaderVisible(true);
 	layout.addColumnData(new ColumnWeightData(60, 30, true));
@@ -303,7 +303,7 @@ private void hookSelectionListeners() {
 
 
 private void hookContextMenu() {
-	MenuManager menuMgr = new MenuManager("#PopupMenu");
+	MenuManager menuMgr = new MenuManager("#PopupMenu"); //$NON-NLS-1$
 	menuMgr.setRemoveAllWhenShown(true);
 	menuMgr.addMenuListener(new IMenuListener() {
 		public void menuAboutToShow(IMenuManager manager) {

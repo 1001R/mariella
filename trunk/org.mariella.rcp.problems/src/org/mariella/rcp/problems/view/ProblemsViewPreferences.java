@@ -13,8 +13,8 @@ import org.mariella.rcp.problems.ProblemsPlugin;
 
 
 public class ProblemsViewPreferences {
-public static final String SHOW_ALL_PROBLEMS = "prefs_problemsview_show_all_problems";
-public static final String SHOWN_PROBLEM_CATEGORIES = "prefs_problemsview_shown_categories";
+public static final String SHOW_ALL_PROBLEMS = "prefs_problemsview_show_all_problems"; //$NON-NLS-1$
+public static final String SHOWN_PROBLEM_CATEGORIES = "prefs_problemsview_shown_categories"; //$NON-NLS-1$
 
 Collection<ProblemCategory> shownCategories;
 boolean showAllProblems;
@@ -39,7 +39,7 @@ public static ScopedPreferenceStore getPreferencesStore() {
 }
 
 public static Collection<ProblemCategory> categoriesFromString(String str) {
-	StringTokenizer t = new StringTokenizer(str, ",");
+	StringTokenizer t = new StringTokenizer(str, ","); //$NON-NLS-1$
 	Collection<ProblemCategory> cats = new HashSet<ProblemCategory>();
 	while (t.hasMoreTokens()) {
 		String x = t.nextToken();
@@ -49,12 +49,12 @@ public static Collection<ProblemCategory> categoriesFromString(String str) {
 }
 
 public static String shownCategoriesToString(Collection<ProblemCategory> cats) {
-	String str = "";
+	String str = ""; //$NON-NLS-1$
 	for (Iterator<ProblemCategory> i = cats.iterator(); i.hasNext();) {
 		ProblemCategory c = i.next();
 		str += c.toString();
 		if (i.hasNext())
-			str += ",";
+			str += ","; //$NON-NLS-1$
 	}
 	return str;
 }

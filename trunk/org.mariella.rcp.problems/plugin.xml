@@ -7,7 +7,7 @@
             class="org.mariella.rcp.problems.view.ProblemsView"
             icon="icons/problems/problems_view.gif"
             id="org.mariella.rcp.problems.view.ProblemsView"
-            name="Problems">
+            name="%ProblemsView.name">
       </view>
    </extension>
    <extension

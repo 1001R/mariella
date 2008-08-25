@@ -10,7 +10,7 @@ public Integer getDefaultOrder() {
 }
 
 public static ProblemCategory fromString(String str) {
-	if ("WARNING".equals(str))
+	if ("WARNING".equals(str)) //$NON-NLS-1$
 		return WARNING;
 	else
 		return ERROR;

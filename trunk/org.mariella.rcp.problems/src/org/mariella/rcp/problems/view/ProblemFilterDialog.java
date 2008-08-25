@@ -44,8 +44,8 @@ protected void okPressed() {
 @Override
 protected void configureShell(Shell newShell) {
 	super.configureShell(newShell);
-	newShell.setText("Filters");
-	newShell.setImage(AbstractUIPlugin.imageDescriptorFromPlugin(ProblemsPlugin.PLUGIN_ID, "icons/problems/filter.gif").createImage());
+	newShell.setText(Messages.getString("ProblemFilterDialog.filters")); //$NON-NLS-1$
+	newShell.setImage(AbstractUIPlugin.imageDescriptorFromPlugin(ProblemsPlugin.PLUGIN_ID, "icons/problems/filter.gif").createImage()); //$NON-NLS-1$
 }
 
 @Override
@@ -78,14 +78,14 @@ protected Control createDialogArea(Composite parent) {
 
 private Composite createCategoryFilterComposite(Composite composite) {
 	Group group = new Group(composite, SWT.NONE);
-	group.setText("Problem Kategorie");
+	group.setText(Messages.getString("ProblemFilterDialog.problemCategory")); //$NON-NLS-1$
 	group.setLayout(new GridLayout());
 	
 	showWarningsCheckbox = new Button(group, SWT.CHECK);
-	showWarningsCheckbox.setText("Warnungen anzeigen");
+	showWarningsCheckbox.setText(Messages.getString("ProblemFilterDialog.showWarnings")); //$NON-NLS-1$
 	showWarningsCheckbox.setSelection(view.preferences.shownCategories.contains(ProblemCategory.WARNING));
 	showErrorsCheckbox = new Button(group, SWT.CHECK);
-	showErrorsCheckbox.setText("Fehler anzeigen");
+	showErrorsCheckbox.setText(Messages.getString("ProblemFilterDialog.showErrors")); //$NON-NLS-1$
 	showErrorsCheckbox.setSelection(view.preferences.shownCategories.contains(ProblemCategory.ERROR));
 	
 	return group;
@@ -93,14 +93,14 @@ private Composite createCategoryFilterComposite(Composite composite) {
 
 private Composite createPrimaryFilterComposite(Composite composite) {
 	Group group = new Group(composite, SWT.NONE);
-	group.setText("Generell");
+	group.setText(Messages.getString("ProblemFilterDialog.general")); //$NON-NLS-1$
 	group.setLayout(new GridLayout());
 	
 	showAllProblemsRadio = new Button(group, SWT.RADIO);
-	showAllProblemsRadio.setText("Alle Probleme  anzeigen");
+	showAllProblemsRadio.setText(Messages.getString("ProblemFilterDialog.showAllProblems")); //$NON-NLS-1$
 	showAllProblemsRadio.setSelection(view.preferences.showAllProblems);
 	showProblemsOfSelectedResourceRadio = new Button(group, SWT.RADIO);
-	showProblemsOfSelectedResourceRadio.setText("Nur Probleme der ausgewählten Resource anzeigen");
+	showProblemsOfSelectedResourceRadio.setText(Messages.getString("ProblemFilterDialog.showProblemsOfSelection")); //$NON-NLS-1$
 	showProblemsOfSelectedResourceRadio.setSelection(!view.preferences.showAllProblems);
 	
 	return group;
