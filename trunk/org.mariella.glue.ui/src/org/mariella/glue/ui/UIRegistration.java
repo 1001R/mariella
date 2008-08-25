@@ -2,9 +2,9 @@ package org.mariella.glue.ui;
 
 import org.eclipse.swt.graphics.Image;
 import org.mariella.glue.service.Context;
-import org.mariella.glue.service.Persistence;
 import org.mariella.glue.service.Entity;
 import org.mariella.glue.service.EntityService;
+import org.mariella.glue.service.Persistence;
 import org.mariella.rcp.databinding.VBindingFactory;
 import org.mariella.rcp.problems.ProblemManager;
 

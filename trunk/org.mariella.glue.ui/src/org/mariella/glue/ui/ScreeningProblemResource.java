@@ -1,9 +1,9 @@
 package org.mariella.glue.ui;
 
-import org.mariella.rcp.problems.ProblemResource;
+import org.mariella.rcp.problems.AbstractProblemResource;
 import org.mariella.rcp.resources.VResourceRef;
 
-public class ScreeningProblemResource extends ProblemResource {
+public class ScreeningProblemResource extends AbstractProblemResource {
 	private VResourceRef ref;
 	private String description;
 

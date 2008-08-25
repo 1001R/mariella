@@ -2,7 +2,7 @@ package org.mariella.rcp.problems;
 
 import org.mariella.rcp.resources.VResourceRef;
 
-public class VResourceProblemResource extends ProblemResource {
+public class VResourceProblemResource extends AbstractProblemResource {
 private VResourceRef ref;
 private String description;
 

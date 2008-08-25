@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -154,8 +155,10 @@ private List<Problem> removeProblemsOfProvider(ProblemsProvider provider) {
 }
 
 public void openEditorAndSetSelection(final Problem problem) {
-	ProblemResource res = problem.getResource();
-	
+	Assert.isTrue(problem.getResource() instanceof EditorProblemResource, "Resource must implement " + EditorProblemResource.class.getName());
+
+	EditorProblemResource res = (EditorProblemResource)problem.getResource();
+
     String editorId = res.getEditorId();
 	IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 	try {
@@ -186,8 +189,12 @@ private void implementOpenEditor(IWorkbenchWindow window, ProblemResource res, S
 }
 
 private IEditorInput getEditorInput(ProblemResource res) {
-	String elementFactoryId = res.getElementFactoryId();
-	IMemento editorMemento = res.getEditorMemento();
+	Assert.isTrue(res instanceof EditorProblemResource, "Resource must implement " + EditorProblemResource.class.getName());
+
+	EditorProblemResource editorResource = (EditorProblemResource)res;
+
+	String elementFactoryId = editorResource.getElementFactoryId();
+	IMemento editorMemento = editorResource.getEditorMemento();
     IElementFactory factory = PlatformUI.getWorkbench().getElementFactory(elementFactoryId);
     IEditorInput input = (IEditorInput)factory.createElement(editorMemento);
 	return input;
