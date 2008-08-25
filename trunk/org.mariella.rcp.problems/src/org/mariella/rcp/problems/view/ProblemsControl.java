@@ -214,7 +214,7 @@ public abstract class ProblemsControl extends Composite implements ProblemManage
 	private LocalResourceManager resourceManager = new LocalResourceManager(JFaceResources.getResources());
 	private RefreshWorker refreshWorker;
 	
-	ProblemsControl(Composite parent, int style) {
+	public ProblemsControl(Composite parent, int style) {
 		super(parent, style);
 		
 		refreshWorker = new RefreshWorker();
@@ -247,12 +247,15 @@ public abstract class ProblemsControl extends Composite implements ProblemManage
 		TreeColumn description = new TreeColumn(tree, SWT.NONE);
 		description.setText(Messages.getString("ProblemsView.description")); //$NON-NLS-1$
 
-		TreeColumn resourceDescription = new TreeColumn(tree, SWT.NONE);
-		resourceDescription.setText(Messages.getString("ProblemsView.resource")); //$NON-NLS-1$
+		if (showResource()) {
+			TreeColumn resourceDescription = new TreeColumn(tree, SWT.NONE);
+			resourceDescription.setText(Messages.getString("ProblemsView.resource")); //$NON-NLS-1$
+		}
 
-		tree.setHeaderVisible(true);
+		tree.setHeaderVisible(isHeaderVisible());
 		layout.addColumnData(new ColumnWeightData(60, 30, true));
-		layout.addColumnData(new ColumnWeightData(40, 30, true));
+		if (showResource())
+			layout.addColumnData(new ColumnWeightData(40, 30, true));
 
 		
 		// create TreeViewer
@@ -266,6 +269,14 @@ public abstract class ProblemsControl extends Composite implements ProblemManage
 		hookSelectionListeners();
 		
 		refreshWorker.start();
+	}
+	
+	protected boolean showResource() {
+		return true;
+	}
+	
+	protected boolean isHeaderVisible() {
+		return true;
 	}
 
 	@Override
