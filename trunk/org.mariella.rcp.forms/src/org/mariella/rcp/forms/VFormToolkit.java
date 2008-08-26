@@ -7,6 +7,7 @@ import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -30,26 +31,36 @@ import org.eclipse.ui.forms.widgets.Section;
 public class VFormToolkit implements ControlFactory {
 
 FormToolkit formToolkit;
+int fontSizeDelta = 0;
 
 public VFormToolkit(FormToolkit formToolkit) {
 	this.formToolkit = formToolkit;
 }
 
+public VFormToolkit(FormToolkit formToolkit, int fontSizeDelta) {
+	this.formToolkit = formToolkit;
+	this.fontSizeDelta = fontSizeDelta;
+}
+
 public void adapt(Composite composite) {
 	formToolkit.adapt(composite);
+	handleFont(composite);
 }
 
 public void adapt(Control control, boolean trackFocus, boolean trackKeyboard) {
 	formToolkit.adapt(control, trackFocus, trackKeyboard);
+	handleFont(control);
 }
 
 public Button createButton(Composite parent, String text, int style) {
-	return formToolkit.createButton(parent, text, style);
+	Button button = formToolkit.createButton(parent, text, style);
+	return button;
 }
 
 public Composite createComposite(Composite parent, int style) {
 	Composite composite = formToolkit.createComposite(parent, style);
 	formToolkit.paintBordersFor(composite);
+	handleFont(composite);
 	return composite;
 }
 
@@ -58,32 +69,45 @@ public Composite createComposite(Composite parent) {
 }
 
 public Composite createCompositeSeparator(Composite parent) {
-	return formToolkit.createCompositeSeparator(parent);
+	Composite composite = formToolkit.createCompositeSeparator(parent);
+	handleFont(composite);
+	return composite;
 }
 
 public ExpandableComposite createExpandableComposite(Composite parent, int expansionStyle) {
-	return formToolkit.createExpandableComposite(parent, expansionStyle);
+	ExpandableComposite composite = formToolkit.createExpandableComposite(parent, expansionStyle);
+	handleFont(composite);
+	return composite;
 }
 
 public Form createForm(Composite parent) {
-	return formToolkit.createForm(parent);
+	Form form = formToolkit.createForm(parent);
+	handleFont(form);
+	return form;
 }
 
 public FormText createFormText(Composite parent, boolean trackFocus) {
-	return formToolkit.createFormText(parent, trackFocus);
+	FormText t = formToolkit.createFormText(parent, trackFocus);
+	handleFont(t);
+	return t;
 }
 
 public Hyperlink createHyperlink(Composite parent, String text, int style) {
-	return formToolkit.createHyperlink(parent, text, style);
+	Hyperlink link = formToolkit.createHyperlink(parent, text, style);
+	handleFont(link);
+	return link;
 }
 
 public ImageHyperlink createImageHyperlink(Composite parent, int style) {
-	return formToolkit.createImageHyperlink(parent, style);
+	ImageHyperlink link = formToolkit.createImageHyperlink(parent, style);
+	handleFont(link);
+	return link;
 }
 
 public Label createLabel(Composite parent, String text, int style) {
 	Label label = formToolkit.createLabel(parent, text, style);
 	label.setForeground(formToolkit.getColors().getColor(IFormColors.TITLE));
+	handleFont(label);
 	return label;
 }
 
@@ -92,42 +116,54 @@ public Label createLabel(Composite parent, String text) {
 }
 
 public ScrolledPageBook createPageBook(Composite parent, int style) {
-	return formToolkit.createPageBook(parent, style);
+	ScrolledPageBook book = formToolkit.createPageBook(parent, style);
+	handleFont(book);
+	return book;
 }
 
 public ScrolledForm createScrolledForm(Composite parent) {
-	return formToolkit.createScrolledForm(parent);
+	ScrolledForm form = formToolkit.createScrolledForm(parent);
+	handleFont(form);
+	return form;
 }
 
 @Override
 public Section createSection(Composite parent, int sectionStyle) {
 	Section section = formToolkit.createSection(parent, sectionStyle);
 	formToolkit.paintBordersFor(section);
+	handleFont(section);
 	return section;
 }
 
 public Label createSeparator(Composite parent, int style) {
-	return formToolkit.createSeparator(parent, style);
+	Label label = formToolkit.createSeparator(parent, style);
+	return label;
 }
 
 public Table createTable(Composite parent, int style) {
 	Table table = formToolkit.createTable(parent, style);
 	table.setLinesVisible(true);
+	handleFont(table);
 	return table;
 }
 
 public Text createText(Composite parent, String value, int style) {
 	Text text = formToolkit.createText(parent, value, style);
 	text.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+	handleFont(text);
 	return text;
 }
 
 public Text createText(Composite parent, String value) {
-	return formToolkit.createText(parent, value, SWT.NONE);
+	Text text = formToolkit.createText(parent, value, SWT.NONE);
+	handleFont(text);
+	return text;
 }
 
 public Tree createTree(Composite parent, int style) {
-	return formToolkit.createTree(parent, style);
+	Tree tree = formToolkit.createTree(parent, style);
+	handleFont(tree);
+	return tree;
 }
 
 public void decorateFormHeading(Form form) {
@@ -214,12 +250,19 @@ public TextViewer createTextViewer(Composite client, int style, boolean drawBord
 		}
 	});
 	textViewer.setDocument(doc);
+	handleFont(textViewer.getControl());
 	return textViewer;
 }
 
 public ComboViewer createComboViewer(Composite parent, int style) {
 	final ComboViewer comboViewer = new ComboViewer(parent, style);
+	handleFont(comboViewer.getControl());
 	return comboViewer;
 }
 
+
+private void handleFont(Control control) {
+	Font font = new FontToolkit().deriveFont(control.getFont(), fontSizeDelta, SWT.NONE);
+	control.setFont(font);
+}
 }
