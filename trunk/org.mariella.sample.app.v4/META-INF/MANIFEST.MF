@@ -6,7 +6,6 @@ Bundle-Version: 1.0.0
 Bundle-Activator: org.mariella.sample.app.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.mariella.logging,
  org.mariella.rcp.resources,
  org.mariella.sample.core,
  org.mariella.rcp.problems,

@@ -1,7 +1,5 @@
 package org.mariella.sample.app;
 
-import java.io.IOException;
-
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.swt.graphics.Image;
@@ -28,13 +26,6 @@ public Activator() {
 public void start(BundleContext context) throws Exception {
 	super.start(context);
 	plugin = this;
-
-	// Enable logging...
-	try {
-		VResourcesPlugin.getJdkLogConfigurator().configure("logging.properties", getBundle());
-	} catch (IOException ex) {
-		throw new RuntimeException(ex);
-	}
 
 	// register mariella resource managers
 	VResourcesPlugin.getResourceManagerRegistry().addManager(new PersonResourceManager());
