@@ -54,6 +54,7 @@ public void adapt(Control control, boolean trackFocus, boolean trackKeyboard) {
 
 public Button createButton(Composite parent, String text, int style) {
 	Button button = formToolkit.createButton(parent, text, style);
+	handleFont(button);
 	return button;
 }
 

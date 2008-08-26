@@ -22,6 +22,7 @@ public boolean isResponsibleFor(Control control) {
 @Override
 protected void doSetApprovedValue(final Object value) {
 	label.setText(value == null ? "" : value.toString()); //$NON-NLS-1$
+	label.getParent().layout(true, true);
 }
 
 @Override
