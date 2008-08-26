@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -13,13 +12,11 @@ import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IElementFactory;
-import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.progress.UIJob;
-import org.mariella.rcp.resources.EditorOpenedCallback;
+import org.mariella.rcp.resources.ResourceOpenedCallback;
 import org.mariella.rcp.resources.VManagedSelectionItem;
 import org.mariella.rcp.resources.VResourceChangeEvent;
 import org.mariella.rcp.resources.VResourceChangeListener;
@@ -154,50 +151,42 @@ private List<Problem> removeProblemsOfProvider(ProblemsProvider provider) {
 	return problems;
 }
 
-public void openEditorAndSetSelection(final Problem problem) {
-	Assert.isTrue(problem.getResource() instanceof EditorProblemResource, "Resource must implement " + EditorProblemResource.class.getName());
+public void openResourceAndSetSelection(final Problem problem) {
+	final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 
-	EditorProblemResource res = (EditorProblemResource)problem.getResource();
+	ProblemResource resource = problem.getResource();
+	
+	final ResourceOpenedCallback cb = new ResourceOpenedCallback() {
+		public void resourceOpened(final IWorkbenchPart part) {
+			if (part != null && problem.getSelection() != null)
+				Display.getCurrent().asyncExec(new Runnable() {
+					public void run() {
+						part.getSite().getSelectionProvider().setSelection(problem.getSelection());
+					}
+				});
+		}
+	};
 
-    String editorId = res.getEditorId();
-	IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
-	try {
-		EditorOpenedCallback cb = new EditorOpenedCallback() {
-			public void editorOpened(final IEditorPart part) {
-				if (part != null && problem.getSelection() != null)
-					Display.getCurrent().asyncExec(new Runnable() {
-						public void run() {
-							part.getSite().getSelectionProvider().setSelection(problem.getSelection());
-						}
-					});
+	
+	ProblemResourceOpenHandler openHandler = resource.getResourceOpenHandler();
+	if (openHandler == null) {
+		if (!(resource instanceof EditorProblemResource)) {
+			throw new IllegalStateException("No ProblemResourceOpenHandler given for a problem resource that does not implement the " + EditorProblemResource.class.getName() + " interface");
+		}
+		openHandler = new AbstractEditorProblemResourceOpenHandler() {
+			@Override
+			protected void openEditor(IWorkbenchWindow window, IEditorInput input, String editorId, ResourceOpenedCallback cb) {
+				try {
+					IEditorPart part = window.getActivePage().openEditor(input, editorId);
+					cb.resourceOpened(part);
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
 			}
 		};
-		implementOpenEditor(window, res, editorId, cb);
-	} catch (PartInitException e) {
-		throw new RuntimeException(e);
-	}
-}
-
-private void implementOpenEditor(IWorkbenchWindow window, ProblemResource res, String editorId, EditorOpenedCallback cb) throws PartInitException {
-	IEditorInput editorInput = getEditorInput(res);
-	if (res.getResourceOpenHandler() != null)
-		res.getResourceOpenHandler().openEditor(window, editorInput, editorId, cb);
-	else {
-		IEditorPart part = window.getActivePage().openEditor(getEditorInput(res), editorId);
-		cb.editorOpened(part);
-	}
-}
-
-private IEditorInput getEditorInput(ProblemResource res) {
-	Assert.isTrue(res instanceof EditorProblemResource, "Resource must implement " + EditorProblemResource.class.getName());
-
-	EditorProblemResource editorResource = (EditorProblemResource)res;
-
-	String elementFactoryId = editorResource.getElementFactoryId();
-	IMemento editorMemento = editorResource.getEditorMemento();
-    IElementFactory factory = PlatformUI.getWorkbench().getElementFactory(elementFactoryId);
-    IEditorInput input = (IEditorInput)factory.createElement(editorMemento);
-	return input;
+	};
+	
+	openHandler.openResource(window, resource, cb);
 }
 
 protected void fireChanged() {

@@ -1,8 +1,7 @@
 package org.mariella.rcp.problems;
 
-import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.mariella.rcp.resources.EditorOpenedCallback;
+import org.mariella.rcp.resources.ResourceOpenedCallback;
 
 public interface ProblemResourceOpenHandler {
 
@@ -13,6 +12,6 @@ public interface ProblemResourceOpenHandler {
  * @param editorId
  * @return
  */
-void openEditor(IWorkbenchWindow window, IEditorInput editorInput, String editorId, EditorOpenedCallback cb);
+void openResource(IWorkbenchWindow window, ProblemResource problemResource, ResourceOpenedCallback cb);
 
 }

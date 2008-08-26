@@ -295,7 +295,7 @@ public abstract class ProblemsControl extends Composite implements ProblemManage
 				if (selection.size() == 0) return;
 
 				Problem problem = (Problem)selection.getFirstElement();
-				getProblemManager().openEditorAndSetSelection(problem);
+				getProblemManager().openResourceAndSetSelection(problem);
 			}
 		});
 		
