@@ -26,6 +26,7 @@ protected Object doGetValue() {
 @Override
 protected void doSetValue(Object value) {
 	((Control)getWidget()).setVisible((Boolean)value);
+	parentToRedraw.layout(true, true);
 	parentToRedraw.redraw();
 }
 
