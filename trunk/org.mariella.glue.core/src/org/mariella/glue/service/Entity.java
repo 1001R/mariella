@@ -1,5 +1,6 @@
 package org.mariella.glue.service;
 
+import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 import at.hts.persistence.mapping.ClassMapping;
@@ -22,6 +23,14 @@ public Entity() {
 
 public PropertyChangeSupport getPropertyChangeSupport() {
 	return propertyChangeSupport;
+}
+
+public void addPropertyChangeListener(PropertyChangeListener listener) {
+	propertyChangeSupport.addPropertyChangeListener(listener);
+}
+
+public void removePropertyChangeListener(PropertyChangeListener listener) {
+	propertyChangeSupport.removePropertyChangeListener(listener);
 }
 
 public Long getIdentity() {

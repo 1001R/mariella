@@ -30,4 +30,19 @@ public void setIdentity(Object identity) {
 	this.identity = identity;
 }
 
+@Override
+public boolean equals(Object obj) {
+	if(obj instanceof EntityReference) {
+		EntityReference er = (EntityReference)obj;
+		return className.equals(er.className) && identity.equals(er.identity);
+	} else {
+		return false;
+	}
+} 
+
+@Override
+public int hashCode() {
+	return identity.hashCode();
+}
+
 }

@@ -1,7 +1,7 @@
 package org.mariella.glue.ui;
 
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.mariella.rcp.databinding.SelectionPath;
+import org.mariella.rcp.databinding.VBindingSelection;
 import org.mariella.rcp.problems.ProblemManager;
 
 public class ScreeningProblemScanner {
@@ -17,7 +17,7 @@ public ScreeningProblemScanner(ProblemManager mgr, ScreeningProblemResource reso
 protected ScreeningProblem createProblem(SelectionPath path) {
 	ScreeningProblem p = new ScreeningProblem();
 	p.setResource(resource);
-	p.setSelection(new StructuredSelection(path));
+	p.setSelection(new VBindingSelection(path));
 	mgr.addProblem(p);
 	return p;
 }

@@ -20,7 +20,9 @@ public String getCreateUser() {
 }
 
 public void setCreateUser(String createUser) {
+	String old = this.createUser;
 	this.createUser = createUser;
+	propertyChangeSupport.firePropertyChange("createUser", old, createUser);
 }
 
 public Timestamp getCreateTimestamp() {
@@ -28,7 +30,9 @@ public Timestamp getCreateTimestamp() {
 }
 
 public void setCreateTimestamp(Timestamp createTimestamp) {
+	Timestamp old = this.createTimestamp;
 	this.createTimestamp = createTimestamp;
+	propertyChangeSupport.firePropertyChange("createTimestamp", old, createTimestamp);
 }
 
 public String getUpdateUser() {
@@ -36,7 +40,9 @@ public String getUpdateUser() {
 }
 
 public void setUpdateUser(String updateUser) {
+	String old = this.updateUser;
 	this.updateUser = updateUser;
+	propertyChangeSupport.firePropertyChange("updateUser", old, updateUser);
 }
 
 public Timestamp getUpdateTimestamp() {
@@ -44,7 +50,9 @@ public Timestamp getUpdateTimestamp() {
 }
 
 public void setUpdateTimestamp(Timestamp updateTimestamp) {
+	Timestamp old = this.updateTimestamp;
 	this.updateTimestamp = updateTimestamp;
+	propertyChangeSupport.firePropertyChange("updateTimestamp", old, updateTimestamp);
 }
 
 public static void createDescription(SchemaDescription schemaDescription) {

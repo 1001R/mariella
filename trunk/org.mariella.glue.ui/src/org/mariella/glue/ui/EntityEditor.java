@@ -49,7 +49,6 @@ class CustomizationCallbackImpl extends AbstractVResourceFormEditorCustomization
 		}
 		public void partActivated(IWorkbenchPart part) {
 			if (part == EntityEditor.this && !isDirty() && needsReload) {
-				Activator.logger.info("reloading editor " + EntityEditor.this);
 				reload();
 				needsReload = false;
 			}
@@ -127,8 +126,10 @@ public void reload() {
 		getSite().getWorkbenchWindow().getShell().getDisplay(),
 		new Runnable() {
 			public void run() {
+				Activator.logger.info("start refreshing " + EntityEditor.this.getClass().getName());
 				getEntityAdapter().reload();
 				dataBindingContext.updateTargets();
+				Activator.logger.info("end refreshing " + EntityEditor.this.getClass().getName());
 			}
 		}
 	);

@@ -11,4 +11,11 @@ public T create(Context context) {
 	entity.setCreateTimestamp(new Timestamp(System.currentTimeMillis()));
 	return entity;
 }
+
+public void save(T entity, Context context) {
+	entity.setUpdateUser("aim");
+	entity.setUpdateTimestamp(new Timestamp(System.currentTimeMillis()));
+	super.save(entity, context);
+}
+
 }
