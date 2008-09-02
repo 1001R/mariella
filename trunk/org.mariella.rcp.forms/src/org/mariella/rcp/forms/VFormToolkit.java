@@ -32,6 +32,7 @@ public class VFormToolkit implements ControlFactory {
 
 FormToolkit formToolkit;
 int fontSizeDelta = 0;
+String fontName = null;
 
 public VFormToolkit(FormToolkit formToolkit) {
 	this.formToolkit = formToolkit;
@@ -263,7 +264,17 @@ public ComboViewer createComboViewer(Composite parent, int style) {
 
 
 private void handleFont(Control control) {
-	Font font = new FontToolkit().deriveFont(control.getFont(), fontSizeDelta, SWT.NONE);
-	control.setFont(font);
+	if (fontSizeDelta != 0 || fontName != null) {
+		Font font = new FontToolkit().deriveFont(control.getFont(), fontName, fontSizeDelta, SWT.NONE);
+		control.setFont(font);
+	}
+}
+
+public String getFontName() {
+	return fontName;
+}
+
+public void setFontName(String fontName) {
+	this.fontName = fontName;
 }
 }

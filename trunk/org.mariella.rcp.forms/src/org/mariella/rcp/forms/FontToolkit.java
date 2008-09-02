@@ -12,14 +12,20 @@ public class FontToolkit {
 
 
 public Font deriveFont(Font font, int heightDelta, int styleDeltas) {
+	return deriveFont(font, null, heightDelta, styleDeltas);
+}
+
+public Font deriveFont(Font font, String fontName, int heightDelta, int styleDeltas) {
 	FontData[] fontData = FontDescriptor.copy(font.getFontData());
 	
 	for (int i=0; i<fontData.length; i++) {
+		if (fontName != null)
+			fontData[i].setName(fontName);
 		fontData[i].setHeight(font.getFontData()[i].getHeight()+heightDelta);
 		fontData[i].setStyle(font.getFontData()[i].getStyle() | styleDeltas);
 	}
 	FontDescriptor fontDescriptor = FontDescriptor.createFrom(fontData);
 	return (Font)resourceManager.get(fontDescriptor);
 }
-	
+
 }
