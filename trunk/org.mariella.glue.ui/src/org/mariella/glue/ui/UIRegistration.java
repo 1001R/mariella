@@ -1,10 +1,11 @@
 package org.mariella.glue.ui;
 
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.IWorkbenchPage;
 import org.mariella.glue.service.Context;
+import org.mariella.glue.service.Persistence;
 import org.mariella.glue.service.Entity;
 import org.mariella.glue.service.EntityService;
-import org.mariella.glue.service.Persistence;
 import org.mariella.rcp.databinding.VBindingFactory;
 import org.mariella.rcp.problems.ProblemManager;
 
@@ -27,4 +28,5 @@ public ScreeningProblemScanner createProblemScanner(ProblemManager problemManage
 public EntityAdapter<T> createAdapter(Context context, T entity);
 
 public void openEditor(Object identity);
+public void closeEditor(IWorkbenchPage page, long id, boolean save);
 }
