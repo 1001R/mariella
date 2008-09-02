@@ -1,5 +1,6 @@
 package org.mariella.glue.ui;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.ui.IPartListener;
@@ -133,6 +134,15 @@ public void reload() {
 			}
 		}
 	);
+}
+
+public boolean makeSaved(String title, String confirmationMessage) {
+	if(isDirty()) {
+		if(MessageDialog.openConfirm(getSite().getShell(), title, confirmationMessage)) {
+			getSite().getPage().saveEditor(this, false);
+		}
+	};
+	return !isDirty();
 }
 
 }

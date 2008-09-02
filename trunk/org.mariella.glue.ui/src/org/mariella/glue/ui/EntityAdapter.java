@@ -21,7 +21,7 @@ public abstract class EntityAdapter <T extends Entity> extends AbstractPersistab
 	protected final Context context;
 	protected final VBindingContext dataBindingContext;
 	protected final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
-
+	
 public EntityAdapter(Context context, T entity) {
 	super();
 	this.entity = entity;

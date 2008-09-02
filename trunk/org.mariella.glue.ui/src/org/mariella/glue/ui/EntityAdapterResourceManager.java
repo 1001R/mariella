@@ -76,7 +76,11 @@ public EntityAdapter<T> getModelForIdentity(Object identity) {
 @Override
 protected VResource implementBuildResource(Object persistentId) {
 	Context context = getUIRegistration().getPersistence().createContext();
-	T entity = getUIRegistration().getService().loadForEditing(context, ((EntityReference)persistentId).getIdentity(), false);
+	EntityReference er = (EntityReference)persistentId;
+	T entity = getUIRegistration().getService().loadForEditing(context, er.getIdentity(), false);
+	if(entity == null) {
+		throw new RuntimeException(er.getClassName() + " with id " + er.getIdentity() + " has not been found!");
+	}
 	EntityAdapter<T>  adapter = getUIRegistration().createAdapter(context, entity);
 	return adapter;
 }

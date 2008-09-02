@@ -6,6 +6,8 @@ import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.mariella.glue.service.Entity;
@@ -84,5 +86,26 @@ public void delete(final Long id) {
 			}
 	);
 }
+
+public void closeEditor(IWorkbenchPage page, long id, boolean save) {
+	for(IEditorReference er : page.getEditorReferences()) {
+		try {
+			IEditorInput ei = er.getEditorInput();
+			if(ei instanceof EntityAdapter<?>) {
+				EntityAdapter<?> ea = (EntityAdapter<?>)ei;
+				if(getEntityClass().isAssignableFrom(ea.getEntity().getClass())) {
+					if(ea.getId().equals(id)) {
+						page.closeEditor(er.getEditor(true), save);
+					}
+				}
+			}
+		} catch (PartInitException e) {
+			throw new RuntimeException(e);
+		}
+	}
+}
+
+
+
 
 }
