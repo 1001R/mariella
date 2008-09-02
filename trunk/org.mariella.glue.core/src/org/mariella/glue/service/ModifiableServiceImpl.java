@@ -52,12 +52,20 @@ public void saveChanges(final Context context) {
 
 protected abstract ClusterDescription getEditingClusterDescription();
 
+protected ClusterDescription getDeleteClusterDescription() {
+	return getEditingClusterDescription();
+}
+
 public ClassDescription getClassDescription() {
 	return getSchemaMapping().getSchemaDescription().getClassDescription(getEntityClass().getName());
 }
 
 public T loadForEditing(final Context context, Object identity, boolean isUpdate) {
 	return load(context, getEditingClusterDescription(), identity, isUpdate);
+}
+
+public T loadForDelete(final Context context, Object identity, boolean isUpdate) {
+	return load(context, getDeleteClusterDescription(), identity, isUpdate);
 }
 
 public T loadFlat(final Context context, Object identity, boolean isUpdate) {
@@ -106,7 +114,7 @@ public void delete(Context context, T entity) {
 }
 
 public void doDelete(Context context, T entity) {
-	throw new UnsupportedOperationException();
+	context.getModificationTracker().remove(entity);
 }
 	
 }

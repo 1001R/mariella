@@ -12,6 +12,7 @@ public T create(Context context);
 public Collection<T> getAllEntities(Context context);
 public void save(T entity, Context context);
 public T loadForEditing(Context context, Object identity, boolean isUpdate);
+public T loadForDelete(final Context context, Object identity, boolean isUpdate);
 public T load(Context context, ClusterDescription cd, Object identity, boolean isUpdate);
 public T loadFlat(Context context, Object identity, boolean isUpdate);
 public ClassDescription getClassDescription();
