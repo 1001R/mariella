@@ -61,7 +61,7 @@ public T getEntity() {
 	return entity;
 }
 
-public Context getHtsContext() {
+public Context getContext() {
 	return context;
 }
 
