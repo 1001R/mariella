@@ -19,12 +19,17 @@ public abstract class ModifiableServiceImpl <T extends Modifiable> extends Scree
 protected abstract Class getEntityClass();
 protected abstract SchemaMapping getSchemaMapping();
 
+protected void assertNotReadonly(Context context) {
+}
+
 public Collection<T> getAllEntities(Context context) {
 	throw new UnsupportedOperationException();
 }
 
 @SuppressWarnings("unchecked")
 public T create(Context context) {
+	assertNotReadonly(context);
+	
 	try {
 		T instance = (T)getEntityClass().newInstance();
 		context.getModificationTracker().addNewParticipant(instance);
@@ -35,10 +40,12 @@ public T create(Context context) {
 }
 
 public void save(T entity, Context context) {
+	assertNotReadonly(context);
 	saveChanges(context);
 }
 
 public void saveChanges(final Context context) {
+	assertNotReadonly(context);
 	new TransactionalRunner(jdbcTemplate.getDataSource()).run(
 			new TransactionalRunnable<T>() {
 				public T run(TransactionalRunner tr) {
@@ -109,11 +116,13 @@ public List<Modifiable> load(final Context context, final ClusterDescription cd,
 }
 
 public void delete(Context context, T entity) {
+	assertNotReadonly(context);
 	doDelete(context, entity);
 	saveChanges(context);
 }
 
 public void doDelete(Context context, T entity) {
+	assertNotReadonly(context);
 	context.getModificationTracker().remove(entity);
 }
 	

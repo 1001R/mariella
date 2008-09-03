@@ -18,4 +18,6 @@ public SchemaMapping getSchemaMapping();
 public ClusterLoader createClusterLoader(ClusterDescription cd);
 public LoaderContext createLoaderContext();
 public DatabaseAccess createDatabaseAccess(final Connection connection);
+public String getUserName();
+public boolean isUserInRole(String role);
 }

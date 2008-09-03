@@ -21,10 +21,11 @@ public abstract class UIRegistrationImpl <T extends Entity> implements UIRegistr
 	
 public UIRegistrationImpl() {
 	super();
-	resourceManager = new EntityAdapterResourceManager<T>(this);
+	resourceManager = createEntityAdapterResourceManager();
 	VResourcesPlugin.getResourceManagerRegistry().addManager(resourceManager);
 }
 
+protected abstract EntityAdapterResourceManager<T> createEntityAdapterResourceManager();
 public abstract String getImageName();
 
 @Override

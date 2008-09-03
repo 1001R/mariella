@@ -145,4 +145,8 @@ public boolean makeSaved(String title, String confirmationMessage) {
 	return !isDirty();
 }
 
+public boolean isReadOnly() {
+	return false;
+}
+
 }

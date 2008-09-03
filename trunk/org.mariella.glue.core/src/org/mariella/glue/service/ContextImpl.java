@@ -19,7 +19,7 @@ import at.hts.persistence.persistor.Persistor;
 import at.hts.persistence.runtime.ModificationTracker;
 import at.hts.persistence.runtime.RIListener;
 
-public class ContextImpl implements Context {
+public abstract class ContextImpl implements Context {
 	protected final SchemaMapping schemaMapping;
 	protected final ModificationTracker  modificationTracker;
 	protected final ClassLoader classLoader;
@@ -102,4 +102,5 @@ public Column getColumn(String tableName, String columnName) {
 public Table getTable(String tableName) {
 	return schemaMapping.getSchema().getTable(tableName);
 }
+
 }

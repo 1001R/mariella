@@ -7,6 +7,7 @@ import java.util.List;
 import org.eclipse.ui.IEditorInput;
 import org.mariella.glue.service.Context;
 import org.mariella.glue.service.Entity;
+import org.mariella.glue.service.Persistence;
 import org.mariella.rcp.problems.ProblemManager;
 import org.mariella.rcp.problems.ProblemResource;
 import org.mariella.rcp.problems.ProblemsPlugin;
@@ -16,7 +17,7 @@ import org.mariella.rcp.resources.VResource;
 import org.mariella.rcp.resources.VResourceRef;
 import org.mariella.rcp.resources.VResourceSaveException;
 
-public class EntityAdapterResourceManager <T extends Entity> extends AbstractEditorAwareVResourceManager implements ProblemsProvider {
+public abstract class EntityAdapterResourceManager <T extends Entity> extends AbstractEditorAwareVResourceManager implements ProblemsProvider {
 	private final UIRegistration<T> uiRegistration;
 	
 public EntityAdapterResourceManager(UIRegistration<T> uiRegistration) {
@@ -25,6 +26,9 @@ public EntityAdapterResourceManager(UIRegistration<T> uiRegistration) {
 	setEditorId(uiRegistration.getEditorId());
 	setElementFactoryId(EntityAdapterElementFactory.ID);
 }
+
+public abstract Persistence getPersistence();
+public abstract Context createContext();
 
 public UIRegistration<T> getUIRegistration() {
 	return uiRegistration;
@@ -61,7 +65,7 @@ protected VResourceRef instanciateRef() {
 
 @Override
 protected VResource implementBuildNewResource() {
-	Context context = getUIRegistration().getPersistence().createContext();
+	Context context = createContext();
 	T entity = getUIRegistration().getService().create(context);
 	EntityAdapter<T> adapter = getUIRegistration().createAdapter(context, entity);
 	return adapter;
@@ -75,7 +79,7 @@ public EntityAdapter<T> getModelForIdentity(Object identity) {
 
 @Override
 protected VResource implementBuildResource(Object persistentId) {
-	Context context = getUIRegistration().getPersistence().createContext();
+	Context context = createContext();
 	EntityReference er = (EntityReference)persistentId;
 	T entity = getUIRegistration().getService().loadForEditing(context, er.getIdentity(), false);
 	if(entity == null) {
@@ -105,7 +109,7 @@ public void addProblems(ProblemManager problemMgr, ProblemResource problemResour
 protected void implementRemoveResource(VResource resource) throws VResourceSaveException {
 	EntityAdapter<T> model = (EntityAdapter<T>)resource;
 	try {
-		Context context = getUIRegistration().getPersistence().createContext();
+		Context context = createContext();
 		T entity = getUIRegistration().getService().loadForEditing(context,model.getEntity().getId(), false);
 		getUIRegistration().getService().delete(context, entity);
 	} catch(Exception e) {
