@@ -1,4 +1,4 @@
-package org.mariella.rcp.forms;
+package org.mariella.rcp;
 
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.DocumentEvent;
