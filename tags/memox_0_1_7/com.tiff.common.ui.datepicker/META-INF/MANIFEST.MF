@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Datepicker Plug-in
+Bundle-SymbolicName: com.tiff.common.ui.datepicker
+Bundle-Version: 1.0.1
+Bundle-Activator: com.tiff.common.ui.datepicker.Activator
+Bundle-Vendor: TIFF
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime
+Eclipse-LazyStart: true
+Export-Package: com.tiff.common.ui.datepicker
