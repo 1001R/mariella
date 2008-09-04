@@ -8,7 +8,8 @@ Bundle-Vendor: CSD
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.jface.text,
- com.tiff.common.ui.datepicker
+ com.tiff.common.ui.datepicker,
+ org.eclipse.ui.forms;bundle-version="3.3.100"
 Eclipse-LazyStart: true
 Export-Package: org.mariella.rcp,
  org.mariella.rcp.actions,

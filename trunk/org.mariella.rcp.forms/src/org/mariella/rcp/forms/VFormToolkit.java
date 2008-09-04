@@ -27,6 +27,7 @@ import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.ScrolledPageBook;
 import org.eclipse.ui.forms.widgets.Section;
+import org.mariella.rcp.ControlFactory;
 
 public class VFormToolkit implements ControlFactory {
 

@@ -16,6 +16,7 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.eclipse.ui.forms.widgets.Section;
+import org.mariella.rcp.ControlFactory;
 
 public class DialogControlFactory implements ControlFactory {
 
