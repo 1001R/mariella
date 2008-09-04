@@ -12,6 +12,10 @@ public AbstractAdapter(AdapterContext context) {
 	this.adapterContext = context;
 }
 
+public AbstractAdapter() {
+	this.adapterContext = new DefaultAdapterContext(null);
+}
+
 public void addPropertyChangeListener(PropertyChangeListener listener) {
 	propertyChangeSupport.addPropertyChangeListener(listener);
 }
