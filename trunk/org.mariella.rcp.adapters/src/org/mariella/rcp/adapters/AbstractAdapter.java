@@ -1,15 +1,23 @@
 package org.mariella.rcp.adapters;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 public abstract class AbstractAdapter implements Adapter {
 
-protected final PropertyChangeSupport propertyChangeSupport = new FixedPropertyChangeSupport(this);
+private final PropertyChangeSupport propertyChangeSupport = new FixedPropertyChangeSupport(this);
+protected AbstractAdapter parent = null;
 protected final AdapterContext adapterContext;
+protected boolean silent = false;	// if silent, no property changes and dirty notifications are sent
 
 public AbstractAdapter(AdapterContext context) {
 	this.adapterContext = context;
+}
+
+public AbstractAdapter(AdapterContext context, AbstractAdapter parent) {
+	this.adapterContext = context;
+	this.parent = parent;
 }
 
 public AbstractAdapter() {
@@ -26,6 +34,39 @@ public void removePropertyChangeListener(PropertyChangeListener listener) {
 
 public AdapterContext getAdapterContext() {
 	return adapterContext;
+}
+
+public AbstractAdapter getParent() {
+	return parent;
+}
+
+public void setParent(AbstractAdapter parent) {
+	this.parent = parent;
+}
+
+public void fireAdapterDirty() {
+	if (silent) return;
+	adapterContext.adapterDirtyNotification(this);
+}
+
+public void firePropertyChange(PropertyChangeEvent evt) {
+	if (silent) return;
+	propertyChangeSupport.firePropertyChange(evt);
+}
+
+public void firePropertyChange(String propertyName, boolean oldValue, boolean newValue) {
+	if (silent) return;
+	propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
+}
+
+public void firePropertyChange(String propertyName, int oldValue, int newValue) {
+	if (silent) return;
+	propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
+}
+
+public void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
+	if (silent) return;
+	propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
 }
 
 }

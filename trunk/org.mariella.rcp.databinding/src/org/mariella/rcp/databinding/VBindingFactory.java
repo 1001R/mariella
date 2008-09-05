@@ -342,6 +342,8 @@ public VBinding createSingleSelectionBinding(VBindingContext dbc, StructuredView
 }
 
 public VBinding createSingleSelectionBinding(VBindingContext dbc, StructuredViewer structuredViewer, Object bean, String propertyPath, VBindingDomain domain) {
+	if (domain == null)
+		domain = new VBindingDomain(Object.class);
 	VBinding binding =((InternalBindingContext)dbc).bindValue(RcpObservables.observeSingleSelection(dbc, structuredViewer), 
 			ModelObservables.observeValue(bean, propertyPath, domain.getType()), 
 			createTargetTextToModel(dbc, domain),  
@@ -350,6 +352,10 @@ public VBinding createSingleSelectionBinding(VBindingContext dbc, StructuredView
 	
 	completeBindingCreation(binding, domain);
 	return binding;
+}
+
+public VBinding createSingleSelectionBinding(VBindingContext dbc, StructuredViewer structuredViewer, Object bean, String propertyPath) {
+	return createSingleSelectionBinding(dbc, structuredViewer, bean, propertyPath, null);
 }
 
 public VBinding createMultiSelectionBinding(VBindingContext dbc, StructuredViewer structuredViewer, Object bean, String propertyPath, Object domainSymbol) {

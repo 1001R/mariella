@@ -15,19 +15,19 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.mariella.rcp.ControlFactory;
+import org.mariella.rcp.databinding.CompoundEnabledCallback;
+import org.mariella.rcp.databinding.EnabledCallback;
 import org.mariella.rcp.databinding.EnabledOnSingleSelectionCallback;
 import org.mariella.rcp.databinding.EnabledRuleExtension;
 import org.mariella.rcp.databinding.SelectionManagementExtension;
 import org.mariella.rcp.databinding.TableViewerElementChangeListenerExtension;
+import org.mariella.rcp.databinding.VBindingContext;
 import org.mariella.rcp.databinding.VBindingDomain;
 import org.mariella.rcp.databinding.VBindingDomainExtension;
 import org.mariella.rcp.util.ColumnLayout;
 
-public abstract class MasterDetailsProtocolControl<A extends MasterDetailsAdapter<K,D>, K extends Object, D extends Object> extends Composite {
+public abstract class KeyedMasterDetailsProtocolControl<A extends KeyedMasterDetailsAdapter<K,D>, K extends Object, D extends Object> extends Composite {
 
-	A adapter;
-	ControlFactory controlFactory;
-	TableViewer protocolViewer;
 	
 	class RemoveAction extends Action {
 	@SuppressWarnings("unchecked")
@@ -50,13 +50,18 @@ public abstract class MasterDetailsProtocolControl<A extends MasterDetailsAdapte
 	}
 	
 	
+	A adapter;
+	ControlFactory controlFactory;
+	TableViewer protocolViewer;
 	EditAgainAction editAgainAction;
 	RemoveAction removeAction;
+	VBindingContext bindingContext;	// the binding context of the UI
 
-public MasterDetailsProtocolControl(Composite parent, int style, A adapter, ControlFactory controlFactory) {
+public KeyedMasterDetailsProtocolControl(Composite parent, int style, A adapter, ControlFactory controlFactory, VBindingContext bindingContext) {
 	super(parent, style);
 	this.adapter = adapter;
 	this.controlFactory = controlFactory;
+	this.bindingContext = bindingContext;
 	
 	setLayout(new FormLayout());
 
@@ -91,21 +96,32 @@ public MasterDetailsProtocolControl(Composite parent, int style, A adapter, Cont
 
 private void addEditAgainAction(Composite parent) {
 	editAgainAction = new EditAgainAction();
-	adapter.getAdapterContext().getBindingContext().getBindingFactory().createActionBinding(adapter.getAdapterContext().getBindingContext(),
+	bindingContext.getBindingFactory().createActionBinding(bindingContext,
 			controlFactory.createButton(parent, getCorrectButtonText(), SWT.PUSH), //$NON-NLS-1$
 			editAgainAction,
-			new EnabledRuleExtension(new EnabledOnSingleSelectionCallback(protocolViewer))
+			createEnabledRuleExtension(new EnabledOnSingleSelectionCallback(protocolViewer))
 			);
 }
 
 private void addRemoveRowAction(Composite parent) {
 	removeAction = new RemoveAction();
-	adapter.getAdapterContext().getBindingContext().getBindingFactory().createActionBinding(adapter.getAdapterContext().getBindingContext(),
+	bindingContext.getBindingFactory().createActionBinding(bindingContext,
 			controlFactory.createButton(parent, getRemoveButtonText(), SWT.PUSH), //$NON-NLS-1$
 			removeAction,
-			new EnabledRuleExtension(new EnabledOnSingleSelectionCallback(protocolViewer))
+			createEnabledRuleExtension(new EnabledOnSingleSelectionCallback(protocolViewer))
 			);
 }
+
+protected EnabledRuleExtension createEnabledRuleExtension(EnabledCallback ...callbacks) {
+	List<EnabledCallback> enabledCallbacks = new ArrayList<EnabledCallback>();
+	for (EnabledCallback callback : callbacks)
+		enabledCallbacks.add(callback);
+	addAdditionalEnabledCallbacks(enabledCallbacks);
+	EnabledRuleExtension enabledExt = new EnabledRuleExtension(new CompoundEnabledCallback(enabledCallbacks.toArray(new EnabledCallback[enabledCallbacks.size()])));
+	return enabledExt;
+}
+
+protected void addAdditionalEnabledCallbacks(List<EnabledCallback> callbacks) {}
 
 protected abstract String getCorrectButtonText();
 
@@ -114,7 +130,7 @@ protected abstract String getRemoveButtonText();
 private TableViewer createProtocolViewer(Composite parent) {
 	protocolViewer = new TableViewer(controlFactory.createTable(parent, SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL | SWT.H_SCROLL | SWT.FULL_SELECTION));
 	
-	adapter.getAdapterContext().getBindingContext().getBindingFactory().createTableViewerListBinding(adapter.getAdapterContext().getBindingContext(), 
+	bindingContext.getBindingFactory().createTableViewerListBinding(bindingContext, 
 			protocolViewer, 
 			adapter, "detailsList",  //$NON-NLS-1$
 			new VBindingDomain("details",  //$NON-NLS-1$
