@@ -17,7 +17,6 @@ import org.mariella.rcp.databinding.CompoundEnabledCallback;
 import org.mariella.rcp.databinding.EnabledCallback;
 import org.mariella.rcp.databinding.EnabledOnSingleSelectionCallback;
 import org.mariella.rcp.databinding.EnabledRuleExtension;
-import org.mariella.rcp.databinding.SelectionManagementExtension;
 import org.mariella.rcp.databinding.VBindingContext;
 import org.mariella.rcp.databinding.VBindingDomain;
 import org.mariella.rcp.databinding.VBindingDomainExtension;
