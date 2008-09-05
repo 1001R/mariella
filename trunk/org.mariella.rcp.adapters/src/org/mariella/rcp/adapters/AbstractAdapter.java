@@ -7,7 +7,7 @@ import java.beans.PropertyChangeSupport;
 public abstract class AbstractAdapter implements Adapter {
 
 private final PropertyChangeSupport propertyChangeSupport = new FixedPropertyChangeSupport(this);
-protected AbstractAdapter parent = null;
+protected Adapter parent = null;
 protected final AdapterContext adapterContext;
 protected boolean silent = false;	// if silent, no property changes and dirty notifications are sent
 
@@ -15,7 +15,7 @@ public AbstractAdapter(AdapterContext context) {
 	this.adapterContext = context;
 }
 
-public AbstractAdapter(AdapterContext context, AbstractAdapter parent) {
+public AbstractAdapter(AdapterContext context, Adapter parent) {
 	this.adapterContext = context;
 	this.parent = parent;
 }
@@ -36,7 +36,7 @@ public AdapterContext getAdapterContext() {
 	return adapterContext;
 }
 
-public AbstractAdapter getParent() {
+public Adapter getParent() {
 	return parent;
 }
 

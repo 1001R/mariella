@@ -3,6 +3,7 @@ package org.mariella.rcp.adapters;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -22,12 +23,12 @@ import org.mariella.rcp.databinding.VBindingDomain;
 import org.mariella.rcp.databinding.VBindingDomainExtension;
 import org.mariella.rcp.util.ColumnLayout;
 
-public abstract class MasterDetailsControl <A extends MasterDetailsAdapter<D>, D extends Object> extends Composite {
+public abstract class MasterDetailsTableControl <A extends MasterDetailsAdapter<D>, D extends Object> extends Composite {
 
 	class AddDetailsAction extends Action {
 	@Override
 	public void run() {
-		D newDetails = adapter.addDetails();
+		D newDetails = getAdapter().addDetails();
 		addedDetails(newDetails);
 	}
 	}
@@ -36,11 +37,14 @@ public abstract class MasterDetailsControl <A extends MasterDetailsAdapter<D>, D
 	class RemoveDetailsAction extends Action {
 	@Override
 	public void run() {
-		adapter.removeSelectedDetails();
+		getAdapter().removeSelectedDetails();
 	}
 	}
 
-protected A adapter;
+private A adapter = null;
+private IObservableValue adapterObservable = null;
+
+
 protected ControlFactory controlFactory;
 protected TableViewer tableViewer;
 AddDetailsAction addDetailsAction;
@@ -49,11 +53,25 @@ VBindingContext bindingContext;	// the binding context of the UI
 
 protected void addedDetails(D details) {}
 
-public MasterDetailsControl(Composite parent, int style, A adapter, ControlFactory controlFactory, VBindingContext bindingContext) {
+public MasterDetailsTableControl(Composite parent, int style, IObservableValue adapterObservable, ControlFactory controlFactory, VBindingContext bindingContext) {
+	super(parent, style);
+	this.adapterObservable = adapterObservable; 
+	this.controlFactory = controlFactory;
+	this.bindingContext = bindingContext;
+	
+	initialize();
+}
+
+public MasterDetailsTableControl(Composite parent, int style, A adapter, ControlFactory controlFactory, VBindingContext bindingContext) {
 	super(parent, style);
 	this.adapter = adapter;
 	this.controlFactory = controlFactory;
 	this.bindingContext = bindingContext;
+	
+	initialize();
+}
+
+private void initialize() {
 	
 	setLayout(new FormLayout());
 
@@ -117,7 +135,7 @@ private TableViewer createTableViewer(Composite parent) {
 	
 	bindingContext.getBindingFactory().createTableViewerListBinding(bindingContext, 
 			tableViewer, 
-			adapter, "detailsList",  //$NON-NLS-1$
+			getAdapterObserved(), "detailsList",  //$NON-NLS-1$
 			new VBindingDomain("details",  //$NON-NLS-1$
 					Object.class,
 					buildTableBindingDomainExtensions()
@@ -125,7 +143,7 @@ private TableViewer createTableViewer(Composite parent) {
 	
 	bindingContext.getBindingFactory().createSingleSelectionBinding(bindingContext, 
 			tableViewer, 
-			adapter, "selectedDetails");
+			getAdapterObserved(), "selectedDetails");
 	
 	decorateTableViewer(tableViewer);
 	
@@ -138,7 +156,6 @@ private VBindingDomainExtension[] buildTableBindingDomainExtensions() {
 	List<VBindingDomainExtension> extensions = new ArrayList<VBindingDomainExtension>();
 	addTableBindingDomainExtensions(extensions);
 	
-	extensions.add(new SelectionManagementExtension("detailsList")); //$NON-NLS-1$
 	extensions.add(createEnabledRuleExtension());
 	
 	VBindingDomainExtension[] array = new VBindingDomainExtension[extensions.size()];
@@ -146,6 +163,16 @@ private VBindingDomainExtension[] buildTableBindingDomainExtensions() {
 	return array;
 }
 
+protected Object getAdapterObserved() {
+	if (adapter != null) return adapter;
+	return adapterObservable;
+}
+
 protected abstract void addTableBindingDomainExtensions(List<VBindingDomainExtension> extensions);
+
+public A getAdapter() {
+	if (adapter != null) return adapter;
+	return (A)adapterObservable.getValue();
+}
 
 }

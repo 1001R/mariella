@@ -8,16 +8,29 @@ import org.eclipse.core.databinding.observable.value.IObservableValue;
 public abstract class MasterDetailsAdapter<D extends Object> extends AbstractAdapter {
 
 	private D selectedDetails;
-	private final List<D> detailsList;
+	private List<D> detailsList;
 	private IObservableValue selectedDetailsObservable;
 	
-@SuppressWarnings("unchecked")
 public MasterDetailsAdapter(AdapterContext context) {
 	super(context);
-	detailsList = context.getBindingContext().getBindingFactory().createObservableList(context.getBindingContext());
-	selectedDetailsObservable = context.getBindingContext().getBindingFactory().createPropertyObservable(
-			context.getBindingContext(), 
+	initialize();
+}
+
+public MasterDetailsAdapter(AdapterContext context, Adapter parent) {
+	super(context, parent);
+	initialize();
+}
+
+private void initialize() {
+	detailsList = fetchDetailsList();
+	selectedDetailsObservable = adapterContext.getBindingContext().getBindingFactory().createPropertyObservable(
+			adapterContext.getBindingContext(), 
 			this, "selectedDetails"); //$NON-NLS-1$
+
+}
+
+protected List<D> fetchDetailsList() {
+	return adapterContext.getBindingContext().getBindingFactory().createObservableList(adapterContext.getBindingContext());
 }
 
 public void removeSelectedDetails() {
