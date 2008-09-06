@@ -20,15 +20,23 @@ public abstract class KeyedMasterDetailsAdapter<K extends Object, D extends Obje
 
 private D selectedDetails;
 
-private final List<D> detailsList;
+private List<D> detailsList;
 
 private IObservableValue selectedDetailsObservable;
 
-@SuppressWarnings("unchecked")
 public KeyedMasterDetailsAdapter(AdapterContext context) {
 	super(context);
-	detailsList = context.getBindingContext().getBindingFactory().createObservableList(context.getBindingContext());
-	selectedDetailsObservable = context.getBindingContext().getBindingFactory().createPropertyObservable(context.getBindingContext(), this, "selectedDetails"); //$NON-NLS-1$
+	initialize();
+}
+
+public KeyedMasterDetailsAdapter(AdapterContext context, Adapter parent) {
+	super(context, parent);
+	initialize();
+}
+
+private void initialize() {
+	detailsList = adapterContext.getBindingContext().getBindingFactory().createObservableList(adapterContext.getBindingContext());
+	selectedDetailsObservable = adapterContext.getBindingContext().getBindingFactory().createPropertyObservable(adapterContext.getBindingContext(), this, "selectedDetails"); //$NON-NLS-1$
 }
 
 public K getSelectedDetailsKey() {
