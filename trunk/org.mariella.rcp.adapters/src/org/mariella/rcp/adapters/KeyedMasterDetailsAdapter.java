@@ -6,7 +6,7 @@ import org.eclipse.core.databinding.observable.value.IObservableValue;
 
 /**
  * Useful for input management where you don't have an ecplicit "add" action, instead
- * an item is added to the detailsList by setting the "selectedDetailsKey" property.
+ * an item is added to the detailsList by setting the "selectedKey" property.
  * 
  * This is useful where you select/add an item with a scanner. (Like in a shop where
  * the products are scanned and each time an item is added to the list). 
@@ -39,14 +39,14 @@ private void initialize() {
 	selectedDetailsObservable = adapterContext.getBindingContext().getBindingFactory().createPropertyObservable(adapterContext.getBindingContext(), this, "selectedDetails"); //$NON-NLS-1$
 }
 
-public K getSelectedDetailsKey() {
+public K getSelectedKey() {
 	if (selectedDetails == null)
 		return null;
-	return getDetailsKey(selectedDetails);
+	return getKey(selectedDetails);
 }
 
-public void setSelectedDetailsKey(K key) {
-	Object oldKey = getSelectedDetailsKey();
+public void setSelectedKey(K key) {
+	Object oldKey = getSelectedKey();
 	Object oldDetails = selectedDetails;
 
 	if (key == null) {
@@ -65,7 +65,7 @@ public void setSelectedDetailsKey(K key) {
 		}
 	}
 
-	firePropertyChange("selectedDetailsKey", oldKey, key); //$NON-NLS-1$
+	firePropertyChange("selectedKey", oldKey, key); //$NON-NLS-1$
 	firePropertyChange("selectedDetails", oldDetails, selectedDetails); //$NON-NLS-1$
 }
 
@@ -74,11 +74,16 @@ protected boolean autoManageDetailsList() {
 }
 
 public void addSelectedDetailsToList() {
-	aboutToAddDetails(selectedDetails);
+	if (selectedDetails != null)
+		addDetails(selectedDetails);
+}
+
+public void addDetails(D details) {
+	aboutToAddDetails(details);
 	if (revertDetails())
-		detailsList.add(0, selectedDetails);
+		detailsList.add(0, details);
 	else
-		detailsList.add(selectedDetails);
+		detailsList.add(details);
 }
 
 public void removeSelectedDetailsFromList() {
@@ -87,7 +92,7 @@ public void removeSelectedDetailsFromList() {
 
 protected boolean isInDetailsList(K key) {
 	for (D d : detailsList)
-		if (matchesKey(getDetailsKey(d), key))
+		if (matchesKey(getKey(d), key))
 			return true;
 	return false;
 }
@@ -96,9 +101,9 @@ protected boolean revertDetails() {
 	return true;
 }
 
-private D getDetails(K key) {
+public D getDetails(K key) {
 	for (D details : detailsList) {
-		if (matchesKey(getDetailsKey(details), key))
+		if (matchesKey(getKey(details), key))
 			return details;
 	}
 	return null;
@@ -106,7 +111,7 @@ private D getDetails(K key) {
 
 protected abstract boolean matchesKey(K key1, K key2);
 
-protected abstract K getDetailsKey(D details);
+protected abstract K getKey(D details);
 
 protected abstract D createDetails(K key);
 
@@ -128,7 +133,7 @@ public void removeDetails(D details) {
 	aboutToRemoveDetails(details);
 	detailsList.remove(details);
 	if (selectedDetails == details && autoManageDetailsList())
-		setSelectedDetailsKey(null);
+		setSelectedKey(null);
 	getAdapterContext().adapterDirtyNotification(this);
 }
 
@@ -139,7 +144,7 @@ public List<D> getDetailsList() {
 public void clearDetailsList() {
 	detailsList.clear();
 	if (autoManageDetailsList())
-		setSelectedDetailsKey(null);
+		setSelectedKey(null);
 	adapterContext.adapterDirtyNotification(this);
 }
 }

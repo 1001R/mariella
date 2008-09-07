@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FormAttachment;
@@ -38,22 +38,11 @@ public abstract class KeyedMasterDetailsProtocolControl<A extends KeyedMasterDet
 		adapter.removeDetails(d);
 	}
 	}
-
-	class EditAgainAction extends Action {
-	@SuppressWarnings("unchecked")
-	@Override
-	public void run() {
-		IStructuredSelection sel = (IStructuredSelection)protocolViewer.getSelection();
-		D d = (D)sel.getFirstElement();
-		adapter.setSelectedDetailsKey(adapter.getDetailsKey(d));
-	}
-	}
 	
 	
 	A adapter;
 	ControlFactory controlFactory;
 	TableViewer protocolViewer;
-	EditAgainAction editAgainAction;
 	RemoveAction removeAction;
 	VBindingContext bindingContext;	// the binding context of the UI
 
@@ -83,24 +72,17 @@ public KeyedMasterDetailsProtocolControl(Composite parent, int style, A adapter,
 	
 	buttonComposite.setLayout(new ColumnLayout(0, 2));
 	
-	addEditAgainAction(buttonComposite);
 	addRemoveRowAction(buttonComposite);
 	
-	protocolViewer.addDoubleClickListener(new IDoubleClickListener() {
-		public void doubleClick(DoubleClickEvent event) {
-			if (editAgainAction.isEnabled())
-				editAgainAction.run();
+	protocolViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+		@Override
+		public void selectionChanged(SelectionChangedEvent event) {
+			IStructuredSelection sel = (IStructuredSelection)protocolViewer.getSelection();
+			if (sel.isEmpty()) return;
+			D d = (D)sel.getFirstElement();
+			KeyedMasterDetailsProtocolControl.this.adapter.setSelectedKey(KeyedMasterDetailsProtocolControl.this.adapter.getKey(d));
 		}
 	});
-}
-
-private void addEditAgainAction(Composite parent) {
-	editAgainAction = new EditAgainAction();
-	bindingContext.getBindingFactory().createActionBinding(bindingContext,
-			controlFactory.createButton(parent, getCorrectButtonText(), SWT.PUSH), //$NON-NLS-1$
-			editAgainAction,
-			createEnabledRuleExtension(new EnabledOnSingleSelectionCallback(protocolViewer))
-			);
 }
 
 private void addRemoveRowAction(Composite parent) {
@@ -122,8 +104,6 @@ protected EnabledRuleExtension createEnabledRuleExtension(EnabledCallback ...cal
 }
 
 protected void addAdditionalEnabledCallbacks(List<EnabledCallback> callbacks) {}
-
-protected abstract String getCorrectButtonText();
 
 protected abstract String getRemoveButtonText();
 
