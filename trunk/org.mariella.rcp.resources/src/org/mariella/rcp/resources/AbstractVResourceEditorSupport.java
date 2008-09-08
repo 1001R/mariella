@@ -156,4 +156,9 @@ public boolean isDirty() {
 }
 
 
+public VResourceEditorPart getEditorPart() {
+	return editorPart;
+}
+
+
 }
