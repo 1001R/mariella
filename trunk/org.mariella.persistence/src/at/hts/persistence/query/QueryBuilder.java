@@ -93,6 +93,10 @@ public TableReference join(ClassDescription classDescription, String alias) {
 	return tableReference;
 }
 
+public ClassMapping getClassMapping(String alias) {
+	return aliasToClassMappingMap.get(alias);
+}
+
 public TableReference join(String pathExpression) {
 	PathExpressionParser parser = new PathExpressionParser();
 	new PathExpression(pathExpression).visit(parser);
