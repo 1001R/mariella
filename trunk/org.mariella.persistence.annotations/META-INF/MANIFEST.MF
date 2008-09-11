@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Annotations Plug-in
+Bundle-SymbolicName: org.mariella.persistence.annotations
+Bundle-Version: 1.0.0
+Bundle-Activator: org.mariella.persistence.annotations.AnnotationsPlugin
+Require-Bundle: org.eclipse.core.runtime
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: org.mariella.persistence.annotations

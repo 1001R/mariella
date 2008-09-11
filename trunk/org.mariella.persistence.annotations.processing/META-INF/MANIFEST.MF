@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Mariella Annotations Plug-in
+Bundle-SymbolicName: org.mariella.persistence.annotations.processing
+Bundle-Version: 1.0.0
+Bundle-Activator: org.mariella.persistence.annotations.processing.AnnotationsPlugin
+Require-Bundle: org.eclipse.core.runtime,
+ org.mariella.persistence.annotations;bundle-version="1.0.0",
+ javax.persistence;bundle-version="1.0.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Classpath: lib/javassist.jar,
+ .
+Export-Package: org.mariella.persistence.annotations.processing
