@@ -21,6 +21,8 @@ public SearchImplementation(T queryParameter) {
 	this.queryParameter = queryParameter;
 }
 
+public abstract String getLabel();
+
 @SuppressWarnings("unchecked")
 public E search(Shell parentShell, String title) {
 	SearchDialog dialog = new SearchDialog(parentShell, title);
