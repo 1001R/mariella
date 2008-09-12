@@ -74,7 +74,13 @@ public QueryBuilder(SchemaMapping schemaMapping, NamespaceProvider namespaceProv
 public QueryBuilder(SchemaMapping schemaMapping) {
 	super();
 	this.schemaMapping = schemaMapping;
-	this.namespaceProvider = QueryBuilderNamespaceProvider.Default;
+	this.namespaceProvider = new QueryBuilderNamespaceProvider() {
+		private QueryBuilderNamespace namespace = new QueryBuilderNamespace();
+		
+		public QueryBuilderNamespace getNamespace(String pathExpression) {
+			return namespace;
+		}
+	};
 }
 
 public void addListener(QueryBuilderListener listener) {
