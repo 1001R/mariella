@@ -26,21 +26,17 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableColumn;
-import org.mariella.glue.service.Context;
 import org.mariella.glue.service.QueryResult;
-import org.mariella.rcp.databinding.VBindingContext;
 import org.mariella.rcp.forms.ControlFactory;
 import org.mariella.rcp.forms.DialogControlFactory;
 
 import at.hts.persistence.runtime.BeanInfo;
 import at.hts.persistence.runtime.Introspector;
-import at.hts.persistence.schema.ClassDescription;
 
-public abstract class SearchDialog <T, E> extends Dialog {
+public class SearchDialog extends Dialog {
 	private Action searchAction = new Action("Search") {
 		public void run() {
-			Context context = createContext();
-			QueryResult<E> result = search(context);
+			QueryResult<?> result = implementation.search();
 			setSearchResult(result);
 		};
 	};
@@ -48,29 +44,33 @@ public abstract class SearchDialog <T, E> extends Dialog {
 	private String title;
 	protected TableViewer tableViewer;
 	
-	protected T searchParameter;
-	protected VBindingContext bindingContext;
 	protected ControlFactory controlFactory;
-	protected SearchCompositeDecorator<T> decorator;
-	protected QueryResult<E> queryResult;
+	protected SearchImplementation<?, ?> implementation;
+	protected QueryResult<?> queryResult;
 
-	protected E selection;
+	protected Object selection;
 
-public SearchDialog(Shell parentShell, T searchParameter, String title) {
+public SearchDialog(Shell parentShell, String title) {
 	super(parentShell);
-	this.searchParameter = searchParameter;
 	this.title = title;
 }
 
-protected abstract SearchCompositeDecorator<T> createDecorator(Composite composite); 
-protected abstract QueryResult<E> search(Context context);
-protected abstract Context createContext();
-protected abstract VBindingContext createBindingContext();
-protected abstract String getColumnText(E element, int columnIndex);
-protected abstract Image getColumnImage(E element, int columnIndex);
-protected abstract void addTableColumns();
+public SearchImplementation<?, ?> getImplementation() {
+	return implementation;
+}
 
-protected void setSearchResult(QueryResult<E> queryResult) {
+public void setImplementation(SearchImplementation<?, ?> implementation) {
+	this.implementation = implementation;
+}
+
+@Override
+public boolean close() {
+	boolean result = super.close();
+	implementation.dispose();
+	return result;
+}
+
+protected void setSearchResult(QueryResult<?> queryResult) {
 	this.queryResult = queryResult;
 	initializeTableViewer();
 	tableViewer.setInput(queryResult);
@@ -81,7 +81,7 @@ protected void initializeTableViewer() {
 		tc.dispose();
 	}
 	if(queryResult != null && !queryResult.getResult().isEmpty()) {
-		addTableColumns();
+		implementation.addTableColumns(tableViewer);
 	}
 	tableViewer.getTable().setHeaderVisible(true);
 	tableViewer.refresh();
@@ -95,7 +95,6 @@ protected void configureShell(Shell newShell) {
 
 @Override
 protected Control createDialogArea(Composite parent) {
-	bindingContext = createBindingContext();
 	controlFactory = new DialogControlFactory();
 	
 	Composite composite = new Composite(parent, SWT.None);
@@ -109,9 +108,9 @@ protected Control createDialogArea(Composite parent) {
 	GridLayout layout = new GridLayout(4, false);
 	group.setLayout(layout);
 
-	decorator = createDecorator(group);
-	decorator.setSearchParameter(searchParameter);
-	decorator.decorateComposite();
+	implementation.setControlFactory(controlFactory);
+	implementation.setComposite(group);
+	implementation.decorateComposite();
 	
 	Composite buttonComposite = new Composite(group, SWT.None);
 	buttonComposite.setLayout(new FillLayout());
@@ -145,7 +144,6 @@ protected Control createDialogArea(Composite parent) {
 			}
 		}
 	);
-	bindingContext.updateTargets();
 	
 	return composite;
 }
@@ -160,7 +158,7 @@ protected void tableSelectionChanged() {
 	getButton(IDialogConstants.OK_ID).setEnabled(!tableViewer.getSelection().isEmpty());
 }
 
-protected Object getValue(E element, String propertyName) {
+protected Object getValue(Object element, String propertyName) {
 	BeanInfo bi = Introspector.Singleton.getBeanInfo(element.getClass());
 	try {
 		PropertyDescriptor pd = bi.getPropertyDescriptor(propertyName);
@@ -171,13 +169,12 @@ protected Object getValue(E element, String propertyName) {
 }
 
 @Override
-@SuppressWarnings("unchecked")
 protected void okPressed() {
-	selection = (E)((IStructuredSelection)tableViewer.getSelection()).getFirstElement();
+	selection = ((IStructuredSelection)tableViewer.getSelection()).getFirstElement();
 	super.okPressed();
 }
 
-public E getSelection() {
+public Object getSelection() {
 	return selection;
 }
 
@@ -192,9 +189,8 @@ protected IStructuredContentProvider createContentProvider() {
 		}
 	
 		@Override
-		@SuppressWarnings("unchecked")
 		public Object[] getElements(Object inputElement) {
-			return inputElement == null ? null : ((QueryResult<E>)inputElement).getResult().toArray();
+			return inputElement == null ? null : ((QueryResult<?>)inputElement).getResult().toArray();
 		}
 	};
 }
@@ -219,15 +215,13 @@ protected ITableLabelProvider createLabelProvider() {
 		}
 	
 		@Override
-		@SuppressWarnings("unchecked")
 		public String getColumnText(Object element, int columnIndex) {
-			return SearchDialog.this.getColumnText((E)element, columnIndex);
+			return implementation.getColumnText(element, columnIndex);
 		}
 	
 		@Override
-		@SuppressWarnings("unchecked")
 		public Image getColumnImage(Object element, int columnIndex) {
-			return SearchDialog.this.getColumnImage((E)element, columnIndex);
+			return implementation.getColumnImage(element, columnIndex);
 		}
 	};
 }
