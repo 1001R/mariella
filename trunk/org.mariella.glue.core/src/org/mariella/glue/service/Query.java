@@ -12,6 +12,8 @@ import java.util.Map;
 import org.mariella.glue.core.Activator;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import at.hts.persistence.database.Column;
+import at.hts.persistence.database.Converter;
 import at.hts.persistence.query.BinaryCondition;
 import at.hts.persistence.query.ColumnReference;
 import at.hts.persistence.query.Expression;
@@ -30,6 +32,8 @@ public abstract class Query <T, E>{
 	protected final T searchParameter;
 
 	protected Map<Parameter, String> parameterNames= new HashMap<Parameter, String>();
+	protected Map<Parameter, Column> parameterColumns = new HashMap<Parameter, Column>();
+	
 	protected List<Parameter> parameters = new ArrayList<Parameter>();
 	protected List<String> resultProperties = new ArrayList<String>();
 	
@@ -117,16 +121,17 @@ protected BinaryCondition neq(String parameterName, String pathExpression) {
 	return addBinaryCondition(parameterName, pathExpression, "<>");
 }
 
-protected Parameter createParameter(String parameterName) {
+protected Parameter createParameter(String parameterName, Column column) {
 	Parameter parameter = new Parameter();
 	parameterNames.put(parameter, parameterName);
+	parameterColumns.put(parameter, column);
 	parameters.add(parameter);
 	return parameter;
 }
 
 protected BinaryCondition addBinaryCondition(String parameterName, String pathExpression, String operator) {
 	ColumnReference columnReference = queryBuilder.createColumnReference(pathExpression);
-	Parameter parameter = createParameter(parameterName);
+	Parameter parameter = createParameter(parameterName, columnReference.getColumn());
 	
 	BinaryCondition binaryCondition = new BinaryCondition();
 	binaryCondition.setLeft(columnReference);
@@ -141,17 +146,19 @@ protected void setParameters(PreparedStatement ps) {
 	int idx = 1;
 	for(Parameter parameter : parameters) {
 		String parameterName = parameterNames.get(parameter);
-		setParameter(ps, parameterName, idx);
+		Column column = parameterColumns.get(parameter);
+		setParameter(ps, column, parameterName, idx);
 		idx++;
 	}
 }
 
-protected void setParameter(PreparedStatement preparedStatement, String parameterName, int idx) {
+@SuppressWarnings("unchecked")
+protected void setParameter(PreparedStatement preparedStatement, Column column, String parameterName, int idx) {
 	BeanInfo beanInfo = Introspector.Singleton.getBeanInfo(searchParameter.getClass());
 	PropertyDescriptor pd = beanInfo.getPropertyDescriptor(parameterName);
 	try {
 		Object value = pd.getReadMethod().invoke(searchParameter, new Object[] {});
-		preparedStatement.setObject(idx, value);
+		((Converter)column.getConverter()).setObject(preparedStatement, idx, column.getType(), value);
 	} catch(Exception e) {
 		throw new RuntimeException(e);
 	}

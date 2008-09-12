@@ -1,8 +1,10 @@
 package org.mariella.glue.service;
 
-public class EntityQueryResult {
+public abstract class EntityQueryResult {
 	private long id;
 
+public abstract Class<?> getEntityClass();
+	
 public long getId() {
 	return id;
 }

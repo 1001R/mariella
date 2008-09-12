@@ -3,7 +3,7 @@ package org.mariella.glue.service;
 import java.sql.Timestamp;
 
 
-public class LostUpdateEntityQueryResult extends EntityQueryResult {
+public abstract class LostUpdateEntityQueryResult extends EntityQueryResult {
 	private String createUser;
 	private Timestamp createTimestamp;
 	private String updateUser;
