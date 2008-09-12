@@ -27,8 +27,8 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableColumn;
 import org.mariella.glue.service.QueryResult;
-import org.mariella.rcp.forms.ControlFactory;
-import org.mariella.rcp.forms.DialogControlFactory;
+import org.mariella.rcp.ControlFactory;
+import org.mariella.rcp.DialogControlFactory;
 
 import at.hts.persistence.runtime.BeanInfo;
 import at.hts.persistence.runtime.Introspector;

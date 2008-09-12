@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.mariella.glue.service.QueryResult;
-import org.mariella.rcp.forms.ControlFactory;
+import org.mariella.rcp.ControlFactory;
 
 public abstract class SearchImplementation <T, E> {
 	protected ControlFactory controlFactory;
