@@ -11,9 +11,9 @@ public class ParseAnnotationsTest {
 @Test
 public void parseAnnotations() throws Exception {
 	OxyUnitInfoBuilder b = new OxyUnitInfoBuilder();
-	//b.setClassLoader(ParseAnnotationsTest.class.getClassLoader());
 	b.setBundle(Activator.getDefault().getBundle());
 	b.build();
+	
 	List<OxyUnitInfo> infos = b.getOxyUnitInfos();
 	for (OxyUnitInfo info : infos) {
 		info.debugPrint(System.out);
