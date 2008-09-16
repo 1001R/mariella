@@ -45,6 +45,7 @@ public boolean close() {
 
 @Override
 protected Control createDialogArea(Composite parent) {
+	parent.setLayout(new FillLayout());
 	controlFactory = new DialogControlFactory();
 	
 	Composite composite = new Composite(parent, SWT.None);
