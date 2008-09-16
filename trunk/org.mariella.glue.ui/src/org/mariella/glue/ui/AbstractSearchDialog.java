@@ -70,6 +70,8 @@ protected void initializeTableViewer() {
 protected void configureShell(Shell newShell) {
 	super.configureShell(newShell);
 	newShell.setText(title);
+	
+	newShell.setMinimumSize(300, 400);
 }
 
 protected void createTableViewer(Composite parent) {
