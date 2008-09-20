@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Test Plug-in
+Bundle-SymbolicName: org.mariella.glue.annotations.processing.test
+Bundle-Version: 1.0.0
+Bundle-Activator: org.mariella.glue.annotations.processing.test.Activator
+Require-Bundle: org.eclipse.core.runtime,
+ org.mariella.glue.annotations;bundle-version="1.0.0",
+ org.mariella.glue.annotations.processing;bundle-version="1.0.0",
+ org.junit4;bundle-version="4.3.1",
+ javax.persistence;bundle-version="1.0.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: org.mariella.glue.annotations.processing.test

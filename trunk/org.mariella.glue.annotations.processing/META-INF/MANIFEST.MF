@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Processing Plug-in
+Bundle-SymbolicName: org.mariella.glue.annotations.processing
+Bundle-Version: 1.0.0
+Bundle-Activator: org.mariella.glue.annotations.processing.AnnotationsProcessingPlugin
+Require-Bundle: org.eclipse.core.runtime,
+ org.mariella.glue.annotations;bundle-version="1.0.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-Classpath: lib/javassist.jar,
+ .
+Export-Package: org.mariella.glue.annotations.processing
