@@ -29,7 +29,7 @@ import org.mariella.rcp.util.ColumnLayout;
 public abstract class KeyedMasterDetailsProtocolControl<A extends KeyedMasterDetailsAdapter<K,D>, K extends Object, D extends Object> extends Composite {
 
 	
-	class RemoveAction extends Action {
+	public class RemoveAction extends Action {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void run() {
@@ -75,6 +75,7 @@ public KeyedMasterDetailsProtocolControl(Composite parent, int style, A adapter,
 	addRemoveRowAction(buttonComposite);
 	
 	protocolViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+		@SuppressWarnings("unchecked")
 		@Override
 		public void selectionChanged(SelectionChangedEvent event) {
 			IStructuredSelection sel = (IStructuredSelection)protocolViewer.getSelection();
@@ -86,12 +87,16 @@ public KeyedMasterDetailsProtocolControl(Composite parent, int style, A adapter,
 }
 
 private void addRemoveRowAction(Composite parent) {
-	removeAction = new RemoveAction();
+	removeAction = createRemoveAction();
 	bindingContext.getBindingFactory().createActionBinding(bindingContext,
 			controlFactory.createButton(parent, getRemoveButtonText(), SWT.PUSH), //$NON-NLS-1$
 			removeAction,
 			createEnabledRuleExtension(new EnabledOnSingleSelectionCallback(protocolViewer))
 			);
+}
+
+protected RemoveAction createRemoveAction() {
+	return new RemoveAction();
 }
 
 protected EnabledRuleExtension createEnabledRuleExtension(EnabledCallback ...callbacks) {
@@ -138,5 +143,9 @@ private VBindingDomainExtension[] buildTableBindingDomainExtensions() {
 }
 
 protected abstract void addTableBindingDomainExtensions(List<VBindingDomainExtension> extensions);
+
+public A getAdapter() {
+	return adapter;
+}
 
 }

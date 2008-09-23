@@ -34,6 +34,7 @@ public KeyedMasterDetailsAdapter(AdapterContext context, Adapter parent) {
 	initialize();
 }
 
+@SuppressWarnings("unchecked")
 private void initialize() {
 	detailsList = adapterContext.getBindingContext().getBindingFactory().createObservableList(adapterContext.getBindingContext());
 	selectedDetailsObservable = adapterContext.getBindingContext().getBindingFactory().createPropertyObservable(adapterContext.getBindingContext(), this, "selectedDetails"); //$NON-NLS-1$

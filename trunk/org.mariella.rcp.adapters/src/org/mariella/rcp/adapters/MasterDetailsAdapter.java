@@ -29,6 +29,7 @@ private void initialize() {
 
 }
 
+@SuppressWarnings("unchecked")
 protected List<D> fetchDetailsList() {
 	return adapterContext.getBindingContext().getBindingFactory().createObservableList(adapterContext.getBindingContext());
 }

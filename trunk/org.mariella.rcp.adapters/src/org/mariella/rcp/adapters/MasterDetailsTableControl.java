@@ -122,6 +122,7 @@ protected Object getAdapterObserved() {
 
 protected abstract void addTableBindingDomainExtensions(List<VBindingDomainExtension> extensions);
 
+@SuppressWarnings("unchecked")
 public A getAdapter() {
 	if (adapter != null) return adapter;
 	return (A)adapterObservable.getValue();
