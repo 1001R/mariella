@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -18,6 +19,7 @@ public class Partner extends Subject {
 
 	private Address billingAddress;
 	private Company ownedCompany;
+	
 	private List<Partner>employees;
 	private Partner employedBy;
 	private Blob myblob;

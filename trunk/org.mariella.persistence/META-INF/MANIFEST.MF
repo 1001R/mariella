@@ -10,8 +10,11 @@ Export-Package: at.hts.persistence.database,
  at.hts.persistence.query,
  at.hts.persistence.runtime,
  at.hts.persistence.schema,
- at.hts.persistence.util
+ at.hts.persistence.util,
+ org.mariella.persistence.annotations.mapping_builder
 Bundle-Activator: at.hts.persistence.runtime.MariellaPersistence
-Require-Bundle: org.eclipse.core.runtime;bundle-version="3.4.0"
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.4.0",
+ org.mariella.persistence.annotations;bundle-version="1.0.0",
+ org.mariella.persistence.annotations.processing;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

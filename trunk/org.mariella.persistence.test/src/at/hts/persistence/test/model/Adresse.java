@@ -1,6 +1,9 @@
 package at.hts.persistence.test.model;
 
+import javax.persistence.Entity;
 
+
+@Entity
 public abstract class Adresse extends Superclass {
 	private String strasse;
 	private Person person;

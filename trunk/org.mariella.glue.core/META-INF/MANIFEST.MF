@@ -6,7 +6,8 @@ Bundle-Version: 1.0.0
 Bundle-Activator: org.mariella.glue.core.Activator
 Require-Bundle: org.eclipse.core.runtime,
  spring;bundle-version="1.0.0",
- org.mariella.persistence;bundle-version="1.0.0"
+ org.mariella.persistence;bundle-version="1.0.0",
+ javax.persistence;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.mariella.glue.service

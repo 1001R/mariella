@@ -17,20 +17,20 @@ import javax.sql.DataSource;
 @SuppressWarnings("unchecked")
 public class OxyUnitInfo implements PersistenceUnitInfo {
 
-List<URL> jarFileUrls = new ArrayList<URL>(); 
-List<String> managedClassNames = new ArrayList<String>();
-String persistenceUnitName = null;
-URL persistenceUnitRootUrl = null;
-Properties properties = new Properties();
-Map<Class,ClassInfo> classToInfoMap = new HashMap<Class,ClassInfo>();
-List<ClassInfo> hierarchyOrderedClassInfos = new ArrayList<ClassInfo>();
-List<ClusterInfo> clusterInfos = new ArrayList<ClusterInfo>();
-List<SqlResultSetMappingInfo> sqlResultSetMappingInfos = new ArrayList<SqlResultSetMappingInfo>();
-List<NamedNativeQueryInfo> namedNativeQueryInfos = new ArrayList<NamedNativeQueryInfo>();
-List<SequenceGeneratorInfo> sequenceGeneratorInfos = new ArrayList<SequenceGeneratorInfo>();
-List<TableGeneratorInfo> tableGeneratorInfos = new ArrayList<TableGeneratorInfo>();
-List<DomainDefinitionInfo> domainDefinitionInfos = new ArrayList<DomainDefinitionInfo>();
-
+	List<URL> jarFileUrls = new ArrayList<URL>(); 
+	List<String> managedClassNames = new ArrayList<String>();
+	String persistenceUnitName = null;
+	URL persistenceUnitRootUrl = null;
+	Properties properties = new Properties();
+	Map<Class,ClassInfo> classToInfoMap = new HashMap<Class,ClassInfo>();
+	List<ClassInfo> hierarchyOrderedClassInfos = new ArrayList<ClassInfo>();
+	List<ClusterInfo> clusterInfos = new ArrayList<ClusterInfo>();
+	List<SqlResultSetMappingInfo> sqlResultSetMappingInfos = new ArrayList<SqlResultSetMappingInfo>();
+	List<NamedNativeQueryInfo> namedNativeQueryInfos = new ArrayList<NamedNativeQueryInfo>();
+	List<SequenceGeneratorInfo> sequenceGeneratorInfos = new ArrayList<SequenceGeneratorInfo>();
+	List<TableGeneratorInfo> tableGeneratorInfos = new ArrayList<TableGeneratorInfo>();
+	List<DomainDefinitionInfo> domainDefinitionInfos = new ArrayList<DomainDefinitionInfo>();
+	
 public Collection<ClassInfo> getClassInfos() {
 	return classToInfoMap.values();
 }

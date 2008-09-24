@@ -45,13 +45,12 @@ public boolean close() {
 
 @Override
 protected Control createDialogArea(Composite parent) {
-	parent.setLayout(new FillLayout());
+	parent.setLayout(new GridLayout(1, false));
 	controlFactory = new DialogControlFactory();
 	
 	Composite composite = new Composite(parent, SWT.None);
 	composite.setLayout(new FillLayout(SWT.VERTICAL));
 
-	
 	tabFolder = new TabFolder(composite, SWT.None);
 	Group group;
 	

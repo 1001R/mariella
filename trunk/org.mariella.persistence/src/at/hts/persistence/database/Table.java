@@ -24,6 +24,9 @@ public void setName(String name) {
 	this.name = name;
 }
 
+public String getSchema() {
+	return null;
+}
 public Collection<Column> getColumns() {
 	return columns.values();
 }

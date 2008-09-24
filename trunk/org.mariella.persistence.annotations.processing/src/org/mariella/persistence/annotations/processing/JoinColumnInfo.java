@@ -6,8 +6,11 @@ import javax.persistence.JoinColumn;
 
 public class JoinColumnInfo {
 
-private JoinColumn joinColumn;
+	private JoinColumn joinColumn;
 
+public JoinColumnInfo() {
+}	
+	
 public String getName() {
 	return joinColumn.name();
 }
