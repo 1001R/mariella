@@ -455,7 +455,7 @@ void mergeOverridenAttributes() {
 	for (AttributeInfo attrInfo : nameToAttributeInfoMap.values()) {
 		AttributeInfo overriddenAttrInfo = removeOverriddenAttributeInfo(attrInfo);
 		if (overriddenAttrInfo != null)
-			attrInfo.override(overriddenAttrInfo);
+			attrInfo.overrideWith(overriddenAttrInfo);
 	}
 }
 

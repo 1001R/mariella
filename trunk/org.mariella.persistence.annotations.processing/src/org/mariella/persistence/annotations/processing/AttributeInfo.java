@@ -69,7 +69,7 @@ public String toString() {
 	return parentClassInfo.getName() + "." + getName();
 }
 
-public void override(AttributeInfo overriddenAttrInfo) {
+public void overrideWith(AttributeInfo overriddenAttrInfo) {
 	
 }
 

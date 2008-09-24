@@ -30,7 +30,7 @@ void setJoinColumnInfos(List<JoinColumnInfo> joinColumnInfos) {
 }
 
 @Override
-public void override(AttributeInfo overriddenAttrInfo) {
+public void overrideWith(AttributeInfo overriddenAttrInfo) {
 	if (joinColumnInfos == null) {
 		joinColumnInfos = ((ToOneAttributeInfo)overriddenAttrInfo).joinColumnInfos;
 	}

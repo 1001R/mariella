@@ -109,7 +109,7 @@ void setConverterName(String converterName) {
 }
 
 @Override
-public void override(AttributeInfo overriddenAttrInfo) {
+public void overrideWith(AttributeInfo overriddenAttrInfo) {
 	if (columnInfo == null) {
 		columnInfo = ((BasicAttributeInfo)overriddenAttrInfo).columnInfo;
 	}
