@@ -15,6 +15,7 @@ public class Person extends Partner {
 	private String surname;
 	private String givenName;
 	private Date dateOfBirth;
+	private Underpants currentUnderpants;
 
 @Column(name="DATEOFBIRTH", nullable=false)
 public Date getDateOfBirth() {
@@ -31,6 +32,10 @@ public String getSurname() {
 	return surname;
 }
 
+public Underpants getCurrentUnderpants() {
+	return currentUnderpants;
+}
+
 public void setGivenName(String givenName) {
 	this.givenName = givenName;
 }
@@ -41,6 +46,10 @@ public void setDateOfBirth(Date dateOfBirth) {
 
 public void setSurname(String surname) {
 	this.surname = surname;
+}
+
+public void setCurrentUnderpants(Underpants currentUnderpants) {
+	this.currentUnderpants = currentUnderpants;
 }
 
 }

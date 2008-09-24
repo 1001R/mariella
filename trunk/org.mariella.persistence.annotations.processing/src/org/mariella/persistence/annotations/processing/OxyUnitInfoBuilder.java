@@ -17,6 +17,7 @@ import java.util.Map;
 import javassist.bytecode.AnnotationsAttribute;
 import javassist.bytecode.ClassFile;
 
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Inheritance;
@@ -67,7 +68,6 @@ public class OxyUnitInfoBuilder {
 		parsePersistenceUnits();
 		for (OxyUnitInfo info : oxyUnitInfos) {
 			parseAnnotations(info);
-			//info.debugPrint(System.out);
 		}
 	}
 
@@ -75,6 +75,7 @@ public class OxyUnitInfoBuilder {
 		Map<Class,List<Class>> annotationToClassesMap = readAnnotatedClasses(
 				oxyUnitInfo, 
 				Entity.class, 
+				Embeddable.class, 
 				Cluster.class,
 				SqlResultSetMapping.class,
 				SqlResultSetMappings.class,
@@ -82,6 +83,7 @@ public class OxyUnitInfoBuilder {
 				NamedNativeQueries.class,
 				DomainDefinitions.class,
 				DomainDefinition.class);
+		parseEmbeddables(oxyUnitInfo, annotationToClassesMap.get(Embeddable.class));
 		parseEntities(oxyUnitInfo, annotationToClassesMap.get(Entity.class));
 		processEntityListenerClassInfoBuilders();
 		
@@ -182,6 +184,25 @@ public class OxyUnitInfoBuilder {
 		
 	}
 
+	private void parseEmbeddables(OxyUnitInfo oxyUnitInfo, List<Class> classes) throws Exception {
+		for (Class clazz : classes) {
+			parseEmbeddable(oxyUnitInfo, clazz);
+		}
+
+		for (Class clazz: classes) {
+			ClassInfo ci = oxyUnitInfo.classToInfoMap.get(clazz);
+			((EmbeddableInfo)ci).buildAttributeInfos();
+		}
+	}
+
+	private void parseEmbeddable(OxyUnitInfo oxyUnitInfo, Class clazz) {
+		EmbeddableInfo info = new EmbeddableInfo();
+		info.setAnnotation(clazz.getAnnotation(Embeddable.class));
+		info.setClazz(clazz);
+		info.setOxyUnitInfo(oxyUnitInfo);
+		oxyUnitInfo.classToInfoMap.put(clazz, info);
+	}
+
 	private void parseEntities(OxyUnitInfo oxyUnitInfo, List<Class> entityClasses) throws Exception {
 		entityClasses = addMappedSuperclasses(entityClasses);
 		entityClasses = orderHierarchy(entityClasses);
@@ -234,12 +255,14 @@ public class OxyUnitInfoBuilder {
 		} else
 			throw new RuntimeException("Not a valid class: " + clazz);
 
+		
 		if (clazz.isAnnotationPresent(EntityListeners.class)) {
 			EntityListeners entityListeners = ((AnnotatedElement)clazz).getAnnotation(EntityListeners.class);
 			for (Class lclazz : entityListeners.value()) {
 				buildEntityListenerClassInfoBuilder(oxyUnitInfo, lclazz, info);
 			}
 		}
+
 
 		info.setOxyUnitInfo(oxyUnitInfo);
 		info.setClazz(clazz);
@@ -305,7 +328,6 @@ public class OxyUnitInfoBuilder {
 		for ( Class clazz : orderedClasses ) {
 			Class superClazz = clazz.getSuperclass();
 			if ( ! newOrderedClasses.contains( superClazz ) ) {
-				//maybe an implicit embeddable superclass
 				addMappedSuperclasses( clazz, newOrderedClasses );
 			}
 		}

@@ -377,15 +377,15 @@ void addAttributeInfo(AttributeInfo attrInfo) {
 }
 
 public void debugPrint(PrintStream out) {
-	if (this instanceof MappedSuperclassInfo)
-		out.print("[");
 	out.print(clazz.getSimpleName());
 	if (superclassInfo != null) {
 		out.print(" extends ");
 		out.print(superclassInfo);
 	}
 	if (this instanceof MappedSuperclassInfo)
-		out.print("]");
+		out.print(" (MappedSuperclass)");
+	if (this instanceof EmbeddableInfo)
+		out.print(" (Embeddable)");
 	out.println();
 	for (AttributeInfo ai : attributeInfos)
 		ai.debugPrint(out);
