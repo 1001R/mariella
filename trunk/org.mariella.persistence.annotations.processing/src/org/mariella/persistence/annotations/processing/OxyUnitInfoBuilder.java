@@ -212,6 +212,11 @@ public class OxyUnitInfoBuilder {
 			ClassInfo ci = oxyUnitInfo.classToInfoMap.get(clazz);
 			ci.buildLifecycleEventInfos();
 		}
+		for (Class clazz : annotatedClasses) {
+			ClassInfo ci = oxyUnitInfo.classToInfoMap.get(clazz);
+			if (ci instanceof MappedClassInfo)
+				((MappedClassInfo)ci).mergeOverridenAttributes();
+		}
 	}
 	
 	private void buildClassInfo(OxyUnitInfo oxyUnitInfo, Class clazz) {

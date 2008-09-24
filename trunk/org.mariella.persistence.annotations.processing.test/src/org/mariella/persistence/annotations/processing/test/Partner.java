@@ -9,6 +9,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.mariella.persistence.annotations.Converter;
+
 @Entity(name="Partner")
 @Table(name="PARTNER")
 public class Partner extends Subject {
@@ -41,6 +43,11 @@ public Partner getEmployedBy() {
 @OneToMany(targetEntity=Partner.class,mappedBy="employedBy")
 public List<Partner> getEmployees() {
 	return employees;
+}
+
+@Converter(name="AliasConverter")
+public String getAlias() {
+	return super.getAlias();
 }
 
 public void setEmployees(List<Partner> employees) {

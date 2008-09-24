@@ -1,5 +1,6 @@
 package org.mariella.persistence.annotations.processing;
 
+import java.io.PrintStream;
 import java.util.Collections;
 import java.util.List;
 
@@ -27,5 +28,24 @@ public List<JoinColumnInfo> getJoinColumnInfos() {
 void setJoinColumnInfos(List<JoinColumnInfo> joinColumnInfos) {
 	this.joinColumnInfos = joinColumnInfos;
 }
+
+@Override
+public void override(AttributeInfo overriddenAttrInfo) {
+	if (joinColumnInfos == null) {
+		joinColumnInfos = ((ToOneAttributeInfo)overriddenAttrInfo).joinColumnInfos;
+	}
+}
+
+@Override
+void debugPrintAttributes(PrintStream out) {
+	super.debugPrintAttributes(out);
+	if (joinColumnInfos != null) {
+		for (JoinColumnInfo joinColInfo : joinColumnInfos) {
+			joinColInfo.debugPrint(out);
+		}
+	}
+		
+}
+
 
 }

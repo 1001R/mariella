@@ -11,9 +11,11 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -30,6 +32,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.TableGenerator;
 import javax.persistence.Transient;
 
+import org.mariella.persistence.annotations.Converter;
 import org.mariella.persistence.annotations.Domain;
 
 @SuppressWarnings("unchecked")
@@ -78,6 +81,7 @@ private void parseAttributeAnnotations() throws Exception {
 private void parseAttributeAnnotations(AnnotatedElement ae) throws Exception {
 	parseColumnAnnotation(ae);
 	parseDomainAnnotation(ae);
+	parseConverterAnnotation(ae);
 	parseJoinColumnAnnotation(ae);
 	parseSequenceGeneratorAnnotation(ae);
 	parseTableGeneratorAnnotation(ae);
@@ -171,24 +175,44 @@ private void parseDomainAnnotation(AnnotatedElement ae) throws Exception {
 	basicAttributeInfo.setDomainName(domain.name());
 }
 
+private void parseConverterAnnotation(AnnotatedElement ae) throws Exception {
+	if (!ae.isAnnotationPresent(Converter.class))
+		return;
+
+	String attributeName = ReflectionUtil.readFieldOrPropertyName(ae);
+	AttributeInfo attributeInfo = getAttributeInfo(attributeName);
+	if (!(attributeInfo instanceof BasicAttributeInfo))
+		throw new Exception("the @Converter annotation is only for base attributes");
+	BasicAttributeInfo basicAttributeInfo = (BasicAttributeInfo) attributeInfo;
+
+	Converter converter = ae.getAnnotation(Converter.class);
+	basicAttributeInfo.setConverterName(converter.name());
+}
+
 private void buildAttributeInfoDefaultsWhereNeeded() throws Exception {
 	Map<String, String> propertyToFieldName = new HashMap<String, String>();
+	Set<String> transientFields = new HashSet<String>();
 	for (Field field : clazz.getDeclaredFields()) {
-		if (isTransient(field))
+		if (isTransient(field)) {
+			transientFields.add(field.getName());
 			continue;
+		}
 		if (hasAttributeInfo(field.getName()))
 			continue;
 		propertyToFieldName.put(ReflectionUtil.buildPropertyName(field.getName()), field.getName());
 	}
 	for (PropertyDescriptor prop : Introspector.getBeanInfo(clazz).getPropertyDescriptors()) {
+		if (transientFields.contains(prop.getName()))
+			continue;
 		if (prop.getReadMethod() != null && prop.getReadMethod().getDeclaringClass() != clazz)
 			continue;
 		Method reader = prop.getReadMethod();
 		if (reader == null)
 			throw new IllegalStateException("Could not determine read method for property named " + prop.getName() + " in class " + clazz);
-		if (isTransient(reader))
+		if (isTransient(reader)) {
+			propertyToFieldName.remove(prop.getName());
 			continue;
-		if (hasAttributeInfo(prop.getName()))
+		} if (hasAttributeInfo(prop.getName()))
 			continue;
 		propertyToFieldName.put(prop.getName(), null);
 	}
@@ -306,6 +330,7 @@ private void buildAttributeInfoFromAnnotations(AnnotatedElement ae) {
 
 	attrInfo.setParentClassInfo(this);
 	attrInfo.setAnnotatedElement(ae);
+	
 	addAttributeInfo(attrInfo);
 }
 
@@ -331,13 +356,24 @@ public AttributeInfo getAttributeInfo(String name) {
 	return result;
 }
 
+public AttributeInfo lookupAttributeInfo(String name) {
+	AttributeInfo attrInfo = nameToAttributeInfoMap.get(name);
+	if (attrInfo != null) return attrInfo;
+	if (superclassInfo == null)
+		return null;
+	return superclassInfo.lookupAttributeInfo(name);
+}
+
 public MappedClassInfo getSuperclassInfo() {
 	return superclassInfo;
 }
 
-void addAttributeInfo(AttributeInfo info) {
-	attributeInfos.add(info);
-	nameToAttributeInfoMap.put(info.getName(), info);
+void addAttributeInfo(AttributeInfo attrInfo) {
+	attributeInfos.add(attrInfo);
+	
+	// keep the original attribute info in the map (see mergeOverriddenAttributes(...)
+	if (!nameToAttributeInfoMap.containsKey(attrInfo.getName()))
+		nameToAttributeInfoMap.put(attrInfo.getName(), attrInfo);
 }
 
 public void debugPrint(PrintStream out) {
@@ -413,6 +449,29 @@ public List<EntityListenerClassInfo> getEntityListenerClassInfos() {
 
 void setEntityListenerClassInfos(List<EntityListenerClassInfo> entityListenerClassInfos) {
 	this.entityListenerClassInfos = entityListenerClassInfos;
+}
+
+void mergeOverridenAttributes() {
+	for (AttributeInfo attrInfo : nameToAttributeInfoMap.values()) {
+		AttributeInfo overriddenAttrInfo = removeOverriddenAttributeInfo(attrInfo);
+		if (overriddenAttrInfo != null)
+			attrInfo.override(overriddenAttrInfo);
+	}
+}
+
+AttributeInfo removeOverriddenAttributeInfo(AttributeInfo attrInfo) {
+	// look in adopted attribute infos
+	for (Iterator<AttributeInfo> it = attributeInfos.iterator(); it.hasNext();) {
+		AttributeInfo each = it.next();
+		if (each == attrInfo) continue;
+		if (each.getName().equals(attrInfo.getName())) {
+			it.remove();
+			return each;
+		}
+	}
+	if (superclassInfo == null) return null;
+	AttributeInfo superAttrInfo = superclassInfo.lookupAttributeInfo(attrInfo.getName());
+	return superAttrInfo;
 }
 
 }

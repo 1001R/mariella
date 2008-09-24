@@ -2,6 +2,8 @@ package org.mariella.persistence.annotations.processing;
 
 
 
+import java.io.PrintStream;
+
 import javax.persistence.Column;
 
 public class ColumnInfo {
@@ -50,5 +52,14 @@ public int getScale() {
 void setColumn(Column column) {
 	this.column = column;
 }
+
+public void debugPrint(PrintStream out) {
+	out.print(" [column");
+	out.print(" name: " + getName());
+	out.print("]");
+	
+}
+
+
 
 }

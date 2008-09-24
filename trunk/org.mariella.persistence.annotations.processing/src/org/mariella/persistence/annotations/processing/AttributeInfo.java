@@ -68,6 +68,11 @@ public abstract boolean isOptionalOrNullable();
 public String toString() {
 	return parentClassInfo.getName() + "." + getName();
 }
+
+public void override(AttributeInfo overriddenAttrInfo) {
+	
+}
+
 }
 
 

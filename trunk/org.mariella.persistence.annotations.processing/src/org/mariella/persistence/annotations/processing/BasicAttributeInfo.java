@@ -14,8 +14,12 @@ public class BasicAttributeInfo extends AttributeInfo {
 	private Type cachedType = null;
 	private ColumnInfo columnInfo = null;
 	private String domainName = null;
+	private String converterName = null;
 	private GeneratedValueInfo generatedValueInfo = null;
 
+	
+public BasicAttributeInfo() {
+}
 
 public boolean isId() {
 	return getAnnotatedElement().isAnnotationPresent(Id.class) || getAnnotatedElement().isAnnotationPresent(EmbeddedId.class);
@@ -35,11 +39,19 @@ void initializeAdoptionCopy(AttributeInfo copy) {
 	((BasicAttributeInfo)copy).columnInfo = columnInfo;
 	((BasicAttributeInfo)copy).domainName = domainName;
 	((BasicAttributeInfo)copy).generatedValueInfo = generatedValueInfo;
+	((BasicAttributeInfo)copy).converterName = converterName;
 }
 
 void debugPrintAttributes(PrintStream out) {
 	super.debugPrintAttributes(out);
 	if (isId()) out.print(" @id");
+	if (converterName != null) {
+		out.print(" @converter=");
+		out.print(converterName);
+	}
+	if (columnInfo != null) {
+		columnInfo.debugPrint(out);
+	}
 }
 
 void debugPrintTypeInfo(PrintStream out) {
@@ -88,5 +100,28 @@ void setDomainName(String domainName) {
 	this.domainName = domainName;
 }
 
+public String getConverterName() {
+	return converterName;
+}
+
+void setConverterName(String converterName) {
+	this.converterName = converterName;
+}
+
+@Override
+public void override(AttributeInfo overriddenAttrInfo) {
+	if (columnInfo == null) {
+		columnInfo = ((BasicAttributeInfo)overriddenAttrInfo).columnInfo;
+	}
+	if (domainName == null) {
+		domainName = ((BasicAttributeInfo)overriddenAttrInfo).domainName;
+	}
+	if (generatedValueInfo == null) {
+		generatedValueInfo = ((BasicAttributeInfo)overriddenAttrInfo).generatedValueInfo;
+	}
+	if (converterName == null) {
+		converterName = ((BasicAttributeInfo)overriddenAttrInfo).converterName;
+	}
+}
 
 }

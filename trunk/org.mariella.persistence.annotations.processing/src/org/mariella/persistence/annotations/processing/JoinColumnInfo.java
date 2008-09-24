@@ -1,5 +1,7 @@
 package org.mariella.persistence.annotations.processing;
 
+import java.io.PrintStream;
+
 import javax.persistence.JoinColumn;
 
 public class JoinColumnInfo {
@@ -40,6 +42,10 @@ public String getTable() {
 
 void setJoinColumn(JoinColumn joinColumn) {
 	this.joinColumn = joinColumn;
+}
+
+public void debugPrint(PrintStream out) {
+	out.print(" @JoinColumn " + getName());
 }
 
 }

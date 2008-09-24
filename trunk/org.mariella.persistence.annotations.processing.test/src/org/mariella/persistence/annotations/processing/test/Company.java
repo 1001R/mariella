@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -37,6 +39,13 @@ public Integer getNrEmployees() {
 public Partner getOwner() {
 	return owner;
 }
+
+@ManyToOne(targetEntity=Partner.class)
+@JoinColumn(name="X_EMPLOYED_BY_ID", referencedColumnName="ID")
+public Partner getEmployedBy() {
+	return super.getEmployedBy();
+}
+
 
 public void setName(String name) {
 	this.name = name;
