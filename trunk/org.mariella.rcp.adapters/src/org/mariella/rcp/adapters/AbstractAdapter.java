@@ -44,9 +44,15 @@ public void setParent(AbstractAdapter parent) {
 	this.parent = parent;
 }
 
-public void fireAdapterDirty() {
+protected void fireAdapterDirty(Object oldValue, Object newValue) {
 	if (silent) return;
+	if (equals(oldValue, newValue)) return;
 	adapterContext.adapterDirtyNotification(this);
+}
+
+private boolean equals(Object o1, Object o2) {
+	if (o1 == null) return o2 == null;
+	return o1.equals(o2);
 }
 
 public void firePropertyChange(PropertyChangeEvent evt) {
@@ -67,6 +73,11 @@ public void firePropertyChange(String propertyName, int oldValue, int newValue) 
 public void firePropertyChange(String propertyName, Object oldValue, Object newValue) {
 	if (silent) return;
 	propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
+}
+
+public void fireAdapterDirty() {
+	if (silent) return;
+	adapterContext.adapterDirtyNotification(this);
 }
 
 }
