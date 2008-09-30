@@ -51,7 +51,7 @@ void buildHierarchyInfo() {
 	superclassInfo = null;
 	Class curSuper = clazz.getSuperclass();
 	while (curSuper != Object.class && superclassInfo == null) {
-		superclassInfo = (MappedClassInfo) oxyUnitInfo.classToInfoMap.get(curSuper);
+		superclassInfo = (MappedClassInfo) oxyUnitInfo.classToInfoMap.get(curSuper.getName());
 		curSuper = curSuper.getSuperclass();
 	}
 	if (superclassInfo != null) {

@@ -12,6 +12,8 @@ public DirectoryClasspathBrowser(File dir) {
 private void read(File dir) {
 	try {
 		File[] dirfiles = dir.listFiles();
+		if (dirfiles == null)
+			return;
 		for (int i = 0; i < dirfiles.length; i++) {
 			if (dirfiles[i].isDirectory()) {
 				read(dirfiles[i]);

@@ -12,6 +12,8 @@ public class EntityInfo extends MappedClassInfo {
 
 	private Class compositeIdClass;
 	private TableInfo tableInfo;
+	private DiscriminatorColumnInfo discriminatorColumnInfo;
+	private DiscriminatorValueInfo discriminatorValueInfo;
 
 @Override
 void buildAttributeInfos() throws Exception {
@@ -87,6 +89,23 @@ public TableInfo getTableInfo() {
 
 void setTableInfo(TableInfo tableInfo) {
 	this.tableInfo = tableInfo;
+}
+
+public DiscriminatorColumnInfo getDiscriminatorColumnInfo() {
+	return discriminatorColumnInfo;
+}
+
+void setDiscriminatorColumnInfo(DiscriminatorColumnInfo discriminatorColumnInfo) {
+	this.discriminatorColumnInfo = discriminatorColumnInfo;
+}
+
+public DiscriminatorValueInfo getDiscriminatorValueInfo() {
+	return discriminatorValueInfo;
+}
+
+public void setDiscriminatorValueInfo(
+		DiscriminatorValueInfo discriminatorValueInfo) {
+	this.discriminatorValueInfo = discriminatorValueInfo;
 }
 
 }

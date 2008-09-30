@@ -17,6 +17,8 @@ import java.util.Map;
 import javassist.bytecode.AnnotationsAttribute;
 import javassist.bytecode.ClassFile;
 
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -51,7 +53,7 @@ public class OxyUnitInfoBuilder {
 			info.setClazz(listenerClazz);
 			info.setOxyUnitInfo(oxyUnitInfo);
 			info.buildLifecycleEventInfos();
-			oxyUnitInfo.classToInfoMap.put(listenerClazz, info);
+			oxyUnitInfo.classToInfoMap.put(listenerClazz.getName(), info);
 			for (MappedClassInfo mappedClassInfo : usingMappedClassInfos) {
 				mappedClassInfo.getEntityListenerClassInfos().add(info);
 			}
@@ -175,7 +177,7 @@ public class OxyUnitInfoBuilder {
 			if (!(clusterTypeArg instanceof Class))
 				throw new IllegalStateException("Root type of cluster " + clazz + " is not a class " + clusterTypeArg);
 			
-			ClassInfo classInfo = oxyUnitInfo.classToInfoMap.get((Class)clusterTypeArg);
+			ClassInfo classInfo = oxyUnitInfo.classToInfoMap.get(((Class)clusterTypeArg).getName());
 			if (classInfo == null || !(classInfo instanceof EntityInfo))
 				throw new IllegalStateException("Root type of cluster " + clazz + " is not an Entity " + clusterTypeArg);
 			clusterInfo.setRootEntityName(classInfo.getName());
@@ -190,7 +192,7 @@ public class OxyUnitInfoBuilder {
 		}
 
 		for (Class clazz: classes) {
-			ClassInfo ci = oxyUnitInfo.classToInfoMap.get(clazz);
+			ClassInfo ci = oxyUnitInfo.classToInfoMap.get(clazz.getName());
 			((EmbeddableInfo)ci).buildAttributeInfos();
 		}
 	}
@@ -200,7 +202,7 @@ public class OxyUnitInfoBuilder {
 		info.setAnnotation(clazz.getAnnotation(Embeddable.class));
 		info.setClazz(clazz);
 		info.setOxyUnitInfo(oxyUnitInfo);
-		oxyUnitInfo.classToInfoMap.put(clazz, info);
+		oxyUnitInfo.classToInfoMap.put(clazz.getName(), info);
 	}
 
 	private void parseEntities(OxyUnitInfo oxyUnitInfo, List<Class> entityClasses) throws Exception {
@@ -220,21 +222,21 @@ public class OxyUnitInfoBuilder {
 			buildClassInfo(oxyUnitInfo, clazz);
 		}
 		for (Class clazz: annotatedClasses) {
-			ClassInfo ci = oxyUnitInfo.classToInfoMap.get(clazz);
+			ClassInfo ci = oxyUnitInfo.classToInfoMap.get(clazz.getName());
 			if (ci instanceof MappedClassInfo)
 				((MappedClassInfo)ci).buildHierarchyInfo();
 		}
 		for (Class clazz: annotatedClasses) {
-			ClassInfo ci = oxyUnitInfo.classToInfoMap.get(clazz);
+			ClassInfo ci = oxyUnitInfo.classToInfoMap.get(clazz.getName());
 			if (ci instanceof MappedClassInfo)
 				((MappedClassInfo)ci).buildAttributeInfos();
 		}
 		for (Class clazz: annotatedClasses) {
-			ClassInfo ci = oxyUnitInfo.classToInfoMap.get(clazz);
+			ClassInfo ci = oxyUnitInfo.classToInfoMap.get(clazz.getName());
 			ci.buildLifecycleEventInfos();
 		}
 		for (Class clazz : annotatedClasses) {
-			ClassInfo ci = oxyUnitInfo.classToInfoMap.get(clazz);
+			ClassInfo ci = oxyUnitInfo.classToInfoMap.get(clazz.getName());
 			if (ci instanceof MappedClassInfo)
 				((MappedClassInfo)ci).mergeOverridenAttributes();
 		}
@@ -267,7 +269,7 @@ public class OxyUnitInfoBuilder {
 		info.setOxyUnitInfo(oxyUnitInfo);
 		info.setClazz(clazz);
 		
-		oxyUnitInfo.classToInfoMap.put(clazz, info);
+		oxyUnitInfo.classToInfoMap.put(clazz.getName(), info);
 		oxyUnitInfo.hierarchyOrderedClassInfos.add(info);
 		
 		if (clazz.isAnnotationPresent(Inheritance.class)) {
@@ -275,6 +277,20 @@ public class OxyUnitInfoBuilder {
 				throw new IllegalArgumentException("@Inheritance annotation can only be assigned to classes that have either @MappedSuperclass or @Entity annotations");
 			((MappedClassInfo)info).setInheritanceInfo(new InheritanceInfo());
 			((MappedClassInfo)info).getInheritanceInfo().setInheritance(((AnnotatedElement)clazz).getAnnotation(Inheritance.class));
+		}
+
+		if (clazz.isAnnotationPresent(DiscriminatorColumn.class)) {
+			if (!(info instanceof EntityInfo))
+				throw new IllegalArgumentException("@DiscriminatorColumn annotation can only be assigned to classes that have an @Entity annotation");
+			((EntityInfo)info).setDiscriminatorColumnInfo(new DiscriminatorColumnInfo());
+			((EntityInfo)info).getDiscriminatorColumnInfo().setDiscriminatorColumn(((AnnotatedElement)clazz).getAnnotation(DiscriminatorColumn.class));
+		}
+
+		if (clazz.isAnnotationPresent(DiscriminatorValue.class)) {
+			if (!(info instanceof EntityInfo))
+				throw new IllegalArgumentException("@DiscriminatorValue annotation can only be assigned to classes that have an @Entity annotation");
+			((EntityInfo)info).setDiscriminatorValueInfo(new DiscriminatorValueInfo());
+			((EntityInfo)info).getDiscriminatorValueInfo().setDiscriminatorValue(((AnnotatedElement)clazz).getAnnotation(DiscriminatorValue.class));
 		}
 
 		if (clazz.isAnnotationPresent(SequenceGenerator.class)) {

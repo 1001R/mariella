@@ -23,6 +23,8 @@ UniqueConstraint[] uniqueConstraints() default {};
 	@SuppressWarnings("unchecked")
 	private List<JoinColumnInfo> joinColumnInfos = Collections.EMPTY_LIST;
 	@SuppressWarnings("unchecked")
+	private List<JoinColumnInfo> inverseJoinColumnInfos = Collections.EMPTY_LIST;
+	@SuppressWarnings("unchecked")
 	private List<UniqueConstraintInfo> uniqueConstraintInfos = Collections.EMPTY_LIST;
 
 public String getName() {
@@ -67,6 +69,14 @@ public void debugPrint(PrintStream out) {
 		info.debugPrint(out);
 	}
 		
+}
+
+public List<JoinColumnInfo> getInverseJoinColumnInfos() {
+	return inverseJoinColumnInfos;
+}
+
+void setInverseJoinColumnInfos(List<JoinColumnInfo> inverseJoinColumnInfos) {
+	this.inverseJoinColumnInfos = inverseJoinColumnInfos;
 }
 	
 }

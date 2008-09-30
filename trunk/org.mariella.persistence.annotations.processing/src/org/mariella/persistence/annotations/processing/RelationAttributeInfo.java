@@ -24,7 +24,7 @@ void resolveReferences() {
 	Class targetEntity = getAnnotatedTargetEntity();
 	if (targetEntity == null || targetEntity == void.class)
 		targetEntity = readTargetEntityByReflection();
-	relatedEntityInfo = (EntityInfo)getParentClassInfo().getOxyUnitInfo().classToInfoMap.get(targetEntity);
+	relatedEntityInfo = (EntityInfo)getParentClassInfo().getOxyUnitInfo().classToInfoMap.get(targetEntity.getName());
 	if (relatedEntityInfo == null)
 		throw new IllegalStateException("Could not determine relatedEntityInfo for relation attribute " + this);
 	String mappedBy = getAnnotatedMappedBy();

@@ -1,5 +1,6 @@
 package at.hts.persistence.schema;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,10 +23,19 @@ public ClassDescription(SchemaDescription schemaDescription, ClassDescription su
 	this.schemaDescription = schemaDescription;
 	this.className = className;
 	this.superClassDescription = superClassDescription;
-	id = superClassDescription.getId();
-	for(PropertyDescription pd : superClassDescription.propertyDescriptions.values()) {
-		propertyDescriptions.put(pd.getPropertyDescriptor().getName(), pd);
+}
+
+public void initialize() {
+	if(superClassDescription != null) {
+		id = superClassDescription.getId();
+		for(PropertyDescription pd : superClassDescription.propertyDescriptions.values()) {
+			propertyDescriptions.put(pd.getPropertyDescriptor().getName(), pd);
+		}
 	}
+}
+
+public Collection<PropertyDescription> getPropertyDescriptions() {
+	return propertyDescriptions.values();
 }
 
 public SchemaDescription getSchemaDescription() {
@@ -54,6 +64,10 @@ public PropertyDescription getId() {
 
 public void setId(PropertyDescription id) {
 	this.id = id;
+}
+
+public String toString() {
+	return getClassName();
 }
 
 }

@@ -52,6 +52,7 @@ private JoinTableInfo buildJoinTableInfo() {
 	info.setAnnotation(getAnnotatedElement().getAnnotation(JoinTable.class));
 	info.setUniqueConstraintInfos(buildUniqueContraintInfos(info.annotation.uniqueConstraints()));
 	info.setJoinColumnInfos(buildJoinColumnInfos(info.annotation.joinColumns()));
+	info.setInverseJoinColumnInfos(buildJoinColumnInfos(info.annotation.inverseJoinColumns()));
 	return info;
 }
 

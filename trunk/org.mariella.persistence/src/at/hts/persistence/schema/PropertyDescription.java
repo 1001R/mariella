@@ -18,4 +18,8 @@ public PropertyDescriptor getPropertyDescriptor() {
 public ClassDescription getClassDescription() {
 	return classDescription;
 }
+
+public String toString() {
+	return classDescription.toString() + "." + getPropertyDescriptor().getName();
+}
 }

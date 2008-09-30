@@ -91,4 +91,8 @@ public Row createPrimaryRow() {
 	return new Row(getPrimaryTable());
 }
 
+public String toString() {
+	return getClassDescription().toString() + " (" + getPrimaryTable().getName() + ")"; 
+}
+
 }

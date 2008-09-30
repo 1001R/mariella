@@ -22,7 +22,7 @@ public class OxyUnitInfo implements PersistenceUnitInfo {
 	String persistenceUnitName = null;
 	URL persistenceUnitRootUrl = null;
 	Properties properties = new Properties();
-	Map<Class,ClassInfo> classToInfoMap = new HashMap<Class,ClassInfo>();
+	Map<String,ClassInfo> classToInfoMap = new HashMap<String,ClassInfo>();
 	List<ClassInfo> hierarchyOrderedClassInfos = new ArrayList<ClassInfo>();
 	List<ClusterInfo> clusterInfos = new ArrayList<ClusterInfo>();
 	List<SqlResultSetMappingInfo> sqlResultSetMappingInfos = new ArrayList<SqlResultSetMappingInfo>();
@@ -122,9 +122,12 @@ public List<NamedNativeQueryInfo> getNamedNativeQueryInfos() {
 }
 
 public ClassInfo getClassInfo(Class clazz) {
-	return classToInfoMap.get(clazz);
+	return classToInfoMap.get(clazz.getName());
 }
 
+public ClassInfo getClassInfo(String className) {
+	return classToInfoMap.get(className);
+}
 
 public List<SequenceGeneratorInfo> getSequenceGeneratorInfos() {
 	return sequenceGeneratorInfos;
@@ -138,6 +141,11 @@ public List<TableGeneratorInfo> getTableGeneratorInfos() {
 
 public List<DomainDefinitionInfo> getDomainDefinitionInfos() {
 	return domainDefinitionInfos;
+}
+
+
+public List<ClassInfo> getHierarchyOrderedClassInfos() {
+	return hierarchyOrderedClassInfos;
 }
 
 }

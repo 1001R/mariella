@@ -4,6 +4,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 import javax.persistence.Column;
+import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
@@ -38,6 +39,7 @@ public Long getIdentity() {
 }
 
 @Column(name="ID")
+@Id
 public Long getId() {
 	return id;
 }

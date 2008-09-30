@@ -17,7 +17,7 @@ import at.hts.persistence.util.Util;
 public class ReferencePropertyMapping extends RelationshipPropertyMapping {
 	private final Column foreignKeyColumn;
 	
-public ReferencePropertyMapping(SingleTableClassMapping classMapping, PropertyDescription propertyDescription, String foreignKeyColumnName) {
+public ReferencePropertyMapping(ClassMapping classMapping, PropertyDescription propertyDescription, String foreignKeyColumnName) {
 	super(classMapping, (ReferencePropertyDescription)propertyDescription);
 	foreignKeyColumn = classMapping.getPrimaryTable().getColumn(foreignKeyColumnName);
 	Util.assertTrue(foreignKeyColumn != null, "Unknown column");

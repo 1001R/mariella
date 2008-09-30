@@ -52,5 +52,8 @@ public void collectUsedTables(Collection<Table> collection) {
 public void collectUsedColumns(Collection<Column> collection) {
 }
 
+public String toString() {
+	return getClassMapping().toString() + "." + getPropertyDescription().getPropertyDescriptor().getName();
+}
 
 }

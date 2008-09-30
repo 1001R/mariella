@@ -40,8 +40,8 @@ public HierarchyInTableClassMapping(SchemaMapping schemaMapping, ClassDescriptio
 		if(superClassMapping != null && superClassMapping instanceof HierarchyInTableClassMapping) {
 			containingClassMapping = (HierarchyInTableClassMapping)superClassMapping;
 			primaryTable = superClassMapping.getPrimaryTable();
-			physicalPropertyMappingList = new ArrayList<PhysicalPropertyMapping>(superClassMapping.physicalPropertyMappingList);
-			propertyMappings = new HashMap<PropertyDescription, PropertyMapping>(superClassMapping.propertyMappings);
+			physicalPropertyMappingList = new ArrayList<PhysicalPropertyMapping>();
+			propertyMappings = new HashMap<PropertyDescription, PropertyMapping>();
 			discriminatorColumn = ((HierarchyInTableClassMapping)superClassMapping).getDiscriminatorColum();
 			this.discriminatorValue = discriminatorValue;
 			containingClassMapping.addContainedClassMapping(this);
