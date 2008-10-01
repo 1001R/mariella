@@ -8,25 +8,30 @@ import java.util.Map;
 
 public class Table {
 	private String name;
+	private String schema;
+	private String catalog;
 	private Map<String, Column> columns = new HashMap<String, Column>();
 	private List<Column> primaryKey = new ArrayList<Column>();
 	
-public Table(String name) {
+public Table(String catalog, String schema, String name) {
 	super();
 	this.name = name;
+	this.schema = schema;
+	this.catalog = catalog;
 }
 	
 public String getName() {
 	return name;
 }
 
-public void setName(String name) {
-	this.name = name;
+public String getSchema() {
+	return schema;
 }
 
-public String getSchema() {
-	return null;
+public String getCatalog() {
+	return catalog;
 }
+
 public Collection<Column> getColumns() {
 	return columns.values();
 }

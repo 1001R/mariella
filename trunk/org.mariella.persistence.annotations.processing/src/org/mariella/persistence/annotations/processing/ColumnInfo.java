@@ -60,6 +60,16 @@ public void debugPrint(PrintStream out) {
 	
 }
 
+@Override
+public boolean equals(Object obj) {
+	return getName().equals(((ColumnInfo)obj).getName());
+}
+
+@Override
+public int hashCode() {
+	return getName().hashCode();
+}
+
 
 
 }

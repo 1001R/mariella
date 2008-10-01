@@ -23,4 +23,14 @@ void setTable(Table table) {
 	this.table = table;
 }
 
+@Override
+public boolean equals(Object obj) {
+	return getSchema().equals(((TableInfo)obj).getSchema()) && getName().equals(((TableInfo)obj).getName());
+}
+
+@Override
+public int hashCode() {
+	return getName().hashCode();
+}
+
 }

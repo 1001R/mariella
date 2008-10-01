@@ -353,10 +353,8 @@ public class OxyUnitInfoBuilder {
 	private void addMappedSuperclasses(Class clazz, List<Class> newOrderedClasses) {
 		Class superClass = clazz.getSuperclass();
 		while (superClass != null) {
-			// TODO include Embeddables here?
 			if ( superClass.isAnnotationPresent( MappedSuperclass.class )) {
 				newOrderedClasses.add( 0, superClass );
-				break;
 			}
 			superClass = superClass.getSuperclass();
 		}

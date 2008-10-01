@@ -1,18 +1,37 @@
 package org.mariella.persistence.annotations.mapping_builder;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseMetaDataDatabaseInfoProvider implements DatabaseInfoProvider {
-	private DatabaseMetaData databaseMetaData;
+public class DatabaseMetaDataDatabaseInfoProvider implements DatabaseInfoProvider{
+	private DatabaseMetaData databaseMetaData = null;
 	private List<DatabaseTableInfo> tableInfos = new ArrayList<DatabaseTableInfo>();
 	
 public DatabaseMetaDataDatabaseInfoProvider(DatabaseMetaData databaseMetaData)  {
 	super();
 	this.databaseMetaData = databaseMetaData;
+}
+
+@SuppressWarnings("unchecked")
+public void load(ObjectInputStream is) throws IOException, ClassNotFoundException {
+	tableInfos = (List<DatabaseTableInfo>)is.readObject();
+}
+
+public void store(ObjectOutputStream os) throws IOException{
+	os.writeObject(tableInfos);
+}
+
+private DatabaseMetaData getDatabaseMetaData() {
+	if(databaseMetaData == null) {
+		throw new RuntimeException("databaseMetaData is not loaded!!!");
+	}
+	return databaseMetaData;
 }
 	
 public DatabaseTableInfo getTableInfo(String catalog, String schema, String tableName) {
@@ -26,6 +45,10 @@ public DatabaseTableInfo getTableInfo(String catalog, String schema, String tabl
 
 private boolean equals(String s1, String s2) {
 	if(s1 == null && s2 == null) {
+		return true;
+	} else if(s1 == null && s2.equals("")) {
+		return true;
+	} else if(s2 == null && s1.equals("")) {
 		return true;
 	} else if(s1 == null || s2 == null) {
 		return false;
@@ -42,7 +65,7 @@ public DatabaseTableInfo loadTableInfo(String catalog, String schema, String tab
 		if(schema != null && schema.length() == 0) {
 			schema = null;
 		}
-		ResultSet rs = databaseMetaData.getTables(catalog, schema, tableName, null);
+		ResultSet rs = getDatabaseMetaData().getTables(catalog, schema, tableName, null);
 		try {
 			if(rs.next()) {
 				DatabaseTableInfo tableInfo = new DatabaseTableInfo();
@@ -50,11 +73,15 @@ public DatabaseTableInfo loadTableInfo(String catalog, String schema, String tab
 				tableInfo.setSchema(rs.getString(2));
 				tableInfo.setName(rs.getString(3));
 				
-				loadColumnInfos(tableInfo);
-				loadPrimaryKey(tableInfo);
-
-				tableInfos.add(tableInfo);
-				return tableInfo;
+				if(equals(tableInfo.getSchema(), schema) && equals(tableInfo.getCatalog(), catalog)) {
+					loadColumnInfos(tableInfo);
+					loadPrimaryKey(tableInfo);
+	
+					tableInfos.add(tableInfo);
+					return tableInfo;
+				} else {
+					return null;
+				}
 			} else {
 				return null;
 			}
@@ -68,7 +95,7 @@ public DatabaseTableInfo loadTableInfo(String catalog, String schema, String tab
 }
 
 private void loadColumnInfos(DatabaseTableInfo tableInfo) throws SQLException {
-	ResultSet rs = databaseMetaData.getColumns(tableInfo.getCatalog(), tableInfo.getSchema(), tableInfo.getName(), null);
+	ResultSet rs = getDatabaseMetaData().getColumns(tableInfo.getCatalog(), tableInfo.getSchema(), tableInfo.getName(), null);
 	try {
 		while(rs.next()) {
 			DatabaseColumnInfo info = new DatabaseColumnInfo();
@@ -96,7 +123,7 @@ private void loadColumnInfos(DatabaseTableInfo tableInfo) throws SQLException {
 }
 
 private void loadPrimaryKey(DatabaseTableInfo tableInfo) throws SQLException {
-	ResultSet rs = databaseMetaData.getPrimaryKeys(tableInfo.getCatalog(), tableInfo.getSchema(), tableInfo.getName());
+	ResultSet rs = getDatabaseMetaData().getPrimaryKeys(tableInfo.getCatalog(), tableInfo.getSchema(), tableInfo.getName());
 	try {
 		while(rs.next()) {
 			String columnName = rs.getString(4);

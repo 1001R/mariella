@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.persistence.InheritanceType;
 
+import org.eclipse.core.runtime.Assert;
 import org.mariella.persistence.annotations.processing.AttributeInfo;
 import org.mariella.persistence.annotations.processing.BasicAttributeInfo;
 import org.mariella.persistence.annotations.processing.ClassInfo;
@@ -110,7 +111,9 @@ protected Table getTable(TableInfo tableInfo) {
 	if(table == null) {
 		table = getTable(tableInfo.getCatalog(), tableInfo.getSchema(), tableInfo.getName());
 		DatabaseTableInfo dti = databaseInfoProvider.getTableInfo(tableInfo.getCatalog(), tableInfo.getSchema(), tableInfo.getName());
+		System.out.println("Loaded info from DB: " + dti.getName());
 		tableInfos.put(tableInfo, dti);
+		tables.put(tableInfo, table);
 	}
 	return table;
 }
@@ -122,7 +125,7 @@ private Table getTable(String catalog, String schema, String name) {
 		if(dti == null) {
 			throw new RuntimeException("Table " + name + " has not been found!");
 		}
-		table = new Table(name);
+		table = new Table(dti.getCatalog(), dti.getSchema(), dti.getName());
 		persistenceInfo.getSchema().addTable(table);
 	}
 	return table;
@@ -132,6 +135,7 @@ protected Column getColumn(TableInfo tableInfo, BasicAttributeInfo attributeInfo
 	Table table = getTable(tableInfo);
 	DatabaseTableInfo dti = tableInfos.get(tableInfo);
 	DatabaseColumnInfo dci = dti.getColumnInfo(attributeInfo.getColumnInfo().getName());
+	Assert.isNotNull(dci, "No database column info for column " + attributeInfo.getColumnInfo().getName());
 	Converter<?> converter;
 	if(attributeInfo.getConverterName() != null) {
 		converter = converterRegistry.getNamedConverter(attributeInfo.getConverterName());
@@ -153,7 +157,7 @@ protected Column getColumn(TableInfo tableInfo, DiscriminatorColumnInfo discrimi
 }
 
 protected Column getColumn(Table table, String columnName, Converter<?> converter) {
-	DatabaseTableInfo dti = databaseInfoProvider.getTableInfo(null, null, table.getName());
+	DatabaseTableInfo dti = databaseInfoProvider.getTableInfo(table.getCatalog(), table.getSchema(), table.getName());
 	DatabaseColumnInfo dci = dti.getColumnInfo(columnName);
 	if(dci == null) {
 		throw new RuntimeException("Column " + table.getName() + "." + columnName + " does not exist!");

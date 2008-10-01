@@ -1,6 +1,7 @@
 package org.mariella.persistence.annotations.mapping_builder;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.Map;
 import at.hts.persistence.database.BigDecimalConverter;
 import at.hts.persistence.database.BooleanAsNumberConverter;
 import at.hts.persistence.database.Converter;
+import at.hts.persistence.database.DateConverter;
 import at.hts.persistence.database.EnumConverter;
 import at.hts.persistence.database.IntegerConverter;
 import at.hts.persistence.database.LongConverter;
@@ -47,6 +49,8 @@ public ConverterRegistryImpl() {
 	registerNumericConverters(Types.NUMERIC);
 	registerConverterFactory(Types.DATE, Timestamp.class, new ConverterFactoryImpl(TimestampConverter.Singleton));
 	registerConverterFactory(Types.TIMESTAMP, Timestamp.class, new ConverterFactoryImpl(TimestampConverter.Singleton));
+	registerConverterFactory(Types.DATE, Date.class, new ConverterFactoryImpl(DateConverter.Singleton));
+	registerConverterFactory(Types.TIMESTAMP, Date.class, new ConverterFactoryImpl(DateConverter.Singleton));
 }
 
 private void registerNumericConverters(int type) {

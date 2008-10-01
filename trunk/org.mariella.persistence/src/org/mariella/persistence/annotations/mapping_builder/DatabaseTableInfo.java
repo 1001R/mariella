@@ -1,12 +1,15 @@
 package org.mariella.persistence.annotations.mapping_builder;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DatabaseTableInfo {
+public class DatabaseTableInfo implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	private String name;
 	private String catalog;
 	private String schema;
