@@ -147,6 +147,7 @@ protected Column getColumn(TableInfo tableInfo, BasicAttributeInfo attributeInfo
 
 protected Column getColumn(TableInfo tableInfo, ColumnInfo columnInfo, Converter<?> converter) {
 	Table table = getTable(tableInfo);
+	@SuppressWarnings("unused")
 	DatabaseTableInfo dti = tableInfos.get(tableInfo);
 	return getColumn(table, columnInfo.getName(), converter);
 }
