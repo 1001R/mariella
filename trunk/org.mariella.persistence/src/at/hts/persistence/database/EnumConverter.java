@@ -24,7 +24,7 @@ public T getObject(ResultSet rs, int index) throws SQLException {
 	}
 }
 
-public void setObject(PreparedStatement ps, int index, int type, Enum value) throws SQLException {
+public void setObject(PreparedStatement ps, int index, int type, T value) throws SQLException {
 	if(value == null) {
 		ps.setNull(index, type);
 	} else {

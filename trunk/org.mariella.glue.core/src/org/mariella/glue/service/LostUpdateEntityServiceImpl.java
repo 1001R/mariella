@@ -7,13 +7,13 @@ public abstract class LostUpdateEntityServiceImpl <T extends LostUpdateEntity> e
 @Override
 public T create(Context context) {
 	T entity = super.create(context);
-	entity.setCreateUser("aim");
+	entity.setCreateUser(context.getUserName());
 	entity.setCreateTimestamp(new Timestamp(System.currentTimeMillis()));
 	return entity;
 }
 
 public void save(T entity, Context context) {
-	entity.setUpdateUser("aim");
+	entity.setUpdateUser(context.getUserName());
 	entity.setUpdateTimestamp(new Timestamp(System.currentTimeMillis()));
 	super.save(entity, context);
 }

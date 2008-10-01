@@ -101,15 +101,15 @@ public T load(Context context, Connection connection, ClusterDescription cd, Obj
 	return (T)clusterLoader.load(connection, loaderContext, identity);
 }
 
-public List<Modifiable> load(final Context context, final ClusterDescription cd, final boolean isUpdate, final ClusterLoaderConditionProvider conditionProvider) {
+public List<T> load(final Context context, final ClusterDescription cd, final boolean isUpdate, final ClusterLoaderConditionProvider conditionProvider) {
 	return new TransactionalRunner(jdbcTemplate.getDataSource()).run(
-			new TransactionalRunnable<List<Modifiable>>() {
+			new TransactionalRunnable<List<T>>() {
 				@SuppressWarnings("unchecked")
-				public List<Modifiable> run(TransactionalRunner tr) {
+				public List<T> run(TransactionalRunner tr) {
 					ClusterLoader clusterLoader = context.createClusterLoader(cd);
 					LoaderContext loaderContext = context.createLoaderContext();
 					loaderContext.setUpdate(isUpdate);
-					return (List<Modifiable>)clusterLoader.load(tr.getConnection(), loaderContext, conditionProvider);
+					return (List<T>)clusterLoader.load(tr.getConnection(), loaderContext, conditionProvider);
 				}
 			}
 		);
