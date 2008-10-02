@@ -115,4 +115,8 @@ public Section createSection(Composite parent, int sectionStyle) {
 	Section section = new Section(parent, sectionStyle);
 	return section;
 }
+
+@Override
+public void adapt(Composite composite) {
+}
 }

@@ -46,6 +46,7 @@ public VFormToolkit(FormToolkit formToolkit, int fontSizeDelta) {
 
 public void adapt(Composite composite) {
 	formToolkit.adapt(composite);
+	paintBordersFor(composite);
 	handleFont(composite);
 }
 

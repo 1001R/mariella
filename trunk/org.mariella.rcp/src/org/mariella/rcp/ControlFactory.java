@@ -51,5 +51,6 @@ Section createSection(Composite parent, int sectionStyle);
 
 TextViewer createTextViewer(Composite client, int single, boolean b);
 
+void adapt(Composite composite);
 
 }
