@@ -15,8 +15,8 @@ public AbstractAdapter(AdapterContext context) {
 	this.adapterContext = context;
 }
 
-public AbstractAdapter(AdapterContext context, Adapter parent) {
-	this.adapterContext = context;
+public AbstractAdapter(Adapter parent) {
+	this.adapterContext = parent.getAdapterContext();
 	this.parent = parent;
 }
 

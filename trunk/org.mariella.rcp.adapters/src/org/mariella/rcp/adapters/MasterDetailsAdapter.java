@@ -16,8 +16,8 @@ public MasterDetailsAdapter(AdapterContext context) {
 	initialize();
 }
 
-public MasterDetailsAdapter(AdapterContext context, Adapter parent) {
-	super(context, parent);
+public MasterDetailsAdapter(Adapter parent) {
+	super(parent);
 	initialize();
 }
 

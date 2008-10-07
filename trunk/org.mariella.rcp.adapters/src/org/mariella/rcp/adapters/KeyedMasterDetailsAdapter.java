@@ -29,8 +29,8 @@ public KeyedMasterDetailsAdapter(AdapterContext context) {
 	initialize();
 }
 
-public KeyedMasterDetailsAdapter(AdapterContext context, Adapter parent) {
-	super(context, parent);
+public KeyedMasterDetailsAdapter(Adapter parent) {
+	super(parent);
 	initialize();
 }
 
