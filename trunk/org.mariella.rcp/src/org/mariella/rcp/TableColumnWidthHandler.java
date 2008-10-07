@@ -13,6 +13,7 @@ public class TableColumnWidthHandler {
 			public void controlResized(ControlEvent e) {
 				if (table.isDisposed()) return;
 				TableColumn[] tc = table.getColumns();
+				if (tc.length == 0) return;
 				int currentWidth = 0;
 				for (int i = 0; i < tc.length; i++) {
 					currentWidth += tc[i].getWidth();
