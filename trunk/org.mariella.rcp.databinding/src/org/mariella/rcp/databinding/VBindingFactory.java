@@ -158,6 +158,27 @@ public VBinding createButtonBinding(VBindingContext dbc, Button button, Object b
 	return binding;
 }
 
+public VBinding createControlEnabledBinding(VBindingContext dbc, Control control, Object bean, String propertyPath) {
+	return createControlEnabledBinding(dbc, control, bean, propertyPath, null);
+}
+
+public VBinding createControlEnabledBinding(VBindingContext dbc, Control control, Object bean, String propertyPath, EnabledCallback callback) {
+	ISWTObservableValue visibleObservable = RcpObservables.observeControlEnabled(dbc, control);
+	VBindingDomain domain = new VBindingDomain("visible", Boolean.class);
+	final EnabledStateModelObservableValue stateModel = new EnabledStateModelObservableValue(callback, bean, propertyPath);
+	VBinding binding = ((InternalBindingContext)dbc).bindValue(
+			visibleObservable,
+			stateModel, 
+			new UpdateValueStrategy(),  
+			new UpdateValueStrategy(),
+			domain);
+	
+	completeBindingCreation(binding, domain);
+	
+	return binding;
+}
+
+
 public VBinding createControlVisibleBinding(VBindingContext dbc, Control control, Composite parentToRedraw, Object bean, String propertyPath) {
 	return createControlVisibleBinding(dbc, control, parentToRedraw, bean, propertyPath, null);
 }
@@ -218,11 +239,13 @@ VBinding createEnabledBinding(VBindingContext dbc, EnabledObservableValueFactory
 			new UpdateValueStrategy(),
 			domain);
 	
-	enabledCallback.install(model);
+	if (enabledCallback instanceof EnabledCallback2)
+		((EnabledCallback2)enabledCallback).install(model);
 	
 	binding.addDisposeListener(new VBinding.DisposeListener() {
 		public void disposed(VBinding binding) {
-			enabledCallback.uninstall(model);
+			if (enabledCallback instanceof EnabledCallback2)
+				((EnabledCallback2)enabledCallback).uninstall(model);
 		}
 	});
 	

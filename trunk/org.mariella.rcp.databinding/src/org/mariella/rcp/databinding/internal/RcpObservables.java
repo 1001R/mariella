@@ -56,6 +56,10 @@ public static ISWTObservableValue observeControlVisible(VBindingContext ctx, Con
 	return new ControlVisibleObservableValue(control, parentToRedraw);
 }
 
+public static ISWTObservableValue observeControlEnabled(VBindingContext ctx, Control control) {
+	return new ControlEnabledObservableValue(control);
+}
+
 public static ISWTObservableValue observeDateTime(VBindingContext ctx, DateTime dateTime) {
 	ISWTObservableValue value = new DateTimeObservableValue(dateTime);
 	((InternalBindingContext)ctx).getMainContext().observablesManager.addObservable(value);

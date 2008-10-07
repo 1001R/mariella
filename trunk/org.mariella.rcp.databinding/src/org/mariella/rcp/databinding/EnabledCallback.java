@@ -6,8 +6,4 @@ public interface EnabledCallback {
 
 boolean isEnabled();
 
-void install(EnabledStateModelObservableValue value);
-
-void uninstall(EnabledStateModelObservableValue value);
-
 }

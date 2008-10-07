@@ -3,7 +3,7 @@ package org.mariella.rcp.databinding;
 import org.mariella.rcp.databinding.internal.EnabledStateModelObservableValue;
 
 
-public class CompoundEnabledCallback implements EnabledCallback {
+public class CompoundEnabledCallback implements EnabledCallback2 {
 
 EnabledCallback[] enabledCallbacks;
 
@@ -18,13 +18,17 @@ public boolean isEnabled() {
 }
 
 public void install(EnabledStateModelObservableValue value) {
-	for (EnabledCallback cb : enabledCallbacks)
-		cb.install(value);
+	for (EnabledCallback cb : enabledCallbacks) {
+		if (cb instanceof EnabledCallback2)
+			((EnabledCallback2)cb).install(value);
+	}
 }
 
 public void uninstall(EnabledStateModelObservableValue value) {
-	for (EnabledCallback cb : enabledCallbacks)
-		cb.uninstall(value);
+	for (EnabledCallback cb : enabledCallbacks) {
+		if (cb instanceof EnabledCallback2)
+			((EnabledCallback2)cb).uninstall(value);
+	}
 }
 
 }
