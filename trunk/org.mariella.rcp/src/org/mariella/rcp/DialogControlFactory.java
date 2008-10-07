@@ -8,6 +8,7 @@ import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
@@ -71,6 +72,7 @@ public Label createSeparator(Composite parent, int style) {
 public Table createTable(Composite parent, int style) {
 	Table table = new Table(parent, style);
 	table.setLinesVisible(true);
+	new TableColumnWidthHandler().handleColumnWidths(table);
 	return table;
 }
 
@@ -108,6 +110,13 @@ public ComboViewer createComboViewer(Composite parent, int style) {
 
 public Tree createTree(Composite parent, int style) {
 	return new Tree(parent, style);
+}
+
+@Override
+public Group createGroup(Composite composite, String text) {
+	Group group = new Group(composite, SWT.NONE);
+	group.setText(text);
+	return group;
 }
 
 @Override

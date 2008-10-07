@@ -11,6 +11,7 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
@@ -28,6 +29,7 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.ScrolledPageBook;
 import org.eclipse.ui.forms.widgets.Section;
 import org.mariella.rcp.ControlFactory;
+import org.mariella.rcp.TableColumnWidthHandler;
 
 public class VFormToolkit implements ControlFactory {
 
@@ -148,6 +150,7 @@ public Table createTable(Composite parent, int style) {
 	Table table = formToolkit.createTable(parent, style);
 	table.setLinesVisible(true);
 	handleFont(table);
+	new TableColumnWidthHandler().handleColumnWidths(table);
 	return table;
 }
 
@@ -264,6 +267,12 @@ public ComboViewer createComboViewer(Composite parent, int style) {
 	return comboViewer;
 }
 
+@Override
+public Group createGroup(Composite composite, String text) {
+	Group group = new Group(composite, SWT.NONE);
+	group.setText(text);
+	return group;
+}
 
 private void handleFont(Control control) {
 	if (fontSizeDelta != 0 || fontName != null) {

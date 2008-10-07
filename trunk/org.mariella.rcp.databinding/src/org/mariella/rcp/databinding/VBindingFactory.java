@@ -178,7 +178,7 @@ public VBinding createControlVisibleBinding(VBindingContext dbc, Control control
 	return binding;
 }
 
-public VBindingContext createDataBindingContext() {
+public VBindingContext createBindingContext() {
 	return new MainBindingContext(this);
 }
 

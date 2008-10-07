@@ -4,6 +4,7 @@ import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
@@ -52,5 +53,7 @@ Section createSection(Composite parent, int sectionStyle);
 TextViewer createTextViewer(Composite client, int single, boolean b);
 
 void adapt(Composite composite);
+
+Group createGroup(Composite composite, String text);
 
 }
