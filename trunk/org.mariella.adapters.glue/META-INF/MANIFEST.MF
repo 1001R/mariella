@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Glue Plug-in
+Bundle-SymbolicName: org.mariella.adapters.glue
+Bundle-Version: 1.0.0
+Bundle-Activator: org.mariella.adapters.glue.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.mariella.rcp.adapters;bundle-version="1.0.0",
+ org.mariella.glue.core;bundle-version="1.0.0",
+ org.mariella.rcp.databinding;bundle-version="1.1.31"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: org.mariella.adapters.glue
