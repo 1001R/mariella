@@ -6,7 +6,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.mariella.rcp.databinding.internal.EnabledStateModelObservableValue;
 
-public class EnabledOnSelectedCallback implements EnabledCallback, ISelectionChangedListener {
+public class EnabledOnSelectedCallback implements EnabledCallback2, ISelectionChangedListener {
 
 ISelectionProvider selectionProvider;
 EnabledStateModelObservableValue enabledStateValue;
