@@ -271,6 +271,7 @@ public ComboViewer createComboViewer(Composite parent, int style) {
 public Group createGroup(Composite composite, String text) {
 	Group group = new Group(composite, SWT.NONE);
 	group.setText(text);
+	handleFont(group);
 	return group;
 }
 
@@ -287,5 +288,13 @@ public String getFontName() {
 
 public void setFontName(String fontName) {
 	this.fontName = fontName;
+}
+
+public int getFontSizeDelta() {
+	return fontSizeDelta;
+}
+
+public void setFontSizeDelta(int fontSizeDelta) {
+	this.fontSizeDelta = fontSizeDelta;
 }
 }
