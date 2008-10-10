@@ -70,7 +70,7 @@ class CustomizationCallbackImpl extends AbstractVResourceFormEditorCustomization
 	}
 
 	public void implementInit() {
-		dataBindingContext = getUIRegistration().getDataBindingFactory().createDataBindingContext();
+		dataBindingContext = getUIRegistration().getDataBindingFactory().createBindingContext();
 		getEditorSite().setSelectionProvider(dataBindingContext.getDataBindingSelectionProvider());
 		getUIRegistration().getDataBindingFactory().addContextExtension(dataBindingContext, new FormPageSelectionExtension(EntityEditor.this));
 		getSite().getPage().addPartListener(partListener);

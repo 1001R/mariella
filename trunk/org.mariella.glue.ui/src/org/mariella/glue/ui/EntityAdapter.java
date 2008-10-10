@@ -25,7 +25,7 @@ public abstract class EntityAdapter <T extends Entity> extends AbstractPersistab
 public EntityAdapter(Context context, T entity) {
 	super();
 	this.entity = entity;
-	dataBindingContext = getUIRegistration().getDataBindingFactory().createDataBindingContext();
+	dataBindingContext = getUIRegistration().getDataBindingFactory().createBindingContext();
 	this.context = context;
 	context.getModificationTracker().addListener(this);
 }
