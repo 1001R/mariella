@@ -54,7 +54,8 @@ public <T> T run(TransactionalRunnable<T> runnable) {
 	} finally {
 		try {
 			Activator.logger.info("Closing Connection");
-			connection.close();
+			if (!connection.isClosed())
+				connection.close();
 		} catch(SQLException e1) {
 			throw new RuntimeException(e1);
 		}

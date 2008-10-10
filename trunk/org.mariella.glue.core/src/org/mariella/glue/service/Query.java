@@ -70,7 +70,7 @@ protected E createResultEntry(ResultSet rs) {
 				Object value = getResultValue(rs, i + 1, si, pd);
 				pd.getWriteMethod().invoke(entry, new Object[] { value });
 			} catch(Exception e) {
-				throw new RuntimeException(e);
+				throw new RuntimeException("Error while invoking " + pd.getWriteMethod(), e);
 			}
 		}
 	}
