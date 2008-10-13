@@ -332,13 +332,11 @@ public VBinding createRadioSetBinding(VBindingContext dbc, Button[] buttons, Obj
 	return binding;
 }
 
-@Deprecated
 public VBinding[] createRadioSetBindings(VBindingContext dbc, Button[] buttons, Object[] values, Object bean, String propertyPath, Object domainSymbol) {
 	VBindingDomain domain = domainRegistry.getDomain(domainSymbol);
 	return createRadioSetBindings(dbc, buttons, values, bean, propertyPath, domain);
 }
 
-@Deprecated
 public VBinding[] createRadioSetBindings(VBindingContext dbc, Button[] buttons, Object[] values, Object bean, String propertyPath, VBindingDomain domain) {
 	VBinding[] bindings = new VBinding[buttons.length];
 	// for each button/value we create a ValueMatchObservable which is suitable for a button binding (boolean)
