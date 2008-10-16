@@ -13,6 +13,9 @@ public class DatabaseMetaDataDatabaseInfoProvider implements DatabaseInfoProvide
 	private DatabaseMetaData databaseMetaData = null;
 	private List<DatabaseTableInfo> tableInfos = new ArrayList<DatabaseTableInfo>();
 	
+	private boolean ignoreSchema = false;
+	private boolean ignoreCatalog = false;
+	
 public DatabaseMetaDataDatabaseInfoProvider(DatabaseMetaData databaseMetaData)  {
 	super();
 	this.databaseMetaData = databaseMetaData;
@@ -36,7 +39,7 @@ private DatabaseMetaData getDatabaseMetaData() {
 	
 public DatabaseTableInfo getTableInfo(String catalog, String schema, String tableName) {
 	for(DatabaseTableInfo dti : tableInfos) {
-		if(equals(catalog, dti.getCatalog()) && equals(schema, dti.getSchema()) && equals(tableName, dti.getName())) {
+		if((ignoreCatalog || equals(catalog, dti.getCatalog())) && (ignoreSchema || equals(schema, dti.getSchema())) && equals(tableName, dti.getName())) {
 			return dti;
 		} 
 	}
@@ -59,10 +62,10 @@ private boolean equals(String s1, String s2) {
 
 public DatabaseTableInfo loadTableInfo(String catalog, String schema, String tableName) {
 	try {
-		if(catalog != null && catalog.length() == 0) {
+		if(ignoreCatalog || (catalog != null && catalog.length() == 0)) {
 			catalog = null;
 		}
-		if(schema != null && schema.length() == 0) {
+		if(ignoreSchema || (schema != null && schema.length() == 0)) {
 			schema = null;
 		}
 		ResultSet rs = getDatabaseMetaData().getTables(catalog, schema, tableName, null);
@@ -73,7 +76,7 @@ public DatabaseTableInfo loadTableInfo(String catalog, String schema, String tab
 				tableInfo.setSchema(rs.getString(2));
 				tableInfo.setName(rs.getString(3));
 				
-				if(equals(tableInfo.getSchema(), schema) && equals(tableInfo.getCatalog(), catalog)) {
+				if((ignoreSchema || equals(tableInfo.getSchema(), schema)) && (ignoreCatalog || equals(tableInfo.getCatalog(), catalog))) {
 					loadColumnInfos(tableInfo);
 					loadPrimaryKey(tableInfo);
 	
@@ -138,6 +141,22 @@ private void loadPrimaryKey(DatabaseTableInfo tableInfo) throws SQLException {
 	}
 	
 	
+}
+
+public boolean isIgnoreSchema() {
+	return ignoreSchema;
+}
+
+public void setIgnoreSchema(boolean ignoreSchema) {
+	this.ignoreSchema = ignoreSchema;
+}
+
+public boolean isIgnoreCatalog() {
+	return ignoreCatalog;
+}
+
+public void setIgnoreCatalog(boolean ignoreCatalog) {
+	this.ignoreCatalog = ignoreCatalog;
 }
 
 }

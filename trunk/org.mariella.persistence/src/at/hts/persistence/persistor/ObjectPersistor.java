@@ -52,9 +52,11 @@ public void persist() {
 	} else if(modificationInfo.getStatus() == ModificationInfo.Status.Modified) {
 		for(String propertyName : modificationInfo.getModifiedProperties()) {
 			PropertyDescription pd = classMapping.getClassDescription().getPropertyDescription(propertyName);
-			PropertyMapping propertyMapping = classMapping.getPropertyMapping(pd);
-			Object value = ModifiableAccessor.Singleton.getValue(modificationInfo.getObject(), propertyMapping.getPropertyDescription());
-			propertyMapping.persist(this, value);
+			if(pd != null) {
+				PropertyMapping propertyMapping = classMapping.getPropertyMapping(pd);
+				Object value = ModifiableAccessor.Singleton.getValue(modificationInfo.getObject(), propertyMapping.getPropertyDescription());
+				propertyMapping.persist(this, value);
+			}
 		}
 	} else if(modificationInfo.getStatus() == ModificationInfo.Status.Removed) {
 		getPrimaryPreparedStatementBuilder();
