@@ -9,6 +9,7 @@ public class ClassDescription {
 	private final String className;
 	private final ClassDescription superClassDescription;
 	private final Map<String, PropertyDescription> propertyDescriptions = new HashMap<String, PropertyDescription>();
+	private boolean isAbstract = false;
 	private PropertyDescription id;
 
 public ClassDescription(SchemaDescription schemaDescription, String className) {
@@ -56,6 +57,14 @@ public PropertyDescription getPropertyDescription(String propertyName) {
 
 public void addPropertyDescription(PropertyDescription propertyDescription) {
 	propertyDescriptions.put(propertyDescription.getPropertyDescriptor().getName(), propertyDescription);
+}
+
+public boolean isAbstract() {
+	return isAbstract;
+}
+
+public void setAbstract(boolean isAbstract) {
+	this.isAbstract = isAbstract;
 }
 
 public PropertyDescription getId() {
