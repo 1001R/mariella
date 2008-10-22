@@ -95,7 +95,9 @@ public TableReference join(SubSelectBuilder subSelectBuilder) {
 		} else {
 			List<Expression> in = new ArrayList<Expression>();
 			for(HierarchyInTableClassMapping child : allChildren) {
-				in.add(((Converter<Object>)getDiscriminatorColum().getConverter()).createLiteral(child.getDiscriminatorValue()));
+				if(!child.getClassDescription().isAbstract()) {
+					in.add(((Converter<Object>)getDiscriminatorColum().getConverter()).createLiteral(child.getDiscriminatorValue()));
+				}
 			}
 			subSelectBuilder.and(
 				new InCondition(
