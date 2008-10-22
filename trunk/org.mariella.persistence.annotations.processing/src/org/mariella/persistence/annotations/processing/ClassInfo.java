@@ -3,6 +3,7 @@ package org.mariella.persistence.annotations.processing;
 import java.io.PrintStream;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -90,6 +91,10 @@ void resolveReferences() {
 
 public List<LifecycleEventInfo> getLifecycleEventInfos() {
 	return lifecycleEventInfos;
+}
+
+public boolean isAbstract() {
+	return Modifier.isAbstract(clazz.getModifiers());
 }
 
 }

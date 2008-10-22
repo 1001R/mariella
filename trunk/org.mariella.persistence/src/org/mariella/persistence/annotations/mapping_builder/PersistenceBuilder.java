@@ -89,6 +89,7 @@ public void build() {
 	for(ClassInfo classInfo : unitInfo.getHierarchyOrderedClassInfos()) {
 		if(classInfo instanceof EntityInfo) {
 			ClassDescription cd = persistenceInfo.getSchemaDescription().getClassDescription(classInfo.getClazz().getName());
+			cd.setAbstract(classInfo.isAbstract());
 			cd.initialize();
 		}
 	}
