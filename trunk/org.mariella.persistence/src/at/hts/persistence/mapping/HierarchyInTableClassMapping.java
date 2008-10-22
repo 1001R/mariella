@@ -115,7 +115,7 @@ public HierarchyInTableClassMapping getClassMappingForDiscriminatorValue(Object 
 		return this;
 	} else {
 		for(HierarchyInTableClassMapping child : allChildren) {
-			if(child.getDiscriminatorValue().equals(value)) {
+			if(!child.getClassDescription().isAbstract() && child.getDiscriminatorValue().equals(value)) {
 				return child;
 			}
 		}
