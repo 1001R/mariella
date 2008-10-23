@@ -136,8 +136,10 @@ private void removeElementChangedListener(Object o) {
 		PropertyPathSupport sup = (PropertyPathSupport) lsup.userObject;
 		sup.object = o;
 		Object target = sup.readTargetObject();
-		lsup.unhookListener(target);
-		elementListenerTargetToElementMap.remove(target);
+		if (target != null) {
+			lsup.unhookListener(target);
+			elementListenerTargetToElementMap.remove(target);
+		}
 	}
 }
 
