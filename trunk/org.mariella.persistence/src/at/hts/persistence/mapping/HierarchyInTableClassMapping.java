@@ -22,7 +22,7 @@ import at.hts.persistence.util.Util;
 public class HierarchyInTableClassMapping extends SingleTableClassMapping {
 	private Column discriminatorColumn;
 	private Object discriminatorValue;
-	private Collection<HierarchyInTableClassMapping> allChildren  = new ArrayList<HierarchyInTableClassMapping>();
+	private Collection<HierarchyInTableClassMapping> allChildren = new ArrayList<HierarchyInTableClassMapping>();
 	private HierarchyInTableClassMapping containingClassMapping;
 	
 public HierarchyInTableClassMapping(SchemaMapping schemaMapping, ClassDescription classDescription, String tableName, String discriminatorColumnName, Object discriminatorValue) {

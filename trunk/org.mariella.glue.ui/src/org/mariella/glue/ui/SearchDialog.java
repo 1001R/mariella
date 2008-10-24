@@ -35,8 +35,9 @@ public boolean close() {
 
 @Override
 protected Control createDialogArea(Composite parent) {
+	parent.setLayout(new GridLayout(1, false));
+	
 	controlFactory = new DialogControlFactory();
-	parent.setLayout(new FillLayout());
 	
 	Composite composite = new Composite(parent, SWT.None);
 	composite.setLayout(new FillLayout(SWT.VERTICAL));
@@ -46,6 +47,7 @@ protected Control createDialogArea(Composite parent) {
 	
 	group = new Group(composite, SWT.SHADOW_ETCHED_IN);
 	group.setText("Search Conditions");
+	
 	GridLayout layout = new GridLayout(4, false);
 	group.setLayout(layout);
 
@@ -65,7 +67,7 @@ protected Control createDialogArea(Composite parent) {
 	group.setLayout(new FillLayout());
 	
 	createTableViewer(group);
-	
+
 	return composite;
 }
 
