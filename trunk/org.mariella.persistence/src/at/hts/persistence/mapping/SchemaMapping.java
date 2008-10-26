@@ -30,6 +30,32 @@ public Schema getSchema() {
 	return schema;
 }
 
+public void initialize() {
+	InitializationContext context = new InitializationContext() {
+		private Collection<AbstractClassMapping> initialized = new HashSet<AbstractClassMapping>();
+		private Collection<AbstractClassMapping> initializing = new HashSet<AbstractClassMapping>();
+		
+		@Override
+		public void ensureInitialized(ClassMapping classMapping) {
+			if(!initialized.contains(classMapping)) {
+				if(initializing.contains(classMapping)) {
+					throw new IllegalStateException();
+				} else {
+					initializing.add(classMapping);
+					classMapping.initialize(this);
+					initializing.remove(classMapping);
+					initialized.add(classMapping);
+				}
+			}
+			
+		}
+	};
+	
+	for(ClassMapping classMapping : getClassMappings()) {
+		classMapping.initialize(context);
+	}
+}
+
 public ClassMapping getClassMapping(String className) {
 	return classMappingMap.get(className);
 }

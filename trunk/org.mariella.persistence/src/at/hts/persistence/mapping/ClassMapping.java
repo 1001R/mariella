@@ -2,6 +2,7 @@ package at.hts.persistence.mapping;
 
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.List;
 
 import at.hts.persistence.database.Column;
 import at.hts.persistence.database.Table;
@@ -14,6 +15,9 @@ public abstract class ClassMapping extends AbstractClassMapping {
 	
 public ClassMapping(SchemaMapping schemaMapping, ClassDescription classDescription) {
 	super(schemaMapping, classDescription);
+}
+
+public void initialize(InitializationContext context) {
 }
 
 public abstract Table getPrimaryTable();
@@ -49,16 +53,20 @@ public void addIdentityColumns(SubSelectBuilder subSelectBuilder, TableReference
 
 
 public Object createObject(ResultSetReader reader, ObjectFactory factory, boolean wantsObjects) throws SQLException {
+	return createObject(reader, factory, wantsObjects, getPhysicalPropertyMappingList());
+}
+
+public Object createObject(ResultSetReader reader, ObjectFactory factory, boolean wantsObjects, List<PhysicalPropertyMapping> physicalPropertyMappings) throws SQLException {
 	int columnIndex = reader.getCurrentColumnIndex();
 	int idIndex = reader.getCurrentColumnIndex();
 	if(wantsObjects) {
-		idIndex += getPhysicalPropertyMappingList().indexOf(getIdMapping());
+		idIndex += physicalPropertyMappings.indexOf(getIdMapping());
 	} 
 	reader.setCurrentColumnIndex(idIndex);
 	Object identity = getIdMapping().getObject(reader, factory);
 	Object entity = identity == null ? null : factory.getObject(this, identity);
 	if(identity == null) {
-		reader.setCurrentColumnIndex(reader.getCurrentColumnIndex() + (wantsObjects ? getPhysicalPropertyMappingList().size() : 1));
+		reader.setCurrentColumnIndex(reader.getCurrentColumnIndex() + (wantsObjects ? physicalPropertyMappings.size() : 1));
 	} else {
 		boolean update;
 		if(entity != null ) {
@@ -69,8 +77,8 @@ public Object createObject(ResultSetReader reader, ObjectFactory factory, boolea
 		}
 		if(wantsObjects) {
 			reader.setCurrentColumnIndex(columnIndex);
-			for(PhysicalPropertyMapping pm : getPhysicalPropertyMappingList()) {
-				if(pm == getIdMapping()) {
+			for(PhysicalPropertyMapping pm : physicalPropertyMappings) {
+				if(pm == getIdMapping() || !getPhysicalPropertyMappingList().contains(pm)) {
 					pm.advance(reader);
 				} else {
 					Object value = pm.getObject(reader, factory);

@@ -24,7 +24,9 @@ public class HierarchyInTableClassMapping extends SingleTableClassMapping {
 	private Object discriminatorValue;
 	private Collection<HierarchyInTableClassMapping> allChildren = new ArrayList<HierarchyInTableClassMapping>();
 	private HierarchyInTableClassMapping containingClassMapping;
-	
+	private List<PropertyMapping> hierarchyPropertyMappings = new ArrayList<PropertyMapping>();
+	private List<PhysicalPropertyMapping> hierarchyPhysicalPropertyMappingList = new ArrayList<PhysicalPropertyMapping>();
+		
 public HierarchyInTableClassMapping(SchemaMapping schemaMapping, ClassDescription classDescription, String tableName, String discriminatorColumnName, Object discriminatorValue) {
 	super(schemaMapping, classDescription, tableName);
 	this.discriminatorColumn = primaryTable.getColumn(discriminatorColumnName);
@@ -50,6 +52,38 @@ public HierarchyInTableClassMapping(SchemaMapping schemaMapping, ClassDescriptio
 	Util.assertTrue(primaryTable != null, "No mapping found for superclass");
 }
 
+public List<PropertyMapping> getHierarchyPropertyMappings(){
+	return hierarchyPropertyMappings;
+}
+
+public List<PhysicalPropertyMapping> getHierarchyPhysicalPropertyMappingList(){
+	return hierarchyPhysicalPropertyMappingList;
+}
+
+@Override
+public void initialize(InitializationContext context) {
+	for(PropertyMapping pm : getPropertyMappings()) {
+		hierarchyPropertyMappings.add(pm);
+	}
+	for(PhysicalPropertyMapping pm : getPhysicalPropertyMappingList()) {
+		hierarchyPhysicalPropertyMappingList.add(pm);
+	}
+
+	for(HierarchyInTableClassMapping child : getAllChildren()) {
+		context.ensureInitialized(child);
+		for(PropertyMapping pm : child.getHierarchyPropertyMappings()) {
+			if(!hierarchyPropertyMappings.contains(pm)) {
+				hierarchyPropertyMappings.add(pm);
+			}
+		}
+		for(PhysicalPropertyMapping pm : child.getHierarchyPhysicalPropertyMappingList()) {
+			if(!hierarchyPhysicalPropertyMappingList.contains(pm)) {
+				hierarchyPhysicalPropertyMappingList.add(pm);
+			}
+		}
+	}
+}
+
 public HierarchyInTableClassMapping getContainingClassMapping() {
 	return containingClassMapping;
 }
@@ -71,6 +105,10 @@ public Column getDiscriminatorColum() {
 
 public Object getDiscriminatorValue() {
 	return discriminatorValue;
+}
+
+public Collection<HierarchyInTableClassMapping> getAllChildren() {
+	return allChildren;
 }
 
 public void collectUsedColumns(Collection<Column> collection) {
@@ -126,7 +164,9 @@ public HierarchyInTableClassMapping getClassMappingForDiscriminatorValue(Object 
 @Override
 public void addObjectColumns(SubSelectBuilder subSelectBuilder, TableReference tableReference) {
 	subSelectBuilder.addSelectItem(tableReference, discriminatorColumn);
-	super.addObjectColumns(subSelectBuilder, tableReference);
+	for(PhysicalPropertyMapping pm : getHierarchyPhysicalPropertyMappingList()) {
+		pm.addColumns(subSelectBuilder, tableReference);
+	}
 }
 
 @Override
@@ -135,16 +175,11 @@ public Object createObject(ResultSetReader reader, ObjectFactory factory, boolea
 		Object value = discriminatorColumn.getObject(reader.getResultSet(), reader.getCurrentColumnIndex());
 		reader.setCurrentColumnIndex(reader.getCurrentColumnIndex() + 1);
 		HierarchyInTableClassMapping effectiveMapping = getClassMappingForDiscriminatorValue(value);
-		return effectiveMapping.primitiveCreateObject(reader, factory, wantsObjects);
+		return effectiveMapping.createObject(reader, factory, wantsObjects, hierarchyPhysicalPropertyMappingList);
 	} else {
-		return primitiveCreateObject(reader, factory, wantsObjects);
+		return super.createObject(reader, factory, wantsObjects);
 	}
 }
-
-protected Object primitiveCreateObject(ResultSetReader reader, ObjectFactory factory, boolean wantsObjects) throws SQLException { 
-	return super.createObject(reader, factory, wantsObjects);
-}
-
 
 @Override
 public Row createPrimaryRow() {
