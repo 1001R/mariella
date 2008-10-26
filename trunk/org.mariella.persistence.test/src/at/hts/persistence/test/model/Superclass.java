@@ -2,8 +2,10 @@ package at.hts.persistence.test.model;
 
 import java.beans.PropertyChangeSupport;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
 
 import at.hts.persistence.runtime.Modifiable;
 
@@ -18,6 +20,7 @@ public PropertyChangeSupport getPropertyChangeSupport() {
 }
 
 @Id
+@Column(name="ID")
 public Long getId() {
 	return id;
 }
@@ -28,6 +31,7 @@ public void setId(Long id) {
 	propertyChangeSupport.firePropertyChange("id", oldValue, id);
 }
 
+@Transient
 public Object getIdentity() {
 	return id;
 }

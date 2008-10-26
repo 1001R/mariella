@@ -15,25 +15,25 @@ import org.junit.Before;
 import org.junit.Test;
 
 import at.hts.persistence.loader.ClusterLoader;
+import at.hts.persistence.loader.ClusterLoaderConditionProvider;
 import at.hts.persistence.loader.LoaderContext;
+import at.hts.persistence.mapping.SchemaMapping;
 import at.hts.persistence.persistor.ClusterDescription;
 import at.hts.persistence.persistor.DatabaseAccess;
 import at.hts.persistence.persistor.Persistor;
-import at.hts.persistence.query.QueryBuilderListener;
 import at.hts.persistence.runtime.Modifiable;
 import at.hts.persistence.runtime.ModificationTracker;
 import at.hts.persistence.runtime.RIListener;
+import at.hts.persistence.schema.ClassDescription;
 import at.hts.persistence.test.model.Adresse;
-import at.hts.persistence.test.model.Identity;
 import at.hts.persistence.test.model.LieferAdresse;
 import at.hts.persistence.test.model.Person;
-import at.hts.persistence.test.model.TestSchemaDescription;
+import at.hts.persistence.test.model.TestPersistence;
 
 public class ModificationTest {
 	private ModificationTracker modificationTracker;
 	private RIListener riListener;
 	
-	private TestSchemaDescription schemaDescription;
 	private Connection connection;
 	
 	private DatabaseAccess idGenerator = new DatabaseAccess() {
@@ -59,13 +59,19 @@ public class ModificationTest {
 			return connection;
 		}
 	};
+
+private SchemaMapping getSchemaMapping() {
+	return TestPersistence.Singleton.getSchemaMapping();
+}
+
+private ClassDescription getClassDescription(Class<?> cls) {
+	return TestPersistence.Singleton.getSchemaMapping().getSchemaDescription().getClassDescription(cls.getName());
+}
 	
 @Before
 public void setUp() throws Exception {
-	schemaDescription = new TestSchemaDescription();
-	
 	modificationTracker = new ModificationTracker();
-	riListener = new RIListener(new TestSchemaDescription());
+	riListener = new RIListener(TestPersistence.Singleton.getSchemaMapping().getSchemaDescription());
 	modificationTracker.addListener(riListener);
 	
 	DriverManager.registerDriver(new OracleDriver());
@@ -82,8 +88,8 @@ public void test() {
 	Adresse adresse = new LieferAdresse();
 	modificationTracker.addNewParticipant(adresse);
 	
-	markus.setPersonIdentity(new Identity("markus", 37));
-	martin.setPersonIdentity(new Identity("martin", 40));
+	markus.setName("markus");
+	martin.setName("martin");
 	adresse.setStrasse("dr. boehringer gasse");
 	markus.getAdressen().add(adresse);
 	adresse.setPerson(martin);
@@ -112,15 +118,15 @@ public void testPersistor() throws Exception {
 	modificationTracker.addNewParticipant(csd);
 	
 	Person markus = new Person();
-	markus.setPersonIdentity(new Identity("markus", 37));
+	markus.setName("markus");
 	modificationTracker.addNewParticipant(markus);
 	markus.getPrivatAdressen().add(csd);
 
 	Person martin = new Person();
-	martin.setPersonIdentity(new Identity("martin", 40));
+	martin.setName("martin");
 	modificationTracker.addNewParticipant(martin);
 
-	p = new Persistor(schemaDescription.getSchemaMapping(), idGenerator, modificationTracker);
+	p = new Persistor(getSchemaMapping(), idGenerator, modificationTracker);
 	p.persist();
 	
 	Adresse bia = new LieferAdresse();
@@ -130,7 +136,7 @@ public void testPersistor() throws Exception {
 	bia.setPerson(martin);
 	markus.setContactPerson(martin);
 	
-	p = new Persistor(schemaDescription.getSchemaMapping(), idGenerator, modificationTracker);
+	p = new Persistor(getSchemaMapping(), idGenerator, modificationTracker);
 	try {
 		p.persist();
 		connection.commit();
@@ -144,28 +150,26 @@ public void testPersistor() throws Exception {
 @SuppressWarnings("unchecked")
 public void testLoader() throws Exception {
 	ClusterDescription cd = new ClusterDescription();
-	cd.setRootDescription(schemaDescription.getClassDescription(Person.class.getName()));
+	cd.setRootDescription(getClassDescription(Person.class));
 	cd.setPathExpressions(new String[] { "root", "root.contactPerson", "root.contactPerson.adressen"  } );
 	
-	ClusterLoader clusterLoader = new ClusterLoader(schemaDescription.getSchemaMapping(), cd);
+	ClusterLoader clusterLoader = new ClusterLoader(getSchemaMapping(), cd);
 	LoaderContext loaderContext = new LoaderContext(modificationTracker);
-	List<Modifiable> result = (List<Modifiable>)clusterLoader.load(connection, loaderContext, QueryBuilderListener.Default);
+	List<Modifiable> result = (List<Modifiable>)clusterLoader.load(connection, loaderContext, ClusterLoaderConditionProvider.Default);
 	Assert.assertEquals(result.size(), 2);
 	Person aim = (Person)result.get(0);
 	Person ms = (Person)result.get(1);
-	Assert.assertEquals(aim.getPersonIdentity().getName(), "markus");
-	Assert.assertEquals(aim.getPersonIdentity().getAge(), 37);
+	Assert.assertEquals(aim.getName(), "markus");
 	Assert.assertEquals(aim.getAdressen().size(), 0);
 	Assert.assertNull(aim.getContactPersonFor());
 	Assert.assertEquals(aim.getContactPerson(), ms);
 	Assert.assertEquals(ms.getContactPersonFor(), aim);
-	Assert.assertEquals(ms.getPersonIdentity().getName(), "martin");
-	Assert.assertEquals(ms.getPersonIdentity().getAge(), 40);
+	Assert.assertEquals(ms.getName(), "martin");
 	Assert.assertEquals(ms.getAdressen().size(), 1);
 	Assert.assertEquals(ms.getAdressen().get(0).getStrasse(), "dr. boehringer gasse");
 	
 	ms.getAdressen().remove(0);
-	Persistor p = new Persistor(schemaDescription.getSchemaMapping(), idGenerator, modificationTracker);
+	Persistor p = new Persistor(getSchemaMapping(), idGenerator, modificationTracker);
 	try {
 		p.persist();
 		connection.commit();
@@ -179,17 +183,17 @@ public void testLoader() throws Exception {
 @SuppressWarnings("unchecked")
 public void testLoader2() throws Exception {
 	ClusterDescription cd = new ClusterDescription();
-	cd.setRootDescription(schemaDescription.getClassDescription(Person.class.getName()));
+	cd.setRootDescription(getClassDescription(Person.class));
 	cd.setPathExpressions(new String[] { "root", "root.privatAdressen" } );
 	
-	ClusterLoader clusterLoader = new ClusterLoader(schemaDescription.getSchemaMapping(), cd);
+	ClusterLoader clusterLoader = new ClusterLoader(getSchemaMapping(), cd);
 	LoaderContext loaderContext = new LoaderContext(modificationTracker);
-	List<Modifiable> result = (List<Modifiable>)clusterLoader.load(connection, loaderContext, QueryBuilderListener.Default);
+	List<Modifiable> result = (List<Modifiable>)clusterLoader.load(connection, loaderContext, ClusterLoaderConditionProvider.Default);
 	Assert.assertEquals(result.size(), 2);
 	Person aim = (Person)result.get(0);
 	aim.getPrivatAdressen().remove(0);
-	aim.setPersonIdentity(new Identity("markus", 19));
-	Persistor p = new Persistor(schemaDescription.getSchemaMapping(), idGenerator, modificationTracker);
+	aim.setName("markus");
+	Persistor p = new Persistor(getSchemaMapping(), idGenerator, modificationTracker);
 	try {
 		p.persist();
 		connection.commit();
