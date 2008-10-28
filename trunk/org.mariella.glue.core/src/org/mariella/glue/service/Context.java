@@ -2,13 +2,14 @@ package org.mariella.glue.service;
 
 import java.sql.Connection;
 
-import at.hts.persistence.loader.ClusterLoader;
-import at.hts.persistence.loader.LoaderContext;
-import at.hts.persistence.mapping.SchemaMapping;
-import at.hts.persistence.persistor.ClusterDescription;
-import at.hts.persistence.persistor.DatabaseAccess;
-import at.hts.persistence.persistor.Persistor;
-import at.hts.persistence.runtime.ModificationTracker;
+import org.mariella.persistence.loader.ClusterLoader;
+import org.mariella.persistence.loader.LoaderContext;
+import org.mariella.persistence.mapping.SchemaMapping;
+import org.mariella.persistence.persistor.ClusterDescription;
+import org.mariella.persistence.persistor.DatabaseAccess;
+import org.mariella.persistence.persistor.Persistor;
+import org.mariella.persistence.runtime.ModificationTracker;
+
 
 public interface Context {
 

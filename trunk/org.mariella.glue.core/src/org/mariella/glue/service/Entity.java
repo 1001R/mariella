@@ -8,7 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
-import at.hts.persistence.runtime.Modifiable;
+import org.mariella.persistence.runtime.Modifiable;
+
 
 @MappedSuperclass
 public class Entity implements Modifiable {

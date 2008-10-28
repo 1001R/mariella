@@ -2,7 +2,8 @@ package org.mariella.glue.service;
 
 import java.util.Collection;
 
-import at.hts.persistence.schema.ClassDescription;
+import org.mariella.persistence.schema.ClassDescription;
+
 
 public interface EntityService <T extends Entity> extends ModifiableService<T> {
 	

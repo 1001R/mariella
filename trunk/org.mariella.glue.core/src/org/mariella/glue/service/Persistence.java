@@ -1,6 +1,6 @@
 package org.mariella.glue.service;
 
-import at.hts.persistence.mapping.SchemaMapping;
+import org.mariella.persistence.mapping.SchemaMapping;
 
 public interface Persistence {
 public SchemaMapping getSchemaMapping();

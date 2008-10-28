@@ -5,11 +5,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.mariella.glue.core.Activator;
+import org.mariella.persistence.query.QueryBuilder;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 
-import at.hts.persistence.query.QueryBuilder;
 
 public class QueryBuilderExecutor {
 	public static interface ResultSetExtractor {

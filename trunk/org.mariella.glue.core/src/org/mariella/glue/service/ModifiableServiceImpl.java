@@ -4,14 +4,15 @@ import java.sql.Connection;
 import java.util.Collection;
 import java.util.List;
 
-import at.hts.persistence.loader.ClusterLoader;
-import at.hts.persistence.loader.ClusterLoaderConditionProvider;
-import at.hts.persistence.loader.LoaderContext;
-import at.hts.persistence.mapping.SchemaMapping;
-import at.hts.persistence.persistor.ClusterDescription;
-import at.hts.persistence.persistor.Persistor;
-import at.hts.persistence.runtime.Modifiable;
-import at.hts.persistence.schema.ClassDescription;
+import org.mariella.persistence.loader.ClusterLoader;
+import org.mariella.persistence.loader.ClusterLoaderConditionProvider;
+import org.mariella.persistence.loader.LoaderContext;
+import org.mariella.persistence.mapping.SchemaMapping;
+import org.mariella.persistence.persistor.ClusterDescription;
+import org.mariella.persistence.persistor.Persistor;
+import org.mariella.persistence.runtime.Modifiable;
+import org.mariella.persistence.schema.ClassDescription;
+
 
 public abstract class ModifiableServiceImpl <T extends Modifiable> extends ScreeningServiceImpl implements ModifiableService<T> {
 

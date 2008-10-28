@@ -2,9 +2,10 @@ package org.mariella.glue.service;
 
 import java.util.List;
 
-import at.hts.persistence.mapping.ClassMapping;
-import at.hts.persistence.query.QueryBuilder;
-import at.hts.persistence.schema.ClassDescription;
+import org.mariella.persistence.mapping.ClassMapping;
+import org.mariella.persistence.query.QueryBuilder;
+import org.mariella.persistence.schema.ClassDescription;
+
 
 public class QueryResult<E> {
 	private final List<E> result;

@@ -1,8 +1,8 @@
 package org.mariella.glue.service;
 
+import org.mariella.persistence.schema.ClassDescription;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import at.hts.persistence.schema.ClassDescription;
 
 
 public abstract class EntityQuery<T, E extends EntityQueryResult> extends Query<T, E>{

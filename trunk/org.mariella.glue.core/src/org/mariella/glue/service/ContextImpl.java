@@ -6,18 +6,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.mariella.glue.core.Activator;
+import org.mariella.persistence.database.Column;
+import org.mariella.persistence.database.Table;
+import org.mariella.persistence.loader.ClusterLoader;
+import org.mariella.persistence.loader.LoaderContext;
+import org.mariella.persistence.loader.ModifiableFactoryImpl;
+import org.mariella.persistence.mapping.SchemaMapping;
+import org.mariella.persistence.persistor.ClusterDescription;
+import org.mariella.persistence.persistor.DatabaseAccess;
+import org.mariella.persistence.persistor.Persistor;
+import org.mariella.persistence.runtime.ModificationTracker;
+import org.mariella.persistence.runtime.RIListener;
 
-import at.hts.persistence.database.Column;
-import at.hts.persistence.database.Table;
-import at.hts.persistence.loader.ClusterLoader;
-import at.hts.persistence.loader.LoaderContext;
-import at.hts.persistence.loader.ModifiableFactoryImpl;
-import at.hts.persistence.mapping.SchemaMapping;
-import at.hts.persistence.persistor.ClusterDescription;
-import at.hts.persistence.persistor.DatabaseAccess;
-import at.hts.persistence.persistor.Persistor;
-import at.hts.persistence.runtime.ModificationTracker;
-import at.hts.persistence.runtime.RIListener;
 
 public abstract class ContextImpl implements Context {
 	protected final SchemaMapping schemaMapping;

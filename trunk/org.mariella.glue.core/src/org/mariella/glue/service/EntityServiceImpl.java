@@ -3,7 +3,8 @@ package org.mariella.glue.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.hts.persistence.runtime.ModificationInfo;
+import org.mariella.persistence.runtime.ModificationInfo;
+
 
 public abstract class EntityServiceImpl <T extends Entity> extends ModifiableServiceImpl<T> implements EntityService<T> {
 	protected List<EntityServiceListener> listeners = new ArrayList<EntityServiceListener>();

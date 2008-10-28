@@ -1,9 +1,9 @@
 package org.mariella.glue.service;
 
+import org.mariella.persistence.schema.ClassDescription;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 
-import at.hts.persistence.schema.ClassDescription;
 
 public abstract class LostUpdateEntityQuery <T extends LostUpdateEntityQueryParameter, E extends LostUpdateEntityQueryResult> extends EntityQuery<T, E> {
 

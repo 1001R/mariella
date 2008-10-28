@@ -2,9 +2,10 @@ package org.mariella.glue.service;
 
 import java.util.Collection;
 
-import at.hts.persistence.persistor.ClusterDescription;
-import at.hts.persistence.runtime.Modifiable;
-import at.hts.persistence.schema.ClassDescription;
+import org.mariella.persistence.persistor.ClusterDescription;
+import org.mariella.persistence.runtime.Modifiable;
+import org.mariella.persistence.schema.ClassDescription;
+
 
 public interface ModifiableService <T extends Modifiable> extends ScreeningService {
 

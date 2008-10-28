@@ -10,19 +10,19 @@ import java.util.List;
 import java.util.Map;
 
 import org.mariella.glue.core.Activator;
+import org.mariella.persistence.database.Column;
+import org.mariella.persistence.database.Converter;
+import org.mariella.persistence.query.BinaryCondition;
+import org.mariella.persistence.query.ColumnReference;
+import org.mariella.persistence.query.Expression;
+import org.mariella.persistence.query.Parameter;
+import org.mariella.persistence.query.QueryBuilder;
+import org.mariella.persistence.query.SelectItem;
+import org.mariella.persistence.runtime.BeanInfo;
+import org.mariella.persistence.runtime.Introspector;
+import org.mariella.persistence.schema.ClassDescription;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import at.hts.persistence.database.Column;
-import at.hts.persistence.database.Converter;
-import at.hts.persistence.query.BinaryCondition;
-import at.hts.persistence.query.ColumnReference;
-import at.hts.persistence.query.Expression;
-import at.hts.persistence.query.Parameter;
-import at.hts.persistence.query.QueryBuilder;
-import at.hts.persistence.query.SelectItem;
-import at.hts.persistence.runtime.BeanInfo;
-import at.hts.persistence.runtime.Introspector;
-import at.hts.persistence.schema.ClassDescription;
 
 public abstract class Query <T, E>{
 	protected final Context context;
