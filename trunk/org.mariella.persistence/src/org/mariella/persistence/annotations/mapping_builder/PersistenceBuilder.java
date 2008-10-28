@@ -105,6 +105,7 @@ public void build() {
 			buildEntityRelationshipMappings((EntityInfo)classInfo);
 		}
 	}
+	getPersistenceInfo().getSchemaMapping().initialize();
 }
 
 protected Table getTable(TableInfo tableInfo) {
