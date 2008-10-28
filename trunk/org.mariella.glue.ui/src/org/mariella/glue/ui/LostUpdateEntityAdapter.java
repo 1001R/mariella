@@ -2,8 +2,8 @@ package org.mariella.glue.ui;
 
 import org.mariella.glue.service.Context;
 import org.mariella.glue.service.LostUpdateEntity;
+import org.mariella.persistence.runtime.Modifiable;
 
-import at.hts.persistence.runtime.Modifiable;
 
 public class LostUpdateEntityAdapter <T extends LostUpdateEntity> extends EntityAdapter<T> {
 	private String createText;

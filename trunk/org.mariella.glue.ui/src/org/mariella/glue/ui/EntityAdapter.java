@@ -8,13 +8,13 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.mariella.glue.service.Context;
 import org.mariella.glue.service.Entity;
+import org.mariella.persistence.runtime.Modifiable;
+import org.mariella.persistence.runtime.ModificationTrackerListener;
 import org.mariella.rcp.databinding.VBindingContext;
 import org.mariella.rcp.problems.ProblemResource;
 import org.mariella.rcp.problems.ProblemResourceHolder;
 import org.mariella.rcp.resources.AbstractPersistableVResource;
 
-import at.hts.persistence.runtime.Modifiable;
-import at.hts.persistence.runtime.ModificationTrackerListener;
 
 public abstract class EntityAdapter <T extends Entity> extends AbstractPersistableVResource implements IAdaptable, ProblemResourceHolder, ModificationTrackerListener, IEditorInput {
 	protected final T entity;

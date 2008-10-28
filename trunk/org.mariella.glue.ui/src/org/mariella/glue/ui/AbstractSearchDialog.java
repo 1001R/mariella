@@ -21,10 +21,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableColumn;
 import org.mariella.glue.service.QueryResult;
+import org.mariella.persistence.runtime.BeanInfo;
+import org.mariella.persistence.runtime.Introspector;
 import org.mariella.rcp.ControlFactory;
 
-import at.hts.persistence.runtime.BeanInfo;
-import at.hts.persistence.runtime.Introspector;
 
 public abstract class AbstractSearchDialog extends Dialog {
 	protected Action searchAction = new Action("Search") {
