@@ -1,8 +1,9 @@
 package org.mariella.persistence.annotations.mapping_builder;
 
-import at.hts.persistence.database.Schema;
-import at.hts.persistence.mapping.SchemaMapping;
-import at.hts.persistence.schema.SchemaDescription;
+import org.mariella.persistence.database.Schema;
+import org.mariella.persistence.mapping.SchemaMapping;
+import org.mariella.persistence.schema.SchemaDescription;
+
 
 public class PersistenceInfo {
 	private Schema schema;

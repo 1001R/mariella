@@ -7,16 +7,17 @@ import java.sql.Types;
 import java.util.HashMap;
 import java.util.Map;
 
-import at.hts.persistence.database.BigDecimalConverter;
-import at.hts.persistence.database.BooleanAsNumberConverter;
-import at.hts.persistence.database.Converter;
-import at.hts.persistence.database.DateConverter;
-import at.hts.persistence.database.EnumConverter;
-import at.hts.persistence.database.IntegerConverter;
-import at.hts.persistence.database.LongConverter;
-import at.hts.persistence.database.StringConverter;
-import at.hts.persistence.database.TimestampConverter;
-import at.hts.persistence.schema.ScalarPropertyDescription;
+import org.mariella.persistence.database.BigDecimalConverter;
+import org.mariella.persistence.database.BooleanAsNumberConverter;
+import org.mariella.persistence.database.Converter;
+import org.mariella.persistence.database.DateConverter;
+import org.mariella.persistence.database.EnumConverter;
+import org.mariella.persistence.database.IntegerConverter;
+import org.mariella.persistence.database.LongConverter;
+import org.mariella.persistence.database.StringConverter;
+import org.mariella.persistence.database.TimestampConverter;
+import org.mariella.persistence.schema.ScalarPropertyDescription;
+
 
 public class ConverterRegistryImpl implements ConverterRegistry {
 	public static interface ConverterFactory {

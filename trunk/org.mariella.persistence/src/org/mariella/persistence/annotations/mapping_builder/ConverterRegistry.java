@@ -1,9 +1,9 @@
 package org.mariella.persistence.annotations.mapping_builder;
 
 import org.mariella.persistence.annotations.mapping_builder.ConverterRegistryImpl.ConverterFactory;
+import org.mariella.persistence.database.Converter;
+import org.mariella.persistence.schema.ScalarPropertyDescription;
 
-import at.hts.persistence.database.Converter;
-import at.hts.persistence.schema.ScalarPropertyDescription;
 
 public interface ConverterRegistry {
 public Converter<?> getNamedConverter(String converterName);
