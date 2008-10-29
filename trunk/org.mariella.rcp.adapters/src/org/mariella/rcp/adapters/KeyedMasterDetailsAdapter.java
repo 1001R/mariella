@@ -85,6 +85,7 @@ public void addDetails(D details) {
 		detailsList.add(0, details);
 	else
 		detailsList.add(details);
+	addedDetails(details);
 }
 
 public void removeSelectedDetailsFromList() {
@@ -122,6 +123,11 @@ protected void aboutToAddDetails(D details) {
 protected void aboutToRemoveDetails(D details) {
 }
 
+protected void addedDetails(D details) {
+}
+
+protected void removedDetails(D details) {
+}
 public D getSelectedDetails() {
 	return selectedDetails;
 }
@@ -136,6 +142,7 @@ public void removeDetails(D details) {
 	if (selectedDetails == details && autoManageDetailsList())
 		setSelectedKey(null);
 	getAdapterContext().adapterDirtyNotification(this);
+	removedDetails(details);
 }
 
 public List<D> getDetailsList() {
