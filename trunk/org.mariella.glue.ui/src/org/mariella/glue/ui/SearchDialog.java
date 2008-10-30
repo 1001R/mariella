@@ -40,13 +40,15 @@ protected Control createDialogArea(Composite parent) {
 	controlFactory = new DialogControlFactory();
 	
 	Composite composite = new Composite(parent, SWT.None);
-	composite.setLayout(new FillLayout(SWT.VERTICAL));
+	composite.setLayoutData(new GridData(GridData.FILL_BOTH));	
+	composite.setLayout(new GridLayout(1, true));
 	
 	GridData gd;
 	Group group;
 	
 	group = new Group(composite, SWT.SHADOW_ETCHED_IN);
 	group.setText("Search Conditions");
+	group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	
 	GridLayout layout = new GridLayout(4, false);
 	group.setLayout(layout);
@@ -63,6 +65,7 @@ protected Control createDialogArea(Composite parent) {
 	new ActionContributionItem(searchAction).fill(buttonComposite);
 	
 	group = new Group(composite, SWT.SHADOW_ETCHED_IN);
+	group.setLayoutData(new GridData(GridData.FILL_BOTH));
 	group.setText("Search Result");
 	group.setLayout(new FillLayout());
 	

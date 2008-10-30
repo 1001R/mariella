@@ -10,17 +10,21 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.mariella.glue.service.QueryResult;
 import org.mariella.rcp.ControlFactory;
+import org.mariella.rcp.databinding.VBindingContext;
 
 public abstract class SearchImplementation <T, E> {
 	protected ControlFactory controlFactory;
 	protected Composite composite;
 	protected final T queryParameter;
-	
+	protected VBindingContext bindingContext;
+
 public SearchImplementation(T queryParameter) {
 	super();
 	this.queryParameter = queryParameter;
+	bindingContext = createBindingContext();
 }
 
+protected abstract VBindingContext createBindingContext();
 public abstract String getLabel();
 
 @SuppressWarnings("unchecked")
@@ -71,7 +75,7 @@ protected void createSeparator() {
 }
 
 public void dispose() {
-	
+	bindingContext.dispose();
 }
 
 }
