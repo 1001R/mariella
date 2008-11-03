@@ -40,7 +40,29 @@ public class QueryBuilderExecutor {
 			return count;
 		}
 	}
-	
+
+	public static class LongExtractor implements ResultSetExtractor {
+		private Long value = null;
+		
+		public LongExtractor() {
+			super();
+		}
+		
+		@Override
+		public boolean extractData(ResultSet resultSet) throws SQLException, DataAccessException {
+			value = resultSet.getLong(1);
+			return false;
+		}
+		
+		public Long getValue() {
+			return value;
+		}
+		
+		public boolean isNull() {
+			return value == null;
+		}
+	}
+
 	private final QueryBuilder queryBuilder;
 
 public QueryBuilderExecutor(QueryBuilder queryBuilder) {
