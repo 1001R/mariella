@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.databinding.observable.Diffs;
-import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.observable.value.AbstractObservableValue;
 import org.eclipse.jface.util.Util;
 import org.eclipse.jface.viewers.ISelection;
@@ -21,8 +20,8 @@ private boolean updating = false;
 private Object currentSelection;
 private ISelectionChangedListener selectionChangedListener;
 
-public SelectionProviderMultiSelectionObservableValue(Realm realm,	ISelectionProvider selectionProvider) {
-	super(realm);
+public SelectionProviderMultiSelectionObservableValue(ISelectionProvider selectionProvider) {
+	super();
 	if (selectionProvider == null) {
 		throw new IllegalArgumentException(
 				"The 'selectionProvider' parameter is null."); //$NON-NLS-1$

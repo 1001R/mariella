@@ -1,9 +1,9 @@
 package org.mariella.rcp.databinding.internal;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import org.eclipse.core.databinding.observable.Diffs;
-import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.observable.value.AbstractObservableValue;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.IValueChangeListener;
@@ -27,16 +27,21 @@ private IValueChangeListener objectChangeListener = new IValueChangeListener() {
 };
 
 private PropertyChangeListener propertyChangeListener = new PropertyChangeListener() {
-	public void propertyChange(java.beans.PropertyChangeEvent event) {
+	public void propertyChange(final PropertyChangeEvent event) {
 		if (!updating) {
-			fireValueChange(Diffs.createValueDiff(event.getOldValue(), event.getNewValue()));
+			getRealm().exec(new Runnable() {
+				@Override
+				public void run() {
+					fireValueChange(Diffs.createValueDiff(event.getOldValue(), event.getNewValue()));
+				}
+			});
 		}
 	}
 };
 
 
-public PropertyPathObservableValue(Realm realm, Object object, String propertyPath, Class valueType) {
-	super(realm);
+public PropertyPathObservableValue(Object object, String propertyPath, Class valueType) {
+	super();
 	propertyPathSupport.object = object;
 	propertyPathSupport.propertyPath = propertyPath;
 	this.valueType = valueType;

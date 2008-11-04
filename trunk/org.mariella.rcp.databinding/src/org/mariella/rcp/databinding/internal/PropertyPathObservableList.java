@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.databinding.observable.Diffs;
-import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.observable.list.IListChangeListener;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.list.ListChangeEvent;
@@ -72,8 +71,8 @@ private boolean updating = false;
 private InternalBindingContext bindingContext;
 
 
-public PropertyPathObservableList(VBindingContext bindingContext, Realm realm, Object object, String propertyPath, Class elementType) {
-	super(realm, new ArrayList(), elementType);
+public PropertyPathObservableList(VBindingContext bindingContext, Object object, String propertyPath, Class elementType) {
+	super(new ArrayList(), elementType);
 	this.bindingContext = (InternalBindingContext)bindingContext;
 	propertyPathSupport.object = object;
 	propertyPathSupport.propertyPath = propertyPath;

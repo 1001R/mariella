@@ -80,9 +80,7 @@ public static IObservableValue observeSingleSelection(VBindingContext ctx, Struc
 
 public static IObservableValue observeMultiSelection(VBindingContext ctx, StructuredViewer structuredViewer) {
 	IObservableValue value = new VStructuredViewerSelectionObservableValue(
-			new SelectionProviderMultiSelectionObservableValue(
-					SWTObservables.getRealm(Display.getDefault()),
-					structuredViewer),
+			new SelectionProviderMultiSelectionObservableValue(structuredViewer),
 			structuredViewer);
 	((InternalBindingContext)ctx).getMainContext().observablesManager.addObservable(value);
 	return value;
@@ -90,9 +88,7 @@ public static IObservableValue observeMultiSelection(VBindingContext ctx, Struct
 
 public static IObservableValue observeMultiSelection(VBindingContext ctx, StructuredViewer structuredViewer, Class targetType) {
 	IObservableValue value = new VStructuredViewerSelectionObservableValue(
-			new SelectionProviderMultiSelectionObservableValue(
-					SWTObservables.getRealm(Display.getDefault()),
-					structuredViewer),
+			new SelectionProviderMultiSelectionObservableValue(structuredViewer),
 			structuredViewer,
 			targetType);
 	((InternalBindingContext)ctx).getMainContext().observablesManager.addObservable(value);

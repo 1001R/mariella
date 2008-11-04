@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.core.databinding.beans.BeansObservables;
+import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.util.Policy;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IStatus;
@@ -32,10 +33,17 @@ public PropertyListenerSupport(final PropertyChangeListener listener,
 
 	this.propertyName = propertyName;
 	this.listener = new PropertyChangeListener() {
-		public void propertyChange(PropertyChangeEvent evt) {
-			if (propertyName.equals(evt.getPropertyName())) {
-				listener.propertyChange(evt);
-			}
+		public void propertyChange(final PropertyChangeEvent evt) {
+			if (Realm.getDefault() == null)
+				throw new IllegalStateException("No Realm available (Realm.getDefault() == null)");
+			Realm.getDefault().exec(new Runnable() {
+				@Override
+				public void run() {
+					if (propertyName.equals(evt.getPropertyName())) {
+						listener.propertyChange(evt);
+					}
+				}
+			});
 		}
 	};
 }

@@ -2,7 +2,6 @@ package org.mariella.rcp.databinding.internal;
 
 import java.util.List;
 
-import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.mariella.rcp.databinding.VBindingContext;
@@ -10,7 +9,7 @@ import org.mariella.rcp.databinding.VBindingContext;
 public class ModelObservables {
 
 public static IObservableValue observeValue(Object object, String propertyPath, Class valueType) {
-	return new PropertyPathObservableValue(Realm.getDefault(), object, propertyPath, valueType);
+	return new PropertyPathObservableValue(object, propertyPath, valueType);
 }
 
 public static IObservableList createObservableList(VBindingContext ctx) {
@@ -31,7 +30,7 @@ public static IObservableList observeList(VBindingContext ctx, Object object, St
 	if (value instanceof IObservableList)
 		return (IObservableList)value;
 	*/
-	return new PropertyPathObservableList(ctx, Realm.getDefault(), object, propertyPath, type);
+	return new PropertyPathObservableList(ctx, object, propertyPath, type);
 }
 
 }

@@ -46,7 +46,7 @@ PropertyChangeListener elementPropertyChangeListener = new PropertyChangeListene
 };
 
 public VStructuredViewerObservableList(VBindingContext bindingContext, StructuredViewer structuredViewer, Class elementType) {
-	super(SWTObservables.getRealm(structuredViewer.getControl().getDisplay()));
+	super();
 	this.bindingContext = bindingContext;
 	this.viewer = structuredViewer;
 	bindingContext.addObserver(this);
