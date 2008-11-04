@@ -72,7 +72,6 @@ public Label createSeparator(Composite parent, int style) {
 public Table createTable(Composite parent, int style) {
 	Table table = new Table(parent, style);
 	table.setLinesVisible(true);
-	new TableColumnWidthHandler().handleColumnWidths(table);
 	return table;
 }
 

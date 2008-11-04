@@ -150,7 +150,6 @@ public Table createTable(Composite parent, int style) {
 	Table table = formToolkit.createTable(parent, style);
 	table.setLinesVisible(true);
 	handleFont(table);
-	new TableColumnWidthHandler().handleColumnWidths(table);
 	return table;
 }
 

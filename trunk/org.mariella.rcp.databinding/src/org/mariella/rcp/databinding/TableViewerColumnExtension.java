@@ -12,6 +12,7 @@ Object domainSymbol;
 VBindingDomain domain;
 String headerText;
 int weight;
+boolean resizable=false;
 
 public TableViewerColumnExtension(String propertyPath, VBindingDomain domain, String headerText, int weight) {
 	this.propertyPath = propertyPath;
@@ -25,6 +26,22 @@ public TableViewerColumnExtension(String propertyPath, Object domainSymbol, Stri
 	this.domainSymbol = domainSymbol;
 	this.headerText = headerText;
 	this.weight = weight;
+}
+
+public TableViewerColumnExtension(String propertyPath, VBindingDomain domain, String headerText, int weight, boolean resizable) {
+	this.propertyPath = propertyPath;
+	this.domain = domain;
+	this.headerText = headerText;
+	this.weight = weight;
+	this.resizable = resizable;
+}
+
+public TableViewerColumnExtension(String propertyPath, Object domainSymbol, String headerText, int weight, boolean resizable) {
+	this.propertyPath = propertyPath;
+	this.domainSymbol = domainSymbol;
+	this.headerText = headerText;
+	this.weight = weight;
+	this.resizable = resizable;
 }
 
 public void install(VBinding binding) {
@@ -58,6 +75,10 @@ public Object getDomainSymbol() {
 
 public void setDomain(VBindingDomain domain) {
 	this.domain = domain;
+}
+
+public boolean isResizable() {
+	return resizable;
 }
 
 }

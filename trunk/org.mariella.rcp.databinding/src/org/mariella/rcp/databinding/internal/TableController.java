@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.mariella.rcp.TableColumnWidthHandler;
 import org.mariella.rcp.databinding.SelectionManagementExtension;
 import org.mariella.rcp.databinding.TableViewerColumnEditExtension;
 import org.mariella.rcp.databinding.TableViewerColumnExtension;
@@ -75,6 +76,7 @@ private VBindingContext bindingContext;
 private boolean editable = true;
 private boolean hookElementChangeListeners = false;
 private List<Runnable> onExtensionInstalledCommands = new ArrayList<Runnable>();
+private TableColumnWidthHandler columnWidthHandler;
 
 public static TableController createTableController(VBindingContext dbc, TableViewer tableViewer) {
 	TableController controller = new TableController();
@@ -90,6 +92,9 @@ private void setTableViewer(TableViewer tableViewer) {
 	tableViewer.getTable().setLayout(tableLayout);
 	tableViewer.getTable().setHeaderVisible(true);
 	tableViewer.setLabelProvider(this);
+	
+	columnWidthHandler = new TableColumnWidthHandler();
+	columnWidthHandler.handleColumnWidths(tableViewer.getTable());
 }
 
 public void install(TableViewerColumnExtension columnExtension, VBinding binding) {
@@ -99,6 +104,14 @@ public void install(TableViewerColumnExtension columnExtension, VBinding binding
 	tableLayout.addColumnData(new ColumnWeightData(columnExtension.getWeight()));
 	TableColumn tableCol = new TableColumn(tableViewer.getTable(), SWT.ITALIC);
 	tableCol.setText(columnExtension.getHeaderText());
+	Map<String,Object> props = (Map<String,Object>)tableCol.getData();
+	if(props == null) {
+		props =new HashMap<String, Object>();
+		tableCol.setData(props);
+	}
+	props.put(TableColumnWidthHandler.RESIZABLE_PROPERTY, columnExtension.isResizable());
+	columnWidthHandler.handleColumnWidths(tableViewer.getTable(), tableCol);
+
 }
 
 public void install(TableViewerEditExtension tableViewerEditExtension) {
