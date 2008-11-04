@@ -21,6 +21,13 @@ public CommonsValidatorConverterBuilder(AbstractFormatValidator cValidator, Form
 	this.modelType = modelType;
 }
 
+public CommonsValidatorConverterBuilder(AbstractFormatValidator cValidator, Format format, String pattern, Class modelType, boolean allowNullValues) {
+	this.cValidator = cValidator;
+	this.format = format;
+	this.modelType = modelType;
+	this.allowNullValues = allowNullValues;
+}
+
 @Override
 public IConverter buildFromModelConverter(VBindingDomain domain) {
 	return new Converter(modelType, String.class) {
@@ -41,11 +48,15 @@ public IConverter buildToModelConverter(VBindingDomain domain) {
 			if ("".equals(fromObject))
 				return null;
 			if (cValidator != null && !cValidator.isValid((String)fromObject)) {
+				if (allowNullValues)
+					return null;
 				throw new RuntimeException("Not a valid input: " + fromObject);
 			}
 			try {
 				return format.parseObject((String)fromObject);
 			} catch (ParseException e) {
+				if (allowNullValues)
+					return null;
 				throw new RuntimeException("Not a valid input: " + fromObject);
 			}
 		}

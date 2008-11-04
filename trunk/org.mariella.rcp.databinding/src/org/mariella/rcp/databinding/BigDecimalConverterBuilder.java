@@ -10,4 +10,9 @@ public BigDecimalConverterBuilder(String pattern) {
 	super(BigDecimalValidator.getInstance(), new BigDecimalFormat(pattern), pattern, BigDecimal.class);
 }
 
+public BigDecimalConverterBuilder(String pattern, boolean allowNullValues) {
+	super(BigDecimalValidator.getInstance(), new BigDecimalFormat(pattern), pattern, BigDecimal.class, allowNullValues);
+}
+
+
 }

@@ -8,4 +8,8 @@ public LongConverterBuilder(String pattern) {
 	super(LongValidator.getInstance(), new IntegerFormat(pattern), pattern, Long.class);
 }
 
+public LongConverterBuilder(String pattern, boolean allowNullValues) {
+	super(LongValidator.getInstance(), new IntegerFormat(pattern), pattern, Long.class, allowNullValues);
+}
+
 }

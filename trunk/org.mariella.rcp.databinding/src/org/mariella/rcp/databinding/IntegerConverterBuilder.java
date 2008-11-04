@@ -8,4 +8,8 @@ public IntegerConverterBuilder(String pattern) {
 	super(IntegerValidator.getInstance(), new IntegerFormat(pattern), pattern, Integer.class);
 }
 
+public IntegerConverterBuilder(String pattern, boolean allowNullValues) {
+	super(IntegerValidator.getInstance(), new IntegerFormat(pattern), pattern, Integer.class, allowNullValues);
+}
+
 }

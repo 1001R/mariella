@@ -9,4 +9,8 @@ public SqlDateConverterBuilder(String pattern) {
 	super(null, new SqlDateFormat(pattern), pattern, Date.class);
 }
 
+public SqlDateConverterBuilder(String pattern, boolean allowNullValues) {
+	super(null, new SqlDateFormat(pattern), pattern, Date.class, allowNullValues);
+}
+
 }
