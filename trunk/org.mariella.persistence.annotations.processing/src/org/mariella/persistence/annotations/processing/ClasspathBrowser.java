@@ -16,8 +16,15 @@ public static ClasspathBrowser getBrowser(URL url) throws Exception {
 		url = FileLocator.resolve(url); 
 	}
 	
-	if (url.getProtocol().equals("file")) {
-		File f = new File(url.getFile());
+	if (url.getProtocol().equals("jar")) {
+		String fileName = url.getFile();
+		if (fileName.endsWith("!/"))
+			fileName = fileName.substring(0,fileName.length()-2);
+		if (fileName.startsWith("file:"))
+			fileName = fileName.substring(5);
+		return new JarClasspathBrowser(new File(fileName));
+	} else if (url.getProtocol().equals("file")) {
+		File f = new File(url.getFile().substring(0,url.getFile().length()-2));
 		if (f.isDirectory()) {
 			return new DirectoryClasspathBrowser(f);
 		} else {
