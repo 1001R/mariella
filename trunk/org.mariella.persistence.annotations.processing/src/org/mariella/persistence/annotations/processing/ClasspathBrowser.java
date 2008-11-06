@@ -24,7 +24,7 @@ public static ClasspathBrowser getBrowser(URL url) throws Exception {
 			fileName = fileName.substring(5);
 		return new JarClasspathBrowser(new File(fileName));
 	} else if (url.getProtocol().equals("file")) {
-		File f = new File(url.getFile().substring(0,url.getFile().length()-2));
+		File f = new File(url.getFile());
 		if (f.isDirectory()) {
 			return new DirectoryClasspathBrowser(f);
 		} else {
