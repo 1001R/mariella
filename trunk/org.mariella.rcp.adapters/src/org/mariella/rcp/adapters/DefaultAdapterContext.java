@@ -14,7 +14,10 @@ public DefaultAdapterContext(VBindingContext bindingContext) {
 }
 
 @Override
-public void dirtyNotification(Object source) {}
+public void dirtyNotification(Object source) {
+	for (AdapterContextObserver obs : observers)
+		obs.dirtyNotification(this);
+}
 
 @Override
 public void addObserver(AdapterContextObserver o) {

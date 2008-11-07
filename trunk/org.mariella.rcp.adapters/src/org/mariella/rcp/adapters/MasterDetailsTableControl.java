@@ -26,7 +26,7 @@ private IObservableValue adapterObservable = null;
 
 protected ControlFactory controlFactory;
 protected TableViewer tableViewer;
-VBindingContext bindingContext;	// the binding context of the UI
+protected final VBindingContext bindingContext;	// the binding context of the UI
 boolean unmodifiableList = false;
 
 protected void addedDetails(D details) {}
