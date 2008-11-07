@@ -97,6 +97,7 @@ private void setTableViewer(TableViewer tableViewer) {
 	columnWidthHandler.handleColumnWidths(tableViewer.getTable());
 }
 
+@SuppressWarnings("unchecked")
 public void install(TableViewerColumnExtension columnExtension, VBinding binding) {
 	if (columnExtension.getDomain() == null)
 		columnExtension.setDomain(binding.getBindingContext().getBindingFactory().getDomainRegistry().getDomain(columnExtension.getDomainSymbol()));
