@@ -75,7 +75,7 @@ protected D createDetails() {
 public void addDetails(D details) {
 	detailsList.add(details);
 	aboutToAddDetails(details);
-	getAdapterContext().adapterDirtyNotification(this);
+	getAdapterContext().dirtyNotification(this);
 	setSelectedDetails(details);
 }
 
@@ -84,7 +84,7 @@ public void removeDetails(D details) {
 	detailsList.remove(details);
 	if (selectedDetails == details)
 		setSelectedDetails(null);
-	getAdapterContext().adapterDirtyNotification(this);
+	getAdapterContext().dirtyNotification(this);
 }
 
 public List<D> getDetailsList() {
@@ -98,7 +98,7 @@ public IObservableList getObservableDetailsList() {
 public void clearDetailsList() {
 	detailsList.clear();
 	setSelectedDetails(null);
-	adapterContext.adapterDirtyNotification(this);
+	adapterContext.dirtyNotification(this);
 }
 
 public void setToFirstSelectedDetails() {

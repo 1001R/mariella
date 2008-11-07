@@ -7,7 +7,7 @@ public interface AdapterContext {
 
 VBindingContext getBindingContext();
 
-void adapterDirtyNotification(Adapter adapter);
+void dirtyNotification(Object source);
 
 void addObserver(AdapterContextObserver o);
 

@@ -14,7 +14,7 @@ public DefaultAdapterContext(VBindingContext bindingContext) {
 }
 
 @Override
-public void adapterDirtyNotification(Adapter adapter) {}
+public void dirtyNotification(Object source) {}
 
 @Override
 public void addObserver(AdapterContextObserver o) {

@@ -47,7 +47,7 @@ public void setParent(AbstractAdapter parent) {
 protected void fireAdapterDirty(Object oldValue, Object newValue) {
 	if (silent) return;
 	if (equals(oldValue, newValue)) return;
-	adapterContext.adapterDirtyNotification(this);
+	adapterContext.dirtyNotification(this);
 }
 
 private boolean equals(Object o1, Object o2) {
@@ -77,7 +77,7 @@ public void firePropertyChange(String propertyName, Object oldValue, Object newV
 
 public void fireAdapterDirty() {
 	if (silent) return;
-	adapterContext.adapterDirtyNotification(this);
+	adapterContext.dirtyNotification(this);
 }
 
 }

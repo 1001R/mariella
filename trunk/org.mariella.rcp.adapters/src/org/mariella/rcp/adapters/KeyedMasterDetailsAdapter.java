@@ -141,7 +141,7 @@ public void removeDetails(D details) {
 	detailsList.remove(details);
 	if (selectedDetails == details && autoManageDetailsList())
 		setSelectedKey(null);
-	getAdapterContext().adapterDirtyNotification(this);
+	getAdapterContext().dirtyNotification(this);
 	removedDetails(details);
 }
 
@@ -153,6 +153,6 @@ public void clearDetailsList() {
 	detailsList.clear();
 	if (autoManageDetailsList())
 		setSelectedKey(null);
-	adapterContext.adapterDirtyNotification(this);
+	adapterContext.dirtyNotification(this);
 }
 }
