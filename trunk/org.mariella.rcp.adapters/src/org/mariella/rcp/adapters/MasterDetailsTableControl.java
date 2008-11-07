@@ -12,6 +12,8 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.mariella.rcp.ControlFactory;
+import org.mariella.rcp.databinding.SelectionManagementExtension;
+import org.mariella.rcp.databinding.TableViewerElementChangeListenerExtension;
 import org.mariella.rcp.databinding.VBindingContext;
 import org.mariella.rcp.databinding.VBindingDomain;
 import org.mariella.rcp.databinding.VBindingDomainExtension;
@@ -108,8 +110,12 @@ protected void decorateTableViewer(TableViewer protocolViewer) {}
 
 private VBindingDomainExtension[] buildTableBindingDomainExtensions() {
 	List<VBindingDomainExtension> extensions = new ArrayList<VBindingDomainExtension>();
+
 	addTableBindingDomainExtensions(extensions);
-	
+
+	extensions.add(new SelectionManagementExtension("detailsList")); //$NON-NLS-1$
+	extensions.add(new TableViewerElementChangeListenerExtension());
+
 	VBindingDomainExtension[] array = new VBindingDomainExtension[extensions.size()];
 	extensions.toArray(array);
 	return array;
