@@ -31,4 +31,6 @@ public EntityMasterDetailsAdapterContext<E> getEntityMasterDetailsAdapterContext
 	return context;
 }
 
+public void dispose() {}
+
 }
