@@ -9,6 +9,7 @@ import org.mariella.rcp.ControlFactory;
 import org.mariella.rcp.adapters.WritableMasterDetailsTableControl;
 import org.mariella.rcp.databinding.LongConverterBuilder;
 import org.mariella.rcp.databinding.TableViewerColumnExtension;
+import org.mariella.rcp.databinding.TableViewerEditExtension;
 import org.mariella.rcp.databinding.VBindingContext;
 import org.mariella.rcp.databinding.VBindingDomain;
 import org.mariella.rcp.databinding.VBindingDomainExtension;
@@ -25,6 +26,7 @@ public EntityMasterDetailsTableControl(Composite parent, int style, IObservableV
 
 @Override
 protected void addTableBindingDomainExtensions(List<VBindingDomainExtension> extensions) {
+	extensions.add(new TableViewerEditExtension());
 	extensions.add(new TableViewerColumnExtension("id", 
 			createIdBindingDomain(),
 			"Id",

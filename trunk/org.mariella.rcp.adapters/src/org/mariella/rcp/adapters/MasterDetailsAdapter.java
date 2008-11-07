@@ -73,19 +73,25 @@ protected D createDetails() {
 }
 
 public void addDetails(D details) {
-	detailsList.add(details);
 	aboutToAddDetails(details);
+	detailsList.add(details);
+	addedDetails(details);
 	getAdapterContext().dirtyNotification(this);
 	setSelectedDetails(details);
 }
 
+protected void addedDetails(D details) {}
+
 public void removeDetails(D details) {
 	aboutToRemoveDetails(details);
 	detailsList.remove(details);
+	removedDetails(details);
 	if (selectedDetails == details)
 		setSelectedDetails(null);
 	getAdapterContext().dirtyNotification(this);
 }
+
+protected void removedDetails(D details) {}
 
 public List<D> getDetailsList() {
 	return detailsList;
