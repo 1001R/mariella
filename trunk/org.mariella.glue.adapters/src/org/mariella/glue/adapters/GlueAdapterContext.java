@@ -6,5 +6,7 @@ import org.mariella.rcp.adapters.AdapterContext;
 public interface GlueAdapterContext extends AdapterContext {
 
 public Context getGlueContext();
+
+public void resetGlueContext();
 	
 }

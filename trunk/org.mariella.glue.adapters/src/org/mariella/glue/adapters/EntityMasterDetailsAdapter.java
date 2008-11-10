@@ -20,6 +20,7 @@ public EntityMasterDetailsAdapter(EntityMasterDetailsAdapterContext<E> context) 
 }
 
 public void reload() {
+	getEntityMasterDetailsAdapterContext().resetGlueContext();
 	deletedEntities.clear();
 	clearDetailsList();
 	Collection<E> entities = readEntities();

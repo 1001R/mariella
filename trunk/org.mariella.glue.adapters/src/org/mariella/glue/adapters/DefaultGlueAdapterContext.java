@@ -8,11 +8,13 @@ import org.mariella.rcp.databinding.VBindingContext;
 
 public class DefaultGlueAdapterContext extends DefaultAdapterContext implements	GlueAdapterContext, ModificationTrackerListener  {
 
+	GlueContextFactory glueContextFactory;
 	Context glueContext = null;
 	
-public DefaultGlueAdapterContext(VBindingContext bindingContext, Context glueContext) {
+public DefaultGlueAdapterContext(VBindingContext bindingContext, GlueContextFactory glueContextFactory) {
 	super(bindingContext);
-	setGlueContext(glueContext);
+	this.glueContextFactory = glueContextFactory;
+	setGlueContext(glueContextFactory.createGlueContext());
 }
 
 public Context getGlueContext() {
@@ -35,6 +37,11 @@ public void indexedPropertyChanged(Modifiable modifiable, String propertyName, i
 @Override
 public void propertyChanged(Modifiable modifiable, String propertyName, Object oldValue, Object newValue) {
 	dirtyNotification(modifiable);
+}
+
+@Override
+public void resetGlueContext() {
+	setGlueContext(glueContextFactory.createGlueContext());
 }
 
 }
