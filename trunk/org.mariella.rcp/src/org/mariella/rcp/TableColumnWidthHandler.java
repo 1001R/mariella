@@ -26,6 +26,7 @@ public void handleColumnWidths(final Table table, TableColumn tableCol) {
 }
 
 protected void handleResize(Table table) {
+	/*
 	if (updating) return;
 	updating = true;
 	try {
@@ -57,6 +58,7 @@ protected void handleResize(Table table) {
 	} finally {
 		updating = false;
 	}
+	*/
 }
 
 @SuppressWarnings("unchecked")
