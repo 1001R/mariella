@@ -1,6 +1,7 @@
 package org.mariella.glue.adapters;
 
 import org.mariella.glue.service.Context;
+import org.mariella.glue.service.ContextFactory;
 import org.mariella.persistence.runtime.Modifiable;
 import org.mariella.persistence.runtime.ModificationTrackerListener;
 import org.mariella.rcp.adapters.DefaultAdapterContext;
@@ -8,10 +9,10 @@ import org.mariella.rcp.databinding.VBindingContext;
 
 public class DefaultGlueAdapterContext extends DefaultAdapterContext implements	GlueAdapterContext, ModificationTrackerListener  {
 
-	GlueContextFactory glueContextFactory;
+	ContextFactory glueContextFactory;
 	Context glueContext = null;
 	
-public DefaultGlueAdapterContext(VBindingContext bindingContext, GlueContextFactory glueContextFactory) {
+public DefaultGlueAdapterContext(VBindingContext bindingContext, ContextFactory glueContextFactory) {
 	super(bindingContext);
 	this.glueContextFactory = glueContextFactory;
 	setGlueContext(glueContextFactory.createGlueContext());
