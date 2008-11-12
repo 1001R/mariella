@@ -1,6 +1,6 @@
 package org.mariella.persistence.query;
 
-import java.sql.Date;
+import java.util.Date;
 
 import org.mariella.persistence.database.Converter;
 import org.mariella.persistence.database.DateConverter;

@@ -51,6 +51,7 @@ public ConverterRegistryImpl() {
 	registerConverterFactory(Types.DATE, Timestamp.class, new ConverterFactoryImpl(TimestampConverter.Singleton));
 	registerConverterFactory(Types.TIMESTAMP, Timestamp.class, new ConverterFactoryImpl(TimestampConverter.Singleton));
 	registerConverterFactory(Types.DATE, Date.class, new ConverterFactoryImpl(DateConverter.Singleton));
+	registerConverterFactory(Types.DATE, java.util.Date.class, new ConverterFactoryImpl(DateConverter.Singleton));
 	registerConverterFactory(Types.TIMESTAMP, Date.class, new ConverterFactoryImpl(DateConverter.Singleton));
 }
 

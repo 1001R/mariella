@@ -1,9 +1,9 @@
 package org.mariella.persistence.database;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 
 import org.mariella.persistence.query.DateLiteral;
 import org.mariella.persistence.query.Literal;
@@ -17,7 +17,7 @@ public Date getObject(ResultSet rs, int index) throws SQLException {
 }
 
 public void setObject(PreparedStatement ps, int index, int type, Date value) throws SQLException {
-	ps.setDate(index, value);
+	ps.setDate(index, value == null ? null : new java.sql.Date(value.getTime()));
 }
 
 public Literal<Date> createLiteral(Object value) {
