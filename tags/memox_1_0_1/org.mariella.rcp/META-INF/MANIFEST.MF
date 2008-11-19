@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Rcp Plug-in
+Bundle-SymbolicName: org.mariella.rcp;singleton:=true
+Bundle-Version: 1.0.6
+Bundle-Activator: org.mariella.rcp.Activator
+Bundle-Vendor: CSD
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.jface.text,
+ com.tiff.common.ui.datepicker,
+ org.eclipse.ui.forms;bundle-version="3.3.100"
+Eclipse-LazyStart: true
+Export-Package: org.mariella.rcp,
+ org.mariella.rcp.actions,
+ org.mariella.rcp.beans,
+ org.mariella.rcp.contentassist,
+ org.mariella.rcp.table,
+ org.mariella.rcp.table.edit,
+ org.mariella.rcp.transfer,
+ org.mariella.rcp.util
+
