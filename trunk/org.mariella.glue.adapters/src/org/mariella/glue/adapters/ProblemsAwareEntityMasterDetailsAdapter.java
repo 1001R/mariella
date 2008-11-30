@@ -1,5 +1,7 @@
 package org.mariella.glue.adapters;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +21,7 @@ import org.mariella.rcp.problems.ProblemsPlugin;
 import org.mariella.rcp.problems.ProblemsProvider;
 
 public abstract class ProblemsAwareEntityMasterDetailsAdapter<E extends Entity> extends EntityMasterDetailsAdapter<E> 
-	implements ProblemsProvider, ProblemManagerObserver, AdapterContextObserver {
+	implements ProblemsProvider, ProblemManagerObserver, AdapterContextObserver, PropertyChangeListener {
 
 	private ProblemResource problemResource = new ProblemResource() {
 		@Override
@@ -45,12 +47,22 @@ public abstract class ProblemsAwareEntityMasterDetailsAdapter<E extends Entity> 
 	}
 	
 	private String errorText = null;
+	private List<ProblemsAwareEntityMasterDetailsAdapterObserver> observers = new ArrayList<ProblemsAwareEntityMasterDetailsAdapterObserver>();
 	
 public ProblemsAwareEntityMasterDetailsAdapter(EntityMasterDetailsAdapterContext<E> context) {
 	super(context);
 	ProblemsPlugin.getProblemManager().addProvider(this);
 	ProblemsPlugin.getProblemManager().addObserver(this);
 	context.addObserver(this);
+	addPropertyChangeListener(this);
+}
+
+public void addObserver(ProblemsAwareEntityMasterDetailsAdapterObserver observer) {
+	observers.add(observer);
+}
+
+public void removeObserver(ProblemsAwareEntityMasterDetailsAdapterObserver observer) {
+	observers.remove(observer);
 }
 
 @Override
@@ -98,6 +110,7 @@ public void dispose() {
 	ProblemsPlugin.getProblemManager().removeObserver(this);
 	ProblemsPlugin.getProblemManager().removeProvider(this);
 	getEntityMasterDetailsAdapterContext().removeObserver(this);
+	removePropertyChangeListener(this);
 
 	super.dispose();
 }
@@ -129,6 +142,7 @@ public void selectedProblemResourceChanged(ProblemResource problemResource) {}
 
 @Override
 public void save() throws Exception {
+	ProblemsPlugin.getProblemManager().invalidate(problemResource);
 	if (!isValid()) {
 		MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 				getErrorDialogTitle(), 
@@ -145,8 +159,17 @@ protected abstract String getCannotSaveBecauseOfErrorsMessage();
 public void refresh() {}
 
 public boolean isValid() {
-	ProblemsPlugin.getProblemManager().invalidate(problemResource);
 	return !ProblemsPlugin.getProblemManager().hasErrors(problemResource);
 }
 
+@Override
+public void propertyChange(PropertyChangeEvent evt) {
+	
+	if (evt.getSource() == this && evt.getPropertyName().equals("errorText")) {
+		boolean isValid = isValid();
+		for (ProblemsAwareEntityMasterDetailsAdapterObserver o : observers)
+			o.validChanged(isValid);
+	}
+		
+}
 }
