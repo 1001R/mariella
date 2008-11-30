@@ -14,6 +14,7 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.resource.LocalResourceManager;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.ITableFontProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
@@ -49,13 +50,14 @@ import org.mariella.rcp.databinding.TableViewerColumnLabelDecoratorExtension;
 import org.mariella.rcp.databinding.TableViewerColumnToolTipExtension;
 import org.mariella.rcp.databinding.TableViewerEditExtension;
 import org.mariella.rcp.databinding.TableViewerElementChangeListenerExtension;
+import org.mariella.rcp.databinding.TableViewerLineColorExtension;
 import org.mariella.rcp.databinding.VBinding;
 import org.mariella.rcp.databinding.VBindingContext;
 import org.mariella.rcp.databinding.VBindingDomain;
 import org.mariella.rcp.databinding.VBindingFactory;
 import org.mariella.rcp.databinding.VBindingSelection;
 
-public class TableController extends StructuredViewerController implements ITableLabelProvider, ITableFontProvider {
+public class TableController extends StructuredViewerController implements ITableLabelProvider, ITableFontProvider, ITableColorProvider {
 
 private LocalResourceManager resourceManager = new LocalResourceManager(JFaceResources.getResources());
 private IObservableValue selectionHolder;
@@ -77,6 +79,7 @@ private boolean editable = true;
 private boolean hookElementChangeListeners = false;
 private List<Runnable> onExtensionInstalledCommands = new ArrayList<Runnable>();
 private TableColumnWidthHandler columnWidthHandler;
+private TableViewerLineColorExtension lineColorExtension = null;
 
 public static TableController createTableController(VBindingContext dbc, TableViewer tableViewer) {
 	TableController controller = new TableController();
@@ -290,6 +293,10 @@ public void install(TableViewerColumnFontExtension fontExtension) {
 	fontExtensionMap.put(fontExtension.getPropertyPath(), fontExtension);
 }
 
+public void install(TableViewerLineColorExtension lineColorExtension) {
+	this.lineColorExtension  = lineColorExtension;
+}
+
 public void install(TableViewerColumnLabelDecoratorExtension decoratorExtension) {
 	labelDecoratorExtensionMap .put(decoratorExtension.getPropertyPath(), decoratorExtension);
 }
@@ -417,6 +424,17 @@ public void extensionsInstalled() {
 		r.run();
 }
 
+@Override
+public Color getBackground(Object element, int columnIndex) {
+	if (lineColorExtension != null)
+		return lineColorExtension.getColorCallback().getBackground(element);
+	return null;
+}
 
-
+@Override
+public Color getForeground(Object element, int columnIndex) {
+	if (lineColorExtension != null)
+		return lineColorExtension.getColorCallback().getForeground(element);
+	return null;
+}
 }
