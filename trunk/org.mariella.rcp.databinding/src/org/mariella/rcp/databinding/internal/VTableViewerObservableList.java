@@ -1,6 +1,7 @@
 package org.mariella.rcp.databinding.internal;
 
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.widgets.TableItem;
 import org.mariella.rcp.databinding.VBindingContext;
 
 public class VTableViewerObservableList extends VStructuredViewerObservableList implements EnabledObservableValueFactory {
@@ -43,9 +44,17 @@ public EnabledObservableValue createEnabledObservableValue() {
 }
 
 @Override
-public void aboutToDispose() {
-	// TODO Auto-generated method stub
-	
+public void aboutToDispose() {}
+
+@Override
+int getIndexInControl(Object element) {
+	int index = 0;
+	for (TableItem item : ((TableViewer)viewer).getTable().getItems()) {
+		if (item.getData() == element)
+			return index;
+		index++;
+	}
+	return -1;
 }
 
 }

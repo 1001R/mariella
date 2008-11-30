@@ -3,6 +3,8 @@ package org.mariella.glue.adapters;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.ui.PlatformUI;
 import org.mariella.glue.service.Entity;
 import org.mariella.rcp.adapters.AdapterContext;
 import org.mariella.rcp.adapters.AdapterContextObserver;
@@ -124,5 +126,27 @@ public void dirtyNotification(AdapterContext context) {
 
 @Override
 public void selectedProblemResourceChanged(ProblemResource problemResource) {}
+
+@Override
+public void save() throws Exception {
+	if (!isValid()) {
+		MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
+				getErrorDialogTitle(), 
+				getCannotSaveBecauseOfErrorsMessage());
+		return;
+	}
+	super.save();
+}
+
+protected abstract String getErrorDialogTitle();
+
+protected abstract String getCannotSaveBecauseOfErrorsMessage();
+
+public void refresh() {}
+
+public boolean isValid() {
+	ProblemsPlugin.getProblemManager().invalidate(problemResource);
+	return !ProblemsPlugin.getProblemManager().hasErrors(problemResource);
+}
 
 }

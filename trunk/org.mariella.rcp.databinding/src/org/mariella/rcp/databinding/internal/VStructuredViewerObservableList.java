@@ -18,6 +18,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Widget;
 import org.mariella.rcp.databinding.SelectionPath;
 import org.mariella.rcp.databinding.VBindingContext;
@@ -177,12 +178,25 @@ public void dispatchSelection(VDataBindingSelectionDispatchContext dispatchCtx) 
 		if (dispatchCtx.matchesPath(selectionBasePath)) {
 			dispatchCtx.dispatched = true;
 			if (dispatchCtx.hasNextPathToken()) {
-				int index = (Integer)dispatchCtx.nextPathToken();
-				viewer.setSelection(new StructuredSelection(implementGetElementAt(index)));
-				implementSetTopIndex(index);
+				Object indexOrElement = dispatchCtx.nextPathToken();
+				Object element;
+				int index;
+				if (indexOrElement instanceof Integer) {
+					index = (Integer)indexOrElement;
+					element = implementGetElementAt(index);
+				} else {
+					element = indexOrElement; 
+					index = getIndexInControl(element); 
+				}
+				if (element == null)
+					viewer.setSelection(new StructuredSelection());
+				else
+					viewer.setSelection(new StructuredSelection(element));
 				
-				
-				completeDispatchSelection(index, dispatchCtx);
+				if (index != -1) {
+					implementSetTopIndex(index);
+					completeDispatchSelection(index, dispatchCtx);
+				}
 			}
 		}
 	} finally {
@@ -192,6 +206,8 @@ public void dispatchSelection(VDataBindingSelectionDispatchContext dispatchCtx) 
 	if (!dispatchCtx.dispatched)
 		dispatchCtx.invokeNextDispatcher(false);
 }
+
+abstract int getIndexInControl(Object element);
 
 void completeDispatchSelection(int index, VDataBindingSelectionDispatchContext dispatchCtx) {}
 

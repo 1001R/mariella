@@ -53,7 +53,7 @@ public MasterDetailsTableControl(Composite parent, int style, A adapter, Control
 
 
 
-private void initialize() {
+protected void initialize() {
 	
 	setLayout(new FormLayout());
 
