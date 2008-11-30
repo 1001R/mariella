@@ -53,7 +53,7 @@ public ProblemsAwareEntityMasterDetailsAdapter(EntityMasterDetailsAdapterContext
 
 @Override
 public void addProblems(ProblemManager problemMgr, ProblemResource resource) {
-	ProblemScanContext ctx = new ProblemScanContext();
+	ProblemScanContext ctx = createProblemScanContext();
 	ctx.problemManager = problemMgr;
 	int index=0;
 	for (E entity : getDetailsList()) {
@@ -61,6 +61,10 @@ public void addProblems(ProblemManager problemMgr, ProblemResource resource) {
 		ctx.currentEntityIndex = index++;
 		scanForProblems(ctx);
 	}
+}
+
+protected ProblemScanContext createProblemScanContext() {
+	return new ProblemScanContext();
 }
 
 protected void scanForProblems(ProblemScanContext ctx) {}
