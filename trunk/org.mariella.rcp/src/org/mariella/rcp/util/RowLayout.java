@@ -6,6 +6,7 @@ import java.util.Map;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Layout;
@@ -61,9 +62,14 @@ protected void layout(Composite composite, boolean flushCache) {
 	Rectangle rect = composite.getClientArea();
 	int x = margin, y = margin;
 	int height = Math.max(rect.height - 2 * margin, maxHeight);
+	
 	for (int i = 0; i < children.length; i++) {
-		if (sizes[i] == null)
+		Button b = (Button)children[i];
+		
+		if (sizes[i] == null) {
+			children[i].setSize(new Point(0,0));
 			continue;
+		}
 		int width = sizes[i].x;
 		children[i].setBounds(x, y, width, height);
 		x += width+ spacing;
@@ -76,7 +82,6 @@ void initialize(Control children[]) {
 	sizes = new Point[children.length];
 	for (int i = 0; i < children.length; i++) {
 		if (!isVisible(children[i])) {
-			System.out.println("not visible");
 			sizes[i] = null;
 			continue;
 		}
