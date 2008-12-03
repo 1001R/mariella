@@ -48,6 +48,9 @@ public ConverterRegistryImpl() {
 	registerNumericConverters(Types.INTEGER);
 	registerNumericConverters(Types.DECIMAL);
 	registerNumericConverters(Types.NUMERIC);
+	
+	registerConverterFactory(Types.FLOAT, BigDecimal.class, new ConverterFactoryImpl(BigDecimalConverter.Singleton));
+		
 	registerConverterFactory(Types.DATE, Timestamp.class, new ConverterFactoryImpl(TimestampConverter.Singleton));
 	registerConverterFactory(Types.TIMESTAMP, Timestamp.class, new ConverterFactoryImpl(TimestampConverter.Singleton));
 	registerConverterFactory(Types.DATE, Date.class, new ConverterFactoryImpl(DateConverter.Singleton));
