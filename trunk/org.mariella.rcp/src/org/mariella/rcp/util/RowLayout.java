@@ -67,7 +67,7 @@ protected void layout(Composite composite, boolean flushCache) {
 		Button b = (Button)children[i];
 		
 		if (sizes[i] == null) {
-			children[i].setSize(new Point(0,0));
+			children[i].setBounds(new Rectangle(0,0,0,0));
 			continue;
 		}
 		int width = sizes[i].x;
