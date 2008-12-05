@@ -137,7 +137,7 @@ protected Column getColumn(TableInfo tableInfo, BasicAttributeInfo attributeInfo
 	Table table = getTable(tableInfo);
 	DatabaseTableInfo dti = tableInfos.get(tableInfo);
 	DatabaseColumnInfo dci = dti.getColumnInfo(attributeInfo.getColumnInfo().getName());
-	Assert.isNotNull(dci, "No database column info for column " + attributeInfo.getColumnInfo().getName());
+	Assert.isNotNull(dci, "No database column info for column " + tableInfo.getName() + "." + attributeInfo.getColumnInfo().getName());
 	Converter<?> converter;
 	if(attributeInfo.getConverterName() != null) {
 		converter = converterRegistry.getNamedConverter(attributeInfo.getConverterName());

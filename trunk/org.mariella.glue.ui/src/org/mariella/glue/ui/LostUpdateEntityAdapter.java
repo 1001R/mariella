@@ -1,11 +1,15 @@
 package org.mariella.glue.ui;
 
+import java.text.SimpleDateFormat;
+
 import org.mariella.glue.service.Context;
 import org.mariella.glue.service.LostUpdateEntity;
 import org.mariella.persistence.runtime.Modifiable;
 
 
 public class LostUpdateEntityAdapter <T extends LostUpdateEntity> extends EntityAdapter<T> {
+	private final SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+	
 	private String createText;
 	private String updateText;
 	
@@ -15,7 +19,7 @@ public LostUpdateEntityAdapter(Context context, T entity) {
 
 public String getCreateText() {
 	if(createText == null) {
-		createText = "created by " + entity.getCreateUser() + " at " + entity.getCreateTimestamp().toString();
+		createText = "created by " + entity.getCreateUser() + " at " + format.format(entity.getCreateTimestamp());
 	}
 	return createText;
 }
@@ -23,7 +27,7 @@ public String getCreateText() {
 public String getUpdateText() {
 	if(updateText == null) {
 		if(entity.getUpdateUser() != null && entity.getUpdateTimestamp() != null) {
-			updateText = "last modified by " + entity.getUpdateUser() + " at " + entity.getUpdateTimestamp().toString();
+			updateText = "last modified by " + entity.getUpdateUser() + " at " + format.format(entity.getUpdateTimestamp());
 		} else {
 			updateText = "no modifications after creation";
 		}

@@ -37,6 +37,8 @@ public abstract class Query <T, E>{
 	protected List<Parameter> parameters = new ArrayList<Parameter>();
 	protected List<String> resultProperties = new ArrayList<String>();
 	
+	protected List<String> ucaseParameters = new ArrayList<String>();
+	
 public Query(Context context, JdbcTemplate jdbcTemplate, ClassDescription classDescription, T searchParameter) {
 	super();
 	this.context = context;
@@ -95,6 +97,29 @@ protected SelectItem addSelectItem(String propertyName, String pathExpression) {
 
 protected BinaryCondition like(String parameterName, String pathExpression) {
 	return addBinaryCondition(parameterName, pathExpression, "like");
+}
+
+protected BinaryCondition ucaseStartsWith(String parameterName, String pathExpression) {
+	final ColumnReference columnReference = queryBuilder.createColumnReference(pathExpression);
+	Parameter parameter = createParameter(parameterName, columnReference.getColumn());
+	
+	BinaryCondition binaryCondition = new BinaryCondition();
+	binaryCondition.setLeft(
+		new Expression() {
+			@Override
+			public void printSql(StringBuilder b) {
+				b.append("UPPER(");
+				columnReference.printSql(b);
+				b.append(")");
+			}
+		}
+	);
+	binaryCondition.setRight(parameter);
+	binaryCondition.setOperator("LIKE");
+	
+	queryBuilder.and(binaryCondition);
+	ucaseParameters.add(parameterName);
+	return binaryCondition;
 }
 
 protected BinaryCondition gt(String parameterName, String pathExpression) {
@@ -158,10 +183,18 @@ protected void setParameter(PreparedStatement preparedStatement, Column column, 
 	PropertyDescriptor pd = beanInfo.getPropertyDescriptor(parameterName);
 	try {
 		Object value = pd.getReadMethod().invoke(searchParameter, new Object[] {});
-		((Converter)column.getConverter()).setObject(preparedStatement, idx, column.getType(), value);
+		if(ucaseParameters.contains(parameterName)) {
+			((Converter)column.getConverter()).setObject(preparedStatement, idx, column.getType(), toUCaseValue((String)value));
+		} else {
+			((Converter)column.getConverter()).setObject(preparedStatement, idx, column.getType(), value);
+		}
 	} catch(Exception e) {
 		throw new RuntimeException(e);
 	}
+}
+
+private String toUCaseValue(String parameterValue) {
+	return parameterValue.toUpperCase() + "%";
 }
 
 protected List<E> executeSearch(Context context, final String sql) {
