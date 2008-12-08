@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Test Plug-in
+Bundle-SymbolicName: tablebinding.test; singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: tablebinding.test.Activator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.mariella.rcp;bundle-version="1.0.6",
+ org.mariella.rcp.databinding;bundle-version="1.1.31",
+ org.eclipse.core.databinding;bundle-version="1.1.0",
+ org.eclipse.jface.text;bundle-version="3.4.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
