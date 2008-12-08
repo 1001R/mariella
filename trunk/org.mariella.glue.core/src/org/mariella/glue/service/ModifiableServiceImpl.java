@@ -105,15 +105,19 @@ public T load(Context context, Connection connection, ClusterDescription cd, Obj
 public List<T> load(final Context context, final ClusterDescription cd, final boolean isUpdate, final ClusterLoaderConditionProvider conditionProvider) {
 	return new TransactionalRunner(jdbcTemplate.getDataSource()).run(
 			new TransactionalRunnable<List<T>>() {
-				@SuppressWarnings("unchecked")
 				public List<T> run(TransactionalRunner tr) {
-					ClusterLoader clusterLoader = context.createClusterLoader(cd);
-					LoaderContext loaderContext = context.createLoaderContext();
-					loaderContext.setUpdate(isUpdate);
-					return (List<T>)clusterLoader.load(tr.getConnection(), loaderContext, conditionProvider);
+					return load(context, tr.getConnection(), cd, isUpdate, conditionProvider);
 				}
 			}
 		);
+}
+
+@SuppressWarnings("unchecked")
+protected List<T> load(Context context, Connection connection, ClusterDescription cd, boolean isUpdate, ClusterLoaderConditionProvider conditionProvider) {
+	ClusterLoader clusterLoader = context.createClusterLoader(cd);
+	LoaderContext loaderContext = context.createLoaderContext();
+	loaderContext.setUpdate(isUpdate);
+	return (List<T>)clusterLoader.load(connection, loaderContext, conditionProvider);
 }
 
 public void delete(Context context, T entity) {
