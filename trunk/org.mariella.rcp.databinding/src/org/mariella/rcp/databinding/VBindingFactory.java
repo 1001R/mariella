@@ -118,7 +118,6 @@ public VBindingDomain copyExtend(VBindingDomain domain, VBindingDomainExtension 
 	return extended;
 }
 
-@Deprecated
 public VBinding createActionBinding(VBindingContext dbc, Action action, VBindingDomainExtension ...extensions) {
 	IObservableValue actionObservable = RcpObservables.observeAction(dbc, action);
 	VBindingDomain domain = new VBindingDomain("action", DefaultBean.class, extensions);

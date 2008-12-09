@@ -9,7 +9,7 @@ public class LostUpdateEntityQueryParameter {
 	
 	private Timestamp createdFrom;
 	private Timestamp createdTo;
-	private String createdBy = "aim";
+	private String createdBy;
 
 	private Timestamp modifiedFrom;
 	private Timestamp modifiedTo;
