@@ -134,4 +134,8 @@ public A getAdapter() {
 	return (A)adapterObservable.getValue();
 }
 
+public TableViewer getTableViewer() {
+	return tableViewer;
+}
+
 }
