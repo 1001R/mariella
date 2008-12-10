@@ -185,6 +185,13 @@ public VResourceRef getRefForPersistentId(Object persistentId) {
 	return ref;
 }
 
+public VResourceRef getRefForPersistentIdIfAvailable(Object persistentId) {
+	for (VResourceRef ref : resourceMap.keySet())
+		if (persistentId.equals(ref.getPersistentId()))
+			return ref;
+	return null;
+}
+
 protected abstract VResource implementBuildResource(Object persistentId);
 
 protected abstract VResource implementBuildNewResource();
