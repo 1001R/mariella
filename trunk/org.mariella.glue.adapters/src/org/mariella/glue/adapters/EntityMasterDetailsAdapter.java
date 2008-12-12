@@ -24,9 +24,9 @@ public void reload() {
 	deletedEntities.clear();
 	clearDetailsList();
 	Collection<E> entities = readEntities();
-	for (E entity : entities) {
-		addDetails(entity);
-	}
+	setDetails(entities);
+	if (getDetailsList().size() > 0)
+		setSelectedDetails(getDetailsList().get(0));
 }
 
 protected abstract  Collection<E> readEntities();
