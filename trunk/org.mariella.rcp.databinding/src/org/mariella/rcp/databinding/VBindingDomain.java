@@ -99,6 +99,9 @@ public void setDomainContext(Object domainContext) {
 }
 
 public <T> T getExtension(Class<T> clazz) {
+	if (extensions == null)
+		return null;
+	
 	for (VBindingDomainExtension ext : extensions)
 		if (clazz.isAssignableFrom(ext.getClass()))
 			return(T) ext;

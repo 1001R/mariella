@@ -89,14 +89,17 @@ private void completeBindingCreation(VBinding binding, VBindingDomain domain) {
 	}
 	
 	if (domain.getExtensions() == null) return;
-	// first install DomainContextExtension
-	for (VBindingDomainExtension extension : domain.getExtensions())
-		if (extension instanceof DomainContextExtension)
-			extension.install(binding);
 	
-	for (VBindingDomainExtension extension : domain.getExtensions())
-		if (!(extension instanceof DomainContextExtension))
-			extension.install(binding);
+	if (domain.getExtensions() != null) {
+		// first install DomainContextExtension
+		for (VBindingDomainExtension extension : domain.getExtensions())
+			if (extension instanceof DomainContextExtension)
+				extension.install(binding);
+		
+		for (VBindingDomainExtension extension : domain.getExtensions())
+			if (!(extension instanceof DomainContextExtension))
+				extension.install(binding);
+	}
 	if (binding.getBinding() instanceof BindingDomainExtensionDependendBinding)
 		((BindingDomainExtensionDependendBinding)binding.getBinding()).extensionsInstalled();
 	
