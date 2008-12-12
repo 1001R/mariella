@@ -1,5 +1,6 @@
 package org.mariella.rcp.adapters;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.core.databinding.observable.list.IObservableList;
@@ -78,6 +79,12 @@ public void addDetails(D details) {
 	addedDetails(details);
 	getAdapterContext().dirtyNotification(this);
 	setSelectedDetails(details);
+}
+
+public void setDetails(Collection<D> details) {
+	detailsList.clear();
+	detailsList.addAll(details);
+	getAdapterContext().dirtyNotification(this);
 }
 
 protected void addedDetails(D details) {}
