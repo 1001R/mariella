@@ -27,10 +27,15 @@ public IConverter buildFromModelConverter(VBindingDomain domain) {
 public IConverter buildToModelConverter(VBindingDomain domain) {
 	return new Converter(String.class, domain.getType()) {
 		public Object convert(Object fromObject) {
-			try {
-				return format.parseObject((String)fromObject);
-			} catch (ParseException e) {
-				throw new RuntimeException(e);
+			String string = (String)fromObject;
+			if(string == null || string.length() == 0) {
+				return null;
+			} else {
+				try {
+					return format.parseObject((String)fromObject);
+				} catch (ParseException e) {
+					throw new RuntimeException(e);
+				}
 			}
 		}
 	};
