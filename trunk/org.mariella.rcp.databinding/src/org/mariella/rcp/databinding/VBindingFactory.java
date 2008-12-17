@@ -381,12 +381,18 @@ public VBinding createSingleSelectionBinding(VBindingContext dbc, StructuredView
 	return createSingleSelectionBinding(dbc, structuredViewer, bean, propertyPath, null);
 }
 
+public VBinding createMultiSelectionBinding(VBindingContext dbc, StructuredViewer structuredViewer, Object bean, String propertyPath) {
+	return createMultiSelectionBinding(dbc, structuredViewer, bean, propertyPath, null);
+}
+
 public VBinding createMultiSelectionBinding(VBindingContext dbc, StructuredViewer structuredViewer, Object bean, String propertyPath, Object domainSymbol) {
 	VBindingDomain domain = domainRegistry.getDomain(domainSymbol);
 	return createMultiSelectionBinding(dbc, structuredViewer, bean, propertyPath, domain);
 }
 
 public VBinding createMultiSelectionBinding(VBindingContext dbc, StructuredViewer structuredViewer, Object bean, String propertyPath, VBindingDomain domain) {
+	if (domain == null)
+		domain = new VBindingDomain(Object.class);
 	VBinding binding =((InternalBindingContext)dbc).bindValue(RcpObservables.observeMultiSelection(dbc, structuredViewer), 
 			ModelObservables.observeValue(bean, propertyPath, domain.getType()), 
 			createTargetTextToModel(dbc, domain),  
