@@ -17,6 +17,15 @@ public EnabledRuleExtension(Object bean, EnabledCallback enabledCallback, String
 	this.enabledCallback = enabledCallback;
 }
 
+public EnabledRuleExtension(final Object bean, final String enabledPropertyPath) {
+	this(bean, new EnabledCallback() {
+		@Override
+		public boolean isEnabled() {
+			return Boolean.TRUE.equals(BindingUtil.getValue(bean, enabledPropertyPath));
+		}
+	}, enabledPropertyPath);
+}
+
 public EnabledRuleExtension(EnabledCallback enabledCallback) {
 	this.bean = null;
 	this.dependencyPropertyPathes = null;

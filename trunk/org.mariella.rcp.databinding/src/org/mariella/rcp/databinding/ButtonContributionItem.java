@@ -1,4 +1,4 @@
-package org.mariella.rcp.databinding.internal;
+package org.mariella.rcp.databinding;
 
 import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.action.IAction;

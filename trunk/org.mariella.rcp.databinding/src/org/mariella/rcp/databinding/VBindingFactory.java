@@ -29,7 +29,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.mariella.rcp.databinding.internal.AsyncActionWrapper;
 import org.mariella.rcp.databinding.internal.BindingDomainExtensionDependendBinding;
-import org.mariella.rcp.databinding.internal.ButtonContributionItem;
 import org.mariella.rcp.databinding.internal.EnabledObservableValue;
 import org.mariella.rcp.databinding.internal.EnabledObservableValueFactory;
 import org.mariella.rcp.databinding.internal.EnabledStateModelObservableValue;
