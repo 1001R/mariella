@@ -120,7 +120,7 @@ public void setValid(boolean valid) {
 	propertyChangeSupport.firePropertyChange("valid", oldValue, valid);
 }
 
-protected Problem createProblem() {
+public Problem createProblem() {
 	Problem problem = new Problem();
 	problem.setResource(problemResource);
 	ProblemsPlugin.getProblemManager().addProblem(problem);
@@ -137,4 +137,9 @@ public boolean validate() {
 public void dirtyNotification(AdapterContext context) {
 	ProblemsPlugin.getProblemManager().invalidate(problemResource);
 }
+
+public List<Problem> getProblems() {
+	return ProblemsPlugin.getProblemManager().getProblemsOfResource(problemResource);
+}
+
 }

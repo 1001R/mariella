@@ -11,11 +11,17 @@ public class DefaultGlueAdapterContext extends DefaultAdapterContext implements	
 
 	ContextFactory glueContextFactory;
 	Context glueContext = null;
+	boolean autoManageDirtyNotification;
 	
 public DefaultGlueAdapterContext(VBindingContext bindingContext, ContextFactory glueContextFactory) {
+	this(bindingContext, glueContextFactory, true);
+}
+
+public DefaultGlueAdapterContext(VBindingContext bindingContext, ContextFactory glueContextFactory, boolean autoManageDirtyNotification) {
 	super(bindingContext);
 	this.glueContextFactory = glueContextFactory;
 	setGlueContext(glueContextFactory.createGlueContext());
+	this.autoManageDirtyNotification = autoManageDirtyNotification;
 }
 
 public Context getGlueContext() {
@@ -32,12 +38,14 @@ public void setGlueContext(Context glueContext) {
 
 @Override
 public void indexedPropertyChanged(Modifiable modifiable, String propertyName, int index, Object oldValue, Object newValue) {
-	dirtyNotification(modifiable);
+	if (autoManageDirtyNotification)
+		dirtyNotification(modifiable);
 }
 
 @Override
 public void propertyChanged(Modifiable modifiable, String propertyName, Object oldValue, Object newValue) {
-	dirtyNotification(modifiable);
+	if (autoManageDirtyNotification)
+		dirtyNotification(modifiable);
 }
 
 @Override
