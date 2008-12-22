@@ -12,11 +12,6 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Widget;
 
-@Deprecated
-/**
- * Use VDataBindingFactory#createActionBinding(VDataBindingContext, Button, Action, BindingDomainExtensions ...) instead.
- * 
- */
 public class ButtonContributionItem extends ContributionItem {
 
 private IAction action;

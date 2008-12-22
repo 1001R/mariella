@@ -80,4 +80,6 @@ public void fireAdapterDirty() {
 	adapterContext.dirtyNotification(this);
 }
 
+@Override
+public void dispose() {}
 }

@@ -6,4 +6,6 @@ AdapterContext getAdapterContext();
 
 Adapter getParent();
 
+void dispose();
+
 }
