@@ -8,6 +8,7 @@ ProblemCategory category;
 ISelection selection;
 String description;
 ProblemResource resource;
+Object details;
 
 
 public Problem(ProblemResource resource, ISelection selection, ProblemCategory category, String description) {
@@ -60,6 +61,16 @@ public ProblemResource getResource() {
 
 public void setResource(ProblemResource resource) {
 	this.resource = resource;
+}
+
+
+public Object getDetails() {
+	return details;
+}
+
+
+public void setDetails(Object details) {
+	this.details = details;
 }
 
 }
