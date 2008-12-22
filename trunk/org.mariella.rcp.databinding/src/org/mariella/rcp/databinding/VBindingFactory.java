@@ -120,6 +120,27 @@ public VBindingDomain copyExtend(VBindingDomain domain, VBindingDomainExtension 
 	return extended;
 }
 
+public VBinding createActionEnabledBinding(VBindingContext dbc, Action action, Object bean, String propertyPath) {
+	return createActionEnabledBinding(dbc, action, bean, propertyPath, null);
+}
+
+public VBinding createActionEnabledBinding(VBindingContext dbc, Action action, Object bean, String propertyPath, EnabledCallback enabledCallback) {
+	IObservableValue enabledObservable= RcpObservables.observeAction(dbc, action);
+	VBindingDomain domain = new VBindingDomain("enabled", Boolean.class);
+	final EnabledStateModelObservableValue stateModel = new EnabledStateModelObservableValue(enabledCallback, bean, propertyPath);
+	VBinding binding = ((InternalBindingContext)dbc).bindValue(
+			enabledObservable,
+			stateModel, 
+			new UpdateValueStrategy(),  
+			new UpdateValueStrategy(),
+			domain);
+	
+	completeBindingCreation(binding, domain);
+	
+	return binding;
+}
+
+@Deprecated
 public VBinding createActionBinding(VBindingContext dbc, Action action, VBindingDomainExtension ...extensions) {
 	IObservableValue actionObservable = RcpObservables.observeAction(dbc, action);
 	VBindingDomain domain = new VBindingDomain("action", DefaultBean.class, extensions);
@@ -164,11 +185,11 @@ public VBinding createControlEnabledBinding(VBindingContext dbc, Control control
 }
 
 public VBinding createControlEnabledBinding(VBindingContext dbc, Control control, Object bean, String propertyPath, EnabledCallback callback) {
-	ISWTObservableValue visibleObservable = RcpObservables.observeControlEnabled(dbc, control);
-	VBindingDomain domain = new VBindingDomain("visible", Boolean.class);
+	ISWTObservableValue enabledObservable = RcpObservables.observeControlEnabled(dbc, control);
+	VBindingDomain domain = new VBindingDomain("enabled", Boolean.class);
 	final EnabledStateModelObservableValue stateModel = new EnabledStateModelObservableValue(callback, bean, propertyPath);
 	VBinding binding = ((InternalBindingContext)dbc).bindValue(
-			visibleObservable,
+			enabledObservable,
 			stateModel, 
 			new UpdateValueStrategy(),  
 			new UpdateValueStrategy(),

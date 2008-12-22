@@ -28,7 +28,12 @@ public VActionObservable(Action action) {
 
 @Override
 protected Object doGetValue() {
-	return null;
+	return action.isEnabled();
+}
+
+@Override
+protected void doSetValue(Object value) {
+	action.setEnabled((Boolean)value);
 }
 
 public Object getValueType() {
