@@ -18,7 +18,11 @@ public FormatConverterBuilder(Format format) {
 public IConverter buildFromModelConverter(VBindingDomain domain) {
 	return new Converter(domain.getType(), String.class) {
 		public Object convert(Object fromObject) {
-			return format.format(fromObject);
+			if(fromObject == null) {
+				return "";
+			} else {
+				return format.format(fromObject);
+			}
 		}
 	};
 }
