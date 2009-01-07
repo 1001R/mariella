@@ -9,6 +9,7 @@ import org.mariella.rcp.adapters.Adapter;
 import org.mariella.rcp.adapters.AdapterContext;
 import org.mariella.rcp.adapters.AdapterContextObserver;
 import org.mariella.rcp.problems.Problem;
+import org.mariella.rcp.problems.ProblemCategory;
 import org.mariella.rcp.problems.ProblemManager;
 import org.mariella.rcp.problems.ProblemManagerObserver;
 import org.mariella.rcp.problems.ProblemResource;
@@ -122,6 +123,7 @@ public void setValid(boolean valid) {
 
 public Problem createProblem() {
 	Problem problem = new Problem();
+	problem.setCategory(ProblemCategory.ERROR);
 	problem.setResource(problemResource);
 	ProblemsPlugin.getProblemManager().addProblem(problem);
 	return problem;

@@ -121,13 +121,30 @@ public VBindingDomain copyExtend(VBindingDomain domain, VBindingDomainExtension 
 }
 
 public VBinding createActionEnabledBinding(VBindingContext dbc, Action action, Object bean, String propertyPath) {
-	return createActionEnabledBinding(dbc, action, bean, propertyPath, null);
+	return createActionEnabledBinding(dbc, action, null, bean, propertyPath);
 }
 
+@Deprecated
 public VBinding createActionEnabledBinding(VBindingContext dbc, Action action, Object bean, String propertyPath, EnabledCallback enabledCallback) {
 	IObservableValue enabledObservable= RcpObservables.observeAction(dbc, action);
 	VBindingDomain domain = new VBindingDomain("enabled", Boolean.class);
 	final EnabledStateModelObservableValue stateModel = new EnabledStateModelObservableValue(enabledCallback, bean, propertyPath);
+	VBinding binding = ((InternalBindingContext)dbc).bindValue(
+			enabledObservable,
+			stateModel, 
+			new UpdateValueStrategy(),  
+			new UpdateValueStrategy(),
+			domain);
+	
+	completeBindingCreation(binding, domain);
+	
+	return binding;
+}
+
+public VBinding createActionEnabledBinding(VBindingContext dbc, Action action, EnabledCallback enabledCallback, Object bean, String ... propertyPathes) {
+	IObservableValue enabledObservable= RcpObservables.observeAction(dbc, action);
+	VBindingDomain domain = new VBindingDomain("enabled", Boolean.class);
+	final EnabledStateModelObservableValue stateModel = new EnabledStateModelObservableValue(enabledCallback, bean, propertyPathes);
 	VBinding binding = ((InternalBindingContext)dbc).bindValue(
 			enabledObservable,
 			stateModel, 
@@ -181,13 +198,30 @@ public VBinding createButtonBinding(VBindingContext dbc, Button button, Object b
 }
 
 public VBinding createControlEnabledBinding(VBindingContext dbc, Control control, Object bean, String propertyPath) {
-	return createControlEnabledBinding(dbc, control, bean, propertyPath, null);
+	return createControlEnabledBinding(dbc, control, null, bean, propertyPath);
 }
 
+@Deprecated
 public VBinding createControlEnabledBinding(VBindingContext dbc, Control control, Object bean, String propertyPath, EnabledCallback callback) {
 	ISWTObservableValue enabledObservable = RcpObservables.observeControlEnabled(dbc, control);
 	VBindingDomain domain = new VBindingDomain("enabled", Boolean.class);
 	final EnabledStateModelObservableValue stateModel = new EnabledStateModelObservableValue(callback, bean, propertyPath);
+	VBinding binding = ((InternalBindingContext)dbc).bindValue(
+			enabledObservable,
+			stateModel, 
+			new UpdateValueStrategy(),  
+			new UpdateValueStrategy(),
+			domain);
+	
+	completeBindingCreation(binding, domain);
+	
+	return binding;
+}
+
+public VBinding createControlEnabledBinding(VBindingContext dbc, Control control, EnabledCallback callback, Object bean, String ... propertyPathes) {
+	ISWTObservableValue enabledObservable = RcpObservables.observeControlEnabled(dbc, control);
+	VBindingDomain domain = new VBindingDomain("enabled", Boolean.class);
+	final EnabledStateModelObservableValue stateModel = new EnabledStateModelObservableValue(callback, bean, propertyPathes);
 	VBinding binding = ((InternalBindingContext)dbc).bindValue(
 			enabledObservable,
 			stateModel, 
@@ -205,10 +239,27 @@ public VBinding createControlVisibleBinding(VBindingContext dbc, Control control
 	return createControlVisibleBinding(dbc, control, parentToRedraw, bean, propertyPath, null);
 }
 
+@Deprecated
 public VBinding createControlVisibleBinding(VBindingContext dbc, Control control, Composite parentToRedraw, Object bean, String propertyPath, VisibleCallback callback) {
 	ISWTObservableValue visibleObservable = RcpObservables.observeControlVisible(dbc, control, parentToRedraw);
 	VBindingDomain domain = new VBindingDomain("visible", Boolean.class);
 	final VisibleStateModelObservableValue stateModel = new VisibleStateModelObservableValue(callback, bean, propertyPath);
+	VBinding binding = ((InternalBindingContext)dbc).bindValue(
+			visibleObservable,
+			stateModel, 
+			new UpdateValueStrategy(),  
+			new UpdateValueStrategy(),
+			domain);
+	
+	completeBindingCreation(binding, domain);
+	
+	return binding;
+}
+
+public VBinding createControlVisibleBinding(VBindingContext dbc, Control control, Composite parentToRedraw, VisibleCallback callback, Object bean, String ... propertyPathes) {
+	ISWTObservableValue visibleObservable = RcpObservables.observeControlVisible(dbc, control, parentToRedraw);
+	VBindingDomain domain = new VBindingDomain("visible", Boolean.class);
+	final VisibleStateModelObservableValue stateModel = new VisibleStateModelObservableValue(callback, bean, propertyPathes);
 	VBinding binding = ((InternalBindingContext)dbc).bindValue(
 			visibleObservable,
 			stateModel, 
