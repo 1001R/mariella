@@ -54,22 +54,32 @@ protected void fillButtonComposite(Composite composite) {
 	addRemoveDetailsAction(composite);
 }
 
+protected  boolean showAddButton() {
+	return true;
+}
+
+protected  boolean showRemoveButton() {
+	return true;
+}
+
 private void addAddDetailsAction(Composite parent) {
 	addDetailsAction = new AddDetailsAction();
-	bindingContext.getBindingFactory().createActionBinding(bindingContext,
-			controlFactory.createButton(parent, getAddDetailsButtonText(), SWT.PUSH), //$NON-NLS-1$
-			addDetailsAction,
-			createEnabledRuleExtension()
-			);
+	if (showAddButton())
+		bindingContext.getBindingFactory().createActionBinding(bindingContext,
+				controlFactory.createButton(parent, getAddDetailsButtonText(), SWT.PUSH), //$NON-NLS-1$
+				addDetailsAction,
+				createEnabledRuleExtension()
+				);
 }
 
 private void addRemoveDetailsAction(Composite parent) {
 	removeDetailsAction = new RemoveDetailsAction();
-	bindingContext.getBindingFactory().createActionBinding(bindingContext,
-			controlFactory.createButton(parent, getRemoveDetailsButtonText(), SWT.PUSH), //$NON-NLS-1$
-			removeDetailsAction,
-			createEnabledRuleExtension(new EnabledOnSingleSelectionCallback(tableViewer))
-			);
+	if (showRemoveButton())
+		bindingContext.getBindingFactory().createActionBinding(bindingContext,
+				controlFactory.createButton(parent, getRemoveDetailsButtonText(), SWT.PUSH), //$NON-NLS-1$
+				removeDetailsAction,
+				createEnabledRuleExtension(new EnabledOnSingleSelectionCallback(tableViewer))
+				);
 }
 
 protected EnabledRuleExtension createEnabledRuleExtension(EnabledCallback ... callbacks) {
