@@ -6,6 +6,7 @@ import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.widgets.Button;
@@ -29,7 +30,6 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.ScrolledPageBook;
 import org.eclipse.ui.forms.widgets.Section;
 import org.mariella.rcp.ControlFactory;
-import org.mariella.rcp.TableColumnWidthHandler;
 
 public class VFormToolkit implements ControlFactory {
 
@@ -262,6 +262,12 @@ public TextViewer createTextViewer(Composite client, int style, boolean drawBord
 
 public ComboViewer createComboViewer(Composite parent, int style) {
 	final ComboViewer comboViewer = new ComboViewer(parent, style);
+	handleFont(comboViewer.getControl());
+	return comboViewer;
+}
+
+public ComboViewer createCComboViewer(Composite parent, int style) {
+	final ComboViewer comboViewer = new ComboViewer(new CCombo(parent, style));
 	handleFont(comboViewer.getControl());
 	return comboViewer;
 }

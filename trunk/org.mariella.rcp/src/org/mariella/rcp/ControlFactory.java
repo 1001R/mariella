@@ -48,6 +48,8 @@ TextViewer createTextViewer(Composite client, int style);
 
 ComboViewer createComboViewer(Composite client, int style);
 
+ComboViewer createCComboViewer(Composite client, int style);
+
 Section createSection(Composite parent, int sectionStyle);
 
 TextViewer createTextViewer(Composite client, int single, boolean b);

@@ -6,6 +6,7 @@ import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
@@ -17,7 +18,6 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
 import org.eclipse.ui.forms.widgets.Section;
-import org.mariella.rcp.ControlFactory;
 
 public class DialogControlFactory implements ControlFactory {
 
@@ -104,6 +104,11 @@ public TextViewer createTextViewer(Composite parent, int style) {
 
 public ComboViewer createComboViewer(Composite parent, int style) {
 	final ComboViewer comboViewer = new ComboViewer(parent, style);
+	return comboViewer;
+}
+
+public ComboViewer createCComboViewer(Composite parent, int style) {
+	final ComboViewer comboViewer = new ComboViewer(new CCombo(parent, style));
 	return comboViewer;
 }
 
