@@ -2,6 +2,9 @@ package org.mariella.rcp.adapters;
 
 import java.util.List;
 
+import org.eclipse.core.databinding.observable.list.IListChangeListener;
+import org.eclipse.core.databinding.observable.list.IObservableList;
+import org.eclipse.core.databinding.observable.list.ListChangeEvent;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 
 /**
@@ -16,13 +19,14 @@ import org.eclipse.core.databinding.observable.value.IObservableValue;
  * @param <K>
  * @param <D>
  */
-public abstract class KeyedMasterDetailsAdapter<K extends Object, D extends Object> extends AbstractAdapter {
+public abstract class KeyedMasterDetailsAdapter<K extends Object, D extends Object> extends AbstractAdapter implements IListChangeListener {
 
 private D selectedDetails;
 
 private List<D> detailsList;
 
 private IObservableValue selectedDetailsObservable;
+private boolean empty = true;
 
 public KeyedMasterDetailsAdapter(AdapterContext context) {
 	super(context);
@@ -37,7 +41,14 @@ public KeyedMasterDetailsAdapter(Adapter parent) {
 @SuppressWarnings("unchecked")
 private void initialize() {
 	detailsList = adapterContext.getBindingContext().getBindingFactory().createObservableList(adapterContext.getBindingContext());
+	((IObservableList)detailsList).addListChangeListener(this);
 	selectedDetailsObservable = adapterContext.getBindingContext().getBindingFactory().createPropertyObservable(adapterContext.getBindingContext(), this, "selectedDetails"); //$NON-NLS-1$
+}
+
+@Override
+public void dispose() {
+	((IObservableList)detailsList).removeListChangeListener(this);
+	super.dispose();
 }
 
 public K getSelectedKey() {
@@ -154,5 +165,21 @@ public void clearDetailsList() {
 	if (autoManageDetailsList())
 		setSelectedKey(null);
 	adapterContext.dirtyNotification(this);
+}
+
+public boolean isEmpty() {
+	return detailsList.isEmpty();
+}
+
+public boolean isNotEmpty() {
+	return !isEmpty();
+}
+
+@Override
+public void handleListChange(ListChangeEvent event) {
+	boolean newEmpty = detailsList.size() == 0;
+	firePropertyChange("empty", empty, isEmpty());
+	firePropertyChange("notEmpty", !empty, isNotEmpty());
+	empty = newEmpty;
 }
 }
