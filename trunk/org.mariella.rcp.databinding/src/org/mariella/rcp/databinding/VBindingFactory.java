@@ -157,6 +157,10 @@ public VBinding createActionEnabledBinding(VBindingContext dbc, Action action, E
 	return binding;
 }
 
+public VBinding createActionEnabledBinding(VBindingContext dbc, Action action, EnabledCallback enabledCallback) {
+	return createActionEnabledBinding(dbc, action, enabledCallback, new DefaultBean(), "this");
+}
+
 @Deprecated
 public VBinding createActionBinding(VBindingContext dbc, Action action, VBindingDomainExtension ...extensions) {
 	IObservableValue actionObservable = RcpObservables.observeAction(dbc, action);
@@ -173,6 +177,7 @@ public VBinding createActionBinding(VBindingContext dbc, Action action, VBinding
 	return binding;
 }
 
+@Deprecated
 public VBinding createActionBinding(VBindingContext dbc, Button button, Action action, VBindingDomainExtension ...extensions) {
 	new ButtonContributionItem(button, new AsyncActionWrapper(action));
 	return createActionBinding(dbc, action, extensions);

@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Widget;
 
+@Deprecated
 public class ButtonContributionItem extends ContributionItem {
 
 private IAction action;

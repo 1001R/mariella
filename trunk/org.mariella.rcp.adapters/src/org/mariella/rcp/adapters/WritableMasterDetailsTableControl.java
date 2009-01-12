@@ -8,10 +8,10 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.mariella.rcp.ControlFactory;
+import org.mariella.rcp.databinding.ButtonContributionItem;
 import org.mariella.rcp.databinding.CompoundEnabledCallback;
 import org.mariella.rcp.databinding.EnabledCallback;
 import org.mariella.rcp.databinding.EnabledOnSingleSelectionCallback;
-import org.mariella.rcp.databinding.EnabledRuleExtension;
 import org.mariella.rcp.databinding.VBindingContext;
 
 public abstract class WritableMasterDetailsTableControl<A extends MasterDetailsAdapter<D>, D extends Object> extends MasterDetailsTableControl<A,D> {
@@ -64,31 +64,29 @@ protected  boolean showRemoveButton() {
 
 private void addAddDetailsAction(Composite parent) {
 	addDetailsAction = new AddDetailsAction();
-	if (showAddButton())
-		bindingContext.getBindingFactory().createActionBinding(bindingContext,
-				controlFactory.createButton(parent, getAddDetailsButtonText(), SWT.PUSH), //$NON-NLS-1$
-				addDetailsAction,
-				createEnabledRuleExtension()
-				);
+	if (showAddButton()) {
+		new ButtonContributionItem(controlFactory.createButton(parent, getAddDetailsButtonText(), SWT.PUSH), addDetailsAction);
+		bindingContext.getBindingFactory().createActionEnabledBinding(bindingContext, addDetailsAction, 
+				new CompoundEnabledCallback(createEnabledCallbacks()));
+
+	}
 }
 
 private void addRemoveDetailsAction(Composite parent) {
 	removeDetailsAction = new RemoveDetailsAction();
-	if (showRemoveButton())
-		bindingContext.getBindingFactory().createActionBinding(bindingContext,
-				controlFactory.createButton(parent, getRemoveDetailsButtonText(), SWT.PUSH), //$NON-NLS-1$
-				removeDetailsAction,
-				createEnabledRuleExtension(new EnabledOnSingleSelectionCallback(tableViewer))
-				);
+	if (showRemoveButton()) {
+		new ButtonContributionItem(controlFactory.createButton(parent, getRemoveDetailsButtonText(), SWT.PUSH), removeDetailsAction);
+		bindingContext.getBindingFactory().createActionEnabledBinding(bindingContext, removeDetailsAction, 
+				new CompoundEnabledCallback(createEnabledCallbacks(new EnabledOnSingleSelectionCallback(tableViewer))));
+	}
 }
 
-protected EnabledRuleExtension createEnabledRuleExtension(EnabledCallback ... callbacks) {
+private EnabledCallback[] createEnabledCallbacks(EnabledCallback ... callbacks) {
 	List<EnabledCallback> enabledCallbacks = new ArrayList<EnabledCallback>();
 	for (EnabledCallback callback : callbacks)
 		enabledCallbacks.add(callback);
 	addAdditionalEnabledCallbacks(enabledCallbacks);
-	EnabledRuleExtension enabledExt = new EnabledRuleExtension(new CompoundEnabledCallback(enabledCallbacks.toArray(new EnabledCallback[enabledCallbacks.size()])));
-	return enabledExt;
+	return enabledCallbacks.toArray(new EnabledCallback[enabledCallbacks.size()]);
 }
 
 protected abstract String getAddDetailsButtonText();

@@ -15,6 +15,7 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.mariella.rcp.ControlFactory;
+import org.mariella.rcp.databinding.ButtonContributionItem;
 import org.mariella.rcp.databinding.CompoundEnabledCallback;
 import org.mariella.rcp.databinding.EnabledCallback;
 import org.mariella.rcp.databinding.EnabledOnSingleSelectionCallback;
@@ -88,11 +89,8 @@ public KeyedMasterDetailsProtocolControl(Composite parent, int style, A adapter,
 
 private void addRemoveRowAction(Composite parent) {
 	removeAction = createRemoveAction();
-	bindingContext.getBindingFactory().createActionBinding(bindingContext,
-			controlFactory.createButton(parent, getRemoveButtonText(), SWT.PUSH), //$NON-NLS-1$
-			removeAction,
-			createEnabledRuleExtension(new EnabledOnSingleSelectionCallback(protocolViewer))
-			);
+	new ButtonContributionItem(controlFactory.createButton(parent, getRemoveButtonText(), SWT.PUSH), removeAction);
+	bindingContext.getBindingFactory().createActionEnabledBinding(bindingContext, removeAction, new EnabledOnSingleSelectionCallback(protocolViewer));
 }
 
 protected RemoveAction createRemoveAction() {
