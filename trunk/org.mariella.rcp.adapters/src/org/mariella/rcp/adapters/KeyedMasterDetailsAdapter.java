@@ -26,7 +26,8 @@ private D selectedDetails;
 private List<D> detailsList;
 
 private IObservableValue selectedDetailsObservable;
-private boolean empty = true;
+private boolean lastEmpty = true;
+private int lastSize = 0;
 
 public KeyedMasterDetailsAdapter(AdapterContext context) {
 	super(context);
@@ -167,19 +168,26 @@ public void clearDetailsList() {
 	adapterContext.dirtyNotification(this);
 }
 
-public boolean isEmpty() {
+public boolean isLastEmpty() {
 	return detailsList.isEmpty();
 }
 
 public boolean isNotEmpty() {
-	return !isEmpty();
+	return !isLastEmpty();
 }
 
 @Override
 public void handleListChange(ListChangeEvent event) {
 	boolean newEmpty = detailsList.size() == 0;
-	firePropertyChange("empty", empty, isEmpty());
-	firePropertyChange("notEmpty", !empty, isNotEmpty());
-	empty = newEmpty;
+	int newSize = detailsList.size();
+	firePropertyChange("empty", lastEmpty, isLastEmpty());
+	firePropertyChange("notEmpty", !lastEmpty, isNotEmpty());
+	firePropertyChange("size", lastSize, newSize);
+	lastEmpty = newEmpty;
+	lastSize = newSize;
+}
+
+public int getSize() {
+	return detailsList.size();
 }
 }
