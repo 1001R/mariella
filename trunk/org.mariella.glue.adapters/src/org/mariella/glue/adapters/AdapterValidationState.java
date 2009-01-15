@@ -38,7 +38,7 @@ public abstract class AdapterValidationState implements ProblemsProvider, Proble
 	
 	private String errorText = null;
 	private boolean valid = false;
-	private PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+	protected PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 	private Adapter adapter;
 
 	
@@ -143,5 +143,13 @@ public void dirtyNotification(AdapterContext context) {
 public List<Problem> getProblems() {
 	return ProblemsPlugin.getProblemManager().getProblemsOfResource(problemResource);
 }
+
+@Override
+public void addProblems(ProblemManager problemMgr, ProblemResource resource) {
+	updateState(problemMgr, resource);
+}
+
+
+protected abstract void updateState(ProblemManager problemMgr, ProblemResource resource);
 
 }
