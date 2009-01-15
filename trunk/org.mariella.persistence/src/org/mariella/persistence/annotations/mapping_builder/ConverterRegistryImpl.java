@@ -45,6 +45,7 @@ public ConverterRegistryImpl() {
 	super();
 	registerConverterFactory(Types.VARCHAR, String.class, new ConverterFactoryImpl(StringConverter.Singleton));
 	registerConverterFactory(Types.LONGVARCHAR, String.class, new ConverterFactoryImpl(StringConverter.Singleton));
+	registerConverterFactory(Types.CLOB, String.class, new ConverterFactoryImpl(StringConverter.Singleton));
 	registerNumericConverters(Types.INTEGER);
 	registerNumericConverters(Types.DECIMAL);
 	registerNumericConverters(Types.NUMERIC);
