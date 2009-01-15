@@ -43,7 +43,9 @@ public Object implementDoGetValue() {
 		if (targetObject == null) return null;
 		if (propertyPath.equals("this")) return targetObject;
 		PropertyDescriptor propDescr = getPropertyDescriptor(targetObject, pathTokens.get(pathTokens.size()-1));
-		if (propDescr.getReadMethod() == null) return null;
+		if (propDescr.getReadMethod() == null) {
+			return null;
+		}
 		return propDescr.getReadMethod().invoke(targetObject, (Object[])null);
 	} catch (Exception e) {
 		throw new RuntimeException(e);
@@ -56,15 +58,15 @@ public void implementDoSetValue(Object value) {
 		if (targetObject == null) return;
 		PropertyDescriptor propDescr = getPropertyDescriptor(targetObject, pathTokens.get(pathTokens.size()-1));
 		if (propertyPath.equals("this"))
-			throw new IllegalStateException("A 'this' property cannot be written");
+			throw new IllegalStateException("Path: " + propertyPath + ": A 'this' property cannot be written");
 		if (propDescr.getWriteMethod() == null) {
 			if (VDataBindingPlugin.logger.isLoggable(Level.FINE))
-				VDataBindingPlugin.logger.log(Level.FINE, "Cannot set value because property " + propDescr.getName() + " has no write method");
+				VDataBindingPlugin.logger.log(Level.FINE, "Path: " + propertyPath + ": Cannot set value because property " + propDescr.getName() + " has no write method");
 			return;
 		}
 		propDescr.getWriteMethod().invoke(targetObject, value);
 	} catch (Exception e) {
-		VDataBindingPlugin.logger.severe("Target object is null (" + "IObservableValue " + object + " returned null)");
+		VDataBindingPlugin.logger.severe("Path: " + propertyPath + ": Target object is null (" + "IObservableValue " + object + " returned null)");
 		throw new RuntimeException(e);
 	}
 }
@@ -74,11 +76,11 @@ Object readTargetObject() {
 	if (object instanceof IObservableValue) {
 		element = ((IObservableValue)object).getValue();
 		if (element == null && VDataBindingPlugin.logger.isLoggable(Level.FINE))
-			VDataBindingPlugin.logger.log(Level.FINE, "Target object is null (" + "IObservableValue " + object + " returned null)");
+			VDataBindingPlugin.logger.log(Level.FINE, "Path: " + propertyPath + ": Target object is null (" + "IObservableValue " + object + " returned null)");
 	} else {
 		element = object;
 		if (element == null && VDataBindingPlugin.logger.isLoggable(Level.FINE))
-			VDataBindingPlugin.logger.log(Level.FINE, "Target object is null");
+			VDataBindingPlugin.logger.log(Level.FINE, "Path: " + propertyPath + ": Target object is null");
 	}
 	if (element == null) {
 		return null;
@@ -89,7 +91,7 @@ Object readTargetObject() {
 		PropertyDescriptor propDescr = getPropertyDescriptor(element, pathToken);
 		if (propDescr.getReadMethod() == null) {
 			if (VDataBindingPlugin.logger.isLoggable(Level.FINE))
-				VDataBindingPlugin.logger.log(Level.FINE, "Target object is null, because property " + propDescr.getName() + " has no read method");
+				VDataBindingPlugin.logger.log(Level.FINE, "Path: " + propertyPath + ": Target object is null, because property " + propDescr.getName() + " has no read method");
 
 			element = null;
 			break;
@@ -108,7 +110,7 @@ Object readTargetObject() {
 		}
 	}
 	if (element == null && VDataBindingPlugin.logger.isLoggable(Level.FINE))
-		VDataBindingPlugin.logger.log(Level.FINE, "Target object is null");
+		VDataBindingPlugin.logger.log(Level.FINE, "Path: " + propertyPath + ": Target object is null");
 	return element;
 }
 
@@ -143,6 +145,13 @@ private PropertyDescriptor getPropertyDescriptor(Class clazz, String propertyNam
 		BeanInfo beanInfo = Introspector.getBeanInfo(curClazz);
 		prop = fetchPropertyDescriptor(beanInfo, propertyName);
 		cachedPropertyDescriptorMap.put(clazz, prop);
+
+		if (prop.getReadMethod() == null)
+			VDataBindingPlugin.logger.log(Level.WARNING, "Path: " + propertyPath + ": Property " + prop.getName() + " has no read method.");
+		if (prop.getWriteMethod() == null)
+			VDataBindingPlugin.logger.log(Level.FINE, "Path: " + propertyPath + ": Property " + prop.getName() + " has no write method.");
+
+		
 		return prop;
 	} catch (IntrospectionException e) {
 		throw new RuntimeException();
