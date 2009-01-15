@@ -61,7 +61,6 @@ public K getSelectedKey() {
 public void setSelectedKey(K key) {
 	Object oldKey = getSelectedKey();
 	Object oldDetails = selectedDetails;
-
 	if (key == null) {
 		selectedDetails = null;
 	} else {
@@ -80,6 +79,11 @@ public void setSelectedKey(K key) {
 
 	firePropertyChange("selectedKey", oldKey, key); //$NON-NLS-1$
 	firePropertyChange("selectedDetails", oldDetails, selectedDetails); //$NON-NLS-1$
+	firePropertyChange("detailsSelected", oldDetails != null, selectedDetails != null);
+}
+
+public boolean isDetailsSelected() {
+	return selectedDetails != null;
 }
 
 protected boolean autoManageDetailsList() {
