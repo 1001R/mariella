@@ -2,8 +2,11 @@ package org.mariella.glue.adapters;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.PlatformUI;
@@ -13,6 +16,7 @@ import org.mariella.rcp.adapters.AdapterContextObserver;
 import org.mariella.rcp.databinding.SelectionPath;
 import org.mariella.rcp.databinding.VBindingSelection;
 import org.mariella.rcp.problems.Problem;
+import org.mariella.rcp.problems.ProblemCategory;
 import org.mariella.rcp.problems.ProblemManager;
 import org.mariella.rcp.problems.ProblemManagerObserver;
 import org.mariella.rcp.problems.ProblemResource;
@@ -75,6 +79,30 @@ public void addProblems(ProblemManager problemMgr, ProblemResource resource) {
 		ctx.currentEntityIndex = index++;
 		scanForProblems(ctx);
 	}
+	Set<String> usedKeys = new HashSet<String>();
+	if (checkUniqueKeys() && isValid()) {
+		// check unique keys if wanted and no other errors have occured
+		for (E entity : getDetailsList()) {
+			String token = getUniqueKeyToken(entity);
+			if (usedKeys.contains(token)) {
+				Problem problem = createProblem(ctx);
+				problem.setCategory(ProblemCategory.ERROR);
+				problem.setDescription(MessageFormat.format(getUniqueKeyVioloationMessage(), token));
+				break;
+			}
+			usedKeys.add(token);
+		}
+	}
+}
+
+protected abstract String getUniqueKeyVioloationMessage();
+
+protected boolean checkUniqueKeys() {
+	return false;
+}
+
+protected String getUniqueKeyToken(E entity) {
+	throw new UnsupportedOperationException();
 }
 
 protected ProblemScanContext createProblemScanContext() {
