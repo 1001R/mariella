@@ -141,22 +141,20 @@ public void dirtyNotification(AdapterContext context) {
 public void selectedProblemResourceChanged(ProblemResource problemResource) {}
 
 @Override
-public void save() throws Exception {
+public boolean save() {
 	ProblemsPlugin.getProblemManager().invalidate(problemResource);
 	if (!isValid()) {
 		MessageDialog.openError(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), 
 				getErrorDialogTitle(), 
 				getCannotSaveBecauseOfErrorsMessage());
-		return;
+		return false;
 	}
-	super.save();
+	return super.save();
 }
 
 protected abstract String getErrorDialogTitle();
 
 protected abstract String getCannotSaveBecauseOfErrorsMessage();
-
-public void refresh() {}
 
 public boolean isValid() {
 	return !ProblemsPlugin.getProblemManager().hasErrors(problemResource);
@@ -170,6 +168,8 @@ public void propertyChange(PropertyChangeEvent evt) {
 		for (ProblemsAwareEntityMasterDetailsAdapterObserver o : observers)
 			o.validChanged(isValid);
 	}
-		
+}
+
+public void refresh() {
 }
 }
