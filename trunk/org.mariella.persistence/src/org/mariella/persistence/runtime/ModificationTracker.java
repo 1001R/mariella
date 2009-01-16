@@ -69,7 +69,7 @@ public Modifiable getParticipant(Object identity) {
 }
 
 public boolean isDirty() {
-	return modifications.isEmpty();
+	return !modifications.isEmpty();
 }
 
 public boolean isDirty(Modifiable persistable) {
