@@ -66,8 +66,11 @@ public void setSelectedDetails(D details) {
 public D addDetails() {
 	D details = createDetails();
 	addDetails(details);
+	createdDetails(details);
 	return details;
 }
+
+protected void createdDetails(D details) {}
 
 protected D createDetails() {
 	throw new UnsupportedOperationException();
