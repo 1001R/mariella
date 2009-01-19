@@ -141,16 +141,27 @@ public VBinding createActionEnabledBinding(VBindingContext dbc, Action action, O
 	return binding;
 }
 
-public VBinding createActionEnabledBinding(VBindingContext dbc, Action action, EnabledCallback enabledCallback, Object bean, String ... propertyPathes) {
+public VBinding createActionEnabledBinding(VBindingContext dbc, Action action, final EnabledCallback enabledCallback, Object bean, String ... propertyPathes) {
 	IObservableValue enabledObservable= RcpObservables.observeAction(dbc, action);
 	VBindingDomain domain = new VBindingDomain("enabled", Boolean.class);
-	final EnabledStateModelObservableValue stateModel = new EnabledStateModelObservableValue(enabledCallback, bean, propertyPathes);
+	final EnabledStateModelObservableValue model = new EnabledStateModelObservableValue(enabledCallback, bean, propertyPathes);
 	VBinding binding = ((InternalBindingContext)dbc).bindValue(
 			enabledObservable,
-			stateModel, 
+			model, 
 			new UpdateValueStrategy(),  
 			new UpdateValueStrategy(),
 			domain);
+	
+	if (enabledCallback instanceof EnabledCallback2)
+		((EnabledCallback2)enabledCallback).install(model);
+	
+	binding.addDisposeListener(new VBinding.DisposeListener() {
+		public void disposed(VBinding binding) {
+			if (enabledCallback instanceof EnabledCallback2)
+				((EnabledCallback2)enabledCallback).uninstall(model);
+		}
+	});
+
 	
 	completeBindingCreation(binding, domain);
 	
