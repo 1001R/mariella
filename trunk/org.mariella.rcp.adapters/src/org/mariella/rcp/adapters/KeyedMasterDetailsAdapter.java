@@ -58,6 +58,7 @@ public K getSelectedKey() {
 	return getKey(selectedDetails);
 }
 
+@SuppressWarnings("unchecked")
 public void setSelectedKey(K key) {
 	Object oldKey = getSelectedKey();
 	Object oldDetails = selectedDetails;
@@ -79,7 +80,12 @@ public void setSelectedKey(K key) {
 
 	firePropertyChange("selectedKey", oldKey, key); //$NON-NLS-1$
 	firePropertyChange("selectedDetails", oldDetails, selectedDetails); //$NON-NLS-1$
+	if (oldDetails != selectedDetails)
+		selectedDetailsChanged((D)oldDetails, selectedDetails);
 	firePropertyChange("detailsSelected", oldDetails != null, selectedDetails != null);
+}
+
+protected void selectedDetailsChanged(D oldSelectedDetails, D newSelectedDetails) {
 }
 
 public boolean isDetailsSelected() {
