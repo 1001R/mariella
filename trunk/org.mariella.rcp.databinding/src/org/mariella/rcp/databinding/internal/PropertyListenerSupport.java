@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.logging.Level;
 
 import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.observable.Realm;
@@ -14,6 +15,7 @@ import org.eclipse.core.databinding.util.Policy;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.mariella.rcp.databinding.VDataBindingPlugin;
 
 public class PropertyListenerSupport {
 
@@ -171,6 +173,10 @@ private boolean processListener(String methodName, Object target) {
 		// ignore too
 	}
 
+	if (method == null) {
+		VDataBindingPlugin.logger.log(Level.WARNING, "NO PROPERTY CHANGE SUPPORT: Class " + target.getClass() + " has no addPropertyChange(...) method!");
+	}
+	
 	if (method != null) {
 		if (!method.isAccessible()) {
 			method.setAccessible(true);
@@ -179,25 +185,14 @@ private boolean processListener(String methodName, Object target) {
 			method.invoke(target, parameters);
 			return true;
 		} catch (IllegalArgumentException e) {
-			log(IStatus.WARNING, "Error during invocation of " + method + " on target " + target, e);
+			VDataBindingPlugin.logger.log(Level.WARNING, "Error during invocation of " + method + " on target " + target, e);
 		} catch (IllegalAccessException e) {
-			log(IStatus.WARNING, "Error during invocation of " + method + " on target " + target, e);
+			VDataBindingPlugin.logger.log(Level.WARNING, "Error during invocation of " + method + " on target " + target, e);
 		} catch (InvocationTargetException e) {
-			log(IStatus.WARNING, "Error during invocation of " + method + " on target " + target, e);
+			VDataBindingPlugin.logger.log(Level.WARNING, "Error during invocation of " + method + " on target " + target, e);
 		}
 	}
 	return false;
-}
-
-/**
- * Logs a message to the Data Binding logger.
- */
-private void log(int severity, String message, Throwable throwable) {
-	if (BeansObservables.DEBUG) {
-		Policy.getLog().log(
-				new Status(severity, Policy.JFACE_DATABINDING, IStatus.OK,
-						message, throwable));
-	}
 }
 
 }
