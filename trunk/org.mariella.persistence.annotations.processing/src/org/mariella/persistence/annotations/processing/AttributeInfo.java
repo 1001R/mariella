@@ -31,8 +31,6 @@ public AnnotatedElement getAnnotatedElement() {
 
 void setAnnotatedElement(AnnotatedElement annotatedElement) {
 	this.annotatedElement = annotatedElement;
-	if (getName().equals("identity"))
-		System.out.println("du dreckige sau");
 }
 
 abstract AttributeInfo copyForAdoption();
