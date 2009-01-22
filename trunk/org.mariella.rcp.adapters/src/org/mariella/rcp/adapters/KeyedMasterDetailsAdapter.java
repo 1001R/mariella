@@ -195,6 +195,10 @@ public void handleListChange(ListChangeEvent event) {
 	firePropertyChange("size", lastSize, newSize);
 	lastEmpty = newEmpty;
 	lastSize = newSize;
+	detailsListChanged();
+}
+
+protected void detailsListChanged() {
 }
 
 public int getSize() {

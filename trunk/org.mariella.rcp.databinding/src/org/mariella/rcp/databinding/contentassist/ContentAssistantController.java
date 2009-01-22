@@ -1,19 +1,25 @@
 package org.mariella.rcp.databinding.contentassist;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
+import org.eclipse.jface.text.TextViewer;
 import org.eclipse.jface.text.contentassist.ContentAssistEvent;
 import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.ICompletionListener;
 import org.eclipse.jface.text.contentassist.ICompletionProposal;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 
 
-public class ContentAssistantController {
+public class ContentAssistantController implements DisposeListener {
 
-ITextViewer textViewer;
+TextViewer textViewer;
 VContentAssistProcessor contentAssistProcessor;
 ContentAssistantExtension contentAssistantExtension;
 ContentAssistant contentAssistant;
@@ -21,7 +27,9 @@ boolean contentAssistantOpen = false;
 ICompletionProposal currentSelectedCompletionProposal;
 boolean enabled = true;
 
-public ContentAssistantController(ITextViewer textViewer, ContentAssistantExtension caExtension, Object domainContext) {
+private static Map<ITextViewer,ContentAssistantController> controllerMap = new HashMap<ITextViewer, ContentAssistantController>();
+
+public ContentAssistantController(TextViewer textViewer, ContentAssistantExtension caExtension, Object domainContext) {
 	this.textViewer = textViewer;
 	this.contentAssistProcessor = caExtension.createContentAssistProcessor(domainContext);
 	this.contentAssistantExtension = caExtension;
@@ -29,6 +37,8 @@ public ContentAssistantController(ITextViewer textViewer, ContentAssistantExtens
 
 public void installContentAssistant() {
 	contentAssistant = new ContentAssistant();
+	controllerMap.put(textViewer, this);
+	textViewer.getControl().addDisposeListener(this);
 	contentAssistant.setContentAssistProcessor(contentAssistProcessor, IDocument.DEFAULT_CONTENT_TYPE);
 	contentAssistant.addCompletionListener(new ICompletionListener() {
 		public void selectionChanged(ICompletionProposal proposal, boolean smartToggle) {
@@ -78,5 +88,16 @@ public boolean isContentAssistantOpen() {
 	return contentAssistantOpen;
 }
 
+@Override
+public void widgetDisposed(DisposeEvent e) {
+	controllerMap.remove(textViewer);
+}
+
+public static boolean isContentAssistantOpen(TextViewer textViewer) {
+	ContentAssistantController controller = controllerMap.get(textViewer);
+	if (controller == null)
+		return false;
+	return controller.isContentAssistantOpen();
+}
 
 }
