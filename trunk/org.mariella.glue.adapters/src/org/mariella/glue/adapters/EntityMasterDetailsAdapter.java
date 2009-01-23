@@ -46,8 +46,7 @@ public EntityMasterDetailsAdapterContext<E> getEntityMasterDetailsAdapterContext
 
 public void dispose() {}
 
-
-protected void createdDetails(E details) {
+protected void addedDetails(E details) {
 	newEntities.add(details);
 }
 

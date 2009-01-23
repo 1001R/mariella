@@ -3,10 +3,12 @@ package org.mariella.rcp.adapters;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.core.databinding.observable.list.IListChangeListener;
 import org.eclipse.core.databinding.observable.list.IObservableList;
+import org.eclipse.core.databinding.observable.list.ListChangeEvent;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 
-public abstract class MasterDetailsAdapter<D extends Object> extends AbstractAdapter {
+public abstract class MasterDetailsAdapter<D extends Object> extends AbstractAdapter implements IListChangeListener {
 
 	private D selectedDetails;
 	private List<D> detailsList;
@@ -24,11 +26,18 @@ public MasterDetailsAdapter(Adapter parent) {
 
 private void initialize() {
 	detailsList = fetchDetailsList();
+	((IObservableList)detailsList).addListChangeListener(this);
 	selectedDetailsObservable = adapterContext.getBindingContext().getBindingFactory().createPropertyObservable(
 			adapterContext.getBindingContext(), 
 			this, "selectedDetails"); //$NON-NLS-1$
-
 }
+
+@Override
+public void dispose() {
+	((IObservableList)detailsList).removeListChangeListener(this);
+	super.dispose();
+}
+
 
 @SuppressWarnings("unchecked")
 protected List<D> fetchDetailsList() {
@@ -121,4 +130,13 @@ public void setToFirstSelectedDetails() {
 	if (detailsList.size() == 0) return;
 	setSelectedDetails(detailsList.get(0));
 }
+
+@Override
+public void handleListChange(ListChangeEvent event) {
+	detailsListChanged();
+}
+
+protected void detailsListChanged() {
+}
+
 }
