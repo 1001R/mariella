@@ -3,6 +3,7 @@ package org.mariella.rcp.databinding.internal;
 import org.eclipse.jface.internal.databinding.provisional.swt.AbstractSWTObservableValue;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.mariella.rcp.util.RowLayout;
 
 public class ControlVisibleObservableValue extends AbstractSWTObservableValue implements VTargetObservable {
 
@@ -20,12 +21,22 @@ public Object getValueType() {
 
 @Override
 protected Object doGetValue() {
-	return ((Control)getWidget()).isVisible();
+	Control control = (Control)getWidget();
+	if (control.getParent().getLayout() instanceof RowLayout) {
+		return ((RowLayout)control.getParent().getLayout()).isVisible(control);
+	} else {
+		return control.isVisible();
+	}
 }
 
 @Override
 protected void doSetValue(Object value) {
-	((Control)getWidget()).setVisible((Boolean)value);
+	Control control = (Control)getWidget();
+	if (control.getParent().getLayout() instanceof RowLayout) {
+		((RowLayout)control.getParent().getLayout()).setVisible(control, (Boolean)value);
+	}	else {
+		((Control)getWidget()).setVisible((Boolean)value);
+	}
 	parentToRedraw.layout(true, true);
 	parentToRedraw.redraw();
 }

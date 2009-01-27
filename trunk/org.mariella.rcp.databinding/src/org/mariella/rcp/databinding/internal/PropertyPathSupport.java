@@ -53,20 +53,22 @@ public Object implementDoGetValue() {
 }
 
 public void implementDoSetValue(Object value) {
+	
+	Object targetObject = readTargetObject();
+	if (targetObject == null) return;
+	PropertyDescriptor propDescr = getPropertyDescriptor(targetObject, pathTokens.get(pathTokens.size()-1));
+	if (propertyPath.equals("this"))
+		throw new IllegalStateException("Path: " + propertyPath + ": A 'this' property cannot be written");
+	if (propDescr.getWriteMethod() == null) {
+		if (VDataBindingPlugin.logger.isLoggable(Level.FINE))
+			VDataBindingPlugin.logger.log(Level.FINE, "Path: " + propertyPath + ": Cannot set value because property " + propDescr.getName() + " has no write method");
+		return;
+	}
+		
 	try {
-		Object targetObject = readTargetObject();
-		if (targetObject == null) return;
-		PropertyDescriptor propDescr = getPropertyDescriptor(targetObject, pathTokens.get(pathTokens.size()-1));
-		if (propertyPath.equals("this"))
-			throw new IllegalStateException("Path: " + propertyPath + ": A 'this' property cannot be written");
-		if (propDescr.getWriteMethod() == null) {
-			if (VDataBindingPlugin.logger.isLoggable(Level.FINE))
-				VDataBindingPlugin.logger.log(Level.FINE, "Path: " + propertyPath + ": Cannot set value because property " + propDescr.getName() + " has no write method");
-			return;
-		}
 		propDescr.getWriteMethod().invoke(targetObject, value);
 	} catch (Exception e) {
-		VDataBindingPlugin.logger.severe("Path: " + propertyPath + ": Target object is null (" + "IObservableValue " + object + " returned null)");
+		VDataBindingPlugin.logger.log(Level.SEVERE, "Path: " + propertyPath + ": Exception during invokation of method " + propDescr.getWriteMethod() + " (" + "IObservableValue " + object + ")", e);
 		throw new RuntimeException(e);
 	}
 }
