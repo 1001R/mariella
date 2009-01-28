@@ -59,6 +59,7 @@ public ProblemsAwareEntityMasterDetailsAdapter(EntityMasterDetailsAdapterContext
 	ProblemsPlugin.getProblemManager().addObserver(this);
 	context.addObserver(this);
 	addPropertyChangeListener(this);
+	ProblemsPlugin.getProblemManager().invalidate(problemResource);
 }
 
 public void addObserver(ProblemsAwareEntityMasterDetailsAdapterObserver observer) {
@@ -200,4 +201,12 @@ public void propertyChange(PropertyChangeEvent evt) {
 
 public void refresh() {
 }
+
+protected String decorateWithEntityInfo(ProblemScanContext ctx, String msg) {
+	return toString(ctx.currentEntity) + "[" + (ctx.currentEntityIndex+1) + "]: " + msg;
+}
+
+protected abstract String toString(E entity);
+
+
 }
