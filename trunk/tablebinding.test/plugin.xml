@@ -24,7 +24,12 @@
       <view
             name="View"
             class="tablebinding.test.View"
-            id="tablebinding.test.view">
+            id="tablebinding.test.View">
+      </view>
+      <view
+            class="tablebinding.test.View2"
+            id="tablebinding.test.View2"
+            name="View2">
       </view>
    </extension>
 

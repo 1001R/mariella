@@ -36,7 +36,7 @@ import org.mariella.rcp.databinding.VBindingDomainRegistry;
 import org.mariella.rcp.databinding.VBindingFactory;
 
 public class View extends ViewPart {
-	public static final String ID = "tablebinding.test.view";
+	public static final String ID = View.class.getName();
 	
 	public static class Entry {
 		String name;
