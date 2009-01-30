@@ -42,6 +42,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.mariella.rcp.TableColumnWidthHandler;
 import org.mariella.rcp.databinding.SelectionManagementExtension;
+import org.mariella.rcp.databinding.TableViewerCheckboxExtension;
 import org.mariella.rcp.databinding.TableViewerColumnEditExtension;
 import org.mariella.rcp.databinding.TableViewerColumnExtension;
 import org.mariella.rcp.databinding.TableViewerColumnFontExtension;
@@ -80,6 +81,7 @@ private boolean hookElementChangeListeners = false;
 private List<Runnable> onExtensionInstalledCommands = new ArrayList<Runnable>();
 private TableColumnWidthHandler columnWidthHandler;
 private TableViewerLineColorExtension lineColorExtension = null;
+private TableViewerCheckboxExtension checkboxExtension = null;
 
 public static TableController createTableController(VBindingContext dbc, TableViewer tableViewer) {
 	TableController controller = new TableController();
@@ -189,7 +191,7 @@ public void install(TableViewerEditExtension tableViewerEditExtension) {
  * @return
  */
 public boolean hookElementChangeListeners() {
-	return hookElementChangeListeners || cursorEditor != null;	// either if explicitly said with TableViewerElementChangeListenerExtension or if edit extension installed
+	return hookElementChangeListeners || cursorEditor != null || checkboxExtension != null;	// either if explicitly said with TableViewerElementChangeListenerExtension or if edit extension installed
 }
 
 public boolean isEditable(int columnIndex) {
@@ -412,6 +414,8 @@ public Collection<String> getPropertyPathes() {
 	Set<String> propertyPathes = new HashSet<String>(columnExtensions.size());
 	for (TableViewerColumnExtension ext : columnExtensions)
 		propertyPathes.add(ext.getPropertyPath());
+	if (checkboxExtension != null)
+		propertyPathes.add(checkboxExtension.getPropertyPath());
 	return propertyPathes;
 }
 
@@ -437,4 +441,10 @@ public Color getForeground(Object element, int columnIndex) {
 		return lineColorExtension.getColorCallback().getForeground(element);
 	return null;
 }
+
+public void install(TableViewerCheckboxExtension tableViewerCheckboxExtension) {
+	this.checkboxExtension = tableViewerCheckboxExtension;
+	targetObservable.install(tableViewerCheckboxExtension);
+}
+
 }

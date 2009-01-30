@@ -42,7 +42,7 @@ IStructuredSelection selectionOnUpdateTargets = null;
 PropertyChangeListener elementPropertyChangeListener = new PropertyChangeListener() {
 	public void propertyChange(PropertyChangeEvent evt) {
 		viewer.refresh(elementListenerTargetToElementMap.get(evt.getSource()));
-		viewer.getControl().redraw();
+		elementPropertyChange(evt);
 	}
 };
 
@@ -288,5 +288,8 @@ public void finishedUpdateModelToTarget() {
 
 @Override
 public void aboutToDispose() {}
+
+protected void elementPropertyChange(PropertyChangeEvent ev) {
+}
 
 }
