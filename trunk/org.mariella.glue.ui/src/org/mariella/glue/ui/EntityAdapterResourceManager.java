@@ -95,6 +95,7 @@ protected Object implementSaveResource(VResource resource) throws VResourceSaveE
 	EntityAdapter<T> adapter = (EntityAdapter<T>)resource;
 	ProblemsPlugin.getProblemManager().checkResourceErrors(new ScreeningProblemResource(adapter.getUIRegistration(), resource.getRef(), resource.getName()));
 	getUIRegistration().getService().save(adapter.getEntity(), adapter.getContext());
+	adapter.saved();
 	return adapter.createEntityReference();
 }
 
