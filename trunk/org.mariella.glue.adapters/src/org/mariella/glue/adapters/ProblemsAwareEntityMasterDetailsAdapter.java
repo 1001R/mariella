@@ -206,7 +206,9 @@ protected String decorateWithEntityInfo(ProblemScanContext ctx, String msg) {
 	return toString(ctx.currentEntity) + "[" + (ctx.currentEntityIndex+1) + "]: " + msg;
 }
 
-protected abstract String toString(E entity);
+protected String toString(E entity) {
+	throw new UnsupportedOperationException();
+}
 
 
 }
