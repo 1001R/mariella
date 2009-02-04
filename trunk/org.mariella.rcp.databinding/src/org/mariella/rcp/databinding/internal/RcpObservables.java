@@ -25,7 +25,7 @@ import org.mariella.rcp.databinding.VBindingContext;
 
 public class RcpObservables {
 
-public static ISWTObservableValue observeText(VBindingContext ctx, TextViewer textViewer, int eventType) {
+public static ISWTObservableValue observeText(VBindingContext ctx, TextViewer textViewer, int eventType, int traverseEventType) {
 	if (textViewer.getDocument() == null)
 		textViewer.setDocument(new Document());
 	// overload tab processing from text viewers (yes, we want traverse behaviour on TAB-key events)
@@ -35,13 +35,13 @@ public static ISWTObservableValue observeText(VBindingContext ctx, TextViewer te
 				e.doit= true;
 		}
 	});
-	VTextViewerObservableValue value = new VTextViewerObservableValue(ctx, textViewer, eventType);
+	VTextViewerObservableValue value = new VTextViewerObservableValue(ctx, textViewer, eventType, traverseEventType);
 	((InternalBindingContext)ctx).getMainContext().observablesManager.addObservable(value);
 	return value;
 }
 
-public static ISWTObservableValue observeText(VBindingContext ctx, Text text, int eventType) {
-	ISWTObservableValue value = new VTextObservableValue(text, eventType);
+public static ISWTObservableValue observeText(VBindingContext ctx, Text text, int eventType, int traverseEventType) {
+	ISWTObservableValue value = new VTextObservableValue(text, eventType, traverseEventType);
 	((InternalBindingContext)ctx).getMainContext().observablesManager.addObservable(value);
 	return value;
 }

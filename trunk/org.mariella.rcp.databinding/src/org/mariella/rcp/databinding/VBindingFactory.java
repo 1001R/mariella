@@ -580,7 +580,7 @@ public VBinding createTextBinding(VBindingContext dbc, Text text, Object bean, S
 public VBinding createTextBinding(VBindingContext dbc, Text text, Object bean, String propertyPath, VBindingDomain domain, TextBindingDetails details) {
 	if (details == null)
 		details = new TextBindingDetails();
-	ISWTObservableValue swtObservable = RcpObservables.observeText(dbc, text, details.eventType);
+	ISWTObservableValue swtObservable = RcpObservables.observeText(dbc, text, details.applyOnEventType, details.applyOnTraverseEventDetail);
 	VUpdateValueStrategy textToModel = createTargetTextToModel(dbc, domain);
 	textToModel.swtObservable = swtObservable;
 	details.statusDecorator.initializeFor((Control)swtObservable.getWidget());
@@ -605,7 +605,7 @@ public VBinding createTextBinding(VBindingContext dbc, TextViewer textViewer, Ob
 public VBinding createTextBinding(VBindingContext dbc, TextViewer textViewer, Object bean, String propertyPath, VBindingDomain domain, TextBindingDetails details) {
 	if (details == null)
 		details = new TextBindingDetails();
-	ISWTObservableValue swtObservable = RcpObservables.observeText(dbc, textViewer, details.eventType);
+	ISWTObservableValue swtObservable = RcpObservables.observeText(dbc, textViewer, details.applyOnEventType, details.applyOnTraverseEventDetail);
 	VUpdateValueStrategy textToModel = createTargetTextToModel(dbc, domain);
 	textToModel.swtObservable = swtObservable;
 	details.statusDecorator.initializeFor((Control)swtObservable.getWidget());

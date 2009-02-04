@@ -36,8 +36,10 @@ private Listener updateListener = new Listener() {
 };
 
 private VerifyListener verifyListener;
-public VTextObservableValue(final Text text, int updateEventType) {
+public VTextObservableValue(final Text text, int updateEventType, int traverseEventType) {
 	super(text);
+	if (traverseEventType != SWT.NONE)
+		throw new RuntimeException("Traverse events are not yet supported for Text controls");
 	boolean eventValid = false;
 	for (int i = 0; !eventValid && i < validUpdateEventTypes.length; i++) {
 		eventValid = (updateEventType == validUpdateEventTypes[i]);

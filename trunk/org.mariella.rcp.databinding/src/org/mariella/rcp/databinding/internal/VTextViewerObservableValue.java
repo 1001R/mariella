@@ -12,6 +12,8 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.widgets.Control;
@@ -24,12 +26,12 @@ import org.mariella.rcp.databinding.contentassist.ContentAssistantController;
 public class VTextViewerObservableValue extends AbstractSWTVetoableValue implements SelectionAwareObservable, EnabledObservableValueFactory, 
 	VTargetObservable, ClipboardSupportingObservable {
 
-private static final int[] validUpdateEventTypes = new int[] { SWT.Modify,
-	SWT.FocusOut, SWT.NONE };
+private static final int[] validUpdateEventTypes = new int[] { SWT.Modify, SWT.FocusOut, SWT.NONE };
 
 final TextViewer textViewer;
 private final StyledText text;
 private final int updateEventType;
+private final int traverseEventType;
 private boolean updating = false;
 private String oldValue;
 private final SelectionDispatchingObservableSupport selectionDispatchingSupport;
@@ -39,6 +41,20 @@ VBindingContext bindingContext;
 private Listener updateListener = new Listener() {
 	public void handleEvent(Event event) {
 		if (!updating) {
+			String newValue = text.getText();
+
+			if (!newValue.equals(oldValue)) {
+				fireValueChange(Diffs.createValueDiff(oldValue, newValue));					
+				oldValue = newValue;
+			}
+		}
+	}
+};
+
+private TraverseListener traverseListener = new TraverseListener() {
+	@Override
+	public void keyTraversed(TraverseEvent e) {
+		if (!updating && e.detail == traverseEventType) {
 			String newValue = text.getText();
 
 			if (!newValue.equals(oldValue)) {
@@ -85,7 +101,7 @@ private FocusListener focusListener = new FocusListener() {
 	}
 };
 
-public VTextViewerObservableValue(VBindingContext bindingContext, TextViewer textViewer, int updateEventType) {
+public VTextViewerObservableValue(VBindingContext bindingContext, TextViewer textViewer, int updateEventType, int traverseEventType) {
 	super(textViewer.getTextWidget());
 	this.bindingContext = bindingContext;
 	this.textViewer = textViewer;
@@ -100,9 +116,14 @@ public VTextViewerObservableValue(VBindingContext bindingContext, TextViewer tex
 	}
 	this.text = textViewer.getTextWidget();
 	this.updateEventType = updateEventType;
+	this.traverseEventType = traverseEventType;
+	
 	if (updateEventType == SWT.FocusOut) {
 		// only work with this listener on FocusOut Events
 		text.addListener(updateEventType, updateListener);
+	}
+	if (updateEventType == SWT.NONE && traverseEventType != SWT.NONE) {
+		text.addTraverseListener(traverseListener);
 	}
 	
 	oldValue = text.getText();
@@ -153,6 +174,7 @@ public void dispose() {
 		text.removeVerifyListener(verifyListener);
 		if (textViewer.getDocument() != null)
 			textViewer.getDocument().removeDocumentListener(documentListener);
+		text.removeTraverseListener(traverseListener);
 	}
 	super.dispose();
 }
