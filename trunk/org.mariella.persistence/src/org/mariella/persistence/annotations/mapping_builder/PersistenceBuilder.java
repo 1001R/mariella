@@ -385,9 +385,9 @@ protected void buildOneToOneAttributeDescription(EntityInfo entityInfo, ClassDes
 	
 	ReferencePropertyDescription pd;
 	if(attributeInfo.getReverseAttributeInfo() != null) {
-		pd = new ReferencePropertyDescription(classDescription, propertyDescriptor, attributeInfo.getReverseAttributeInfo().getName());
+		pd = new ReferencePropertyDescription(classDescription, propertyDescriptor, attributeInfo.isUpdateForeignKeys(), attributeInfo.getReverseAttributeInfo().getName());
 	} else {
-		pd = new ReferencePropertyDescription(classDescription, propertyDescriptor);
+		pd = new ReferencePropertyDescription(classDescription, propertyDescriptor, attributeInfo.isUpdateForeignKeys());
 	}
 	classDescription.addPropertyDescription(pd);
 }
@@ -417,9 +417,9 @@ protected void buildManyToOneAttributeDescription(EntityInfo entityInfo, ClassDe
 	
 	ReferencePropertyDescription pd;
 	if(attributeInfo.getReverseAttributeInfo() != null) {
-		pd = new ReferencePropertyDescription(classDescription, propertyDescriptor, attributeInfo.getReverseAttributeInfo().getName());
+		pd = new ReferencePropertyDescription(classDescription, propertyDescriptor, attributeInfo.isUpdateForeignKeys(), attributeInfo.getReverseAttributeInfo().getName());
 	} else {
-		pd = new ReferencePropertyDescription(classDescription, propertyDescriptor);
+		pd = new ReferencePropertyDescription(classDescription, propertyDescriptor, attributeInfo.isUpdateForeignKeys());
 	}
 	classDescription.addPropertyDescription(pd);
 }

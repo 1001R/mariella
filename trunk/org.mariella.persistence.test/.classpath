@@ -6,8 +6,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.mariella.persistence"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/javax.persistence"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.mariella.glue.annotations"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.mariella.glue.annotations.processing"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.mariella.glue.core"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.mariella.persistence.annotations"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.mariella.persistence.annotations.processing"/>

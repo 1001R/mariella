@@ -34,6 +34,7 @@ import javax.persistence.Transient;
 
 import org.mariella.persistence.annotations.Converter;
 import org.mariella.persistence.annotations.Domain;
+import org.mariella.persistence.annotations.ForeignKeyUpdateStrategy;
 
 @SuppressWarnings("unchecked")
 public abstract class MappedClassInfo extends ClassInfo {
@@ -86,6 +87,18 @@ private void parseAttributeAnnotations(AnnotatedElement ae) throws Exception {
 	parseSequenceGeneratorAnnotation(ae);
 	parseTableGeneratorAnnotation(ae);
 	parseGeneratedValueAnnotation(ae);
+	parseForeignKeyUpdateStrategy(ae);
+}
+
+private void parseForeignKeyUpdateStrategy(AnnotatedElement ae) throws Exception {
+	if (!(ae.isAnnotationPresent(ForeignKeyUpdateStrategy.class)))
+		return;
+	String attributeName = ReflectionUtil.readFieldOrPropertyName(ae);
+	AttributeInfo attributeInfo = getAttributeInfo(attributeName);
+	if (!(attributeInfo instanceof ToOneAttributeInfo)) 
+		throw new Exception("the @ForeignKeyUpdateStrategy annotation is only for \"to one\" attributes");
+	
+	((ToOneAttributeInfo)attributeInfo).setForeignKeyUpdateStrategy(ae.getAnnotation(ForeignKeyUpdateStrategy.class));
 }
 
 private void parseGeneratedValueAnnotation(AnnotatedElement ae) throws Exception {

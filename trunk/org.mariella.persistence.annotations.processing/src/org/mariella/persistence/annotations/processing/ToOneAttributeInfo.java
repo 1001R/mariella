@@ -4,11 +4,14 @@ import java.io.PrintStream;
 import java.util.Collections;
 import java.util.List;
 
+import org.mariella.persistence.annotations.ForeignKeyUpdateStrategy;
+
 
 @SuppressWarnings("unchecked")
 public abstract class ToOneAttributeInfo extends RelationAttributeInfo {
 
 private List<JoinColumnInfo> joinColumnInfos = Collections.EMPTY_LIST;
+private ForeignKeyUpdateStrategy foreignKeyUpdateStrategy = null;
 
 @Override
 Class readTargetEntityByReflection() {
@@ -44,8 +47,21 @@ void debugPrintAttributes(PrintStream out) {
 			joinColInfo.debugPrint(out);
 		}
 	}
-		
 }
 
+public ForeignKeyUpdateStrategy getForeignKeyUpdateStrategy() {
+	return foreignKeyUpdateStrategy;
+}
+
+void setForeignKeyUpdateStrategy(
+		ForeignKeyUpdateStrategy foreignKeyUpdateStrategy) {
+	this.foreignKeyUpdateStrategy = foreignKeyUpdateStrategy;
+}
+
+public boolean isUpdateForeignKeys() {
+	if (foreignKeyUpdateStrategy == null)
+		return true;
+	return foreignKeyUpdateStrategy.update();
+}
 
 }

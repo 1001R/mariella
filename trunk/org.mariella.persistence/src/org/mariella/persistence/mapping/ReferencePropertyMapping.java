@@ -73,7 +73,7 @@ protected TableReference joinReverse(SubSelectBuilder subSelectBuilder, TableRef
 
 @Override
 public void persist(ObjectPersistor persistor, Object value) {
-	if(foreignKeyColumn != null) {
+	if(foreignKeyColumn != null && getPropertyDescription().isUpdateForeignKeys()) {
 		Object relatedIdentity = null;
 		if(value != null) {
 			relatedIdentity = ModifiableAccessor.Singleton.getValue(value, getPropertyDescription().getReferencedClassDescription().getId());
@@ -84,7 +84,7 @@ public void persist(ObjectPersistor persistor, Object value) {
 
 @Override
 public void collectUsedColumns(Collection<Column> collection) {
-	if(foreignKeyColumn != null) {
+	if(foreignKeyColumn != null && getPropertyDescription().isUpdateForeignKeys()) {
 		collection.add(foreignKeyColumn);
 	}
 }
