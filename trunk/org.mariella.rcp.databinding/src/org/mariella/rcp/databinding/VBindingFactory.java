@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DateTime;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.mariella.rcp.databinding.internal.AsyncActionWrapper;
@@ -44,6 +45,7 @@ import org.mariella.rcp.databinding.internal.VStatusLineManagerErrorMsgAdapter;
 import org.mariella.rcp.databinding.internal.VTableViewerObservableList;
 import org.mariella.rcp.databinding.internal.VTargetObservable;
 import org.mariella.rcp.databinding.internal.VUpdateValueStrategy;
+import org.mariella.rcp.databinding.internal.VUpdateValueStrategyObserver;
 import org.mariella.rcp.databinding.internal.VisibleStateModelObservableValue;
 
 
@@ -299,7 +301,7 @@ public VBinding createDateTimeBinding(VBindingContext dbc, DateTime dateTime, Ob
 
 public VBinding createDateTimeBinding(VBindingContext dbc, DateTime dateTime, Object bean, String propertyPath, VBindingDomain domain) {
 	ISWTObservableValue swtObservable = RcpObservables.observeDateTime(dbc, dateTime);
-	VUpdateValueStrategy textToModel = createTargetTextToModel(dbc, domain);
+	VUpdateValueStrategy textToModel = createTargetTextToModel(dbc, domain, null);
 	textToModel.swtObservable = swtObservable;
 	VBinding binding = ((InternalBindingContext)dbc).bindValue(
 			swtObservable,
@@ -350,7 +352,7 @@ public VBinding createLabelBinding(VBindingContext dbc, Label label, Object bean
 
 public VBinding createLabelBinding(VBindingContext dbc, Label label, Object bean, String propertyPath, VBindingDomain domain) {
 	ISWTObservableValue swtObservable = RcpObservables.observeLabel(dbc, label);
-	VUpdateValueStrategy textToModel = createTargetTextToModel(dbc, domain);
+	VUpdateValueStrategy textToModel = createTargetTextToModel(dbc, domain, null);
 	textToModel.swtObservable = swtObservable;
 	VBinding binding = ((InternalBindingContext)dbc).bindValue(
 			swtObservable,
@@ -456,7 +458,7 @@ public VBinding createSingleSelectionBinding(VBindingContext dbc, StructuredView
 		domain = new VBindingDomain(Object.class);
 	VBinding binding =((InternalBindingContext)dbc).bindValue(RcpObservables.observeSingleSelection(dbc, structuredViewer), 
 			ModelObservables.observeValue(bean, propertyPath, domain.getType()), 
-			createTargetTextToModel(dbc, domain),  
+			createTargetTextToModel(dbc, domain, null),  
 			createModelToTargetText(dbc, domain),
 			domain);
 	
@@ -482,7 +484,7 @@ public VBinding createMultiSelectionBinding(VBindingContext dbc, StructuredViewe
 		domain = new VBindingDomain(Object.class);
 	VBinding binding =((InternalBindingContext)dbc).bindValue(RcpObservables.observeMultiSelection(dbc, structuredViewer), 
 			ModelObservables.observeValue(bean, propertyPath, domain.getType()), 
-			createTargetTextToModel(dbc, domain),  
+			createTargetTextToModel(dbc, domain, null),  
 			createModelToTargetText(dbc, domain),
 			domain);
 	
@@ -561,8 +563,8 @@ public VBinding createTableViewerListBinding(VBindingContext dbc, TableViewer ta
 	return binding;
 }
 
-private VUpdateValueStrategy createTargetTextToModel(VBindingContext dbc, VBindingDomain domain) {
-	VUpdateValueStrategy strategy = new VUpdateValueStrategy(dbc);
+private VUpdateValueStrategy createTargetTextToModel(VBindingContext dbc, VBindingDomain domain, VUpdateValueStrategyObserver updateValueStrategyObserver) {
+	VUpdateValueStrategy strategy = new VUpdateValueStrategy(dbc, updateValueStrategyObserver);
 	strategy.setConverter(domain.getConverterBuilder().buildToModelConverter(domain));
 	IValidator beforeConvertToModel = domain.getConverterBuilder().buildBeforeSetModelValidator(domain);
 	if (beforeConvertToModel != null)
@@ -581,7 +583,7 @@ public VBinding createTextBinding(VBindingContext dbc, Text text, Object bean, S
 	if (details == null)
 		details = new TextBindingDetails();
 	ISWTObservableValue swtObservable = RcpObservables.observeText(dbc, text, details.applyOnEventType, details.applyOnTraverseEventDetail);
-	VUpdateValueStrategy textToModel = createTargetTextToModel(dbc, domain);
+	VUpdateValueStrategy textToModel = createTargetTextToModel(dbc, domain, null);
 	textToModel.swtObservable = swtObservable;
 	details.statusDecorator.initializeFor((Control)swtObservable.getWidget());
 	VBinding binding = ((InternalBindingContext)dbc).bindValue(
@@ -606,7 +608,23 @@ public VBinding createTextBinding(VBindingContext dbc, TextViewer textViewer, Ob
 	if (details == null)
 		details = new TextBindingDetails();
 	ISWTObservableValue swtObservable = RcpObservables.observeText(dbc, textViewer, details.applyOnEventType, details.applyOnTraverseEventDetail);
-	VUpdateValueStrategy textToModel = createTargetTextToModel(dbc, domain);
+	
+	final VBinding[] bindingRef = new VBinding[1];
+	
+	VUpdateValueStrategyObserver updateTextToModelObserver = details.refreshAfterInput ? 
+			new VUpdateValueStrategyObserver() {
+				@Override
+				public void setValueOccured(IObservableValue observable, Object value) {
+					Display.getCurrent().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							bindingRef[0].getBinding().updateModelToTarget();
+						}
+					});
+				}
+			} : null;
+	
+	VUpdateValueStrategy textToModel = createTargetTextToModel(dbc, domain, updateTextToModelObserver);
 	textToModel.swtObservable = swtObservable;
 	details.statusDecorator.initializeFor((Control)swtObservable.getWidget());
 	VBinding binding = ((InternalBindingContext)dbc).bindValue(
@@ -615,6 +633,7 @@ public VBinding createTextBinding(VBindingContext dbc, TextViewer textViewer, Ob
 			textToModel,  
 			createModelToTargetText(dbc, domain),
 			domain);
+	bindingRef[0] = binding;
 	((InternalBindingContext)dbc).getMainContext().swtObservableStatusDecoratorMap.put(swtObservable, details.statusDecorator);
 	
 	completeBindingCreation(binding, domain);

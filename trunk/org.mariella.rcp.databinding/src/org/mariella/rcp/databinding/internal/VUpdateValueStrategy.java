@@ -18,16 +18,25 @@ public class VUpdateValueStrategy extends UpdateValueStrategy {
 public VBindingContext dbc;
 public ISWTObservableValue swtObservable;
 public String conversionError = null;
+private VUpdateValueStrategyObserver observer = null;
 
 public VUpdateValueStrategy(VBindingContext dbc) {
 	super();
 	this.dbc = dbc;
 }
 
+public VUpdateValueStrategy(VBindingContext dbc, VUpdateValueStrategyObserver observer) {
+	super();
+	this.dbc = dbc;
+	this.observer = observer;
+}
+
 @Override
 protected IStatus doSet(IObservableValue observableValue, Object value) {
 	try {
 		observableValue.setValue(value);
+		if (observer != null)
+			observer.setValueOccured(observableValue, value);
 	} catch (Exception ex) {
 		VDataBindingPlugin.logger.log(Level.SEVERE, "", ex);
 	}
