@@ -23,6 +23,15 @@ public TextBindingDetails(int applyOnEventType, int applyOnTraverseEventDetail, 
 	this(applyOnEventType, applyOnTraverseEventDetail, refreshAfterInputCallback, new ForegroundStatusDecorator(Display.getCurrent().getSystemColor(SWT.COLOR_RED)));
 }
 
+public TextBindingDetails(int applyOnEventType, int applyOnTraverseEventDetail, final boolean refreshAfterInput) {
+	this(applyOnEventType, applyOnTraverseEventDetail, new RefreshAfterTextInputCallback() {
+		@Override
+		public boolean refreshAfterTextInput() {
+			return refreshAfterInput;
+		}
+	}, new ForegroundStatusDecorator(Display.getCurrent().getSystemColor(SWT.COLOR_RED)));
+}
+
 public TextBindingDetails(int applyOnEventType, int applyOnTraverseEventDetail, RefreshAfterTextInputCallback refreshAfterInputCallback, SWTObservableStatusDecorator statusDecorator) {
 	this.applyOnEventType = applyOnEventType;
 	this.applyOnTraverseEventDetail = applyOnTraverseEventDetail;
