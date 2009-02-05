@@ -1,12 +1,8 @@
 package org.mariella.rcp.databinding;
 
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
-import org.eclipse.jface.viewers.ICheckStateListener;
-import org.eclipse.jface.viewers.TableViewer;
 import org.mariella.rcp.databinding.internal.InternalBindingContext;
-import org.mariella.rcp.databinding.internal.PropertyPathSupport;
 import org.mariella.rcp.databinding.internal.TableController;
 import org.mariella.rcp.databinding.internal.VTableViewerObservableList;
 

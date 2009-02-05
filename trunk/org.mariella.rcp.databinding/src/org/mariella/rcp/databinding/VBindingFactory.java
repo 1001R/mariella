@@ -302,13 +302,11 @@ public VBinding createDateTimeBinding(VBindingContext dbc, DateTime dateTime, Ob
 
 public VBinding createDateTimeBinding(VBindingContext dbc, DateTime dateTime, Object bean, String propertyPath, VBindingDomain domain) {
 	ISWTObservableValue swtObservable = RcpObservables.observeDateTime(dbc, dateTime);
-	VUpdateValueStrategy textToModel = createTargetTextToModel(dbc, domain, null);
-	textToModel.swtObservable = swtObservable;
 	VBinding binding = ((InternalBindingContext)dbc).bindValue(
 			swtObservable,
 			ModelObservables.observeValue(bean, propertyPath, domain.getType()), 
-			textToModel,  
-			createModelToTargetText(dbc, domain),
+			null,  
+			null,
 			domain);
 	
 	completeBindingCreation(binding, domain);
@@ -353,13 +351,11 @@ public VBinding createLabelBinding(VBindingContext dbc, Label label, Object bean
 
 public VBinding createLabelBinding(VBindingContext dbc, Label label, Object bean, String propertyPath, VBindingDomain domain) {
 	ISWTObservableValue swtObservable = RcpObservables.observeLabel(dbc, label);
-	VUpdateValueStrategy textToModel = createTargetTextToModel(dbc, domain, null);
-	textToModel.swtObservable = swtObservable;
 	VBinding binding = ((InternalBindingContext)dbc).bindValue(
 			swtObservable,
 			ModelObservables.observeValue(bean, propertyPath, domain.getType()), 
-			textToModel,  
-			createModelToTargetText(dbc, domain),
+			null,  
+			null,
 			domain);
 	
 	completeBindingCreation(binding, domain);
@@ -459,8 +455,8 @@ public VBinding createSingleSelectionBinding(VBindingContext dbc, StructuredView
 		domain = new VBindingDomain(Object.class);
 	VBinding binding =((InternalBindingContext)dbc).bindValue(RcpObservables.observeSingleSelection(dbc, structuredViewer), 
 			ModelObservables.observeValue(bean, propertyPath, domain.getType()), 
-			createTargetTextToModel(dbc, domain, null),  
-			createModelToTargetText(dbc, domain),
+			null,  
+			null,
 			domain);
 	
 	completeBindingCreation(binding, domain);
@@ -485,8 +481,8 @@ public VBinding createMultiSelectionBinding(VBindingContext dbc, StructuredViewe
 		domain = new VBindingDomain(Object.class);
 	VBinding binding =((InternalBindingContext)dbc).bindValue(RcpObservables.observeMultiSelection(dbc, structuredViewer), 
 			ModelObservables.observeValue(bean, propertyPath, domain.getType()), 
-			createTargetTextToModel(dbc, domain, null),  
-			createModelToTargetText(dbc, domain),
+			null,  
+			null,
 			domain);
 	
 	completeBindingCreation(binding, domain);
@@ -610,7 +606,7 @@ public VBinding createTextBinding(VBindingContext dbc, TextViewer textViewer, Ob
 		details = new TextBindingDetails();
 	final TextBindingDetails finalDetails = details;
 	
-	ISWTObservableValue swtObservable = RcpObservables.observeText(dbc, textViewer, details.applyOnEventType, details.applyOnTraverseEventDetail);
+	final ISWTObservableValue swtObservable = RcpObservables.observeText(dbc, textViewer, details.applyOnEventType, details.applyOnTraverseEventDetail);
 	
 	final VBinding[] bindingRef = new VBinding[1];
 	
@@ -618,8 +614,8 @@ public VBinding createTextBinding(VBindingContext dbc, TextViewer textViewer, Ob
 	VUpdateValueStrategyObserver updateTextToModelObserver = details.refreshAfterInputCallback == null ? null : 
 			new VUpdateValueStrategyObserver() {
 				@Override
-				public void setValueOccured(IObservableValue observable, Object value) {
-					final TextViewer textViewer = ((VTextViewerObservableValue)observable).getTextViewer();
+				public void setValueOccured(IObservableValue target, Object value) {
+					final TextViewer textViewer = ((VTextViewerObservableValue)swtObservable).getTextViewer();
 					Display.getCurrent().asyncExec(new Runnable() {
 						@Override
 						public void run() {

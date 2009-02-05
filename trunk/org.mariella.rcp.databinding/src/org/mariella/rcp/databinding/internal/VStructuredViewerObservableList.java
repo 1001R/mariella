@@ -10,7 +10,6 @@ import java.util.Map;
 
 import org.eclipse.core.databinding.observable.list.AbstractObservableList;
 import org.eclipse.jface.databinding.swt.ISWTObservable;
-import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -18,7 +17,6 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Widget;
 import org.mariella.rcp.databinding.SelectionPath;
 import org.mariella.rcp.databinding.VBindingContext;

@@ -1,8 +1,6 @@
 package org.mariella.rcp.databinding.internal;
 
 import org.eclipse.jface.viewers.AbstractListViewer;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.widgets.TableItem;
 import org.mariella.rcp.databinding.VBindingContext;
 
 public class VListViewerObservableList extends VStructuredViewerObservableList {

@@ -4,6 +4,6 @@ import org.eclipse.core.databinding.observable.value.IObservableValue;
 
 public interface VUpdateValueStrategyObserver {
 
-void setValueOccured(IObservableValue observable, Object value);
+void setValueOccured(IObservableValue target, Object value);
 	
 }

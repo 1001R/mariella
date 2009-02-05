@@ -1,7 +1,6 @@
 package org.mariella.rcp.databinding.internal;
 
 import org.eclipse.jface.internal.databinding.provisional.swt.AbstractSWTObservableValue;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 public class ControlEnabledObservableValue extends AbstractSWTObservableValue implements VTargetObservable {

@@ -10,8 +10,6 @@ import org.eclipse.swt.widgets.TableItem;
 import org.mariella.rcp.databinding.TableViewerCheckboxExtension;
 import org.mariella.rcp.databinding.VBindingContext;
 
-import sun.security.action.GetBooleanAction;
-
 public class VTableViewerObservableList extends VStructuredViewerObservableList implements EnabledObservableValueFactory {
 
 	TableViewerCheckboxExtension checkboxExtension = null;

@@ -9,12 +9,8 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.logging.Level;
 
-import org.eclipse.core.databinding.beans.BeansObservables;
 import org.eclipse.core.databinding.observable.Realm;
-import org.eclipse.core.databinding.util.Policy;
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.mariella.rcp.databinding.VDataBindingPlugin;
 
 public class PropertyListenerSupport {
