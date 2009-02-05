@@ -44,6 +44,7 @@ import org.mariella.rcp.databinding.internal.VListViewerObservableList;
 import org.mariella.rcp.databinding.internal.VStatusLineManagerErrorMsgAdapter;
 import org.mariella.rcp.databinding.internal.VTableViewerObservableList;
 import org.mariella.rcp.databinding.internal.VTargetObservable;
+import org.mariella.rcp.databinding.internal.VTextViewerObservableValue;
 import org.mariella.rcp.databinding.internal.VUpdateValueStrategy;
 import org.mariella.rcp.databinding.internal.VUpdateValueStrategyObserver;
 import org.mariella.rcp.databinding.internal.VisibleStateModelObservableValue;
@@ -607,22 +608,29 @@ public VBinding createTextBinding(VBindingContext dbc, TextViewer textViewer, Ob
 public VBinding createTextBinding(VBindingContext dbc, TextViewer textViewer, Object bean, String propertyPath, VBindingDomain domain, TextBindingDetails details) {
 	if (details == null)
 		details = new TextBindingDetails();
+	final TextBindingDetails finalDetails = details;
+	
 	ISWTObservableValue swtObservable = RcpObservables.observeText(dbc, textViewer, details.applyOnEventType, details.applyOnTraverseEventDetail);
 	
 	final VBinding[] bindingRef = new VBinding[1];
 	
-	VUpdateValueStrategyObserver updateTextToModelObserver = details.refreshAfterInput ? 
+	
+	VUpdateValueStrategyObserver updateTextToModelObserver = details.refreshAfterInputCallback == null ? null : 
 			new VUpdateValueStrategyObserver() {
 				@Override
 				public void setValueOccured(IObservableValue observable, Object value) {
+					final TextViewer textViewer = ((VTextViewerObservableValue)observable).getTextViewer();
 					Display.getCurrent().asyncExec(new Runnable() {
 						@Override
 						public void run() {
-							bindingRef[0].getBinding().updateModelToTarget();
+							if (finalDetails.refreshAfterInputCallback.refreshAfterTextInput()) {
+								bindingRef[0].getBinding().updateModelToTarget();
+								textViewer.doOperation(TextViewer.SELECT_ALL);
+							}
 						}
 					});
 				}
-			} : null;
+			};
 	
 	VUpdateValueStrategy textToModel = createTargetTextToModel(dbc, domain, updateTextToModelObserver);
 	textToModel.swtObservable = swtObservable;
