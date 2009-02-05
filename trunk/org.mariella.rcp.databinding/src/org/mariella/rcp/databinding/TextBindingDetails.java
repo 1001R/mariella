@@ -17,29 +17,29 @@ public TextBindingDetails() {
 	this(SWT.Modify);
 }
 
-public TextBindingDetails(int applyOnEventType) {
+public TextBindingDetails(final int applyOnEventType) {
 	this(new TextViewerObservableCallback() {
 		@Override
 		public boolean updateModelOnDocumentModification() {
-			return true;
+			return applyOnEventType == SWT.Modify;
 		}
 	}, SWT.NONE, null, new ForegroundStatusDecorator(Display.getCurrent().getSystemColor(SWT.COLOR_RED)));
 }
 
-public TextBindingDetails(int applyOnEventType, int applyOnTraverseEventDetail, RefreshAfterTextInputCallback refreshAfterInputCallback) {
+public TextBindingDetails(final int applyOnEventType, int applyOnTraverseEventDetail, RefreshAfterTextInputCallback refreshAfterInputCallback) {
 	this(new TextViewerObservableCallback() {
 		@Override
 		public boolean updateModelOnDocumentModification() {
-			return true;
+			return applyOnEventType == SWT.Modify;
 		}
 	}, applyOnTraverseEventDetail, refreshAfterInputCallback, new ForegroundStatusDecorator(Display.getCurrent().getSystemColor(SWT.COLOR_RED)));
 }
 
-public TextBindingDetails(int applyOnEventType, int applyOnTraverseEventDetail, final boolean refreshAfterInput) {
+public TextBindingDetails(final int applyOnEventType, int applyOnTraverseEventDetail, final boolean refreshAfterInput) {
 	this(new TextViewerObservableCallback() {
 		@Override
 		public boolean updateModelOnDocumentModification() {
-			return true;
+			return applyOnEventType == SWT.Modify;
 		}
 	}, applyOnTraverseEventDetail, new RefreshAfterTextInputCallback() {
 		@Override

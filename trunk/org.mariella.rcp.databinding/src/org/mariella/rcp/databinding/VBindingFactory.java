@@ -620,9 +620,8 @@ public VBinding createTextBinding(VBindingContext dbc, TextViewer textViewer, Ob
 						@Override
 						public void run() {
 							if (finalDetails.refreshAfterInputCallback.refreshAfterTextInput()) {
-								System.out.println("BLAHBLAHHHH");
-								//bindingRef[0].getBinding().updateModelToTarget();
-								//textObservable.getTextViewer().doOperation(TextViewer.SELECT_ALL);
+								bindingRef[0].getBinding().updateModelToTarget();
+								textObservable.getTextViewer().doOperation(TextViewer.SELECT_ALL);
 							}
 						}
 					});
