@@ -19,6 +19,7 @@ import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.mariella.rcp.databinding.TextBindingDetails;
 import org.mariella.rcp.databinding.VBindingContext;
 import org.mariella.rcp.databinding.VBindingSelection;
 import org.mariella.rcp.databinding.contentassist.ContentAssistantController;
@@ -30,8 +31,7 @@ private static final int[] validUpdateEventTypes = new int[] { SWT.Modify, SWT.F
 
 final TextViewer textViewer;
 private final StyledText text;
-private final int updateEventType;
-private final int traverseEventType;
+private TextBindingDetails textBindingDetails;
 private boolean updating = false;
 private String oldValue;
 private final SelectionDispatchingObservableSupport selectionDispatchingSupport;
@@ -54,7 +54,7 @@ private Listener updateListener = new Listener() {
 private TraverseListener traverseListener = new TraverseListener() {
 	@Override
 	public void keyTraversed(TraverseEvent e) {
-		if (!updating && e.detail == traverseEventType) {
+		if (!updating && e.detail == textBindingDetails.applyOnTraverseEventDetail) {
 			String newValue = text.getText();
 
 			if (!newValue.equals(oldValue)) {
@@ -82,13 +82,20 @@ private SelectionListener selectionListener = new SelectionListener() {
 private IDocumentListener documentListener = new IDocumentListener() {
 	String currentText;
 	public void documentAboutToBeChanged(DocumentEvent event) {
-		currentText = text.getText();
+		if (textBindingDetails.applyOnEventType == SWT.Modify || 
+				(textBindingDetails.textViewerObservableCallback != null && textBindingDetails.textViewerObservableCallback.updateModelOnDocumentModification())) {
+			currentText = text.getText();
+		}
 	}
 	public void documentChanged(DocumentEvent e) {
 		if (!updating) {
 			String newText = text.getText();
-			fireValueChange(Diffs.createValueDiff(currentText, newText));
-			fireSelectionChanged();
+			
+			if (textBindingDetails.applyOnEventType == SWT.Modify || 
+					(textBindingDetails.textViewerObservableCallback != null && textBindingDetails.textViewerObservableCallback.updateModelOnDocumentModification())) {
+				fireValueChange(Diffs.createValueDiff(currentText, newText));
+				fireSelectionChanged();
+			}
 		}
 	}
 };
@@ -101,28 +108,27 @@ private FocusListener focusListener = new FocusListener() {
 	}
 };
 
-public VTextViewerObservableValue(VBindingContext bindingContext, TextViewer textViewer, int updateEventType, int traverseEventType) {
+public VTextViewerObservableValue(VBindingContext bindingContext, TextViewer textViewer, TextBindingDetails textBindingDetails) {
 	super(textViewer.getTextWidget());
 	this.bindingContext = bindingContext;
 	this.textViewer = textViewer;
 	selectionDispatchingSupport = new SelectionDispatchingObservableSupport(this, new ControlSelectionDecorator(textViewer.getTextWidget())); 
 	boolean eventValid = false;
 	for (int i = 0; !eventValid && i < validUpdateEventTypes.length; i++) {
-		eventValid = (updateEventType == validUpdateEventTypes[i]);
+		eventValid = (textBindingDetails.applyOnEventType == validUpdateEventTypes[i]);
 	}
 	if (!eventValid) {
 		throw new IllegalArgumentException(
-				"UpdateEventType [" + updateEventType + "] is not supported."); //$NON-NLS-1$//$NON-NLS-2$
+				"UpdateEventType [" + textBindingDetails.applyOnEventType + "] is not supported."); //$NON-NLS-1$//$NON-NLS-2$
 	}
 	this.text = textViewer.getTextWidget();
-	this.updateEventType = updateEventType;
-	this.traverseEventType = traverseEventType;
+	this.textBindingDetails = textBindingDetails;
 	
-	if (updateEventType == SWT.FocusOut) {
+	if (textBindingDetails.applyOnEventType == SWT.FocusOut) {
 		// only work with this listener on FocusOut Events
-		text.addListener(updateEventType, updateListener);
+		text.addListener(textBindingDetails.applyOnEventType, updateListener);
 	}
-	if (updateEventType == SWT.NONE && traverseEventType != SWT.NONE) {
+	if (textBindingDetails.applyOnEventType == SWT.NONE && textBindingDetails.applyOnTraverseEventDetail != SWT.NONE) {
 		text.addTraverseListener(traverseListener);
 	}
 	
@@ -130,8 +136,7 @@ public VTextViewerObservableValue(VBindingContext bindingContext, TextViewer tex
 	
 	textViewer.getTextWidget().addVerifyListener(verifyListener);
 	
-	if (updateEventType == SWT.Modify)
-		textViewer.getDocument().addDocumentListener(documentListener);
+	textViewer.getDocument().addDocumentListener(documentListener);
 	textViewer.getTextWidget().addFocusListener(focusListener);
 	text.addSelectionListener(selectionListener);
 }
@@ -166,14 +171,15 @@ protected Object doGetValue() {
 @Override
 public void dispose() {
 	if (!text.isDisposed()) {
-		if (updateEventType != SWT.None) {
-			text.removeListener(updateEventType, updateListener);
+		if (textBindingDetails.applyOnEventType != SWT.None) {
+			text.removeListener(textBindingDetails.applyOnEventType, updateListener);
 		}
 		text.removeSelectionListener(selectionListener);
 		text.removeFocusListener(focusListener);
 		text.removeVerifyListener(verifyListener);
-		if (textViewer.getDocument() != null)
+		if (textViewer.getDocument() != null) {
 			textViewer.getDocument().removeDocumentListener(documentListener);
+		}
 		text.removeTraverseListener(traverseListener);
 	}
 	super.dispose();

@@ -1,5 +1,6 @@
 package org.mariella.rcp.databinding;
 
+import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 
@@ -10,21 +11,37 @@ public int applyOnEventType;	// SWT.Modify, SWT.FocusOut, SWT.NONE
 public int applyOnTraverseEventDetail;	// e.g. SWT.TRAVERSE_RETURN;	only valid when applyOnEventTsype is set to SWT.NONE
 public RefreshAfterTextInputCallback refreshAfterInputCallback = null;	// after an user input has occured, refresh the contents of the text field.
 public SWTObservableStatusDecorator statusDecorator;
+public TextViewerObservableCallback textViewerObservableCallback = null;
 
 public TextBindingDetails() {
 	this(SWT.Modify);
 }
 
 public TextBindingDetails(int applyOnEventType) {
-	this(applyOnEventType, SWT.NONE, null, new ForegroundStatusDecorator(Display.getCurrent().getSystemColor(SWT.COLOR_RED)));
+	this(new TextViewerObservableCallback() {
+		@Override
+		public boolean updateModelOnDocumentModification() {
+			return true;
+		}
+	}, SWT.NONE, null, new ForegroundStatusDecorator(Display.getCurrent().getSystemColor(SWT.COLOR_RED)));
 }
 
 public TextBindingDetails(int applyOnEventType, int applyOnTraverseEventDetail, RefreshAfterTextInputCallback refreshAfterInputCallback) {
-	this(applyOnEventType, applyOnTraverseEventDetail, refreshAfterInputCallback, new ForegroundStatusDecorator(Display.getCurrent().getSystemColor(SWT.COLOR_RED)));
+	this(new TextViewerObservableCallback() {
+		@Override
+		public boolean updateModelOnDocumentModification() {
+			return true;
+		}
+	}, applyOnTraverseEventDetail, refreshAfterInputCallback, new ForegroundStatusDecorator(Display.getCurrent().getSystemColor(SWT.COLOR_RED)));
 }
 
 public TextBindingDetails(int applyOnEventType, int applyOnTraverseEventDetail, final boolean refreshAfterInput) {
-	this(applyOnEventType, applyOnTraverseEventDetail, new RefreshAfterTextInputCallback() {
+	this(new TextViewerObservableCallback() {
+		@Override
+		public boolean updateModelOnDocumentModification() {
+			return true;
+		}
+	}, applyOnTraverseEventDetail, new RefreshAfterTextInputCallback() {
 		@Override
 		public boolean refreshAfterTextInput() {
 			return refreshAfterInput;
@@ -32,8 +49,25 @@ public TextBindingDetails(int applyOnEventType, int applyOnTraverseEventDetail, 
 	}, new ForegroundStatusDecorator(Display.getCurrent().getSystemColor(SWT.COLOR_RED)));
 }
 
-public TextBindingDetails(int applyOnEventType, int applyOnTraverseEventDetail, RefreshAfterTextInputCallback refreshAfterInputCallback, SWTObservableStatusDecorator statusDecorator) {
-	this.applyOnEventType = applyOnEventType;
+public TextBindingDetails(TextViewerObservableCallback cb) {
+	this(cb, SWT.NONE, null, new ForegroundStatusDecorator(Display.getCurrent().getSystemColor(SWT.COLOR_RED)));
+}
+
+public TextBindingDetails(TextViewerObservableCallback cb, int applyOnTraverseEventDetail, RefreshAfterTextInputCallback refreshAfterInputCallback) {
+	this(cb, applyOnTraverseEventDetail, refreshAfterInputCallback, new ForegroundStatusDecorator(Display.getCurrent().getSystemColor(SWT.COLOR_RED)));
+}
+
+public TextBindingDetails(TextViewerObservableCallback cb, int applyOnTraverseEventDetail, final boolean refreshAfterInput) {
+	this(cb, applyOnTraverseEventDetail, new RefreshAfterTextInputCallback() {
+		@Override
+		public boolean refreshAfterTextInput() {
+			return refreshAfterInput;
+		}
+	}, new ForegroundStatusDecorator(Display.getCurrent().getSystemColor(SWT.COLOR_RED)));
+}
+
+public TextBindingDetails(TextViewerObservableCallback cb, int applyOnTraverseEventDetail, RefreshAfterTextInputCallback refreshAfterInputCallback, SWTObservableStatusDecorator statusDecorator) {
+	this.textViewerObservableCallback = cb;
 	this.applyOnTraverseEventDetail = applyOnTraverseEventDetail;
 	this.statusDecorator = statusDecorator;
 	this.refreshAfterInputCallback = refreshAfterInputCallback;

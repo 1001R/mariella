@@ -18,12 +18,13 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.mariella.rcp.databinding.TextBindingDetails;
 import org.mariella.rcp.databinding.VBindingContext;
 
 
 public class RcpObservables {
 
-public static ISWTObservableValue observeText(VBindingContext ctx, TextViewer textViewer, int eventType, int traverseEventType) {
+public static ISWTObservableValue observeText(VBindingContext ctx, TextViewer textViewer, TextBindingDetails textBindingDetails) {
 	if (textViewer.getDocument() == null)
 		textViewer.setDocument(new Document());
 	// overload tab processing from text viewers (yes, we want traverse behaviour on TAB-key events)
@@ -33,7 +34,7 @@ public static ISWTObservableValue observeText(VBindingContext ctx, TextViewer te
 				e.doit= true;
 		}
 	});
-	VTextViewerObservableValue value = new VTextViewerObservableValue(ctx, textViewer, eventType, traverseEventType);
+	VTextViewerObservableValue value = new VTextViewerObservableValue(ctx, textViewer, textBindingDetails);
 	((InternalBindingContext)ctx).getMainContext().observablesManager.addObservable(value);
 	return value;
 }

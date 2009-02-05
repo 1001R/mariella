@@ -354,8 +354,8 @@ public VBinding createLabelBinding(VBindingContext dbc, Label label, Object bean
 	VBinding binding = ((InternalBindingContext)dbc).bindValue(
 			swtObservable,
 			ModelObservables.observeValue(bean, propertyPath, domain.getType()), 
-			null,  
-			null,
+			createTargetTextToModel(dbc, domain, null),  
+			createModelToTargetText(dbc, domain),
 			domain);
 	
 	completeBindingCreation(binding, domain);
@@ -606,7 +606,7 @@ public VBinding createTextBinding(VBindingContext dbc, TextViewer textViewer, Ob
 		details = new TextBindingDetails();
 	final TextBindingDetails finalDetails = details;
 	
-	final ISWTObservableValue swtObservable = RcpObservables.observeText(dbc, textViewer, details.applyOnEventType, details.applyOnTraverseEventDetail);
+	final ISWTObservableValue swtObservable = RcpObservables.observeText(dbc, textViewer, details);
 	
 	final VBinding[] bindingRef = new VBinding[1];
 	
@@ -615,13 +615,14 @@ public VBinding createTextBinding(VBindingContext dbc, TextViewer textViewer, Ob
 			new VUpdateValueStrategyObserver() {
 				@Override
 				public void setValueOccured(IObservableValue target, Object value) {
-					final TextViewer textViewer = ((VTextViewerObservableValue)swtObservable).getTextViewer();
+					final VTextViewerObservableValue textObservable = (VTextViewerObservableValue)swtObservable; 
 					Display.getCurrent().asyncExec(new Runnable() {
 						@Override
 						public void run() {
 							if (finalDetails.refreshAfterInputCallback.refreshAfterTextInput()) {
-								bindingRef[0].getBinding().updateModelToTarget();
-								textViewer.doOperation(TextViewer.SELECT_ALL);
+								System.out.println("BLAHBLAHHHH");
+								//bindingRef[0].getBinding().updateModelToTarget();
+								//textObservable.getTextViewer().doOperation(TextViewer.SELECT_ALL);
 							}
 						}
 					});
