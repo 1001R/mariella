@@ -13,7 +13,7 @@ public class GlobalClipboardActionsHandler implements ISelectionChangedListener 
 abstract class GlobalClipboardAction extends Action {
 
 GlobalClipboardAction() {
-	setEnabled(true);
+	setEnabled(false);
 }
 @Override
 public final void run() {
@@ -108,6 +108,7 @@ public void initialize(IActionBars actionBars) {
 	actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(), copyAction);
 	actionBars.setGlobalActionHandler(ActionFactory.PASTE.getId(), pasteAction);
 	actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
+	validateActions();
 }
 	
 }
