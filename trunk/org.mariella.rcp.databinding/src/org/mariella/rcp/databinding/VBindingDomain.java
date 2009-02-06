@@ -47,6 +47,10 @@ public VBindingDomain(Object symbol, Class type, ConverterBuilder converterBuild
 	setExtensions(extensions);
 }
 
+public VBindingDomain(Class type, ConverterBuilder converterBuilder, VBindingDomainExtension ... extensions) {
+	this("internal", type, converterBuilder, extensions);
+}
+
 
 public VBindingDomain setAfterConvertValidators(IValidator ...validators) {
 	this.afterConvertValidators = validators;
