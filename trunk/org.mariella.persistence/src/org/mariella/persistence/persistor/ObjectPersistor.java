@@ -48,7 +48,7 @@ public void persist() {
 	if(modificationInfo.getStatus() == ModificationInfo.Status.New) {
 		for(PropertyMapping propertyMapping : classMapping.getPropertyMappings()) {
 			Object value = ModifiableAccessor.Singleton.getValue(modificationInfo.getObject(), propertyMapping.getPropertyDescription());
-			propertyMapping.persist(this, value);
+			propertyMapping.insert(this, value);
 		}
 	} else if(modificationInfo.getStatus() == ModificationInfo.Status.Modified) {
 		for(String propertyName : modificationInfo.getModifiedProperties()) {
@@ -56,8 +56,8 @@ public void persist() {
 			if(pd != null) {
 				PropertyMapping propertyMapping = classMapping.getPropertyMapping(pd);
 				Object value = ModifiableAccessor.Singleton.getValue(modificationInfo.getObject(), propertyMapping.getPropertyDescription());
-				propertyMapping.persist(this, value);
-			}
+				propertyMapping.update(this, value);
+		}
 		}
 	} else if(modificationInfo.getStatus() == ModificationInfo.Status.Removed) {
 		getPrimaryPreparedStatementBuilder();

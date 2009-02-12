@@ -62,9 +62,15 @@ public void or(Expression expression) {
 private String createTableAlias(Table table) {
 	int count = 0;
 	String alias;
+	String nameBase;
+	if(table.getName().length() > DatabaseConstants.MAX_IDENTIFIER_LENGTH - 2) {
+		nameBase = table.getName().substring(0, DatabaseConstants.MAX_IDENTIFIER_LENGTH - 2);
+	} else {
+		nameBase = table.getName();
+	}
 	boolean found;
 	do {
-		alias = table.getName() + count;
+		alias = nameBase + count;
 		found = false;
 		for(TableReference tableReference : subSelect.getFromClause().getJoinedTableReferences()) {
 			if(tableReference.getAlias().equals(alias)) {

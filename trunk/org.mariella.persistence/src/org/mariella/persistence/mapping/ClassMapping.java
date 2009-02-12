@@ -104,4 +104,13 @@ public String toString() {
 	return getClassDescription().toString() + " (" + getPrimaryTable().getName() + ")"; 
 }
 
+public ColumnMapping getColumnMapping(Column column) {
+	for(PhysicalPropertyMapping pm : physicalPropertyMappingList) {
+		if(pm instanceof ColumnMapping) {
+			return (ColumnMapping)pm;
+		}
+	}
+	return null;
+}
+
 }

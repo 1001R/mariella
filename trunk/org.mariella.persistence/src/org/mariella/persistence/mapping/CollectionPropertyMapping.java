@@ -28,7 +28,7 @@ public TableReference joinReverse(SubSelectBuilder subSelectBuilder, TableRefere
 }
 
 @Override
-public void persist(ObjectPersistor persistor, Object value) {
+protected void persist(ObjectPersistor persistor, Object value) {
 }
 
 }

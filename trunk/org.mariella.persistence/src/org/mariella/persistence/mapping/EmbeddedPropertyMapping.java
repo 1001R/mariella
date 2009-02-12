@@ -37,7 +37,7 @@ public Object getObject(ResultSetReader reader, ObjectFactory factory) throws SQ
 }
 
 @Override
-public void persist(ObjectPersistor persistor, Object value) {
+protected void persist(ObjectPersistor persistor, Object value) {
 	for(PhysicalPropertyMapping pm : embeddedClassMapping.getPhysicalPropertyMappingList()) {
 		Object propertyValue = ModifiableAccessor.Singleton.getValue(value, pm.getPropertyDescription());
 		pm.persist(persistor, propertyValue);

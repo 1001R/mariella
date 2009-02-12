@@ -1,7 +1,9 @@
 package org.mariella.persistence.annotations.mapping_builder;
 
 import java.beans.PropertyDescriptor;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.InheritanceType;
@@ -21,6 +23,7 @@ import org.mariella.persistence.annotations.processing.OneToOneAttributeInfo;
 import org.mariella.persistence.annotations.processing.OxyUnitInfo;
 import org.mariella.persistence.annotations.processing.RelationAttributeInfo;
 import org.mariella.persistence.annotations.processing.TableInfo;
+import org.mariella.persistence.annotations.processing.ToOneAttributeInfo;
 import org.mariella.persistence.database.Column;
 import org.mariella.persistence.database.Converter;
 import org.mariella.persistence.database.StringConverter;
@@ -30,6 +33,7 @@ import org.mariella.persistence.mapping.CollectionAsTablePropertyMapping;
 import org.mariella.persistence.mapping.CollectionPropertyMapping;
 import org.mariella.persistence.mapping.ColumnMapping;
 import org.mariella.persistence.mapping.HierarchyInTableClassMapping;
+import org.mariella.persistence.mapping.JoinColumn;
 import org.mariella.persistence.mapping.ReferencePropertyMapping;
 import org.mariella.persistence.mapping.SingleTableClassMapping;
 import org.mariella.persistence.runtime.Introspector;
@@ -385,9 +389,9 @@ protected void buildOneToOneAttributeDescription(EntityInfo entityInfo, ClassDes
 	
 	ReferencePropertyDescription pd;
 	if(attributeInfo.getReverseAttributeInfo() != null) {
-		pd = new ReferencePropertyDescription(classDescription, propertyDescriptor, attributeInfo.isUpdateForeignKeys(), attributeInfo.getReverseAttributeInfo().getName());
+		pd = new ReferencePropertyDescription(classDescription, propertyDescriptor, attributeInfo.getReverseAttributeInfo().getName());
 	} else {
-		pd = new ReferencePropertyDescription(classDescription, propertyDescriptor, attributeInfo.isUpdateForeignKeys());
+		pd = new ReferencePropertyDescription(classDescription, propertyDescriptor);
 	}
 	classDescription.addPropertyDescription(pd);
 }
@@ -398,18 +402,8 @@ protected void buildOneToOneAttributeMapping(EntityInfo entityInfo, ClassMapping
 	
 	ReferencePropertyDescription pd = (ReferencePropertyDescription)classMapping.getClassDescription().getPropertyDescription(attributeInfo.getName());
 	
-	if(attributeInfo.getJoinColumnInfos() != null && attributeInfo.getJoinColumnInfos().size() > 0) {
-		if(attributeInfo.getJoinColumnInfos().size() != 1) {
-			throw new IllegalStateException("One one join column is allowed (" + attributeInfo.toString() + ")!");
-		}
-		JoinColumnInfo jci = attributeInfo.getJoinColumnInfos().get(0);
-		Column joinColumn = getColumn(classMapping.getPrimaryTable(), jci.getName(), referencedClassMapping.getIdMapping().getColumn().getConverter());
-		ReferencePropertyMapping pm = new ReferencePropertyMapping(classMapping, pd, joinColumn.getName());
-		classMapping.setPropertyMapping(pd, pm);
-	} else {
-		ReferencePropertyMapping pm = new ReferencePropertyMapping(classMapping, pd);
-		classMapping.setPropertyMapping(pd, pm);
-	}
+	ReferencePropertyMapping pm = createReferencePropertyMapping(classMapping, referencedClassMapping, pd, attributeInfo);
+	classMapping.setPropertyMapping(pd, pm);
 }
 
 protected void buildManyToOneAttributeDescription(EntityInfo entityInfo, ClassDescription classDescription, ManyToOneAttributeInfo attributeInfo) {
@@ -417,9 +411,9 @@ protected void buildManyToOneAttributeDescription(EntityInfo entityInfo, ClassDe
 	
 	ReferencePropertyDescription pd;
 	if(attributeInfo.getReverseAttributeInfo() != null) {
-		pd = new ReferencePropertyDescription(classDescription, propertyDescriptor, attributeInfo.isUpdateForeignKeys(), attributeInfo.getReverseAttributeInfo().getName());
+		pd = new ReferencePropertyDescription(classDescription, propertyDescriptor, attributeInfo.getReverseAttributeInfo().getName());
 	} else {
-		pd = new ReferencePropertyDescription(classDescription, propertyDescriptor, attributeInfo.isUpdateForeignKeys());
+		pd = new ReferencePropertyDescription(classDescription, propertyDescriptor);
 	}
 	classDescription.addPropertyDescription(pd);
 }
@@ -429,19 +423,8 @@ protected void buildManyToOneAttributeMapping(EntityInfo entityInfo, ClassMappin
 	ClassMapping referencedClassMapping = classMapping.getSchemaMapping().getClassMapping(referencedClass.getName());
 	
 	ReferencePropertyDescription pd = (ReferencePropertyDescription )classMapping.getClassDescription().getPropertyDescription(attributeInfo.getName());
-	
-	if(attributeInfo.getJoinColumnInfos() != null && attributeInfo.getJoinColumnInfos().size() > 0) {
-		if(attributeInfo.getJoinColumnInfos().size() != 1) {
-			throw new IllegalStateException("One one join column is allowed (" + attributeInfo.toString() + ")!");
-		}
-		JoinColumnInfo jci = attributeInfo.getJoinColumnInfos().get(0);
-		Column joinColumn = getColumn(classMapping.getPrimaryTable(), jci.getName(), referencedClassMapping.getIdMapping().getColumn().getConverter());
-		ReferencePropertyMapping pm = new ReferencePropertyMapping(classMapping, pd, joinColumn.getName());
-		classMapping.setPropertyMapping(pd, pm);
-	} else {
-		ReferencePropertyMapping pm = new ReferencePropertyMapping(classMapping, pd);
-		classMapping.setPropertyMapping(pd, pm);
-	}
+	ReferencePropertyMapping pm = createReferencePropertyMapping(classMapping, referencedClassMapping, pd, attributeInfo);
+	classMapping.setPropertyMapping(pd, pm);
 }
 
 private AttributeInfo getAttributeInfo(ClassDescription cd, String attributeName) {
@@ -450,6 +433,43 @@ private AttributeInfo getAttributeInfo(ClassDescription cd, String attributeName
 		return ((EntityInfo)classInfo).lookupAttributeInfo(attributeName);
 	}
 	return null;
+}
+
+private ReferencePropertyMapping createReferencePropertyMapping(ClassMapping classMapping, ClassMapping referencedClassMapping, PropertyDescription propertyDescription, ToOneAttributeInfo attributeInfo) {
+	List<JoinColumnInfo> joinColumnInfos = attributeInfo.getJoinColumnInfos();
+	ReferencePropertyMapping rpm = new ReferencePropertyMapping(classMapping, propertyDescription);
+	if(attributeInfo.getJoinColumnInfos() != null && attributeInfo.getJoinColumnInfos().size() > 0) {
+		List<JoinColumn> joinColumns = new ArrayList<JoinColumn>();
+		if(joinColumnInfos.size() == 1 && (joinColumnInfos.get(0).getReferencedColumnName() == null || joinColumnInfos.get(0).getReferencedColumnName().length() == 0)) {
+			JoinColumnInfo jci = joinColumnInfos.get(0);
+			Column joinColumn = getColumn(classMapping.getPrimaryTable(), jci.getName(), referencedClassMapping.getIdMapping().getColumn().getConverter());
+			JoinColumn jc = new JoinColumn();
+			jc.setMyColumn(joinColumn);
+			jc.setReferencedColumn(referencedClassMapping.getIdMapping().getColumn());
+			jc.setInsertable(jci.isInsertable());
+			jc.setUpdatable(jci.isUpdatable());
+			joinColumns.add(jc);
+		} else {
+			for(JoinColumnInfo jci : joinColumnInfos) {
+				if(jci.getReferencedColumnName() == null) {
+					throw new IllegalStateException("No referenced column name specified for relationship " + referencedClassMapping.getClassDescription().getClassName() + "." + attributeInfo.getName() + "!");
+				}
+				Column keyColumn = referencedClassMapping.getPrimaryTable().getColumn(jci.getReferencedColumnName());
+				if(keyColumn == null) {
+					throw new IllegalStateException("Join column " + referencedClassMapping.getPrimaryTable() + "." + jci.getReferencedColumnName() + " does not exist!");
+				}
+				Column joinColumn = getColumn(classMapping.getPrimaryTable(), jci.getName(), keyColumn.getConverter());
+				JoinColumn jc = new JoinColumn();
+				jc.setMyColumn(joinColumn);
+				jc.setReferencedColumn(keyColumn);
+				jc.setInsertable(jci.isInsertable());
+				jc.setUpdatable(jci.isUpdatable());
+				joinColumns.add(jc);
+			}
+		}
+		rpm.setJoinColumns(joinColumns);
+	} 
+	return rpm;
 }
 
 }

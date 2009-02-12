@@ -15,7 +15,8 @@ public PhysicalPropertyMapping(AbstractClassMapping classMapping, PropertyDescri
 }
 
 @Override
-public abstract void persist(ObjectPersistor persistor, Object value);
+protected abstract void persist(ObjectPersistor persistor, Object value);
+
 public abstract <T> Object getObject(ResultSetReader reader, ObjectFactory factory) throws SQLException;
 public abstract void advance(ResultSetReader reader) throws SQLException;
 public abstract void addColumns(SubSelectBuilder subSelectBuilder, TableReference tableReference);

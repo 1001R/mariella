@@ -1,6 +1,7 @@
 package org.mariella.persistence.mapping;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.mariella.persistence.database.Column;
 import org.mariella.persistence.persistor.ObjectPersistor;
@@ -12,42 +13,35 @@ import org.mariella.persistence.query.TableReference;
 import org.mariella.persistence.runtime.ModifiableAccessor;
 import org.mariella.persistence.schema.PropertyDescription;
 import org.mariella.persistence.schema.ReferencePropertyDescription;
-import org.mariella.persistence.util.Util;
-
 
 public class ReferencePropertyMapping extends RelationshipPropertyMapping {
-	private final Column foreignKeyColumn;
+	private List<JoinColumn> joinColumns = null;
 	
-public ReferencePropertyMapping(ClassMapping classMapping, PropertyDescription propertyDescription, String foreignKeyColumnName) {
-	super(classMapping, (ReferencePropertyDescription)propertyDescription);
-	foreignKeyColumn = classMapping.getPrimaryTable().getColumn(foreignKeyColumnName);
-	Util.assertTrue(foreignKeyColumn != null, "Unknown column");
-}
-
 public ReferencePropertyMapping(ClassMapping classMapping, PropertyDescription propertyDescription) {
 	super(classMapping, (ReferencePropertyDescription)propertyDescription);
-	foreignKeyColumn = null;
 }
 
-public Column getForeignKeyColumn() {
-	return foreignKeyColumn;
+public void setJoinColumns(List<JoinColumn> joinColumns) {
+	this.joinColumns = joinColumns;
 }
 
-@Override
+@Override 
 public ReferencePropertyDescription getPropertyDescription() {
 	return (ReferencePropertyDescription)super.getPropertyDescription();
 }
 
 public TableReference join(SubSelectBuilder subSelectBuilder, TableReference myTableReference) {
-	if(getForeignKeyColumn() != null) {
+	if(joinColumns != null) {
 		TableReference referencedTableReference = getReferencedClassMapping().join(subSelectBuilder);
-		subSelectBuilder.and(
-			BinaryCondition.eq(
-				new ColumnReference(myTableReference, getForeignKeyColumn()),
-				new ColumnReference(referencedTableReference, getReferencedClassMapping().getIdMapping().getColumn()),
-				getForeignKeyColumn().isNullable() ? JoinType.leftouter : JoinType.inner
-			)
-		);
+		for(JoinColumn joinColumn : joinColumns) {
+			subSelectBuilder.and(
+				BinaryCondition.eq(
+					new ColumnReference(myTableReference, joinColumn.getMyColumn()),
+					new ColumnReference(referencedTableReference, joinColumn.getReferencedColumn()),
+					joinColumn.getMyColumn().isNullable() ? JoinType.leftouter : JoinType.inner
+				)
+			);
+		}
 		return referencedTableReference;
 	} else {
 		return getReversePropertyMapping().joinReverse(subSelectBuilder, myTableReference);
@@ -56,36 +50,62 @@ public TableReference join(SubSelectBuilder subSelectBuilder, TableReference myT
 
 @Override
 protected TableReference joinReverse(SubSelectBuilder subSelectBuilder, TableReference referencedTableReference) {
-	if(getForeignKeyColumn() == null) {
+	if(joinColumns == null) {
 		throw new UnsupportedOperationException();
 	} else {
 		TableReference ownerTableReference = getClassMapping().join(subSelectBuilder);
-		subSelectBuilder.and(
-			BinaryCondition.eq(
-					new ColumnReference(ownerTableReference, getForeignKeyColumn()),
-					new ColumnReference(referencedTableReference, getReferencedClassMapping().getIdMapping().getColumn()),
-					getForeignKeyColumn().isNullable() ? JoinType.leftouter : JoinType.inner
-			)
-		);
+		for(JoinColumn joinColumn : joinColumns) {
+			subSelectBuilder.and(
+				BinaryCondition.eq(
+						new ColumnReference(ownerTableReference, joinColumn.getMyColumn()),
+						new ColumnReference(referencedTableReference, joinColumn.getReferencedColumn()),
+						joinColumn.getMyColumn().isNullable() ? JoinType.leftouter : JoinType.inner
+				)
+			);
+		}
 		return ownerTableReference;
 	}
 }
 
 @Override
-public void persist(ObjectPersistor persistor, Object value) {
-	if(foreignKeyColumn != null && getPropertyDescription().isUpdateForeignKeys()) {
-		Object relatedIdentity = null;
-		if(value != null) {
-			relatedIdentity = ModifiableAccessor.Singleton.getValue(value, getPropertyDescription().getReferencedClassDescription().getId());
-		}
-		persistor.getPrimaryPreparedStatementBuilder().getRow().setProperty(getForeignKeyColumn(), relatedIdentity);
-	}
+protected void persist(ObjectPersistor persistor, Object value) {
+	throw new UnsupportedOperationException();
 }
 
 @Override
-public void collectUsedColumns(Collection<Column> collection) {
-	if(foreignKeyColumn != null && getPropertyDescription().isUpdateForeignKeys()) {
-		collection.add(foreignKeyColumn);
+public void insert(ObjectPersistor persistor, Object value) {
+	persist(persistor, value, true);
+}
+
+@Override
+public void update(ObjectPersistor persistor, Object value) {
+	persist(persistor, value, false);
+}
+
+protected void persist(ObjectPersistor persistor, Object value, boolean isInsert) {
+	if(joinColumns != null) {
+		for(JoinColumn joinColumn : joinColumns) {
+			if(isInsert && joinColumn.isInsertable() || !isInsert && joinColumn.isUpdatable()) {
+				Object relatedValue = null;
+				if(value != null) {
+					ColumnMapping cm = getReferencedClassMapping().getColumnMapping(joinColumn.getReferencedColumn());
+					relatedValue = ModifiableAccessor.Singleton.getValue(value, cm.getPropertyDescription());
+				}
+				persistor.getPrimaryPreparedStatementBuilder().getRow().setProperty(joinColumn.getMyColumn(), relatedValue);
+			}
+		}
 	}
 }
+
+
+
+@Override
+public void collectUsedColumns(Collection<Column> collection) {
+	if(joinColumns != null) {
+		for(JoinColumn joinColumn : joinColumns) {
+			collection.add(joinColumn.getMyColumn());
+		}
+	}
+}
+
 }

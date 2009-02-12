@@ -45,7 +45,15 @@ public AbstractClassMapping getClassMapping() {
 	return classMapping;
 }
 
-public abstract void persist(ObjectPersistor persistor, Object value);
+public void insert(ObjectPersistor persistor, Object value) {
+	persist(persistor, value);
+}
+
+public void update(ObjectPersistor persistor, Object value) {
+	persist(persistor, value);
+}
+
+protected abstract void persist(ObjectPersistor persistor, Object value);
 
 public void collectUsedTables(Collection<Table> collection) {
 }
