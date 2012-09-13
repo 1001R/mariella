@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Mapping Plug-in
+Bundle-SymbolicName: org.mariella.persistence.mapping
+Bundle-Version: 1.0.0
+Bundle-Activator: org.mariella.persistence.mapping.Activator
+Export-Package: org.mariella.persistence.mapping
+Require-Bundle: org.eclipse.core.runtime,
+ javax.persistence
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
