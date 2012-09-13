@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Core
+Bundle-SymbolicName: org.mariella.cat.core
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.mariella.cat.core.CatCore
+Require-Bundle: org.eclipse.core.runtime
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: org.mariella.cat.common,
+ org.mariella.cat.core,
+ org.mariella.cat.core.format,
+ org.mariella.cat.core.validation
