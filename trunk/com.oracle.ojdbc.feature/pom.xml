@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.mariella.persistence</groupId>
+		<groupId>org.mariella</groupId>
 		<artifactId>org.mariella.parent</artifactId>
 		<version>1.0.0</version>
 		<relativePath>../org.mariella.parent</relativePath>
