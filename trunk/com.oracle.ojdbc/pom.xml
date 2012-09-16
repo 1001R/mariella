@@ -11,7 +11,7 @@
 		<relativePath>../org.mariella.parent</relativePath>
 	</parent>
 
-	<groupId>com.oracle.ojdbc</groupId>
+	<groupId>org.mariella.persistence</groupId>
 	<artifactId>com.oracle.ojdbc</artifactId>
 	<version>1.0.0</version>
 	<packaging>eclipse-plugin</packaging>
