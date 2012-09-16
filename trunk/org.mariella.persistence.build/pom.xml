@@ -13,12 +13,10 @@
 		<!-- GENERATION-MARKER-START -->
 		<module>../org.mariella.persistence</module>
 		<module>../org.mariella.persistence.mapping</module>
-		<module>../org.mariella.persistence.annotations.processing.test</module>
 		<module>../org.mariella.persistence.annotations</module>
 		<module>../org.mariella.persistence.annotations.processing</module>
 		<module>../com.oracle.ojdbc</module>
 		<module>../javax.persistence</module>
-		<module>../javax.bean.validation</module>
 		<module>../org.mariella.persistence.feature</module>
 		<!-- GENERATION-MARKER-END -->
 	</modules>
