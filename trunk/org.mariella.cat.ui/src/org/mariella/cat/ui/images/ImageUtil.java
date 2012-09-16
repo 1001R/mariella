@@ -79,6 +79,7 @@ public final class ImageUtil {
 			cb.setLocation(0, 0);
 			cb.setSize(cb.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 			cb.setBackground(cb.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+			shell.pack();
 			shell.open();
 			cb.setSelection(true);
 			cbImgChecked = createImage(cb);
