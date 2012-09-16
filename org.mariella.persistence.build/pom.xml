@@ -18,6 +18,7 @@
 		<module>../org.mariella.persistence.annotations.processing</module>
 		<module>../com.oracle.ojdbc</module>
 		<module>../javax.persistence</module>
+		<module>../javax.bean.validation</module>
 		<module>../org.mariella.persistence.feature</module>
 		<!-- GENERATION-MARKER-END -->
 	</modules>
