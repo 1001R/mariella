@@ -2,7 +2,7 @@
 <feature
       id="org.mariella.cat.ui.feature"
       label="Mariella Cat UI Feature"
-      version="1.0.0.qualifier"
+      version="0.1.0"
       provider-name="Aimit">
 
    <description url="http://www.example.com/description">
