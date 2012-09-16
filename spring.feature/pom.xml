@@ -11,7 +11,7 @@
 		<relativePath>../org.mariella.parent</relativePath>
 	</parent>
 
-	<groupId>spring</groupId>
+	<groupId>org.mariella.spring</groupId>
 	<artifactId>spring.feature</artifactId>
 	<version>3.0.5</version>
 	<packaging>eclipse-feature</packaging>
