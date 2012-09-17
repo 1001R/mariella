@@ -13,7 +13,7 @@
 
 	<groupId>org.mariella.persistence</groupId>
 	<artifactId>org.mariella.persistence.feature</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>eclipse-feature</packaging>
 
 </project>
