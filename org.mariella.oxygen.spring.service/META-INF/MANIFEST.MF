@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: org.mariella.oxygen.spring.service
+Bundle-SymbolicName: org.mariella.oxygen.spring.service;singleton:=true
+Bundle-Version: 1.0.0
+Export-Package: org.mariella.oxygen.service.server.spring
+Require-Bundle: spring,
+ org.mariella.oxygen.220,
+ org.mariella.oxygen.core
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy
