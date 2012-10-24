@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: org.mariella.oxygen.220
+Bundle-SymbolicName: org.mariella.oxygen.220
+Bundle-Version: 1.0.0
+Bundle-ClassPath: .
+Export-Package: org.mariella.oxygen.runtime.core,
+ org.mariella.oxygen.runtime.impl
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: org.eclipse.core.runtime,
+ javax.persistence,
+ org.mariella.persistence,
+ org.mariella.persistence.annotations,
+ org.mariella.persistence.annotations.processing,
+ org.mariella.persistence.mapping,
+ org.mariella.oxygen.core
