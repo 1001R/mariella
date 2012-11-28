@@ -15,6 +15,7 @@ import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.mariella.cat.common.SafeList;
@@ -144,8 +145,17 @@ public abstract class RefreshContext {
 
 	public abstract boolean canRefresh(Object control);
 
+	public void updateUiValue(Label label, String modelValue) {
+		if (!label.isDisposed() && canRefresh(label)) {
+			modelValue = (modelValue == null ? "" : modelValue);
+			String uiValue = label.getText();
+			if (!modelValue.equals(uiValue)) {
+				label.setText(modelValue);
+			}
+		}
+	}
 	public void updateUiValue(StyledText styledText, String modelValue) {
-		if (canRefresh(styledText)) {
+		if (!styledText.isDisposed() && canRefresh(styledText)) {
 			modelValue = (modelValue == null ? "" : modelValue);
 			String uiValue = styledText.getText();
 			if (!modelValue.equals(uiValue)) {
@@ -159,7 +169,7 @@ public abstract class RefreshContext {
 	}
 
 	public void updateUiValue(Text text, String modelValue) {
-		if (canRefresh(text)) {
+		if (!text.isDisposed() && canRefresh(text)) {
 			modelValue = (modelValue == null ? "" : modelValue);
 			String uiValue = text.getText();
 			if (!modelValue.equals(uiValue)) {
@@ -178,7 +188,7 @@ public abstract class RefreshContext {
 
 	public void updateUiValue(Button button, Boolean selected) {
 		boolean selectedValue = selected != null && selected;
-		if (button.getSelection() != selectedValue) {
+		if (!button.isDisposed() && button.getSelection() != selectedValue) {
 			button.setSelection(selectedValue);
 		}
 	}
@@ -190,7 +200,7 @@ public abstract class RefreshContext {
 	}
 
 	public void updateUiEnabled(Control control, boolean enabled) {
-		if (control.isEnabled() != enabled) {
+		if (!control.isDisposed() && control.isEnabled() != enabled) {
 			control.setEnabled(enabled);
 		}
 	}
@@ -207,7 +217,9 @@ public abstract class RefreshContext {
 
 	public boolean updateUiVisible(Control control, boolean visible) {
 		if (control.getVisible() != visible) {
-			control.setVisible(visible);
+			if (!control.isDisposed()) {
+				control.setVisible(visible);
+			}
 			return true;
 		} else {
 			return false;
@@ -215,6 +227,9 @@ public abstract class RefreshContext {
 	}
 
 	public boolean updateUiVisible(Viewer viewer, boolean visible) {
+		if (viewer.getControl().isDisposed()) {
+			return false;
+		}
 		if (viewer.getControl().getVisible() != visible) {
 			viewer.getControl().setVisible(visible);
 			return true;
@@ -224,6 +239,9 @@ public abstract class RefreshContext {
 	}
 
 	public boolean updateUiVisible(TableColumn column, boolean visible) {
+		if (column.isDisposed()) {
+			return false;
+		}
 		if (visible && column.getWidth() == 0 && !column.getResizable()) {
 			Integer lastWidth = (Integer) column.getData("lastWidth");
 			Boolean wasResizable = (Boolean) column.getData("wasResizable");
@@ -246,13 +264,13 @@ public abstract class RefreshContext {
 	}
 
 	public void updateUiEditable(StyledText control, boolean editable) {
-		if (control.getEditable() != editable) {
+		if (!control.isDisposed() && control.getEditable() != editable) {
 			control.setEditable(editable);
 		}
 	}
 
 	public void updateUiEditable(Text control, boolean editable) {
-		if (control.getEditable() != editable) {
+		if (!control.isDisposed() && control.getEditable() != editable) {
 			control.setEditable(editable);
 		}
 	}
