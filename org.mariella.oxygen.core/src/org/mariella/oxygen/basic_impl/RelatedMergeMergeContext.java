@@ -14,7 +14,14 @@ public boolean isOverwrite(EntityState myState, EntityState sourceState) {
 }
 
 public Object getMyEntity(Object sourceEntity) {
-	return myPool.getEntityStateForPoolId(sourcePool.getEntityState(sourceEntity).getPoolIdentity()).getEntity();
+	EntityState sourceState = sourcePool.getEntityState(sourceEntity);
+	if (sourceState == null)
+		throw new IllegalStateException("No entity state for entity " + sourceEntity + ". Entity does not seem to be in the object pool.");
+	EntityState myState = myPool.getEntityStateForPoolId(sourceState.getPoolIdentity());
+	if (myState == null)
+		throw new IllegalStateException();
+	
+	return myState.getEntity();
 }
 
 }

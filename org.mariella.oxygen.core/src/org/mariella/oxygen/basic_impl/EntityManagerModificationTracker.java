@@ -9,6 +9,7 @@ public class EntityManagerModificationTracker extends AbstractModificationTracke
 	private static final long serialVersionUID = 1L;
 
 	private transient OxyEntityManager entityManager;
+	private String info;
 
 public EntityManagerModificationTracker() {
 	super();
@@ -25,6 +26,19 @@ public void setEntityManager(OxyEntityManager entityManager) {
 @Override
 public SchemaDescription getSchemaDescription() {
 	return entityManager.getSchemaDescription();
+}
+
+public String getInfo() {
+	return info;
+}
+
+public void setInfo(String info) {
+	this.info = info;
+}
+
+@Override
+public String toString() {
+	return super.toString() + " (" + info + ")";
 }
 
 }

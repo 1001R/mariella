@@ -4,7 +4,6 @@ package org.mariella.oxygen.basic_core;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -14,6 +13,7 @@ import org.mariella.persistence.runtime.CollectionModificationInfo;
 import org.mariella.persistence.runtime.ModifiableAccessor;
 import org.mariella.persistence.runtime.ModificationInfo;
 import org.mariella.persistence.runtime.ModificationInfo.Status;
+import org.mariella.persistence.runtime.PersistenceException;
 import org.mariella.persistence.runtime.TrackedList;
 import org.mariella.persistence.schema.ClassDescription;
 import org.mariella.persistence.schema.CollectionPropertyDescription;
@@ -128,7 +128,12 @@ public void merge(MergeContext mergeContext, EntityState sourceState) {
 			} else if(pd instanceof ReferencePropertyDescription || overwrite) {
 				Object value = ModifiableAccessor.Singleton.getValue(sourceEntity, pd);
 				if(value != null) {
-					value = mergeContext.getMyEntity(value);
+					try {
+						value = mergeContext.getMyEntity(value);
+					} catch(IllegalStateException e) {
+						throw new PersistenceException("Error during merge; Source Entity: " + sourceEntity + "; property: " + pd.getPropertyDescriptor().getName()
+								, e);
+					}
 				}
 				ModifiableAccessor.Singleton.setValue(entity, pd, value);
 			}

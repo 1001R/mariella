@@ -36,6 +36,7 @@ public class OxyObjectPoolImpl implements OxyObjectPool, Serializable {
 
 	private EntityManagerModificationTracker modificationTracker;
 	private Map<String, Object> attributes;
+	private String info;
 
 	private Map<Object, EntityState> entityStates = new HashMap<Object, EntityState>();
 	private Map<Long, EntityState> poolIdentityMap = new HashMap<Long, EntityState>();
@@ -217,6 +218,19 @@ private EntityState createEntityState(Object entity, long poolIdentity) {
 
 public EntityState createEntityState(Object entity) {
 	return createEntityState(entity, nextPoolIdentity++);
+}
+
+public String getInfo() {
+	return info;
+}
+
+public void setInfo(String info) {
+	this.info = info;
+}
+
+@Override
+public String toString() {
+	return super.toString() + " (" + info + ")";
 }
 
 }
