@@ -30,8 +30,11 @@ public OxyEntityManagerImpl(ClassResolver entityClassResolver, SchemaDescription
 
 private void createObjectPool() {
 	EntityManagerModificationTracker modificationTracker = new EntityManagerModificationTracker();
+	modificationTracker.setInfo("Created by " + OxyEntityManagerImpl.this.getClass().getName());
 	modificationTracker.addPersistentListener(new RIListener(modificationTracker));
-	setObjectPool(new OxyObjectPoolImpl(modificationTracker));
+	OxyObjectPoolImpl objectPool = new OxyObjectPoolImpl(modificationTracker);
+	objectPool.setInfo("Created by " + OxyEntityManagerImpl.this.getClass().getName());
+	setObjectPool(objectPool);
 }
 
 public SchemaDescription getSchemaDescription() {
