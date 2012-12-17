@@ -11,7 +11,7 @@ import org.mariella.persistence.schema.SchemaDescription;
 public abstract class OxyEntityManagerImpl implements OxyEntityManager {
 
 	protected OxyObjectPoolImpl objectPool;
-	private SchemaDescription schemaDescription;
+	private transient SchemaDescription schemaDescription;
 	private final ClassResolver entityClassResolver;
 
 public OxyEntityManagerImpl(SchemaDescription schemaDescription) {
