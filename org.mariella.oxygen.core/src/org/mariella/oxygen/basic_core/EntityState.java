@@ -151,6 +151,10 @@ public void merge(MergeContext mergeContext, EntityState sourceState) {
 	} else if(!modificationInfo.getModifiedProperties().isEmpty() && modificationInfoAdded) {
 		mergeContext.getMyPool().getModificationTracker().addModificationInfo(modificationInfo);
 	}
+	
+	if (entity instanceof CustomMergable) {
+		((CustomMergable)entity).mergeWithSource(sourceEntity, mergeContext.getMyPool(), mergeContext.getSourcePool());
+	}
 }
 
 @SuppressWarnings("unchecked")
