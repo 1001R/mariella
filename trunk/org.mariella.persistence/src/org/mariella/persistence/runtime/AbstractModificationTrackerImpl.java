@@ -145,6 +145,12 @@ public void primitiveAddExistingParticipant(Object participant) {
 	}
 }
 
+public boolean isParticipant(Object participant) {
+	Object identity = getIdentity(participant);
+	return participants.containsKey(identity);
+	
+}
+
 public void primitiveRemoveExisitingParticipant(Object participant) {
 	Object identity = getIdentity(participant);
 	if(identity != null) {
