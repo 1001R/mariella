@@ -15,6 +15,8 @@ import org.mariella.persistence.runtime.ModificationTrackerEntityListener;
 import org.mariella.persistence.schema.ClassDescription;
 import org.mariella.persistence.util.Assert;
 
+import sun.misc.Cleaner;
+
 public class OxyObjectPoolImpl implements OxyObjectPool, Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -130,10 +132,14 @@ public boolean containsPoolIdentity(long poolIdentity) {
 }
 
 public void mergeRelated(OxyObjectPool sourcePool) throws Exception  {
+	mergeRelated(sourcePool, null);
+}
+
+public void mergeRelated(OxyObjectPool sourcePool, Object customContext) throws Exception  {
 	merging = true;
 	getModificationTracker().setEnabled(false);
 	try {
-		MergeContext mergeContext = new RelatedMergeMergeContext(this, sourcePool);
+		MergeContext mergeContext = new RelatedMergeMergeContext(this, sourcePool, customContext);
 
 		for(EntityState myState : new ArrayList<EntityState>(getAllEntityStates())) {
 			if(myState.isRemoved() && sourcePool.getEntityStateForPoolId(myState.getPoolIdentity()) == null) {
@@ -180,7 +186,7 @@ public Object mergeEntity(OxyObjectPool sourcePool, Object sourceEntity) {
 	if(sourceEntity == null) {
 		return null;
 	} else {
-		UnrelatedMergeContext mergeContext = new UnrelatedMergeContext(this, sourcePool);
+		UnrelatedMergeContext mergeContext = new UnrelatedMergeContext(this, sourcePool, null);
 		return mergeContext.getMyEntity(sourceEntity);
 	}
 }
@@ -226,6 +232,12 @@ public String getInfo() {
 
 public void setInfo(String info) {
 	this.info = info;
+}
+
+public void detachAll() {
+	entityStates.clear();
+	poolIdentityMap.clear();
+	modificationTracker.detachAll();
 }
 
 @Override

@@ -5,8 +5,8 @@ import org.mariella.oxygen.basic_core.OxyObjectPool;
 
 public class RelatedMergeMergeContext extends MergeContext {
 	
-public RelatedMergeMergeContext(OxyObjectPoolImpl myPool, OxyObjectPool sourcePool) {
-	super(myPool, sourcePool);
+public RelatedMergeMergeContext(OxyObjectPoolImpl myPool, OxyObjectPool sourcePool, Object customMergeContext) {
+	super(myPool, sourcePool, customMergeContext);
 }
 
 public boolean isOverwrite(EntityState myState, EntityState sourceState) {
