@@ -89,7 +89,7 @@ public ModificationInfo getModificationInfo() {
 }
 
 @SuppressWarnings("unchecked")
-public void merge(MergeContext mergeContext, EntityState sourceState) {
+public void merge(final MergeContext mergeContext, EntityState sourceState) {
 	Object sourceEntity = sourceState.getEntity();
 
 	boolean overwrite = mergeContext.isOverwrite(this, sourceState);
@@ -153,7 +153,19 @@ public void merge(MergeContext mergeContext, EntityState sourceState) {
 	}
 	
 	if (entity instanceof CustomMergable) {
-		((CustomMergable)entity).mergeWithSource(sourceEntity, mergeContext.getMyPool(), mergeContext.getSourcePool());
+		((CustomMergable)entity).mergeWithSource(sourceEntity, new CustomMergeContext() {
+			public Object getCustomContext() {
+				return mergeContext.getCustomContext();
+			}
+
+			public OxyObjectPool getMyPool() {
+				return mergeContext.getMyPool();
+			}
+
+			public OxyObjectPool getSourcePool() {
+				return mergeContext.getSourcePool();
+			}
+		});
 	}
 }
 

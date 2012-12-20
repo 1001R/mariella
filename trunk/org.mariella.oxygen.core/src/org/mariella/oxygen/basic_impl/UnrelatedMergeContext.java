@@ -11,8 +11,8 @@ import org.mariella.persistence.schema.ClassDescription;
 public class UnrelatedMergeContext extends MergeContext {
 	private List<Object> overwrite = new ArrayList<Object>();
 	
-public UnrelatedMergeContext(OxyObjectPoolImpl myPool, OxyObjectPool sourcePool) {
-	super(myPool, sourcePool);
+public UnrelatedMergeContext(OxyObjectPoolImpl myPool, OxyObjectPool sourcePool, Object customMergeContext) {
+	super(myPool, sourcePool, customMergeContext);
 }
 
 @Override
