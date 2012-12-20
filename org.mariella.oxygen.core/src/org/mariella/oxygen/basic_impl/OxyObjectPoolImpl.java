@@ -166,7 +166,7 @@ public void mergeRelated(OxyObjectPool sourcePool) throws Exception  {
 			Object entity = myState.getEntity();
 			if(sourceState.isNew()) {
 				getModificationTracker().addNewParticipant(entity);
-			} else {
+			} else if (!getModificationTracker().isParticipant(entity)){
 				getModificationTracker().addExistingParticipant(entity);
 			}
 		}
