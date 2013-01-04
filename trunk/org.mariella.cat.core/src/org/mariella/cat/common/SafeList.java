@@ -49,6 +49,14 @@ public class SafeList<T> implements Iterable<T> {
 		return removed;
 	}
 	
+	public boolean isEmpty() {
+		return elements == null || elements.length == 0;
+	}
+	
+	public int size() {
+		return elements == null ? 0 : elements.length;
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public Iterator<T> iterator() {
