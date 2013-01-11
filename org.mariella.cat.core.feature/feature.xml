@@ -2,7 +2,7 @@
 <feature
       id="org.mariella.cat.core.feature"
       label="Mariella Cat Core Feature"
-      version="0.1.0"
+      version="0.2.0"
       provider-name="Aimit">
 
    <description url="http://www.example.com/description">
@@ -21,7 +21,7 @@
          id="org.mariella.cat.core"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="0.2.0"
          unpack="false"/>
 
 </feature>
