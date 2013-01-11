@@ -2,10 +2,10 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: org.mariella.oxygen.core
 Bundle-SymbolicName: org.mariella.oxygen.core
-Bundle-Version: 1.0.0
+Bundle-Version: 1.1.0
 Export-Package: org.mariella.oxygen.basic_core,
  org.mariella.oxygen.basic_impl,
  org.mariella.oxygen.util
 Require-Bundle: org.eclipse.core.runtime,
- org.mariella.persistence
+ org.mariella.persistence;bundle-version="[1.0.0,1.1.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

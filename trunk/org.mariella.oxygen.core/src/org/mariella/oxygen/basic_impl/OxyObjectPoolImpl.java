@@ -15,7 +15,6 @@ import org.mariella.persistence.runtime.ModificationTrackerEntityListener;
 import org.mariella.persistence.schema.ClassDescription;
 import org.mariella.persistence.util.Assert;
 
-import sun.misc.Cleaner;
 
 public class OxyObjectPoolImpl implements OxyObjectPool, Serializable {
 	private static final long serialVersionUID = 1L;
