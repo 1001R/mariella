@@ -2,7 +2,7 @@
 <feature
       id="org.mariella.cat.ui.build"
       label="Feature"
-      version="0.2.0">
+      version="0.2.1">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
@@ -18,6 +18,6 @@
 
    <includes
          id="org.mariella.cat.ui.feature"
-         version="0.2.0"/>
+         version="0.2.1"/>
 
 </feature>

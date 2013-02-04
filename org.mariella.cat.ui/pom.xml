@@ -12,7 +12,7 @@
 
 	<groupId>org.mariella.cat.ui</groupId>
 	<artifactId>org.mariella.cat.ui</artifactId>
-	<version>0.2.0</version>
+	<version>0.2.1</version>
 	<packaging>eclipse-plugin</packaging>
 
 </project>
