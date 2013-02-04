@@ -12,7 +12,7 @@ public abstract class FormattedTextEditSupport<T> extends EditSupportAdapter<Str
 
 	private Format format;
 	private Object messageKey;
-	private String parseErrorMessage = "Invalid value: \\'{0}\\'";
+	private String parseErrorMessage = "Invalid value: ''{0}''";
 	
 	public FormattedTextEditSupport() {
 		this(null, null, null);
