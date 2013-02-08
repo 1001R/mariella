@@ -4,13 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>at.rufus</groupId>
-		<artifactId>at.rufus.parent</artifactId>
+		<groupId>org.mariella</groupId>
+		<artifactId>org.mariella.parent</artifactId>
 		<version>1.0.0</version>
-		<relativePath>../at.rufus.parent</relativePath>
+		<relativePath>../org.mariella.parent</relativePath>
 	</parent>
 
-	<groupId>at.rufus.resources.server</groupId>
+	<groupId>org.mariella.oxygen</groupId>
 	<artifactId>org.mariella.oxygen.core</artifactId>
 	<version>1.1.0</version>
 	<packaging>eclipse-plugin</packaging>
