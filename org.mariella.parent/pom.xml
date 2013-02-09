@@ -15,7 +15,7 @@
 
 	
 	<properties>
-		<tycho-version>0.15.0</tycho-version>
+		<tycho-version>0.16.0</tycho-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	
@@ -40,6 +40,10 @@
 		  <layout>p2</layout>
 		  <url>http://download.eclipse.org/releases/indigo</url>
 	   </repository>
+	   <repository>
+			<id>central</id>
+			<url>http://repo1.maven.org/maven2/.</url>
+		</repository>
 	</repositories>
 	<build>
 		<plugins>
