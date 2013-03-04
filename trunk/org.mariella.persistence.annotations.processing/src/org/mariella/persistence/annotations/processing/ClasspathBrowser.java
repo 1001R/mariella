@@ -3,7 +3,9 @@ package org.mariella.persistence.annotations.processing;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +29,7 @@ public abstract class ClasspathBrowser {
 			this.inputStream = inputStream;
 		}
 	}
-	
+
 List<Entry> entries= new ArrayList<Entry>();
 
 public static ClasspathBrowser getBrowser(URL url, Bundle bundle) throws Exception {
@@ -85,7 +87,8 @@ private static List<Entry> readEntries(URL url) {
 		}
 		return new JarClasspathBrowser(new File(fileName)).entries;
 	} else if (url.getProtocol().equals("file")) {
-		File f = new File(url.getFile());
+		String fName = toFileName(url);
+		File f = new File(fName);
 		if (f.isDirectory()) {
 			return new DirectoryClasspathBrowser(f).entries;
 		} else {
@@ -94,6 +97,16 @@ private static List<Entry> readEntries(URL url) {
 	} else {
 		throw new IllegalArgumentException("Invalid url: " + url);
 	}
+}
+
+private static String toFileName(URL url) {
+	String fName = url.getFile();
+	try {
+		fName = URLDecoder.decode( fName, "UTF-8");
+	} catch (UnsupportedEncodingException e) {
+		throw new RuntimeException(e);
+	}
+	return fName;
 }
 
 public static List<File> getBundleClasspathEntries(Bundle bundle) throws IOException {
