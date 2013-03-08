@@ -2,9 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Oracle 10.2 ojdbc14.jar
 Bundle-SymbolicName: com.oracle.ojdbc
-Bundle-Version: 1.0.0
+Bundle-Version: 1.0.1
 Bundle-ClassPath: ojdbc6.jar
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: oracle.core.lmx,
  oracle.core.lvf,
  oracle.jdbc,
@@ -35,3 +34,4 @@ Export-Package: oracle.core.lmx,
  oracle.security.o5logon,
  oracle.sql,
  oracle.sql.converter
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
