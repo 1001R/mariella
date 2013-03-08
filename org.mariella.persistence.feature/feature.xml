@@ -2,7 +2,7 @@
 <feature
       id="org.mariella.persistence.feature"
       label="Mariella Persistence Feature"
-      version="1.0.1.qualifier">
+      version="1.0.1">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
@@ -20,40 +20,40 @@
          id="org.mariella.persistence"
          download-size="0"
          install-size="0"
-         version="1.0.1.qualifier"
+         version="1.0.1"
          unpack="false"/>
 
    <plugin
          id="org.mariella.persistence.annotations"
          download-size="0"
          install-size="0"
-         version="1.0.1.qualifier"
+         version="1.0.1"
          unpack="false"/>
 
    <plugin
          id="org.mariella.persistence.annotations.processing"
          download-size="0"
          install-size="0"
-         version="1.0.1.qualifier"
+         version="1.0.1"
          unpack="false"/>
 
    <plugin
          id="org.mariella.persistence.mapping"
          download-size="0"
          install-size="0"
-         version="1.0.1.qualifier"
+         version="1.0.1"
          unpack="false"/>
 
    <plugin
          id="javax.persistence"
          download-size="0"
          install-size="0"
-         version="1.0.1.qualifier"/>
+         version="1.0.1"/>
 
    <plugin
          id="com.oracle.ojdbc"
          download-size="0"
          install-size="0"
-         version="1.0.1.qualifier"/>
+         version="1.0.1"/>
 
 </feature>
