@@ -2,7 +2,7 @@
 <feature
       id="org.mariella.persistence.build"
       label="Feature"
-      version="1.0.0.qualifier">
+      version="1.0.1.qualifier">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
@@ -18,6 +18,6 @@
 
    <includes
          id="org.mariella.persistence.feature"
-         version="1.0.0"/>
+         version="1.0.1.qualifier"/>
 
 </feature>
