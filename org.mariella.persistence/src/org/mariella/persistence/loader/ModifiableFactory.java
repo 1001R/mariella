@@ -7,5 +7,5 @@ public interface ModifiableFactory {
 
 public Object createModifiable(ClassDescription classDescription);
 public Object createEmbeddable(ClassDescription classDescription);
-
+public Class<?> getClass(ClassDescription classDescription);
 }

@@ -16,15 +16,22 @@ public ModifiableFactoryImpl(ClassLoader classLoader) {
 	this.classLoader = classLoader;
 }
 
-public Object createModifiable(ClassDescription classDescription) {
+@Override
+public Class<?> getClass(ClassDescription classDescription) {
 	try {
 		if(classLoader == null) {
-			return (Object)Class.forName(classDescription.getClassName()).newInstance();
+			return Class.forName(classDescription.getClassName());
 		} else {
-			return (Object)classLoader.loadClass(classDescription.getClassName()).newInstance();
+			return classLoader.loadClass(classDescription.getClassName());
 		}
 	} catch(ClassNotFoundException e) {
 		throw new RuntimeException(e);
+	}
+}
+
+public Object createModifiable(ClassDescription classDescription) {
+	try {
+		return getClass(classDescription).newInstance();
 	} catch(InstantiationException e) {
 		throw new RuntimeException(e);
 	} catch(IllegalAccessException e) {
@@ -33,19 +40,7 @@ public Object createModifiable(ClassDescription classDescription) {
 }
 
 public Object createEmbeddable(ClassDescription classDescription) {
-	try {
-		if(classLoader == null) {
-			return Class.forName(classDescription.getClassName()).newInstance();
-		} else {
-			return classLoader.loadClass(classDescription.getClassName()).newInstance();
-		}
-	} catch(ClassNotFoundException e) {
-		throw new RuntimeException(e);
-	} catch(InstantiationException e) {
-		throw new RuntimeException(e);
-	} catch(IllegalAccessException e) {
-		throw new RuntimeException(e);
-	}
+	return createModifiable(classDescription);
 }
 
 }

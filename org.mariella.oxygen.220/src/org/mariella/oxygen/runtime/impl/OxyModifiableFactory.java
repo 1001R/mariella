@@ -15,12 +15,18 @@ public class OxyModifiableFactory implements ModifiableFactory {
 	public ClassResolver getClassResolver() {
 		return classResolver;
 	}
+	
+	public Class<?> getClass(ClassDescription classDescription) {
+		try {
+			return getClassResolver().resolveClass(classDescription.getClassName());
+		} catch(ClassNotFoundException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	public Object createModifiable(ClassDescription classDescription) {
 		try {
-			return getClassResolver().resolveClass(classDescription.getClassName()).newInstance();
-		} catch(ClassNotFoundException e) {
-			throw new RuntimeException(e);
+			return getClass(classDescription).newInstance();
 		} catch(InstantiationException e) {
 			throw new RuntimeException(e);
 		} catch(IllegalAccessException e) {
@@ -29,15 +35,7 @@ public class OxyModifiableFactory implements ModifiableFactory {
 	}
 
 	public Object createEmbeddable(ClassDescription classDescription) {
-		try {
-			return getClassResolver().resolveClass(classDescription.getClassName()).newInstance();
-		} catch(ClassNotFoundException e) {
-			throw new RuntimeException(e);
-		} catch(InstantiationException e) {
-			throw new RuntimeException(e);
-		} catch(IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
+		return createModifiable(classDescription);
 	}
 
 }
