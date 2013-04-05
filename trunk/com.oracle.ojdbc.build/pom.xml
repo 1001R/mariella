@@ -4,7 +4,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	
-	<groupId>org.mariella.persistence</groupId>
+	<groupId>com.oracle.ojdbc</groupId>
 	<artifactId>com.oracle.ojdbc.build</artifactId>
 	<version>1.0.0</version>
 	<packaging>pom</packaging>
