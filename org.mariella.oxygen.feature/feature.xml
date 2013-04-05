@@ -2,7 +2,7 @@
 <feature
       id="org.mariella.oxygen.feature"
       label="Oxygen Feature"
-      version="1.1.0">
+      version="1.1.1">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
@@ -20,21 +20,21 @@
          id="org.mariella.oxygen.220"
          download-size="0"
          install-size="0"
-         version="1.1.0"
+         version="1.1.1"
          unpack="false"/>
 
    <plugin
          id="org.mariella.oxygen.core"
          download-size="0"
          install-size="0"
-         version="1.1.0"
+         version="1.1.1"
          unpack="false"/>
 
    <plugin
          id="org.mariella.oxygen.spring.core"
          download-size="0"
          install-size="0"
-         version="1.1.0"
+         version="1.1.1"
          unpack="false"/>
 
 </feature>

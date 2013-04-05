@@ -10,9 +10,9 @@
 		<relativePath>../org.mariella.parent</relativePath>
 	</parent>
 
-	<groupId>org.mariella.persistence</groupId>
+	<groupId>com.oracle.ojdbc</groupId>
 	<artifactId>com.oracle.ojdbc</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.0</version>
 	<packaging>eclipse-plugin</packaging>
 
 </project>
