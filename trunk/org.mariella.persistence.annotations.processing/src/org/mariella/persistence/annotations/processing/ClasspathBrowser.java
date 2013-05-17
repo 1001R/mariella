@@ -16,6 +16,7 @@ public abstract class ClasspathBrowser {
 	public static class Entry {
 		private String name;
 		private InputStream inputStream;
+		private Bundle bundle;
 		public String getName() {
 			return name;
 		}
@@ -27,6 +28,12 @@ public abstract class ClasspathBrowser {
 		}
 		public void setInputStream(InputStream inputStream) {
 			this.inputStream = inputStream;
+		}
+		public void setBundle(Bundle bundle) {
+			this.bundle = bundle;
+		}
+		public Bundle getBundle() {
+			return bundle;
 		}
 	}
 
@@ -61,22 +68,21 @@ public static ClasspathBrowser getBrowser(URL url, Bundle bundle) throws Excepti
 
 }
 
-public static List<Entry> resolveEntries(URL url, Bundle bundle) throws Exception {
-	if (url.getProtocol().equals("bundleresource")) {
-		final List<Entry> entries = new ArrayList<Entry>();
-		if(bundle == null) {
-			throw new IllegalArgumentException("Cannot resolve a bundle url without a bundle!");
-		}
+public static List<Entry> resolveBundleEntries(List<Bundle> bundles) throws Exception {
+	final List<Entry> entries = new ArrayList<Entry>();
+	for (Bundle bundle : bundles) {
 		for(File bcpEntry : getBundleClasspathEntries(bundle)) {
-			entries.addAll(readEntries(bcpEntry.toURI().toURL()));
+			List<Entry> bundleEntries = readEntries(bcpEntry.toURI().toURL());
+			for (Entry bundleEntry : bundleEntries) {
+				bundleEntry.setBundle(bundle);
+			}
+			entries.addAll(bundleEntries);
 		}
-		return entries;
-	} else {
-		return readEntries(url);
 	}
+	return entries;
 }
 
-private static List<Entry> readEntries(URL url) {
+public static List<Entry> readEntries(URL url) {
 	if (url.getProtocol().equals("jar")) {
 		String fileName = url.getFile();
 		if (fileName.endsWith("!/")) {
