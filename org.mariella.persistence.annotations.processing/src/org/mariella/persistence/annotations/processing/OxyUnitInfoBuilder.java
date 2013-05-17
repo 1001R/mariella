@@ -9,7 +9,6 @@ import java.lang.reflect.Type;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +40,8 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.UniqueConstraint;
 
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.Platform;
 import org.mariella.persistence.annotations.Cluster;
 import org.mariella.persistence.annotations.DomainDefinition;
 import org.mariella.persistence.annotations.DomainDefinitions;
@@ -81,9 +82,8 @@ import org.xml.sax.helpers.XMLReaderFactory;
 public class OxyUnitInfoBuilder {
 	public final static String PERSISTENCE_XML_LOCATION = "META-INF/persistence.xml";
 
-
-	ClassLoader classLoader = null;
-	Bundle bundle = null;
+	private ClassLoader classLoader = null;
+	private List<Bundle> bundles = null;
 
 	List<OxyUnitInfo> oxyUnitInfos = new ArrayList<OxyUnitInfo>();
 	Map<Class, EntityListenerClassInfoBuilder> classToEntityListenerClassInfoBuilder = new HashMap<Class, EntityListenerClassInfoBuilder>();
@@ -569,7 +569,13 @@ public class OxyUnitInfoBuilder {
 		for (Class annoClass : annotationClasses) {
 			result.put(annoClass, new ArrayList<Class>());
 		}
-		final List<Entry> entries = ClasspathBrowser.resolveEntries(oxyUnitInfo.getPersistenceUnitRootUrl(), bundle);
+		List<Entry> entries;
+		List<Bundle> bundles = getBundles();
+		if (bundles != null) {
+			entries = ClasspathBrowser.resolveBundleEntries(bundles);
+		} else {
+			entries = ClasspathBrowser.readEntries(oxyUnitInfo.getPersistenceUnitRootUrl());
+		}
 		for (Entry entry : entries) {
 			DataInputStream dstream = new DataInputStream(entry.getInputStream());
 			ClassFile cf = null;
@@ -588,6 +594,7 @@ public class OxyUnitInfoBuilder {
 					javassist.bytecode.annotation.Annotation anno = visible.getAnnotation(annoClass.getName());
 					if (anno != null) {
 						List<Class> list = result.get(annoClass);
+						Bundle bundle = entry.getBundle();
 						if (bundle != null) {
 							list.add(bundle.loadClass(cf.getName()));
 						} else {
@@ -602,14 +609,23 @@ public class OxyUnitInfoBuilder {
 
 
 	private void parsePersistenceUnits() throws Exception {
-		Enumeration<URL> persistenceXmlResources = bundle != null ? bundle.getResources(PERSISTENCE_XML_LOCATION) :
-			classLoader.getResources(PERSISTENCE_XML_LOCATION);
-		if (persistenceXmlResources == null || !persistenceXmlResources.hasMoreElements()) {
+		List<URL> urls = new ArrayList<URL>();
+		List<Bundle> bundles = getBundles();
+		if (bundles != null) {
+			for (Bundle bundle : bundles) {
+				URL url = bundle.getResource(PERSISTENCE_XML_LOCATION);
+				if (url != null) {
+					urls.add(url);
+				}
+			}
+		} else {
+			urls.add(classLoader.getResource(PERSISTENCE_XML_LOCATION));
+		}
+		if (urls.isEmpty()) {
 			throw new Exception("No " + PERSISTENCE_XML_LOCATION + " found.");
 		}
-		while (persistenceXmlResources.hasMoreElements()) {
-			URL xmlRes = persistenceXmlResources.nextElement();
-			parsePersistenceUnit(xmlRes);
+		for (URL url : urls) {
+			parsePersistenceUnit(url);
 		}
 	}
 
@@ -620,11 +636,12 @@ public class OxyUnitInfoBuilder {
 
 		PersistenceXmlHandler handler = new PersistenceXmlHandler();
 		handler.oxyUnitInfo = new OxyUnitInfo();
-		URL rootUrl;
-		if (bundle == null) {
+		List<Bundle> bundles = getBundles();
+		if (bundles == null) {
 			URL xmlFileURL = classLoader.getResource(PERSISTENCE_XML_LOCATION);
 			File file=new File(urlDecode(xmlFileURL.getFile()));
 			File rootFile = file.getParentFile().getParentFile();
+			URL rootUrl;
 			if (rootFile.getPath().endsWith("!")) {
 				// TODO huuuaaahhhh ... better way to find out if this is path in a jar file?
 				// remove '!'
@@ -634,11 +651,8 @@ public class OxyUnitInfoBuilder {
 			} else {
 				rootUrl = new URL("file", null, rootFile.getPath());
 			}
-		} else {
-			rootUrl = bundle.getResource("/");
+			handler.oxyUnitInfo.setPersistenceUnitRootUrl(rootUrl);
 		}
-
-		handler.oxyUnitInfo.setPersistenceUnitRootUrl(rootUrl);
 
 		XMLReader reader = XMLReaderFactory.createXMLReader();
 		reader.setContentHandler(handler);
@@ -660,12 +674,26 @@ public class OxyUnitInfoBuilder {
 		return oxyUnitInfos;
 	}
 
-	public Bundle getBundle() {
-		return bundle;
+	public List<Bundle> getBundles() {
+		if (bundles == null) {
+			bundles = new ArrayList<Bundle>(5);
+			IConfigurationElement[] configElements = Platform.getExtensionRegistry().getConfigurationElementsFor("org.mariella.persistence.persistenceBundles");
+			for (IConfigurationElement configElement : configElements) {
+				if (configElement.getName().equals("bundle")) {
+					String bundleId = configElement.getAttribute("bundleId");
+					Bundle bundle = Platform.getBundle(bundleId);
+					if (bundle == null) {
+						// boom
+					}
+					bundles.add(bundle);
+				}
+			}
+		}
+		return bundles.isEmpty() ? null : bundles;
 	}
 
-	public void setBundle(Bundle bundle) {
-		this.bundle = bundle;
-	}
+//	public void setBundles(List<Bundle> bundles) {
+//		this.bundles = bundles;
+//	}
 
 }

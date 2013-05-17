@@ -3,7 +3,9 @@ package org.mariella.oxygen.runtime.impl;
 
 import java.sql.Driver;
 import java.sql.DriverManager;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,7 +14,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceException;
 
+import org.mariella.oxygen.basic_core.ClassResolver;
 import org.mariella.oxygen.basic_impl.BundleClassResolver;
+import org.mariella.oxygen.basic_impl.DefaultClassResolver;
 import org.mariella.oxygen.runtime.core.OxyConnectionProvider;
 import org.mariella.persistence.annotations.processing.OxyUnitInfoBuilder;
 import org.mariella.persistence.mapping.OxyUnitInfo;
@@ -30,16 +34,34 @@ public class OxyEntityManagerFactory implements EntityManagerFactory {
 	// TODO mart: added OxyUnitInfo as property for debugging
 	private OxyUnitInfo oxyUnitInfo;
 	private SchemaMapping schemaMapping;
-	private BundleClassResolver persistenceClassResolver;
+	private ClassResolver persistenceClassResolver;
 
 public OxyEntityManagerFactory(String emName, Map<?, ?> properties) {
 	super();
 	try {
 		this.emName = emName;
-		persistenceClassResolver = new BundleClassResolver(
-				(String) properties.get("persistenceBundleName"),
-				(String) properties.get("persistenceBundleVersion"));
-		oxyUnitInfo = fetchOxyUnitInfo(persistenceClassResolver.resolveBundle());
+		OxyUnitInfoBuilder  builder = new OxyUnitInfoBuilder();
+		builder.setClassLoader(getClass().getClassLoader());
+		builder.build();
+
+		for (OxyUnitInfo oxyUnitInfo : builder.getOxyUnitInfos()) {
+			if (oxyUnitInfo.getPersistenceUnitName().equals(emName))
+				this.oxyUnitInfo = oxyUnitInfo;
+		}
+		if (this.oxyUnitInfo == null) {
+			throw new IllegalStateException("Could not find any META-INF/persistence.xml having name " + emName);
+		}
+		
+		List<Bundle> bundles = builder.getBundles();
+		if (bundles != null) {
+			List<String> bundleIds = new ArrayList<String>(bundles.size());
+			for (Bundle bundle : bundles) {
+				bundleIds.add(bundle.getSymbolicName());
+			}
+			persistenceClassResolver = new BundleClassResolver(bundleIds);
+		} else {
+			persistenceClassResolver = new DefaultClassResolver(getClass().getClassLoader());
+		}
 	} catch (Throwable t) {
 		throw new PersistenceException(t);
 	}
@@ -101,22 +123,6 @@ public EntityManager createEntityManager(Map properties) {
 	} catch (Exception e) {
 		throw new PersistenceException(e);
 	}
-}
-
-private OxyUnitInfo fetchOxyUnitInfo(Bundle persistenceBundle) throws Exception {
-	OxyUnitInfoBuilder  builder = new OxyUnitInfoBuilder();
-	if(persistenceBundle != null) {
-		builder.setBundle(persistenceBundle);
-	} else {
-		builder.setClassLoader(getClass().getClassLoader());
-	}
-	builder.build();
-
-	for (OxyUnitInfo oxyUnitInfo : builder.getOxyUnitInfos()) {
-		if (oxyUnitInfo.getPersistenceUnitName().equals(emName))
-			return oxyUnitInfo;
-	}
-	throw new IllegalStateException("Could not find any META-INF/persistence.xml having name " + emName);
 }
 
 public boolean isOpen() {
