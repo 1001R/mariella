@@ -20,7 +20,7 @@ Export-Package: javassist,
  javassist.util.proxy,
  org.mariella.persistence.annotations.processing
 Require-Bundle: org.eclipse.core.runtime,
- javax.persistence;bundle-version="[1.0.2,1.0.2]",
+ javax.persistence;bundle-version="[3.0.0,3.0.0]",
  org.mariella.persistence.annotations;bundle-version="[1.0.2,1.0.2]",
  org.mariella.persistence.mapping;bundle-version="[1.0.2,1.0.2]"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
