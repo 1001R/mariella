@@ -12,7 +12,7 @@
 
 	<groupId>org.mariella.persistence</groupId>
 	<artifactId>javax.persistence</artifactId>
-	<version>1.0.2</version>
+	<version>3.0.0</version>
 	<packaging>eclipse-plugin</packaging>
 
 </project>
