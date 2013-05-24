@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<psf version="2.0">
+<provider id="org.tigris.subversion.subclipse.core.svnnature">
+<project reference="0.9.3,https://mariella.googlecode.com/svn/trunk/org.mariella.cat.core,org.mariella.cat.core"/>
+<project reference="0.9.3,https://mariella.googlecode.com/svn/trunk/org.mariella.cat.feature,org.mariella.cat.feature"/>
+<project reference="0.9.3,https://mariella.googlecode.com/svn/trunk/org.mariella.cat.build,org.mariella.cat.build"/>
+<project reference="0.9.3,https://mariella.googlecode.com/svn/trunk/org.mariella.cat.ui,org.mariella.cat.ui"/>
+</provider>
+<workingSets editPageId="org.eclipse.jdt.ui.JavaWorkingSetPage" id="1369387776540_21" label="org.mariella.cat" name="org.mariella.cat">
+<item elementID="=org.mariella.cat.core" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item elementID="=org.mariella.cat.ui" factoryID="org.eclipse.jdt.ui.PersistableJavaElementFactory"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/org.mariella.cat.feature" type="4"/>
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/org.mariella.cat.build" type="4"/>
+</workingSets>
+</psf>
