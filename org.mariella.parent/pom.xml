@@ -16,7 +16,7 @@
 	
 	<properties>
 		<tycho-version>0.16.0</tycho-version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>  -->
 	</properties>
 	
 	<pluginRepositories>
@@ -54,6 +54,12 @@
 				<configuration>
 					<environments>
 						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86</arch>
+						</environment>
+						<!-- 
+						<environment>
 							<os>linux</os>
 							<ws>gtk</ws>
 							<arch>x86</arch>
@@ -62,11 +68,6 @@
 							<os>linux</os>
 							<ws>gtk</ws>
 							<arch>x86_64</arch>
-						</environment>
-						<environment>
-							<os>win32</os>
-							<ws>win32</ws>
-							<arch>x86</arch>
 						</environment>
 						<environment>
 							<os>win32</os>
@@ -78,24 +79,18 @@
 							<ws>cocoa</ws>
 							<arch>x86_64</arch>
 						</environment>
+						 -->
 					</environments>
 				</configuration>
 			</plugin>
+			
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-maven-plugin</artifactId>
 				<version>${tycho-version}</version>
 				<extensions>true</extensions>
 			</plugin>
-		<!--	<plugin>
-				<groupId>org.sonatype.tycho</groupId>
-				<artifactId>maven-osgi-compiler-plugin</artifactId>
-				<version>${tycho-version}</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>-->
+
 		</plugins>
 	</build>
 </project>
