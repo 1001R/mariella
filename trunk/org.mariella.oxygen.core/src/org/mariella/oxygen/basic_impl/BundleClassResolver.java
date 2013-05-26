@@ -1,14 +1,11 @@
 package org.mariella.oxygen.basic_impl;
 
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Map;
 
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.osgi.service.resolver.BundleDescription;
 import org.mariella.oxygen.basic_core.ClassResolver;
 import org.osgi.framework.Bundle;
-import org.osgi.framework.wiring.BundleRevision;
 
 public class BundleClassResolver implements ClassResolver {
 
@@ -33,32 +30,37 @@ public class BundleClassResolver implements ClassResolver {
 	
 	@SuppressWarnings("unchecked")
 	private Collection<Bundle> getTopLevelBundles(Bundle... bundles) {
-		Collection<Bundle> topLevelBundles = new LinkedList<Bundle>();
-		BundleDescription[] bundleDescriptions = new BundleDescription[bundles.length];
-		Map<String, BundleDescription>[] dependencies = new Map[bundles.length];
-		int i = 0;
-		for(; i < bundles.length; i++) {
-			BundleDescription bundleDescription = (BundleDescription) bundles[i].adapt(BundleRevision.class);
-			if(bundleDescription == null) {
-				throw new RuntimeException("Unable to resolve bundle description for bundle '" + bundles[i].getSymbolicName() + "'.");
-			}
-			bundleDescriptions[i] = bundleDescription;
-			dependencies[i] = BundleDependencies.resolve(true, bundleDescription);
-		}
-		int j;
-		for(i = 0; i < bundles.length; i++) {
-			for(j = 0; j < bundles.length; j++) {
-				if (i != j) {
-					if(dependencies[j].containsKey(bundleDescriptions[i].getSymbolicName())) {
-						break;
-					}
-				}
-			}
-			if(j == bundles.length) {
-				topLevelBundles.add(bundles[i]);
-			}
-		}
-		return topLevelBundles;
+		
+		// TODO: TOP-LEVEL OPTIMIZATION UNCOMMENTED AS LONG AS ECLIPSE 3.6 SERVER PLUGINS ARE USED!!!
+		
+//		Collection<Bundle> topLevelBundles = new LinkedList<Bundle>();
+//		BundleDescription[] bundleDescriptions = new BundleDescription[bundles.length];
+//		Map<String, BundleDescription>[] dependencies = new Map[bundles.length];
+//		int i = 0;
+//		for(; i < bundles.length; i++) {
+//			BundleDescription bundleDescription = (BundleDescription) bundles[i].adapt(BundleRevision.class);
+//			if(bundleDescription == null) {
+//				throw new RuntimeException("Unable to resolve bundle description for bundle '" + bundles[i].getSymbolicName() + "'.");
+//			}
+//			bundleDescriptions[i] = bundleDescription;
+//			dependencies[i] = BundleDependencies.resolve(true, bundleDescription);
+//		}
+//		int j;
+//		for(i = 0; i < bundles.length; i++) {
+//			for(j = 0; j < bundles.length; j++) {
+//				if (i != j) {
+//					if(dependencies[j].containsKey(bundleDescriptions[i].getSymbolicName())) {
+//						break;
+//					}
+//				}
+//			}
+//			if(j == bundles.length) {
+//				topLevelBundles.add(bundles[i]);
+//			}
+//		}
+//		return topLevelBundles;
+		
+		return Arrays.asList(bundles);
 	}
 
 	public Class<?> resolveClass(String className) throws ClassNotFoundException {
