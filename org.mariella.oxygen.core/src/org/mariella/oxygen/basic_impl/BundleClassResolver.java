@@ -33,8 +33,6 @@ public class BundleClassResolver implements ClassResolver {
 	
 	@SuppressWarnings("unchecked")
 	private Collection<Bundle> getTopLevelBundles(Bundle... bundles) {
-		// TODO: TOP-LEVEL OPTIMIZATION UNCOMMENTED AS LONG AS ECLIPSE 3.6 SERVER PLUGINS ARE USED!!!
-//		return Arrays.asList(bundles);
 		Collection<Bundle> topLevelBundles = new LinkedList<Bundle>();
 		BundleDescription[] bundleDescriptions = new BundleDescription[bundles.length];
 		Map<String, BundleDescription>[] dependencies = new Map[bundles.length];
