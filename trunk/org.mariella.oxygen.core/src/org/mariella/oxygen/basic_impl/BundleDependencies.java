@@ -50,7 +50,7 @@ public class BundleDependencies {
 
 	private static void collectRequiredBundles(Map<String, BundleDescription> dependencies, BundleSpecification[] requiredBundles, boolean includeOptional) {
 		for (int i = 0; i < requiredBundles.length; i++) {
-			if (requiredBundles[i].isOptional() && !includeOptional) {
+			if (!requiredBundles[i].isExported() || (requiredBundles[i].isOptional() && !includeOptional)) {
 				continue;
 			}
 			BaseDescription supplier = requiredBundles[i].getSupplier();
