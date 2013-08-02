@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.mariella.cat.feature_1.0.0.jar" id="org.mariella.cat.feature" version="1.0.0">
+      <category name="org.mariella.cat"/>
+   </feature>
+   <category-def name="org.mariella.cat" label="Mariella Cat"/>
+</site>
