@@ -4,9 +4,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Schema {
+public abstract class Schema {
 	private Map<String, Table> tables = new HashMap<String, Table>();
 	private Map<String, Sequence> sequences = new HashMap<String, Sequence>();
+	
+public abstract BatchInsertStatementBuilder createBatchInsertStatementBuilder();
 	
 public Collection<Table> getTables() {
 	return tables.values();

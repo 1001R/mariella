@@ -13,6 +13,9 @@ public class PersistenceXmlHandler extends DefaultHandler {
 OxyUnitInfo oxyUnitInfo;
 String curValue;
 
+public void setOxyUnitInfo(OxyUnitInfo oxyUnitInfo) {
+	this.oxyUnitInfo = oxyUnitInfo;
+}
 
 public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 	try {
