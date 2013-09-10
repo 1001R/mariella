@@ -9,7 +9,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-@SuppressWarnings("unchecked")
 public class ReflectionUtil {
 
 public static Type readCollectionElementType(Type t) {
@@ -19,7 +18,7 @@ public static Type readCollectionElementType(Type t) {
 	return null;
 }
 
-public static Type readTypeArgumentsOfClass(Class clazz) {
+public static Type readTypeArgumentsOfClass(Class<?> clazz) {
 	Type t = clazz.getGenericSuperclass();
 	if ( t instanceof ParameterizedType ) {
 		return readActualTypeArgument((ParameterizedType)t);
@@ -30,10 +29,10 @@ public static Type readTypeArgumentsOfClass(Class clazz) {
 public static Type readActualTypeArgument(ParameterizedType pt) {
 	Type[] genTypes = pt.getActualTypeArguments();
 	if ( genTypes.length == 1 && genTypes[0] instanceof Class ) {
-		return (Class) genTypes[0];
+		return (Class<?>) genTypes[0];
 	}
 	else if ( genTypes.length == 2 && genTypes[1] instanceof Class ) {
-		return (Class) genTypes[1];
+		return (Class<?>) genTypes[1];
 	}
 	return null;
 }
@@ -70,7 +69,7 @@ public static boolean hasAnyEJB3Annotations(AnnotatedElement annotatedElement) {
 	return false;
 }
 
-public static PropertyDescriptor getPropertyDescriptor(Class clazz, String propName) {
+public static PropertyDescriptor getPropertyDescriptor(Class<?> clazz, String propName) {
 	try {
 		for (PropertyDescriptor prop : Introspector.getBeanInfo(clazz).getPropertyDescriptors())
 			if (prop.getName().equals(propName))
@@ -81,7 +80,7 @@ public static PropertyDescriptor getPropertyDescriptor(Class clazz, String propN
 	}
 }
 
-public static Field getField(Class clazz, String name) {
+public static Field getField(Class<?> clazz, String name) {
 	for (Field declared : clazz.getDeclaredFields())
 		if (declared.getName().equals(name)) return declared;
 	return null;

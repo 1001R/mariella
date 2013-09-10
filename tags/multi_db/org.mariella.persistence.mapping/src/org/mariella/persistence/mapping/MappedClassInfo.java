@@ -10,20 +10,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings("unchecked")
 public abstract class MappedClassInfo extends ClassInfo {
 
-private MappedClassInfo superclassInfo;
-private List<MappedClassInfo> subclassInfos = new ArrayList<MappedClassInfo>();
-private List<AttributeInfo> attributeInfos;
-private Map<String, AttributeInfo> nameToAttributeInfoMap = new HashMap<String, AttributeInfo>();
-private InheritanceInfo inheritanceInfo;
-private List<EntityListenerClassInfo> entityListenerClassInfos = new ArrayList<EntityListenerClassInfo>();
-private String name = null;
-private boolean excludeSuperclassListeners;
-
-
-
+	private MappedClassInfo superclassInfo;
+	private List<MappedClassInfo> subclassInfos = new ArrayList<MappedClassInfo>();
+	private List<AttributeInfo> attributeInfos;
+	private Map<String, AttributeInfo> nameToAttributeInfoMap = new HashMap<String, AttributeInfo>();
+	private InheritanceInfo inheritanceInfo;
+	private List<EntityListenerClassInfo> entityListenerClassInfos = new ArrayList<EntityListenerClassInfo>();
+	private String name = null;
+	private boolean excludeSuperclassListeners;
 
 public boolean containsLifecycleEventInfo(LifecycleEventInfo info) {
 	for (LifecycleEventInfo each : getLifecycleEventInfos()) {
@@ -34,11 +30,11 @@ public boolean containsLifecycleEventInfo(LifecycleEventInfo info) {
 }
 
 
-Class getClassMemberType(AnnotatedElement ae) {
+Class<?> getClassMemberType(AnnotatedElement ae) {
 	if (ae instanceof Field)
-		return (Class) ((Field) ae).getGenericType();
+		return (Class<?>) ((Field) ae).getGenericType();
 	else
-		return (Class) ((Method) ae).getGenericReturnType();
+		return (Class<?>) ((Method) ae).getGenericReturnType();
 }
 
 public List<AttributeInfo> getAttributeInfos() {
