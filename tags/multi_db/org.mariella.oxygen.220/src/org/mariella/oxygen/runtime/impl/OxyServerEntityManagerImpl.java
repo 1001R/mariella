@@ -93,15 +93,18 @@ public void checkTransaction() throws TransactionRequiredException {
 	}
 }
 
+public DatabaseAccess createDatabaseAccess() {
+	return new DatabaseAccess() {
+		@Override
+		public Object doInConnection(ConnectionCallback callback) throws SQLException {
+			return callback.doInConnection(connectionProvider.getConnection());
+		}
+	};
+}
+
 public void flush() throws IllegalStateException, TransactionRequiredException, PersistenceException {
 	try {
-		DatabaseAccess dba = new DatabaseAccess() {
-			@Override
-			public Object doInConnection(ConnectionCallback callback) throws SQLException {
-				return callback.doInConnection(connectionProvider.getConnection());
-			}
-		};
-		Persistor persistor = new Persistor(schemaMapping, dba, objectPool.getModificationTracker());
+		Persistor persistor = new Persistor(schemaMapping, createDatabaseAccess(), objectPool.getModificationTracker());
 		persistor.persist();
 	} catch(TransactionRequiredException e) {
 		throw e;

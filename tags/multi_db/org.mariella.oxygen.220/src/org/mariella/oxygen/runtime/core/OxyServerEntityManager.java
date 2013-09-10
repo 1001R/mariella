@@ -9,6 +9,7 @@ import javax.persistence.LockModeType;
 import org.mariella.oxygen.basic_core.OxyEntityManager;
 import org.mariella.persistence.loader.ModifiableFactory;
 import org.mariella.persistence.mapping.SchemaMapping;
+import org.mariella.persistence.persistor.DatabaseAccess;
 
 /**
  * @author aim
@@ -20,6 +21,9 @@ public interface OxyServerEntityManager extends EntityManager, OxyContext, OxyEn
  * @see org.mariella.oxygen.modifications.Context#getSchemaRepresentation()
  */
 public SchemaMapping getSchemaMapping();
+
+
+public DatabaseAccess createDatabaseAccess();
 
 /**
  * Clear the persistence context, causing all managed entities to become detached.
