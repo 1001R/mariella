@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+	"http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName"><value>org.h2.Driver</value></property>
+		<property name="url"><value>jdbc:h2:~/test</value></property>
+		<property name="username"><value></value></property>
+		<property name="password"><value></value></property>
+	</bean>
+	
+	<bean id="entityTransactionFactory" class="org.mariella.oxygen.spring.OxyDataSourceTransactionManagerManagedTransactionFactory"/>
+
+	<bean id="environment" class="org.mariella.oxygen.osgi.EclipseEnvironment">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="entityTransactionFactory" ref="entityTransactionFactory"/>
+	</bean>
+	
+	<bean id="entityManagerFactory" class="org.mariella.oxygen.spring.OxyDataSourceEntityManagerFactoryBean">
+		<property name="persistenceUnitName"><value>test</value></property>
+		<property name="persistenceBundleName"><value>org.mariella.persistence.springtest.model</value></property>
+		<!-- <property name="persistenceBundleVersion"><value>1.0.0</value></property> -->
+		<property name="dataSource" ref="dataSource"/>
+		<property name="environment" ref="environment"/>
+	</bean>
+
+	<bean id="entityManagerProvider" class="org.mariella.oxygen.spring.OxyDataSourceEntityManagerProvider">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+
+<!--
+	<bean id="mappingProvider" class="at.rufus.resources.server.service.RufusSchemaMappingProvider" />
+-->
+
+	<bean id="transactionManager" class="org.mariella.oxygen.spring.OxyDataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="entityManagerFactory" ref="entityManagerFactory"/>
+		<property name="environment" ref="environment"/>
+	</bean>
+
+	<bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+		<property name="transactionManager">
+			<ref bean="transactionManager"/>
+		</property>
+		<property name="isolationLevelName"><value>ISOLATION_READ_COMMITTED</value></property>
+		<property name="propagationBehaviorName"><value>PROPAGATION_REQUIRED</value></property>
+	</bean>
+
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource"><ref bean="dataSource"/></property>
+		<property name="nativeJdbcExtractor"><bean class="org.springframework.jdbc.support.nativejdbc.CommonsDbcpNativeJdbcExtractor"></bean></property>
+	</bean>
+	
+	<bean id="service" class="org.mariella.persistence.springtest.service.Service">
+		<property name="entityManagerProvider" ref="entityManagerProvider"/>
+		<property name="transactionTemplate" ref="transactionTemplate"/>
+	</bean>
+	
+</beans>
