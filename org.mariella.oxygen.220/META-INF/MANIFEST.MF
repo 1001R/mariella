@@ -6,8 +6,7 @@ Bundle-Version: 1.1.1
 Bundle-ClassPath: .
 Export-Package: org.mariella.oxygen.runtime.core,
  org.mariella.oxygen.runtime.impl
-Require-Bundle: org.eclipse.core.runtime,
- javax.persistence;bundle-version="[3.0.0,3.1.0)",
+Require-Bundle: javax.persistence;bundle-version="[3.0.0,3.1.0)",
  org.mariella.persistence;bundle-version="[1.0.2,1.1.0)",
  org.mariella.persistence.annotations;bundle-version="[1.0.2,1.1.0)",
  org.mariella.persistence.annotations.processing;bundle-version="[1.0.2,1.1.0)",
