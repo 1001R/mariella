@@ -37,9 +37,8 @@ public void indexedPropertyChanged(Object modifiable, String propertyName, int i
 						}
 						setReferenceProperty(newValue, (ReferencePropertyDescription)reverse, modifiable);
 					} else if(reverse instanceof CollectionPropertyDescription) {
-						// [teofanos, 8.9.2011] -> @aist: warum der tote code hier? ich lass den zombie mal so stehn ;-)
-						if(oldValue != null) {
-							getTrackedList(oldValue, (CollectionPropertyDescription)reverse).add(modifiable);
+						if(newValue != null) {
+							getTrackedList(newValue, (CollectionPropertyDescription)reverse).add(modifiable);
 						}
 					} else {
 						throw new IllegalStateException();

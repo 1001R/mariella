@@ -18,28 +18,32 @@ import org.mariella.persistence.mapping.TableInfo;
 import org.mariella.persistence.schema.ClassDescription;
 
 
-public class PersistenceBuilder {
-	private final OxyUnitInfo unitInfo;
-	private final PersistenceInfo persistenceInfo;
-	private final DatabaseInfoProvider databaseInfoProvider;
-	private final Map<TableInfo, DatabaseTableInfo> tableInfos = new HashMap<TableInfo, DatabaseTableInfo>();
-	private final Map<TableInfo, Table> tables = new HashMap<TableInfo, Table>();
-	private final Map<String, Sequence> sequences = new HashMap<String, Sequence>();
+public abstract class PersistenceBuilder {
+	protected final OxyUnitInfo unitInfo;
+	protected final PersistenceInfo persistenceInfo;
+	protected final DatabaseInfoProvider databaseInfoProvider;
+	protected final Map<TableInfo, DatabaseTableInfo> tableInfos = new HashMap<TableInfo, DatabaseTableInfo>();
+	protected final Map<TableInfo, Table> tables = new HashMap<TableInfo, Table>();
+	protected final Map<String, Sequence> sequences = new HashMap<String, Sequence>();
 
-	// ms: die sequences pro table brauch ich das für memox v2 fallback szenario, bitte nicht entfernen.
-	private GenericSequenceProvider genericSequenceProvider = null;
+	// TODO ms: die sequences pro table brauch ich das für memox v2 fallback szenario, bitte nicht entfernen.
+	protected GenericSequenceProvider genericSequenceProvider = null;
 
 
-	private ConverterRegistry converterRegistry = new ConverterRegistryImpl();
+	protected ConverterRegistry converterRegistry;
 
-	private Map<EntityInfo, EntityMappingBuilder> entityMappingBuilders = new HashMap<EntityInfo, EntityMappingBuilder>();
+	protected Map<EntityInfo, EntityMappingBuilder> entityMappingBuilders = new HashMap<EntityInfo, EntityMappingBuilder>();
 
 public PersistenceBuilder(OxyUnitInfo unitInfo, DatabaseInfoProvider databaseInfoProvider) {
 	super();
 	this.unitInfo = unitInfo;
-	persistenceInfo = new PersistenceInfo();
+	persistenceInfo = createPersistenceInfo();
 	this.databaseInfoProvider = databaseInfoProvider;
+	
+	converterRegistry = new ConverterRegistryImpl();
 }
+
+protected abstract PersistenceInfo createPersistenceInfo();
 
 public PersistenceInfo getPersistenceInfo() {
 	return persistenceInfo;

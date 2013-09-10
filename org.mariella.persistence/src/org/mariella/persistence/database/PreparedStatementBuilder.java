@@ -2,17 +2,10 @@ package org.mariella.persistence.database;
 
 import java.sql.Connection;
 
-public abstract class PreparedStatementBuilder {
+public interface PreparedStatementBuilder {
 
-public PreparedStatementBuilder() {
-	super();
-}
-
-public void initialize() {
-}
-
-public abstract void execute(Connection connection);
-
-public abstract String getSqlDebugString();
+public void initialize();
+public void execute(Connection connection);
+public String getSqlDebugString();
 
 }

@@ -1,7 +1,6 @@
 package org.mariella.persistence.annotations.processing;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
@@ -9,14 +8,10 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.FileLocator;
-import org.osgi.framework.Bundle;
-
 public abstract class ClasspathBrowser {
 	public static class Entry {
 		private String name;
 		private InputStream inputStream;
-		private Bundle bundle;
 		public String getName() {
 			return name;
 		}
@@ -29,58 +24,11 @@ public abstract class ClasspathBrowser {
 		public void setInputStream(InputStream inputStream) {
 			this.inputStream = inputStream;
 		}
-		public void setBundle(Bundle bundle) {
-			this.bundle = bundle;
-		}
-		public Bundle getBundle() {
-			return bundle;
-		}
 	}
 
 List<Entry> entries= new ArrayList<Entry>();
 
-public static ClasspathBrowser getBrowser(URL url, Bundle bundle) throws Exception {
 
-	if (url.getProtocol().equals("bundleresource")) {
-		if(bundle == null) {
-			throw new IllegalArgumentException("Cannot resolve a bundle url without a bundle!");
-		}
-		url = FileLocator.getBundleFile(bundle).toURI().toURL();
-	}
-
-	if (url.getProtocol().equals("jar")) {
-		String fileName = url.getFile();
-		if (fileName.endsWith("!/"))
-			fileName = fileName.substring(0,fileName.length()-2);
-		if (fileName.startsWith("file:"))
-			fileName = fileName.substring(5);
-		return new JarClasspathBrowser(new File(fileName));
-	} else if (url.getProtocol().equals("file")) {
-		File f = new File(url.getFile());
-		if (f.isDirectory()) {
-			return new DirectoryClasspathBrowser(f);
-		} else {
-			return new JarClasspathBrowser(f);
-		}
-	} else {
-		throw new IllegalArgumentException("Invalid url: " + url);
-	}
-
-}
-
-public static List<Entry> resolveBundleEntries(List<Bundle> bundles) throws Exception {
-	final List<Entry> entries = new ArrayList<Entry>();
-	for (Bundle bundle : bundles) {
-		for(File bcpEntry : getBundleClasspathEntries(bundle)) {
-			List<Entry> bundleEntries = readEntries(bcpEntry.toURI().toURL());
-			for (Entry bundleEntry : bundleEntries) {
-				bundleEntry.setBundle(bundle);
-			}
-			entries.addAll(bundleEntries);
-		}
-	}
-	return entries;
-}
 
 public static List<Entry> readEntries(URL url) {
 	if (url.getProtocol().equals("jar")) {
@@ -114,32 +62,6 @@ private static String toFileName(URL url) {
 	}
 	return fName;
 }
-
-public static List<File> getBundleClasspathEntries(Bundle bundle) throws IOException {
-	final List<File> classpathFiles = new ArrayList<File>();
-	File bundleFile = FileLocator.getBundleFile(bundle);
-	String bundlePath = bundleFile.getAbsolutePath();
-	String bundleClasspath = (String) bundle.getHeaders().get("Bundle-Classpath");
-	if(bundleClasspath != null) {
-		String[] paths = bundleClasspath.split(",");
-		File classpathFile;
-		for(String path : paths) {
-			if(!(path = path.trim()).isEmpty()) {
-				if(!path.startsWith(File.separator)) {
-					classpathFile = new File(bundlePath + File.separator + path).getCanonicalFile();
-					if(classpathFile.exists()) {
-						classpathFiles.add(classpathFile);
-					}
-				}
-			}
-		}
-	}
-	if(classpathFiles.isEmpty()) {
-		classpathFiles.add(bundleFile);
-	}
-	return classpathFiles;
-}
-
 
 public List<Entry> getEntries() {
 	return entries;
