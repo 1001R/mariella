@@ -7,31 +7,31 @@ import org.mariella.persistence.runtime.ModificationTracker;
 
 public interface OxyObjectPool extends ObjectPool, Serializable {
 
-ModificationTracker getModificationTracker();
+public ModificationTracker getModificationTracker();
 
-OxyEntityManager getEntityManager();
+public OxyEntityManager getEntityManager();
 
-Collection<EntityState> getAllEntityStates();
+public Collection<EntityState> getAllEntityStates();
 
-boolean contains(Object entity);
+public boolean contains(Object entity);
 
-boolean containsPoolIdentity(long poolIdentity);
+public boolean containsPoolIdentity(long poolIdentity);
 
-EntityState getEntityState(Object entity);
-EntityState getEntityStateForPoolId(long poolId);
+public EntityState getEntityState(Object entity);
+public EntityState getEntityStateForPoolId(long poolId);
 
-Object getEntityForPersistentId(Object persistentIdentity);
-Object getPersistentIdentityForEntity(Object entity);
+public Object getEntityForPersistentId(Object persistentIdentity);
+public Object getPersistentIdentityForEntity(Object entity);
 
-RuntimeException createRuntimeException(Throwable t);
+public RuntimeException createRuntimeException(Throwable t);
 
-void mergeRelated(OxyObjectPool sourcePool) throws Exception;
-void mergeRelated(OxyObjectPool sourcePool, Object customContext) throws Exception;
-Object mergeEntity(OxyObjectPool sourcePool, Object sourceEntity);
+public void mergeRelated(OxyObjectPool sourcePool) throws Exception;
+public void mergeRelated(OxyObjectPool sourcePool, Object customContext) throws Exception;
+public Object mergeEntity(OxyObjectPool sourcePool, Object sourceEntity);
 
-Object getAttribute(String attributeName);
-void setAttribute(String attributeName, Object value);
+public Object getAttribute(String attributeName);
+public void setAttribute(String attributeName, Object value);
 
-void detachAll();
+public void detachAll();
 
 }
