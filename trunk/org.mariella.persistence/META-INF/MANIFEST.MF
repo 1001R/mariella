@@ -5,6 +5,7 @@ Bundle-SymbolicName: org.mariella.persistence;singleton:=true
 Bundle-Version: 1.0.2
 Export-Package: org.mariella.persistence.annotations.mapping_builder,
  org.mariella.persistence.database,
+ org.mariella.persistence.generic,
  org.mariella.persistence.loader,
  org.mariella.persistence.mapping,
  org.mariella.persistence.persistor,
@@ -12,8 +13,7 @@ Export-Package: org.mariella.persistence.annotations.mapping_builder,
  org.mariella.persistence.runtime,
  org.mariella.persistence.schema,
  org.mariella.persistence.util
-Require-Bundle: com.oracle.ojdbc;bundle-version="[1.0.0,1.1.0)",
- spring;bundle-version="[3.0.5,3.1.0)",
+Require-Bundle: 
  javax.persistence;bundle-version="[3.0.0,3.0.0]",
  org.mariella.persistence.annotations;bundle-version="[1.0.2,1.0.2]",
  org.mariella.persistence.annotations.processing;bundle-version="[1.0.2,1.0.2]",

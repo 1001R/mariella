@@ -13,6 +13,7 @@ import org.mariella.oxygen.runtime.core.OxyConnectionProvider;
  * @author aim
  */
 public class OxyJ2SEConnectionProvider implements OxyConnectionProvider {
+	public static final String JDBC_DRIVER = "org.mariella.oxygen.jdbcdriver";
 	public static final String CONNECT_PROPERTY_NAME = "org.mariella.oxygen.connectstring"; 
 	public static final String DBUSER_PROPERTY_NAME = "org.mariella.oxygen.dbuser";
 	public static final String DBPASSWORD_PROPERTY_NAME = "org.mariella.oxygen.dbpassword";
