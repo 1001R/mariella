@@ -55,8 +55,6 @@ public void afterPropertiesSet() throws Exception {
 
 	HashMap<String, Object> properties = new HashMap<String, Object>();
 	properties.put("dataSource", dataSource);
-	properties.put("persistenceBundleName", persistenceBundleName);
-	properties.put("persistenceBundleVersion", persistenceBundleVersion);
 	properties.put("org.mariella.oxygen.environment", environment);
 	
 	ClassLoader cl = Thread.currentThread().getContextClassLoader();
@@ -88,14 +86,6 @@ public DataSource getDataSource() {
 
 public void setDataSource(DataSource dataSource) {
 	this.dataSource = dataSource;
-}
-
-public void setPersistenceBundleName(String persistenceBundleName) {
-	this.persistenceBundleName = persistenceBundleName;
-}
-
-public void setPersistenceBundleVersion(String persistenceBundleVersion) {
-	this.persistenceBundleVersion = persistenceBundleVersion;
 }
 
 }

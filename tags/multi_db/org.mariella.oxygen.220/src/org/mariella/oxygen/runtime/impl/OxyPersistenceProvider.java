@@ -22,9 +22,9 @@ public EntityManagerFactory createContainerEntityManagerFactory(PersistenceUnitI
 public EntityManagerFactory createEntityManagerFactory(String emName, Map properties) {
 	Environment environment = (Environment)properties.get("org.mariella.oxygen.environment");
 	if(environment == null) {
-		environment = new StandaloneEnvironment(emName, properties);
+		environment = new StandaloneEnvironment(emName);
 	}
-	environment.initialize(emName);
+	environment.initialize(emName, properties);
 
 	return new OxyEntityManagerFactory(emName, properties, environment);
 }

@@ -60,8 +60,14 @@ protected void initializeMapping(DatabaseInfoProvider databaseInfoProvider) {
 		persistenceBuilder = new GenericPersistenceBuilder(oxyUnitInfo, databaseInfoProvider);
 	}
 	
+	configurePersistenceBuilder(persistenceBuilder);
+	
 	persistenceBuilder.build();
 	schemaMapping = persistenceBuilder.getPersistenceInfo().getSchemaMapping();
+}
+
+protected void configurePersistenceBuilder(PersistenceBuilder persistenceBuilder) {
+	
 }
 
 public OxyUnitInfo getOxyUnitInfo() {

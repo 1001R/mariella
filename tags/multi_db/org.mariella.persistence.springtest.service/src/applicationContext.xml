@@ -29,10 +29,6 @@
 		<property name="dataSource" ref="dataSource"/>
 	</bean>
 
-<!--
-	<bean id="mappingProvider" class="at.rufus.resources.server.service.RufusSchemaMappingProvider" />
--->
-
 	<bean id="transactionManager" class="org.mariella.oxygen.spring.OxyDataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource"/>
 		<property name="entityManagerFactory" ref="entityManagerFactory"/>
