@@ -1,8 +1,7 @@
 package org.mariella.oxygen.osgi;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -13,7 +12,6 @@ import org.mariella.oxygen.runtime.impl.OxyEntityTransactionFactory;
 import org.mariella.persistence.annotations.processing.OxyUnitInfoBuilder;
 import org.mariella.persistence.mapping.OxyUnitInfo;
 import org.mariella.persistence.runtime.PersistenceException;
-import org.osgi.framework.Bundle;
 
 public class EclipseEnvironment extends EnvironmentImpl {
 	private OxyConnectionProvider connectionProvider;
@@ -24,8 +22,10 @@ public EclipseEnvironment() {
 	properties = new HashMap<String, Object>();
 }
 
-public void initialize(String emName) {
+@Override
+public void initialize(String emName, Map<?, ?> properties) {
 	try {
+		this.properties = properties;
 		OsgiPersistenceUnitParser parser = new OsgiPersistenceUnitParser();
 		OxyUnitInfoBuilder builder = new OxyUnitInfoBuilder(parser);
 		builder.build();
@@ -38,12 +38,7 @@ public void initialize(String emName) {
 			throw new IllegalStateException("Could not find any META-INF/persistence.xml having name " + emName);
 		}
 		
-		List<Bundle> bundles = parser.getBundles();
-		List<String> bundleIds = new ArrayList<String>(bundles.size());
-		for (Bundle bundle : bundles) {
-			bundleIds.add(bundle.getSymbolicName());
-		}
-		persistenceClassResolver = new BundleClassResolver(bundleIds);
+		persistenceClassResolver = BundleClassResolver.create();
 		createSchemaMapping();
 	} catch (Throwable t) {
 		throw new PersistenceException(t);

@@ -13,17 +13,18 @@ import org.mariella.persistence.mapping.OxyUnitInfo;
 
 public class StandaloneEnvironment extends EnvironmentImpl {
 	
-public StandaloneEnvironment(String emName, Map<?, ?> properties) {
+public StandaloneEnvironment(String emName) {
 	super();
-	this.properties = properties; 
 }
 
 public OxyEntityTransactionFactory createEntityTransactionFactory() {
 	return new DefaultEntityTransactionFactory();
 }
 
-public void initialize(String emName) {
+@Override
+public void initialize(String emName, Map<?, ?> properties) {
 	try {
+		this.properties = properties;
 		PersistenceUnitParser parser = new ClassLoaderPersistenceUnitParser(getClass().getClassLoader());
 		OxyUnitInfoBuilder  builder = new OxyUnitInfoBuilder(parser);
 		builder.build();

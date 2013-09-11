@@ -1,5 +1,7 @@
 package org.mariella.oxygen.runtime.impl;
 
+import java.util.Map;
+
 import org.mariella.oxygen.basic_core.ClassResolver;
 import org.mariella.oxygen.runtime.core.OxyConnectionProvider;
 import org.mariella.persistence.annotations.mapping_builder.DatabaseMetaDataDatabaseInfoProvider;
@@ -15,5 +17,5 @@ public ClassResolver getPersistenceClassResolver();
 public OxyConnectionProvider createConnectionProvider();
 public OxyEntityTransactionFactory createEntityTransactionFactory();
 
-public void initialize(String emName);
+public void initialize(String emName, Map<?, ?> properties);
 }

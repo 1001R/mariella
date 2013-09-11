@@ -1,9 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: org.mariella.persistence.oracle
-Bundle-SymbolicName: org.mariella.persistence.oracle
+Bundle-SymbolicName: org.mariella.persistence.oracle;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Require-Bundle: org.mariella.persistence,
  com.oracle.ojdbc
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: org.mariella.persistence.oracle
