@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Cat Ui
+Bundle-SymbolicName: org.mariella.cat.ui
+Bundle-Version: 1.0.0
+Bundle-Activator: org.mariella.cat.ui.CatUi
+Export-Package: org.mariella.cat.ui,
+ org.mariella.cat.ui.controls.decorations,
+ org.mariella.cat.ui.controls.radioset,
+ org.mariella.cat.ui.editcontext,
+ org.mariella.cat.ui.flexgridlayout,
+ org.mariella.cat.ui.images
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.mariella.cat.core;bundle-version="[1.0.0,1.0.0]";visibility:=reexport
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ActivationPolicy: lazy

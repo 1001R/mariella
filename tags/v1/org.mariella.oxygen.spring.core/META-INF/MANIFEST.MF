@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: org.mariella.oxygen.spring.core
+Bundle-SymbolicName: org.mariella.oxygen.spring.core
+Bundle-Version: 1.1.1
+Export-Package: org.mariella.oxygen.spring
+Require-Bundle: spring;bundle-version="[3.0.5,3.1.0)",
+ org.mariella.persistence;bundle-version="[1.0.2,1.1.0)",
+ org.mariella.persistence.mapping;bundle-version="[1.0.2,1.1.0)",
+ javax.persistence;bundle-version="[3.0.0,3.1.0)",
+ org.mariella.oxygen.220;bundle-version="[1.1.1,1.1.1]",
+ org.mariella.oxygen.core;bundle-version="[1.1.1,1.1.1]"

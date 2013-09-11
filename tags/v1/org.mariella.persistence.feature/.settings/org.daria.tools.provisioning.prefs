@@ -1,0 +1,4 @@
+eclipse.preferences.version=1
+svn_filters=
+unmodifiable_features=
+unmodifiable_plugins=com.oracle.ojdbc;javax.persistence

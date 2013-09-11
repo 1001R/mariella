@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Persistence Plug-in
+Bundle-SymbolicName: javax.persistence
+Bundle-Version: 3.0.0
+Bundle-ClassPath: ejb3-persistence.jar
+Export-Package: javax.persistence,
+ javax.persistence.spi
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
