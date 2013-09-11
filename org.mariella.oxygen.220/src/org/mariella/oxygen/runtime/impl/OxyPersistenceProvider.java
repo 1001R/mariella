@@ -11,12 +11,22 @@ import javax.persistence.spi.PersistenceUnitInfo;
  */
 public class OxyPersistenceProvider implements PersistenceProvider {
 
+public OxyPersistenceProvider() {
+	super();
+}
+
 public EntityManagerFactory createContainerEntityManagerFactory(PersistenceUnitInfo info, Map properties) {
 	throw new UnsupportedOperationException("Container environments are not supported!");
 }
 
 public EntityManagerFactory createEntityManagerFactory(String emName, Map properties) {
-	return new OxyEntityManagerFactory(emName, properties);
+	Environment environment = (Environment)properties.get("org.mariella.oxygen.environment");
+	if(environment == null) {
+		environment = new StandaloneEnvironment(emName);
+	}
+	environment.initialize(emName, properties);
+
+	return new OxyEntityManagerFactory(emName, properties, environment);
 }
 
 

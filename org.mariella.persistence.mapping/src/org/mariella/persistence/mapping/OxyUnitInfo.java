@@ -14,7 +14,6 @@ import javax.persistence.spi.PersistenceUnitInfo;
 import javax.persistence.spi.PersistenceUnitTransactionType;
 import javax.sql.DataSource;
 
-@SuppressWarnings("unchecked")
 public class OxyUnitInfo implements PersistenceUnitInfo {
 
 	List<URL> jarFileUrls = new ArrayList<URL>(); 
@@ -121,7 +120,7 @@ public List<NamedNativeQueryInfo> getNamedNativeQueryInfos() {
 	return namedNativeQueryInfos;
 }
 
-public ClassInfo getClassInfo(Class clazz) {
+public ClassInfo getClassInfo(Class<?> clazz) {
 	return classToInfoMap.get(clazz.getName());
 }
 

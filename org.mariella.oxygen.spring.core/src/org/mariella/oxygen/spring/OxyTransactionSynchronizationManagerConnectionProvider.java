@@ -12,11 +12,10 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 /**
  * @author mart
  */
-public class OxyDataSourceConnectionProvider implements OxyConnectionProvider {
-
+public class OxyTransactionSynchronizationManagerConnectionProvider implements OxyConnectionProvider {
 	private DataSource dataSource;
 
-public OxyDataSourceConnectionProvider(DataSource ds) {
+public OxyTransactionSynchronizationManagerConnectionProvider(DataSource ds) {
 	this.dataSource = ds;
 }
 

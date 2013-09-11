@@ -1,12 +1,11 @@
 package org.mariella.persistence.mapping;
 
 
-@SuppressWarnings("unchecked")
 public class NamedNativeQueryInfo {
 
 private String name;
 private String query;
-private Class resultClass;
+private Class<?> resultClass;
 private QueryHintInfo[] queryHintInfos;
 private String sqlResultSetMappingName;
 
@@ -22,10 +21,10 @@ public String getQuery() {
 public void setQuery(String query) {
 	this.query = query;
 }
-public Class getResultClass() {
+public Class<?> getResultClass() {
 	return resultClass;
 }
-public void setResultClass(Class resultClass) {
+public void setResultClass(Class<?> resultClass) {
 	this.resultClass = resultClass;
 }
 public QueryHintInfo[] getQueryHintInfos() {

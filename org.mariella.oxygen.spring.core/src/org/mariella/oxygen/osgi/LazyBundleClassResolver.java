@@ -1,4 +1,4 @@
-package org.mariella.oxygen.basic_impl;
+package org.mariella.oxygen.osgi;
 
 import java.util.List;
 

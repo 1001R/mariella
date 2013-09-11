@@ -57,7 +57,7 @@ protected void persistPrimary(ObjectPersistor persistor, Object value) {
 public void persistSecondary(ObjectPersistor persistor, Object value) {
 	CollectionModificationInfo cmi = persistor.getModificationInfo().getCollectionModificationInfo(getPropertyDescription().getPropertyDescriptor().getName());
 	if(cmi != null && cmi.hasChanges()) {
-		BatchInsertStatementBuilder isb = new BatchInsertStatementBuilder();
+		BatchInsertStatementBuilder isb = persistor.getPersistor().getSchemaMapping().getSchema().createBatchInsertStatementBuilder();
 		List<?> elements = (List<?>)value;
 		for(int i = 0; i < elements.size(); i++) {
 			Object element = elements.get(i);

@@ -3,30 +3,31 @@ package org.mariella.oxygen.spring;
 
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.sql.DataSource;
 
-import org.apache.log4j.Logger;
+import org.mariella.oxygen.osgi.EclipseEnvironment;
 import org.mariella.oxygen.runtime.impl.OxyEntityManagerFactory;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 
-public class OxyDataSourceEntityManagerFactoryBean implements FactoryBean, InitializingBean, DisposableBean, ApplicationContextAware {
-private static final Logger logger = Logger.getLogger(OxyDataSourceEntityManagerFactoryBean.class);
+public class OxyDataSourceEntityManagerFactoryBean implements FactoryBean, InitializingBean, DisposableBean {
+	private static final Logger logger = Logger.getLogger(OxyDataSourceEntityManagerFactoryBean.class.getName());
 
-private OxyEntityManagerFactory factory;
-private String persistenceUnitName;
-private String persistenceBundleName;
-private String persistenceBundleVersion;
-private DataSource dataSource;
-private ApplicationContext applicationContext;
+	private OxyEntityManagerFactory factory;
+	private String persistenceUnitName;
+	private String persistenceBundleName;
+	private String persistenceBundleVersion;
+	private DataSource dataSource;
+	private EclipseEnvironment environment;
 
+public OxyDataSourceEntityManagerFactoryBean() {
+	super();
+}
 
 public Object getObject() throws Exception {
 	return factory;
@@ -40,15 +41,22 @@ public boolean isSingleton() {
 	return true;
 }
 
+public EclipseEnvironment getEnvironment() {
+	return environment;
+}
+
+public void setEnvironment(EclipseEnvironment environment) {
+	this.environment = environment;
+}
+
 public void afterPropertiesSet() throws Exception {
 	if (persistenceUnitName == null)
 		throw new IllegalStateException("Property 'persistenceUnitName' must be specified for OxyEntityManagerFactoryBean");
 
 	HashMap<String, Object> properties = new HashMap<String, Object>();
 	properties.put("dataSource", dataSource);
-	properties.put("persistenceBundleName", persistenceBundleName);
-	properties.put("persistenceBundleVersion", persistenceBundleVersion);
-
+	properties.put("org.mariella.oxygen.environment", environment);
+	
 	ClassLoader cl = Thread.currentThread().getContextClassLoader();
 	ClassLoader clTarget = OxyEntityManagerFactory.class.getClassLoader();
 	try {
@@ -58,19 +66,12 @@ public void afterPropertiesSet() throws Exception {
 		Thread.currentThread().setContextClassLoader(cl);
 	}
 
-	applicationContext.publishEvent(new SchemaMappingNotificationEvent(this,
-			factory.getOxyUnitInfo().getPersistenceUnitName(),
-			factory.getSchemaMapping()
-	));
-
-	if (logger.isDebugEnabled())
-		logger.debug("Created EntityManagerFactory");
+	logger.fine("Created EntityManagerFactory");
 }
 
 public void destroy() throws Exception {
 	factory.close();
-	if (logger.isDebugEnabled())
-		logger.debug("Closed EntityManagerFactory");
+	logger.fine("Closed EntityManagerFactory");
 }
 
 public void setProperties(Properties properties) {}
@@ -85,18 +86,6 @@ public DataSource getDataSource() {
 
 public void setDataSource(DataSource dataSource) {
 	this.dataSource = dataSource;
-}
-
-public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-	this.applicationContext = applicationContext;
-}
-
-public void setPersistenceBundleName(String persistenceBundleName) {
-	this.persistenceBundleName = persistenceBundleName;
-}
-
-public void setPersistenceBundleVersion(String persistenceBundleVersion) {
-	this.persistenceBundleVersion = persistenceBundleVersion;
 }
 
 }
