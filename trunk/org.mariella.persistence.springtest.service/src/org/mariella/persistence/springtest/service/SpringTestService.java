@@ -1,5 +1,9 @@
 package org.mariella.persistence.springtest.service;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+import org.h2.Driver;
 import org.mariella.oxygen.spring.OxyEntityManagerProvider;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -26,6 +30,12 @@ public static SpringTestService getInstance() {
 }
 
 public void start(BundleContext bundleContext) throws Exception {
+	DriverManager.registerDriver(new Driver());
+	Connection connection = DriverManager.getConnection("jdbc:h2:~/test");
+	new FileExecutor(getClass().getResourceAsStream("/h2/drop.sql"), connection, false).execute();
+	new FileExecutor(getClass().getResourceAsStream("/h2/create.sql"), connection, true).execute();
+	connection.close();
+	
 	SpringTestService.context = bundleContext;
 	SpringTestService.instance = this;
 	applicationContext = new ClassPathXmlApplicationContext("/applicationContext.xml") {
