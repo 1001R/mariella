@@ -6,19 +6,43 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-public class CommandInvoker {
+import org.mariella.oxygen.basic_core.ClassResolver;
+import org.mariella.oxygen.remoting.common.Invoker;
 
-public void invoke(Command command) {
-	try {
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		ObjectOutputStream os = new ObjectOutputStream(bos);
-		os.writeObject(command);
-		os.close();
-		
-		ObjectInputStream is = new ObjectInputStream(new ByteArrayInputStream(bos.toByteArray()));
-	} catch(IOException e) {
-		throw new RuntimeException(e);
-	}
+
+public class CommandInvoker extends Invoker<Command<?>> {
+
+public CommandInvoker(ClassResolver classResolver) {
+	super(classResolver);
 }
+
+public void invoke() throws IOException, ClassNotFoundException {
+	ByteArrayOutputStream bos = new ByteArrayOutputStream();
+	ObjectOutputStream oos = new ObjectOutputStream(bos);
 	
+	oos.writeObject(getObjectPool());
+	super.invoke(oos);
+	
+	ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bos.toByteArray())) {
+		protected java.lang.Class<?> resolveClass(java.io.ObjectStreamClass desc) throws IOException ,ClassNotFoundException {
+			return getClassResolver().resolveClass(desc.getName());	
+		}
+	};
+	
+	InvokableCommand invokableCommand = new InvokableCommand();
+	invokableCommand.invoke(ois);
+	
+	ByteArrayOutputStream bos2 = new ByteArrayOutputStream();
+	ObjectOutputStream oos2 = new ObjectOutputStream(bos2);
+	invokableCommand.writeResult(oos2);
+	
+	ObjectInputStream rois = new ObjectInputStream(new ByteArrayInputStream(bos2.toByteArray())) {
+		protected java.lang.Class<?> resolveClass(java.io.ObjectStreamClass desc) throws IOException ,ClassNotFoundException {
+			return getClassResolver().resolveClass(desc.getName());	
+		}
+	};
+	
+	readResult(rois);
+}
+
 }

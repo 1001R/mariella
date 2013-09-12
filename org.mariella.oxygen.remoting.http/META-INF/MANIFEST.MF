@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Http
+Bundle-SymbolicName: org.mariella.oxygen.remoting.http
+Bundle-Version: 1.0.0
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Require-Bundle: org.apache.http;bundle-version="4.2.1",
+ org.mariella.oxygen.remoting;bundle-version="1.0.0",
+ org.mariella.oxygen.core;bundle-version="1.1.1",
+ org.eclipse.core.runtime;bundle-version="3.7.0",
+ org.mariella.persistence;bundle-version="1.0.2"
+Bundle-Activator: org.mariella.oxygen.remoting.http.common.HttpRemoting

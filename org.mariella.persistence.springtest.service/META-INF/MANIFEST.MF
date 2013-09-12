@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Service
-Bundle-SymbolicName: org.mariella.persistence.springtest.service
+Bundle-SymbolicName: org.mariella.persistence.springtest.service;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: org.mariella.persistence.springtest.service.SpringTestService
 Eclipse-RegisterBuddy: org.mariella.oxygen.spring.core
@@ -15,8 +15,11 @@ Require-Bundle: org.eclipse.core.runtime,
  org.mariella.persistence.mapping;bundle-version="1.0.2",
  org.mariella.persistence.springtest.model;bundle-version="1.0.0",
  javax.persistence;bundle-version="3.0.0",
- spring;bundle-version="3.0.5"
+ spring;bundle-version="3.0.5",
+ org.mariella.persistence.h2;bundle-version="1.0.0",
+ org.mariella.oxygen.remoting;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Bundle-ClassPath: .
+Bundle-ClassPath: .,
+ lib/h2-1.3.171.jar
 Export-Package: org.mariella.persistence.springtest.service

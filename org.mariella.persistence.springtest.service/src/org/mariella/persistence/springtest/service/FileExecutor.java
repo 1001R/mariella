@@ -1,4 +1,4 @@
-package org.mariella.persistence.springtest.test;
+package org.mariella.persistence.springtest.service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
