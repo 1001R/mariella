@@ -14,6 +14,8 @@
 		<module>../org.mariella.persistence.mapping</module>
 		<module>../org.mariella.persistence.annotations</module>
 		<module>../org.mariella.persistence.annotations.processing</module>
+		<module>../org.mariella.persistence.oracle</module>
+		<module>../org.mariella.persistence.h2</module>
 		<module>../com.oracle.ojdbc</module>
 		<module>../javax.persistence</module>
 		<module>../org.mariella.persistence.feature</module>
