@@ -50,4 +50,18 @@
          install-size="0"
          version="3.0.0"/>
 
+   <plugin
+         id="org.mariella.persistence.h2"
+         download-size="0"
+         install-size="0"
+         version="1.0.2"
+         unpack="false"/>
+
+   <plugin
+         id="org.mariella.persistence.oracle"
+         download-size="0"
+         install-size="0"
+         version="1.0.2"
+         unpack="false"/>
+
 </feature>

@@ -37,4 +37,12 @@
          version="1.1.1"
          unpack="false"/>
 
+   <plugin
+         id="org.mariella.oxygen.spring.core.h2"
+         download-size="0"
+         install-size="0"
+         version="1.1.1"
+         fragment="true"
+         unpack="false"/>
+
 </feature>
