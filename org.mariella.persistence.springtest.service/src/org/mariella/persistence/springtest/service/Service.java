@@ -1,6 +1,13 @@
 package org.mariella.persistence.springtest.service;
 
-import org.mariella.oxygen.basic_core.OxyEntityManager;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+
 import org.mariella.oxygen.basic_impl.OxyEntityManagerImpl;
 import org.mariella.oxygen.runtime.core.OxyServerEntityManager;
 import org.mariella.oxygen.spring.OxyEntityManagerProvider;
@@ -46,7 +53,22 @@ public void execute(final LoadExtendedPersonCommand command) {
 			}
 		}
 	);
-	
+}
+
+public void execute(final CreateTestDataCommand command) {
+	transactionTemplate.execute(
+			new TransactionCallback<Void>() {
+				@Override
+				public Void doInTransaction(TransactionStatus arg0) {
+					OxyServerEntityManager em = entityManagerProvider.getEntityManager();
+					new RemotingTest(em).execute(command);
+					return null;
+				}
+			}
+		);
+}
+
+public void setupDB() {
 }
 
 public void test() {
@@ -54,7 +76,7 @@ public void test() {
 			new TransactionCallback<Object>() {
 				@Override
 				public Object doInTransaction(TransactionStatus arg0) {
-					OxyServerEntityManager em = entityManagerProvider.getEntityManager();
+//					OxyServerEntityManager em = entityManagerProvider.getEntityManager();
 					//new SimpleTest(em).referentialTest();
 					return null;
 				}
@@ -116,6 +138,27 @@ public OxyEntityManagerImpl getEntityManager() {
 
 public TransactionTemplate getTransactionTemplate() {
 	return transactionTemplate;
+}
+
+public InputStream loadSomeContent() {
+	ByteArrayOutputStream bos = new ByteArrayOutputStream();
+	PrintWriter w = new PrintWriter(new OutputStreamWriter(bos));
+	w.write("ABER HALLO");
+	w.close();
+	ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
+	return bis;
+}
+
+public String postSomeContent(InputStream inputStream) throws IOException {
+	String s = "";
+	InputStreamReader reader = new InputStreamReader(inputStream);
+	while (true) {
+		int i = reader.read();
+		if (i == -1)
+			break;
+		s += (char)i;
+	}
+	return s;
 }
 
 }

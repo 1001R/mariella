@@ -30,22 +30,24 @@ public static SpringTestService getInstance() {
 }
 
 public void start(BundleContext bundleContext) throws Exception {
-	DriverManager.registerDriver(new Driver());
-	Connection connection = DriverManager.getConnection("jdbc:h2:~/test");
-	new FileExecutor(getClass().getResourceAsStream("/h2/drop.sql"), connection, false).execute();
-	new FileExecutor(getClass().getResourceAsStream("/h2/create.sql"), connection, true).execute();
-	connection.close();
-	
-	SpringTestService.context = bundleContext;
-	SpringTestService.instance = this;
-	applicationContext = new ClassPathXmlApplicationContext("/applicationContext.xml") {
-		@Override
-		public ClassLoader getClassLoader() {
-			return SpringTestService.class.getClassLoader();
-		}
-	};
-	
-	service = (Service)applicationContext.getBean("service");
+	if (System.getProperty("REMOTING_TEST_CLIENT_ENV") == null) {
+		DriverManager.registerDriver(new Driver());
+		Connection connection = DriverManager.getConnection("jdbc:h2:~/test");
+		new FileExecutor(getClass().getResourceAsStream("/h2/drop.sql"), connection, false).execute();
+		new FileExecutor(getClass().getResourceAsStream("/h2/create.sql"), connection, true).execute();
+		connection.close();
+		
+		SpringTestService.context = bundleContext;
+		SpringTestService.instance = this;
+		applicationContext = new ClassPathXmlApplicationContext("/applicationContext.xml") {
+			@Override
+			public ClassLoader getClassLoader() {
+				return SpringTestService.class.getClassLoader();
+			}
+		};
+		
+		service = (Service)applicationContext.getBean("service");
+	}
 }
 
 public void stop(BundleContext bundleContext) throws Exception {
