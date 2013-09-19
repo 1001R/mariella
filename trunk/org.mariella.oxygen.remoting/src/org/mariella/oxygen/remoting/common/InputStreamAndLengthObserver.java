@@ -1,4 +1,4 @@
-package org.mariella.oxygen.remoting.http.common;
+package org.mariella.oxygen.remoting.common;
 
 public interface InputStreamAndLengthObserver {
 

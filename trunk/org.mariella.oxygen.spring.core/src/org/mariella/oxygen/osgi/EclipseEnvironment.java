@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.mariella.oxygen.basic_impl.BundleClassResolver;
 import org.mariella.oxygen.runtime.core.OxyConnectionProvider;
 import org.mariella.oxygen.runtime.impl.EnvironmentImpl;
 import org.mariella.oxygen.runtime.impl.OxyDataSourceConnectionProvider;
@@ -38,7 +39,7 @@ public void initialize(String emName, Map<?, ?> properties) {
 			throw new IllegalStateException("Could not find any META-INF/persistence.xml having name " + emName);
 		}
 		
-		persistenceClassResolver = BundleClassResolver.create();
+		persistenceClassResolver = new BundleClassResolver();
 		createSchemaMapping();
 	} catch (Throwable t) {
 		throw new PersistenceException(t);

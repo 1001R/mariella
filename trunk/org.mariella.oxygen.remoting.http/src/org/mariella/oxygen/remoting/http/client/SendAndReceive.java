@@ -1,13 +1,12 @@
 package org.mariella.oxygen.remoting.http.client;
 
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InterruptedIOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.ObjectStreamClass;
 import java.io.OutputStream;
 import java.io.SequenceInputStream;
 import java.net.ConnectException;
@@ -26,20 +25,17 @@ import java.util.logging.Logger;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.auth.Credentials;
-import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.util.EntityUtils;
-import org.mariella.oxygen.basic_core.ClassResolver;
+import org.mariella.oxygen.remoting.common.InputStreamAndLength;
+import org.mariella.oxygen.remoting.common.InputStreamAndLengthObserver;
+import org.mariella.oxygen.remoting.common.Invoker;
 import org.mariella.oxygen.remoting.http.common.HttpInputStreamWrapper;
 import org.mariella.oxygen.remoting.http.common.HttpRemoting;
-import org.mariella.oxygen.remoting.http.common.InputStreamAndLength;
-import org.mariella.oxygen.remoting.http.common.InputStreamAndLengthObserver;
 import org.mariella.oxygen.remoting.http.common.InputStreamPlaceholder;
-import org.mariella.oxygen.remoting.http.common.RemoteCall;
 
 public class SendAndReceive {
 	
@@ -79,14 +75,11 @@ public class SendAndReceive {
 	 * @author Rufus Team Member
 	 */
 	class ReplacingObjectOutputStream extends ObjectOutputStream {
-		protected final RemoteCall call;
-		
 		private Set<Object> objects = new HashSet<>();
 		private Map<String, ObjectStatistic> typeStatistic = new HashMap<>();
 
-		public ReplacingObjectOutputStream(OutputStream out, RemoteCall call) throws IOException {
+		public ReplacingObjectOutputStream(OutputStream out) throws IOException {
 			super(out);
-			this.call = call;
 			enableReplaceObject(true);
 		}
 		
@@ -126,35 +119,39 @@ public class SendAndReceive {
 		}
 	}
 	
-	private final ClassResolver classResolver;
+	private final URL url;
+	private final boolean tryReconnect;
+	protected final Invoker<?> invoker;
+	
 	private List<SendAndReceiveListener> listeners = new ArrayList<>();
 	private volatile boolean cancelRequest = false;
 	private int maxTries = 1;
 	private long waitForNextRetry = -1L;
-
-public SendAndReceive(ClassResolver classResolver) {
-	this.classResolver = classResolver;
+	
+public SendAndReceive(URL url, boolean tryReconnect, Invoker<?> invoker) {
+	this.url = url;
+	this.tryReconnect = tryReconnect;
+	this.invoker = invoker;
 	if (HttpRemoting.getInstance().getSendAndReceiveInitializer() != null) {
 		HttpRemoting.getInstance().getSendAndReceiveInitializer().initialize(this);
 	}
-}
-
-protected void preparePost(RemoteCall<?> call, HttpPost httpPost) {
 }
 
 protected boolean isInputStreamResult() {
 	return false;
 }
 
-public SendAndReceiveResult sendAndReceive(HttpClient httpclient, RemoteCall call, Invoker invoker) throws SendAndReceiveException, IOException, ClassNotFoundException, InterruptedException {
+protected void preparePost(HttpPost httpPost) {
+}
+
+public void sendAndReceive(HttpClient httpclient) throws SendAndReceiveException, IOException, ClassNotFoundException, InterruptedException {
 	
 	HttpRemoting.getInstance().addCurrentSendAndReceive(this);
 	HttpPost httpPost = null;
 	try {
 		
-		URL url = new URL(call.getUrl());
 		httpPost = new HttpPost(url.toExternalForm());
-		HttpEntity requestBody = buildRequestBody(call);
+		HttpEntity requestBody = buildRequestBody();
 		
 		final HttpPost post = httpPost;
 		if (requestBody instanceof AbortableInputStreamEntity) {
@@ -168,26 +165,26 @@ public SendAndReceiveResult sendAndReceive(HttpClient httpclient, RemoteCall cal
 		
 		httpPost.setEntity(requestBody);
 		
-		preparePost(call, httpPost);
+		preparePost(httpPost);
 
-		HttpResponse response = executeRetry(httpclient, httpPost, call);
+		HttpResponse response = executeRetry(httpclient, httpPost);
 		if (response.getStatusLine().getStatusCode() != 200) {
 			throw new SendAndReceiveException(response.getStatusLine().getStatusCode(), response.getStatusLine().toString());
 		}
 		
 		HttpEntity httpEntity = response.getEntity();
-		Object result = readResult(httpEntity.getContent());
+
+		InputStream resultIn = httpEntity.getContent();
+		invoker.readResult(resultIn);
 		
-		// consume the connection immediately if content stream is not needed
-		InputStream content;
-		if(call instanceof RemoteCommandCall && ((RemoteCommandCall) call).getCommand() instanceof InputStreamProvidingCommand) {
-			content = new HttpInputStreamWrapper(httpPost, httpEntity);
+		if (invoker.getResult() instanceof InputStreamAndLength) {
+			InputStreamAndLength isAndLen = (InputStreamAndLength)invoker.getResult();
+			isAndLen.setInputStream(new HttpInputStreamWrapper(httpPost, httpEntity));
+			invoker.setResult(isAndLen);
 		} else {
-			content = httpEntity.getContent();
+			// consume the connection immediately if content stream is not needed
 			EntityUtils.consume(httpEntity); // put's the connection back to the pool
 		}
-		return new SendAndReceiveResult(result, content);
-		
 	} catch (ConnectException ex) {
 		if (httpPost != null) {
 			httpPost.abort();
@@ -205,7 +202,7 @@ public SendAndReceiveResult sendAndReceive(HttpClient httpclient, RemoteCall cal
 	
 }
 
-private HttpResponse executeRetry(HttpClient httpclient, HttpPost httppost, RemoteCall call) throws InterruptedException, IOException {
+private HttpResponse executeRetry(HttpClient httpclient, HttpPost httppost) throws InterruptedException, IOException {
 	for (int i=0; i<maxTries && !cancelRequest; i++) {
 		try {
 			HttpResponse response = httpclient.execute(httppost);
@@ -219,7 +216,7 @@ private HttpResponse executeRetry(HttpClient httpclient, HttpPost httppost, Remo
 			log.log(Level.INFO, "Send/Receive has been canceled");
 			throw ce;
 		} catch (ConnectException ce) {
-			if (!call.isTryReconnect())
+			if (!tryReconnect)
 				break;
 			if (cancelRequest) {
 				log.log(Level.INFO, "Could not connect to " + httppost.getURI() + ". Connect has been canceled.");
@@ -242,7 +239,7 @@ private HttpResponse executeRetry(HttpClient httpclient, HttpPost httppost, Remo
 	
 	fireConnectFailed(maxTries - 1);
 	String msg = "Could not connect to repository.";
-	if (call.isTryReconnect() && maxTries > 1) {
+	if (tryReconnect && maxTries > 1) {
 		msg += " Number of tries: " + maxTries + ", waiting " + (waitForNextRetry / 1000L) + " seconds each time.";
 	}
 	throw new ConnectException(msg);
@@ -278,29 +275,20 @@ public void cancelConnect() {
 	Thread.currentThread().interrupt();
 }
 
-private Object readResult(InputStream content) throws IOException, ClassNotFoundException {
-	ObjectInputStream ois = new ObjectInputStream(content) {
-		@Override
-		protected Class<?> resolveClass(ObjectStreamClass desc) throws IOException, ClassNotFoundException {
-			return classResolver.resolveClass(desc.getName());
-		}
-	};
-	Object result = ois.readObject();
-	return result;
-}
-
-private HttpEntity buildRequestBody(RemoteCall call) throws IOException {
+private HttpEntity buildRequestBody() throws IOException {
 	ByteArrayOutputStream out = new ByteArrayOutputStream();
-	ReplacingObjectOutputStream oos = new ReplacingObjectOutputStream(out, call);
-	oos.writeObject(call);
+	ReplacingObjectOutputStream oos = new ReplacingObjectOutputStream(out);
+
+	invoker.invoke(oos);
 	oos.close();
 	byte[] callBytes = out.toByteArray();
-	if (call instanceof RemoteCommandCall && ((RemoteCommandCall)call).getCommand() instanceof InputStreamProcessingCommand) {
-		InputStreamProcessingCommand cmd = (InputStreamProcessingCommand)((RemoteCommandCall)call).getCommand();
+	
+	if (invoker.getPostedContent() != null) {
 		InputStream in1 = new ByteArrayInputStream(callBytes);
-		InputStreamAndLength abortable = cmd.getProcessedInputStream();
+		InputStreamAndLength abortable = invoker.getPostedContent();
 		InputStream in2 = abortable.getInputStream();
-		final AbortableInputStreamEntity entity = new AbortableInputStreamEntity(new SequenceInputStream(in1, in2), cmd.getProcessedInputStream().getLength() + callBytes.length);
+		final AbortableInputStreamEntity entity = new AbortableInputStreamEntity(new SequenceInputStream(in1, in2), 
+				invoker.getPostedContent().getLength() + callBytes.length);
 		abortable.setObserver(new InputStreamAndLengthObserver() {
 			@Override
 			public void streamingAborted() {
@@ -309,6 +297,7 @@ private HttpEntity buildRequestBody(RemoteCall call) throws IOException {
 		});
 		return entity;
 	}
+	
 	System.out.println("  POST objectcount: "+oos.getNumberOfObjects());
 	System.out.println("  POST size: "+callBytes.length+" bytes");
 	List<String> types = new ArrayList<>(oos.getTypeStatistic().keySet());

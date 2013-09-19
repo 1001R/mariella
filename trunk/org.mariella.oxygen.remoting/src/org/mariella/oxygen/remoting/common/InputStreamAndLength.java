@@ -1,4 +1,4 @@
-package org.mariella.oxygen.remoting.http.common;
+package org.mariella.oxygen.remoting.common;
 
 import java.io.InputStream;
 import java.io.Serializable;
@@ -7,9 +7,9 @@ import java.io.Serializable;
 public class InputStreamAndLength implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	// replaced by InputStreamPlaceholder, needs to be non-transient
-	private InputStream inputStream;
 	private long length;
+
+	private transient InputStream inputStream;
 	private transient InputStreamAndLengthObserver observer = null;
 	
 	public InputStreamAndLength(InputStream inputStream, long inputStreamLength) {
