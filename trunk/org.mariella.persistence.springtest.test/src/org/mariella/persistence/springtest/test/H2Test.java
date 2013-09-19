@@ -11,7 +11,7 @@ import org.mariella.oxygen.basic_impl.OxyClientEntityManagerImpl;
 import org.mariella.oxygen.remoting.common.RemotingClassResolver;
 import org.mariella.persistence.schema.SchemaDescription;
 import org.mariella.persistence.springtest.model.Person;
-import org.mariella.persistence.springtest.service.CommandInvoker;
+import org.mariella.persistence.springtest.service.TestCommandInvoker;
 import org.mariella.persistence.springtest.service.LoadExtendedPersonCommand;
 import org.mariella.persistence.springtest.service.LoadPersonCommand;
 import org.mariella.persistence.springtest.service.SpringTestService;
@@ -23,6 +23,7 @@ public class H2Test {
 public static void dispose() throws SQLException {
 }
 
+
 @Test
 public void test() throws Exception {
 	SpringTestService.service.test();
@@ -32,14 +33,13 @@ public void test() throws Exception {
 	org.mariella.oxygen.basic_core.ClassResolver classResolver = new RemotingClassResolver();
 	clientEntityManager = new OxyClientEntityManagerImpl(schemaDescr, classResolver);
 	OxyObjectPool pool = clientEntityManager.getObjectPool();
-
-	CommandInvoker invoker;
+	TestCommandInvoker invoker;
 	
 	// entitymgr, pool, ...
 	LoadPersonCommand command = new LoadPersonCommand(pool);
 	command.setId("P1");
 	
-	invoker = new CommandInvoker(new RemotingClassResolver());
+	invoker = new TestCommandInvoker(new RemotingClassResolver());
 	invoker.setObjectPool(command.getObjectPool());
 	invoker.setCommand(command);
 	invoker.invoke();
@@ -52,7 +52,8 @@ public void test() throws Exception {
 	LoadExtendedPersonCommand command2 = new LoadExtendedPersonCommand(pool);
 	command2.setPerson(person);
 	
-	invoker = new CommandInvoker(new RemotingClassResolver());
+	invoker = new TestCommandInvoker(new RemotingClassResolver());
+	invoker.setSendObjectPool(false);
 	invoker.setObjectPool(command2.getObjectPool());
 	invoker.setCommand(command2);
 	invoker.invoke();
