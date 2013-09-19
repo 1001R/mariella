@@ -25,8 +25,9 @@ public Object getPersistentIdentityForEntity(Object entity);
 
 public RuntimeException createRuntimeException(Throwable t);
 
-public void mergeRelated(OxyObjectPool sourcePool) throws Exception;
-public void mergeRelated(OxyObjectPool sourcePool, Object customContext) throws Exception;
+public void mergeRelated(OxyObjectPool sourcePool);
+public void mergeRelated(OxyObjectPool sourcePool, Object customContext);
+public void merge(OxyObjectPool sourcePool);
 public Object mergeEntity(OxyObjectPool sourcePool, Object sourceEntity);
 
 public Object getAttribute(String attributeName);

@@ -23,8 +23,16 @@ public abstract class Invoker<T> {
 		protected Object resolveObject(Object obj) throws IOException {
 			if (obj instanceof ResultEntityPlaceholder) {
 				ResultEntityPlaceholder id = (ResultEntityPlaceholder)obj;
-				Object entity = objectPool.getEntityStateForPoolId(id.poolIdentity).getEntity();
-				return entity;
+				if(sendObjectPool) {
+					return objectPool.getEntityStateForPoolId(id.poolIdentity).getEntity();
+				} else {
+					Object entity = objectPool.getEntityForPersistentId(id.persistentIdentity);
+					if(entity == null) {
+						entity = obj;
+						objectPool.getModificationTracker().addExistingParticipant(entity);
+					}
+					return entity;
+				}
 			}
 			return super.resolveObject(obj);
 		}
@@ -34,8 +42,10 @@ public abstract class Invoker<T> {
 		}
 
 	}
-	
+
+	private boolean sendObjectPool = true;
 	private OxyObjectPool objectPool;
+	private InputStreamAndLength postedContent = null;
 	private T command;
 	private Object result;
 	
@@ -61,6 +71,14 @@ public void setCommand(T command) {
 	this.command = command;
 }
 
+public boolean isSendObjectPool() {
+	return sendObjectPool;
+}
+
+public void setSendObjectPool(boolean sendObjectPool) {
+	this.sendObjectPool = sendObjectPool;
+}
+
 public Object getResult() {
 	return result;
 }
@@ -70,25 +88,56 @@ public ClassResolver getClassResolver() {
 }
 
 public void invoke(ObjectOutputStream outputStream) throws IOException {
-	outputStream.writeObject(command);
+	if(sendObjectPool) {
+		outputStream.writeObject(getObjectPool());
+	}
+	outputStream.writeObject(getCommand());
 }
 
-public void readResult(ObjectInputStream inputStream) throws IOException, ClassNotFoundException {
-	OxyObjectPool remotePool = (OxyObjectPool)inputStream.readObject();
-	byte[] serializedResult = (byte[])inputStream.readObject();
+public void readResult(InputStream inputStream) throws IOException, ClassNotFoundException {
+	int resultFlags = inputStream.read();
+	@SuppressWarnings("unused")
+	boolean inputStreamResult = (resultFlags & ResultFlags.STREAM) != 0;
 	
+	ObjectInputStream ois = new ObjectInputStream(inputStream) {
+		protected java.lang.Class<?> resolveClass(java.io.ObjectStreamClass desc) throws IOException ,ClassNotFoundException {
+			return getClassResolver().resolveClass(desc.getName());	
+		}
+	};
+
+	OxyObjectPool remotePool = (OxyObjectPool)ois.readObject();
 	if(remotePool != null) {
 		mergeIntoMyPool(remotePool);
 	}
-
+	
+	byte[] serializedResult = (byte[])ois.readObject();
 	InputStream is = new ByteArrayInputStream(serializedResult);
 	ResultObjectInputStream ris = new ResultObjectInputStream(is);
 	result = ris.readObject();
+
+	if (result instanceof InputStreamAndLength)
+		((InputStreamAndLength)result).setInputStream(inputStream);
 }
 
-private void mergeIntoMyPool(OxyObjectPool otherPool) throws ClassNotFoundException {
+protected void mergeIntoMyPool(OxyObjectPool otherPool) throws ClassNotFoundException {
 	((OxyObjectPoolImpl)otherPool).setEntityManager((OxyEntityManagerImpl) objectPool.getEntityManager());
 	objectPool.mergeRelated(otherPool);
+}
+
+public InputStreamAndLength getPostedContent() {
+	return postedContent;
+}
+
+public void setPostedContent(InputStreamAndLength postedContent) {
+	this.postedContent = postedContent;
+}
+
+public boolean isExpectsReturnedContent() {
+	return false;
+}
+
+public void setResult(Object result) {
+	this.result = result;
 }
 
 }

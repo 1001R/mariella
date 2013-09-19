@@ -65,7 +65,8 @@ public OxyObjectPool getObjectPool() {
 
 public void setObjectPool(OxyObjectPool objectPool) {
 	this.objectPool = (OxyObjectPoolImpl)objectPool;
-	this.objectPool.setEntityManager(this);
+	if (this.objectPool != null)
+		this.objectPool.setEntityManager(this);
 }
 
 public ClassDescription getObjectDescription(Class<?> entityClass) {

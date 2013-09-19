@@ -130,11 +130,11 @@ public boolean containsPoolIdentity(long poolIdentity) {
 	return poolIdentityMap.containsKey(poolIdentity);
 }
 
-public void mergeRelated(OxyObjectPool sourcePool) throws Exception  {
+public void mergeRelated(OxyObjectPool sourcePool) {
 	mergeRelated(sourcePool, null);
 }
 
-public void mergeRelated(OxyObjectPool sourcePool, Object customContext) throws Exception  {
+public void mergeRelated(OxyObjectPool sourcePool, Object customContext) {
 	merging = true;
 	getModificationTracker().setEnabled(false);
 	try {
@@ -179,6 +179,9 @@ public void mergeRelated(OxyObjectPool sourcePool, Object customContext) throws 
 		getModificationTracker().setEnabled(true);
 		merging = false;
 	}
+}
+
+public void merge(OxyObjectPool sourcePool) {
 }
 
 public Object mergeEntity(OxyObjectPool sourcePool, Object sourceEntity) {
