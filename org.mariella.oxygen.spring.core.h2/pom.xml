@@ -12,7 +12,7 @@
 
 	<groupId>org.mariella.oxygen</groupId>
 	<artifactId>org.mariella.oxygen.spring.core.h2</artifactId>
-	<version>1.1.1</version>
+	<version>1.1.2</version>
 	<packaging>eclipse-plugin</packaging>
 
 </project>
