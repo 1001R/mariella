@@ -2,7 +2,7 @@
 <feature
       id="org.mariella.oxygen.build"
       label="Oxygen Build Feature"
-      version="1.1.1">
+      version="1.1.2">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
