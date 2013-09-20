@@ -2,7 +2,7 @@
 <feature
       id="org.mariella.oxygen.feature"
       label="Oxygen Feature"
-      version="1.1.1">
+      version="1.1.2">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
@@ -20,29 +20,43 @@
          id="org.mariella.oxygen.220"
          download-size="0"
          install-size="0"
-         version="1.1.1"
+         version="1.1.2"
          unpack="false"/>
 
    <plugin
          id="org.mariella.oxygen.core"
          download-size="0"
          install-size="0"
-         version="1.1.1"
+         version="1.1.2"
          unpack="false"/>
 
    <plugin
          id="org.mariella.oxygen.spring.core"
          download-size="0"
          install-size="0"
-         version="1.1.1"
+         version="1.1.2"
          unpack="false"/>
 
    <plugin
          id="org.mariella.oxygen.spring.core.h2"
          download-size="0"
          install-size="0"
-         version="1.1.1"
+         version="1.1.2"
          fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="org.mariella.oxygen.remoting"
+         download-size="0"
+         install-size="0"
+         version="1.1.2"
+         unpack="false"/>
+
+   <plugin
+         id="org.mariella.oxygen.remoting.http"
+         download-size="0"
+         install-size="0"
+         version="1.1.2"
          unpack="false"/>
 
 </feature>

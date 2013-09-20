@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Http
 Bundle-SymbolicName: org.mariella.oxygen.remoting.http;singleton:=true
-Bundle-Version: 1.0.0
+Bundle-Version: 1.1.2
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: org.apache.http;bundle-version="4.2.1",
  org.mariella.oxygen.remoting;bundle-version="1.0.0",
