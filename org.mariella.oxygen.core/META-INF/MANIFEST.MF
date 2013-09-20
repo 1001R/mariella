@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: org.mariella.oxygen.core
 Bundle-SymbolicName: org.mariella.oxygen.core
-Bundle-Version: 1.1.1
+Bundle-Version: 1.1.2
 Export-Package: org.mariella.oxygen.basic_core,
  org.mariella.oxygen.basic_impl,
  org.mariella.oxygen.util
