@@ -32,9 +32,18 @@ public abstract class AbstractModificationTrackerImpl implements PropertyChangeL
 	
 	private SavePointSupport savePointSupport = null;
 
+	private transient Thread thread;
+
 public AbstractModificationTrackerImpl() {
 	super();
+	thread = Thread.currentThread();
 }
+
+
+public void setThread(Thread thread) {
+	this.thread = thread;
+}
+
 
 public abstract SchemaDescription getSchemaDescription();
 
@@ -226,6 +235,11 @@ public void flushed() {
 }
 
 public void propertyChange(PropertyChangeEvent event) {
+	if (thread == null)
+		throw new IllegalStateException();
+	if (thread != Thread.currentThread())
+		throw new RuntimeException("ILLEGAL THREAD ACESS");
+
 	if(enabled) {
 		Object participant = (Object)event.getSource();
 		ClassDescription cd = getSchemaDescription().getClassDescription(participant.getClass().getName());
