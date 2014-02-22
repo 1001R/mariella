@@ -60,6 +60,10 @@ public void setPrimaryUpdateTable(Table primaryUpdateTable) {
 	this.primaryUpdateTable = primaryUpdateTable;
 }
 
+public Table getMainUpdateTable() {
+	return primaryUpdateTable;
+}
+
 public List<PropertyMapping> getHierarchyPropertyMappings(){
 	return hierarchyPropertyMappings;
 }

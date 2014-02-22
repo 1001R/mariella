@@ -5,12 +5,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import org.mariella.persistence.database.ConnectionCallback;
 import org.mariella.persistence.database.PreparedStatementBuilder;
 import org.mariella.persistence.mapping.ClassMapping;
+import org.mariella.persistence.mapping.IBatchStrategy;
 import org.mariella.persistence.mapping.SchemaMapping;
 import org.mariella.persistence.runtime.MariellaPersistence;
 import org.mariella.persistence.runtime.ModificationInfo;
@@ -25,12 +27,22 @@ public class Persistor {
 	private Logger logger = MariellaPersistence.logger;
 
 	private Map<Object, ObjectPersistor> persistorMap = new HashMap<Object, ObjectPersistor>();
+	private Class<?>[] orderedBatchedClasses;
+	private PreparedStatementManager preparedStatementManager;
 
 public Persistor(SchemaMapping schemaMapping, DatabaseAccess databaseAccess, ModificationTracker modificationTracker) {
 	super();
 	this.schemaMapping = schemaMapping;
 	this.modificationTracker = modificationTracker;
 	this.databaseAccess = databaseAccess;
+	IBatchStrategy defaultBatchStrategy = schemaMapping.getDefaultBatchStrategy();
+	if (defaultBatchStrategy != null) {
+		this.orderedBatchedClasses = defaultBatchStrategy.getOrderedBatchClasses();
+	}
+}
+
+public void setOrderedBatchedClasses(Class<?>... persistentClasses) {
+	this.orderedBatchedClasses = persistentClasses;
 }
 
 public SchemaMapping getSchemaMapping() {
@@ -59,43 +71,86 @@ public Collection<ObjectPersistor> getObjectPersistors() {
 	return persistorMap.values();
 }
 
+private void addTables(List<String> tables, ClassMapping classMapping) {
+	if (classMapping.getSuperClassMapping() != null) {
+		addTables(tables, classMapping.getSuperClassMapping());
+	}
+	if (classMapping != null && classMapping.getMainUpdateTable() != null && !tables.contains(classMapping.getMainUpdateTable().getName())) {
+		tables.add(classMapping.getMainUpdateTable().getName());
+	}
+}
+
 public void persist() {
-	for(ModificationInfo modificationInfo : new ArrayList<ModificationInfo>(modificationTracker.getModifications())) {
-		if(modificationInfo.getStatus() == ModificationInfo.Status.New) {
-			getObjectPersistor(modificationInfo.getObject()).generateKey();
-		}
-	}
+	try {
+		databaseAccess.doInConnection(new ConnectionCallback() {
+			@Override
+			public Object doInConnection(Connection connection) throws SQLException {
+				List<String> orderedBatchedTables = new ArrayList<String>();
+				if (orderedBatchedClasses != null) {
+					for (Class<?> persistentClass : orderedBatchedClasses) {
+						ClassMapping cm = schemaMapping.getClassMapping(persistentClass.getName());
+						addTables(orderedBatchedTables, cm);
+					}
+				}
+				preparedStatementManager = new PreparedStatementManager(connection, orderedBatchedTables);
+				
+				for(ModificationInfo modificationInfo : new ArrayList<ModificationInfo>(modificationTracker.getModifications())) {
+					if(modificationInfo.getStatus() == ModificationInfo.Status.New) {
+						getObjectPersistor(modificationInfo.getObject()).generateKey();
+					}
+				}
 
-	for(ModificationInfo modificationInfo : new ArrayList<ModificationInfo>(modificationTracker.getModifications())) {
-		if(modificationInfo.getStatus() != ModificationInfo.Status.NewRemoved) {
-			getObjectPersistor(modificationInfo.getObject()).persistPrimary();
-		}
-	}
+				for(ModificationInfo modificationInfo : new ArrayList<ModificationInfo>(modificationTracker.getModifications())) {
+					if(modificationInfo.getStatus() != ModificationInfo.Status.NewRemoved) {
+						getObjectPersistor(modificationInfo.getObject()).persistPrimary();
+					}
+				}
 
-	for(ModificationInfo modificationInfo : new ArrayList<ModificationInfo>(modificationTracker.getModifications())) {
-		if(modificationInfo.getStatus() != ModificationInfo.Status.NewRemoved) {
-			getObjectPersistor(modificationInfo.getObject()).persistSecondary();
-		}
-	}
+				try {
+					preparedStatementManager.executeAll();
+				} catch (SQLException ex) {
+					try {
+						preparedStatementManager.cloaseAll();
+					} catch (SQLException ex2) {
+						// ignore
+					}
+					throw ex;
+				}
 
+				for(ModificationInfo modificationInfo : new ArrayList<ModificationInfo>(modificationTracker.getModifications())) {
+					if(modificationInfo.getStatus() != ModificationInfo.Status.NewRemoved) {
+						getObjectPersistor(modificationInfo.getObject()).persistSecondary();
+					}
+				}
+
+				try {
+					preparedStatementManager.executeAll();
+				} catch (SQLException ex) {
+					try {
+						preparedStatementManager.cloaseAll();
+					} catch (SQLException ex2) {
+						// ignore
+					}
+					throw ex;
+				}
+				preparedStatementManager = null;
+				return null;
+			}
+		});
+	} catch (SQLException ex) {
+		throw new RuntimeException(ex);
+	}
 	modificationTracker.flushed();
 }
 
 public void execute(final PreparedStatementBuilder psb) {
 	psb.initialize();
 	getLogger().info(psb.getSqlDebugString());
+	psb.execute(preparedStatementManager);
 	try {
-		databaseAccess.doInConnection(
-			new ConnectionCallback() {
-				@Override
-				public Object doInConnection(Connection connection) throws SQLException {
-					psb.execute(connection);
-					return null;
-				}
-			}
-		);
-	} catch(SQLException e) {
-		throw new RuntimeException(e);
+		preparedStatementManager.executeAllIfMaxEntriesReached();
+	} catch (SQLException ex) {
+		throw new RuntimeException(ex);
 	}
 }
 

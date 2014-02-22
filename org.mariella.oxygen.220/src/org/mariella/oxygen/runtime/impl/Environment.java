@@ -9,6 +9,7 @@ import org.mariella.persistence.mapping.SchemaMapping;
 
 public interface Environment {
 	public static final String PERSISTENCE_BUILDER = "org.mariella.oxygen.persistenceBuilder";
+	public static final String DEFAULT_BATCH_STRATEGY = "org.mariella.persistence.defaultBatchStrategy";
 	public static final String IGNORE_DB_SCHEMA = DatabaseMetaDataDatabaseInfoProvider.class.getName() + ".ignoreSchema";
 	public static final String IGNORE_DB_CATALOG = DatabaseMetaDataDatabaseInfoProvider.class.getName() + ".ignoreCatalog";
 

@@ -50,6 +50,11 @@ public void setJoinUpdateTable(Table joinUpdateTable) {
 }
 
 @Override
+public Table getMainUpdateTable() {
+	return joinUpdateTable != null ? joinUpdateTable : super.getMainUpdateTable();
+}
+
+@Override
 public void initialize(ClassMappingInitializationContext context) {
 	super.initialize(context);
 	for(PrimaryKeyJoinColumn primaryKeyJoinColumn : primaryKeyJoinColumns.getPrimaryKeyJoinColumns()) {

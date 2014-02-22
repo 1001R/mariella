@@ -1,9 +1,9 @@
 package org.mariella.persistence.database;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import org.mariella.persistence.persistor.PreparedStatementManager;
 import org.mariella.persistence.persistor.Row;
 
 
@@ -14,7 +14,7 @@ public UpdateStatementBuilder(Row row) {
 }
 
 @Override
-public void execute(Connection connection) {
+public void execute(PreparedStatementManager psManager) {
 	StringBuilder b = new StringBuilder();
 	b.append("UPDATE ");
 	b.append(row.getTable().getName());
@@ -39,7 +39,7 @@ public void execute(Connection connection) {
 	}
 	
 	try {
-		PreparedStatement ps = connection.prepareStatement(b.toString());
+		PreparedStatement ps = psManager.prepareStatement(row.getTable().getName(), b.toString());
 		int index = 1;
 		for(Column column : row.getSetColumns()) {
 			if(!row.getTable().getPrimaryKey().contains(column)) {
@@ -51,11 +51,7 @@ public void execute(Connection connection) {
 			pk.setObject(ps, index, row.getProperty(pk));
 			index++;
 		}
-		try {
-			ps.executeUpdate();
-		} finally {
-			ps.close();
-		}
+		psManager.prepared(ps);
 	} catch(SQLException e) {
 		throw new RuntimeException(e);
 	}	

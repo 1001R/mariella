@@ -1,10 +1,10 @@
 package org.mariella.persistence.database;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.mariella.persistence.persistor.PreparedStatementManager;
 import org.mariella.persistence.persistor.Row;
 
 
@@ -17,7 +17,7 @@ public DeleteStatementBuilder(Row row) {
 public abstract List<Column> getColumnsForWhereClause();
 
 @Override
-public void execute(Connection connection) {
+public void execute(PreparedStatementManager psManager) {
 	StringBuilder b = new StringBuilder();
 	b.append("DELETE FROM ");
 	b.append(row.getTable().getName());
@@ -32,17 +32,13 @@ public void execute(Connection connection) {
 	}
 	
 	try {
-		PreparedStatement ps = connection.prepareStatement(b.toString());
+		PreparedStatement ps = psManager.prepareStatement(row.getTable().getName(), b.toString());
 		int index = 1;
 		for(Column column : getColumnsForWhereClause()) {
 			column.setObject(ps, index, row.getProperty(column));
 			index++;
 		}
-		try {
-			ps.executeUpdate();
-		} finally {
-			ps.close();
-		}
+		psManager.prepared(ps);
 	} catch(SQLException e) {
 		throw new RuntimeException(e);
 	}	
