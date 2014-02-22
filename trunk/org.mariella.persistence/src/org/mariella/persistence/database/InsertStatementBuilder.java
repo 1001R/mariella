@@ -17,7 +17,7 @@ public InsertStatementBuilder(Row row) {
 public void execute(PreparedStatementManager psManager) {
 	try {
 		String sql = getInsertString();
-		PreparedStatement ps = psManager.prepareStatement(row.getTable().getName(), sql);
+		PreparedStatement ps = psManager.prepareStatement(row.getTable().getName(), false, sql);
 		setParameters(ps);
 		psManager.prepared(ps);
 	} catch(SQLException e) {

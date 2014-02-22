@@ -60,7 +60,7 @@ public void execute(PreparedStatementManager psManager) {
 		}
 		b.append(")");
 		try {
-			PreparedStatement ps = psManager.prepareStatement(getTemplateRow().getTable().getName(), b.toString());
+			PreparedStatement ps = psManager.prepareStatement(getTemplateRow().getTable().getName(), false, b.toString());
 			try {
 				for(Row row : rows) {
 					int index = 1;

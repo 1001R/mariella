@@ -30,7 +30,7 @@ public void execute(PreparedStatementManager psManager) {
 	);
 	
 	try {
-		PreparedStatement ps = psManager.prepareStatement(row.getTable().getName(), sql);
+		PreparedStatement ps = psManager.prepareStatement(row.getTable().getName(), false, sql);
 		int index = 1;
 		for(Column pk : row.getTable().getPrimaryKey()) {
 			pk.setObject(ps, index, row.getProperty(pk));
