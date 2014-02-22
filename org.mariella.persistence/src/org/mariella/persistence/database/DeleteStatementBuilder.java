@@ -32,7 +32,7 @@ public void execute(PreparedStatementManager psManager) {
 	}
 	
 	try {
-		PreparedStatement ps = psManager.prepareStatement(row.getTable().getName(), b.toString());
+		PreparedStatement ps = psManager.prepareStatement(row.getTable().getName(), true, b.toString());
 		int index = 1;
 		for(Column column : getColumnsForWhereClause()) {
 			column.setObject(ps, index, row.getProperty(column));

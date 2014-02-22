@@ -39,7 +39,7 @@ public void execute(PreparedStatementManager psManager) {
 	}
 	
 	try {
-		PreparedStatement ps = psManager.prepareStatement(row.getTable().getName(), b.toString());
+		PreparedStatement ps = psManager.prepareStatement(row.getTable().getName(), false, b.toString());
 		int index = 1;
 		for(Column column : row.getSetColumns()) {
 			if(!row.getTable().getPrimaryKey().contains(column)) {

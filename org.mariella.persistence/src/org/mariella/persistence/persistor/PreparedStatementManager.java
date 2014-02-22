@@ -16,9 +16,11 @@ public class PreparedStatementManager {
 	private static class PreparedStatementEntry {
 		private String table;
 		private PreparedStatement preparedStatement;
+		private boolean delete;
 		
-		public PreparedStatementEntry(String table, PreparedStatement preparedStatement) {
+		public PreparedStatementEntry(String table, boolean delete, PreparedStatement preparedStatement) {
 			this.table = table;
+			this.delete = delete;
 			this.preparedStatement = preparedStatement;
 		}
 	}
@@ -34,13 +36,13 @@ public class PreparedStatementManager {
 		this.orderedBatchedTables = tableDependenyOrder;
 	}
 	
-	public PreparedStatement prepareStatement(String table, String sql) throws SQLException {
+	public PreparedStatement prepareStatement(String table, boolean delete, String sql) throws SQLException {
 		if (orderedBatchedTables.contains(table)) {
 			PreparedStatement ps = preparedStatementMap.get(sql);
 			if (ps == null) {
 				ps = connection.prepareStatement(sql);
 				preparedStatementMap.put(sql, ps);
-				preparedStatements.add(new PreparedStatementEntry(table, ps));
+				preparedStatements.add(new PreparedStatementEntry(table, delete, ps));
 			}
 			return ps;
 		} else {
@@ -66,9 +68,15 @@ public class PreparedStatementManager {
 			Collections.sort(preparedStatements, new Comparator<PreparedStatementEntry>() {
 				@Override
 				public int compare(PreparedStatementEntry o1, PreparedStatementEntry o2) {
-					int i1 = orderedBatchedTables.indexOf(o1.table);
-					int i2 = orderedBatchedTables.indexOf(o2.table);
-					return i1-i2; 
+					if (o1.delete != o2.delete) {
+						// execute deletes after insert/updates
+						return o1.delete ? 1 : -1;
+					} else {
+						int i1 = orderedBatchedTables.indexOf(o1.table);
+						int i2 = orderedBatchedTables.indexOf(o2.table);
+						// deletes are executed in the reverse order
+						return o1.delete ? i2-i1 : i1-i2;
+					}
 				}
 			});
 			Iterator<PreparedStatementEntry> psIt = preparedStatements.iterator();
@@ -98,7 +106,7 @@ public class PreparedStatementManager {
 	}
 	
 	public void executeAllIfMaxEntriesReached() throws SQLException {
-		if (rowsEntered > 5000) {
+		if (rowsEntered > 1000) {
 			executeAll();
 		}
 	}
@@ -124,8 +132,12 @@ public class PreparedStatementManager {
 		}
 	}
 
-	public PreparedStatement prepareSingleStatement(String sql, String[] columnNames) throws SQLException {
+	public PreparedStatement prepareSingleStatement(String sql) throws SQLException {
 		return connection.prepareStatement(sql);
+	}
+
+	public PreparedStatement prepareSingleStatement(String sql, String[] columnNames) throws SQLException {
+		return connection.prepareStatement(sql, columnNames);
 	}
 
 }
