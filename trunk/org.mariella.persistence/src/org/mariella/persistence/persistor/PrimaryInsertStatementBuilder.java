@@ -1,6 +1,5 @@
 package org.mariella.persistence.persistor;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,12 +18,12 @@ public PrimaryInsertStatementBuilder(ObjectPersistor objectPersistor, Row row) {
 }
 
 @Override
-public void execute(Connection connection) {
+public void execute(PreparedStatementManager psManager) {
 	try {
 		ClassMapping classMapping = objectPersistor.getClassMapping();
 		if(classMapping.getPrimaryKey().getGeneratedByDatabaseColumnMappings().length > 0) {
 			String sql = getInsertString();
-			PreparedStatement ps = connection.prepareStatement(sql, classMapping.getPrimaryKey().getGeneratedByDatabaseColumnNames());
+			PreparedStatement ps = psManager.prepareSingleStatement(sql, classMapping.getPrimaryKey().getGeneratedByDatabaseColumnNames());
 			try {
 				setParameters(ps);
 				ps.execute();
@@ -49,7 +48,7 @@ public void execute(Connection connection) {
 			}
 			return;
 		}
-		super.execute(connection);
+		super.execute(psManager);
 	} catch(SQLException e) {
 		throw new RuntimeException(e);
 	}

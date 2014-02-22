@@ -16,6 +16,7 @@ public class SchemaMapping {
 	protected final SchemaDescription schemaDescription;
 	protected final Schema schema;
 	private Map<String, ClassMapping> classMappingMap = new HashMap<String, ClassMapping>();
+	private IBatchStrategy defaultBatchStrategy;
 
 public SchemaMapping(SchemaDescription schemaDescription, Schema schema) {
 	super();
@@ -29,6 +30,14 @@ public SchemaDescription getSchemaDescription() {
 
 public Schema getSchema() {
 	return schema;
+}
+
+public IBatchStrategy getDefaultBatchStrategy() {
+	return defaultBatchStrategy;
+}
+
+public void setDefaultBatchStrategy(IBatchStrategy defaultBatchStrategy) {
+	this.defaultBatchStrategy = defaultBatchStrategy;
 }
 
 public void initialize() {

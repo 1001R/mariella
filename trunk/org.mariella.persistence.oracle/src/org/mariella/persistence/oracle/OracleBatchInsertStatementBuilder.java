@@ -1,15 +1,13 @@
 package org.mariella.persistence.oracle;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import oracle.jdbc.OraclePreparedStatement;
-
 import org.mariella.persistence.database.BatchInsertStatementBuilder;
 import org.mariella.persistence.database.Column;
+import org.mariella.persistence.persistor.PreparedStatementManager;
 import org.mariella.persistence.persistor.Row;
 
 
@@ -43,7 +41,7 @@ private boolean isBatch() {
 }
 
 @Override
-public void execute(Connection connection) {
+public void execute(PreparedStatementManager psManager) {
 	if(!rows.isEmpty()) {
 		StringBuilder b = new StringBuilder();
 		b.append("INSERT INTO ");
@@ -62,10 +60,7 @@ public void execute(Connection connection) {
 		}
 		b.append(")");
 		try {
-			PreparedStatement ps = connection.prepareStatement(b.toString());
-			if(isBatch()) {
-				((OraclePreparedStatement)ps).setExecuteBatch(500);
-			}
+			PreparedStatement ps = psManager.prepareStatement(getTemplateRow().getTable().getName(), b.toString());
 			try {
 				for(Row row : rows) {
 					int index = 1;
@@ -73,9 +68,8 @@ public void execute(Connection connection) {
 						column.setObject(ps, index, row.getProperty(column));
 						index++;
 					}
-					ps.executeUpdate();
+					psManager.prepared(ps);
 				}
-				((OraclePreparedStatement)ps).sendBatch();
 			} finally {
 				ps.close();
 			}

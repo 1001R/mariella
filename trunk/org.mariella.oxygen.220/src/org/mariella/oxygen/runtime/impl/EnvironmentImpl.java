@@ -11,6 +11,7 @@ import org.mariella.persistence.annotations.mapping_builder.DatabaseInfoProvider
 import org.mariella.persistence.annotations.mapping_builder.DatabaseMetaDataDatabaseInfoProvider;
 import org.mariella.persistence.annotations.mapping_builder.PersistenceBuilder;
 import org.mariella.persistence.generic.GenericPersistenceBuilder;
+import org.mariella.persistence.mapping.IBatchStrategy;
 import org.mariella.persistence.mapping.OxyUnitInfo;
 import org.mariella.persistence.mapping.SchemaMapping;
 
@@ -40,6 +41,14 @@ protected void createSchemaMapping() {
 		} finally {
 			connectionProvider.close();
 		}
+
+		String defaultBatchStrategyClassName = getStringProperty(DEFAULT_BATCH_STRATEGY);
+		if (defaultBatchStrategyClassName != null) {
+			Class<?> defaultBatchstrategyClass = persistenceClassResolver.resolveClass(defaultBatchStrategyClassName);
+			IBatchStrategy defaultBatchStrategy = (IBatchStrategy) defaultBatchstrategyClass.newInstance();
+			schemaMapping.setDefaultBatchStrategy(defaultBatchStrategy);
+		}
+		
 	} catch(Exception e) {
 		throw new IllegalStateException("Unable to create schema mapping", e);
 	}

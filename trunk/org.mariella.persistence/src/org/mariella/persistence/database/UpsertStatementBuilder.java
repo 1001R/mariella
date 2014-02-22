@@ -1,11 +1,11 @@
 package org.mariella.persistence.database;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.mariella.persistence.persistor.PreparedStatementManager;
 import org.mariella.persistence.persistor.Row;
 
 public class UpsertStatementBuilder extends SingleRowPreparedStatementBuilder {
@@ -19,7 +19,7 @@ public UpsertStatementBuilder(Row row) {
 }
 
 @Override
-public void execute(Connection connection) {
+public void execute(PreparedStatementManager psManager) {
 	String sql = buildSqlString(
 		new BuildCallback() {
 			@Override
@@ -30,7 +30,7 @@ public void execute(Connection connection) {
 	);
 	
 	try {
-		PreparedStatement ps = connection.prepareStatement(sql);
+		PreparedStatement ps = psManager.prepareStatement(row.getTable().getName(), sql);
 		int index = 1;
 		for(Column pk : row.getTable().getPrimaryKey()) {
 			pk.setObject(ps, index, row.getProperty(pk));
@@ -46,11 +46,7 @@ public void execute(Connection connection) {
 				index++;
 			}
 		}
-		try {
-			ps.executeUpdate();
-		} finally {
-			ps.close();
-		}
+		psManager.prepared(ps);
 	} catch(SQLException e) {
 		throw new RuntimeException(e);
 	}	
