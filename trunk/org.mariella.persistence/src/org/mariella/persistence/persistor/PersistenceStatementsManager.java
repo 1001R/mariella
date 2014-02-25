@@ -61,6 +61,7 @@ public class PersistenceStatementsManager {
 			if (batchMode == BatchMode.batched) {
 				MariellaPersistence.logger.info("Batched over "+batchSize+" rows: "+sql);
 				preparedStatement.executeBatch();
+				batchSize = 0;
 			}
 		}
 
