@@ -7,14 +7,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import org.mariella.persistence.database.ConnectionCallback;
 import org.mariella.persistence.database.PreparedStatementBuilder;
 import org.mariella.persistence.mapping.ClassMapping;
 import org.mariella.persistence.mapping.IBatchStrategy;
 import org.mariella.persistence.mapping.SchemaMapping;
-import org.mariella.persistence.runtime.MariellaPersistence;
 import org.mariella.persistence.runtime.ModificationInfo;
 import org.mariella.persistence.runtime.ModificationTracker;
 
@@ -24,11 +22,10 @@ public class Persistor {
 	private final ModificationTracker modificationTracker;
 	private final DatabaseAccess databaseAccess;
 
-	private Logger logger = MariellaPersistence.logger;
-
 	private Map<Object, ObjectPersistor> persistorMap = new HashMap<Object, ObjectPersistor>();
 	private Class<?>[] orderedBatchedClasses;
-	private PreparedStatementManager preparedStatementManager;
+	private int maxBatchSize = 500;
+	private PersistenceStatementsManager preparedStatementManager;
 
 public Persistor(SchemaMapping schemaMapping, DatabaseAccess databaseAccess, ModificationTracker modificationTracker) {
 	super();
@@ -38,11 +35,16 @@ public Persistor(SchemaMapping schemaMapping, DatabaseAccess databaseAccess, Mod
 	IBatchStrategy defaultBatchStrategy = schemaMapping.getDefaultBatchStrategy();
 	if (defaultBatchStrategy != null) {
 		this.orderedBatchedClasses = defaultBatchStrategy.getOrderedBatchClasses();
+		this.maxBatchSize = defaultBatchStrategy.getMaxBatchSize();
 	}
 }
 
 public void setOrderedBatchedClasses(Class<?>... persistentClasses) {
 	this.orderedBatchedClasses = persistentClasses;
+}
+
+public void setMaxBatchSize(int maxBatchSize) {
+	this.maxBatchSize = maxBatchSize;
 }
 
 public SchemaMapping getSchemaMapping() {
@@ -92,7 +94,7 @@ public void persist() {
 						addTables(orderedBatchedTables, cm);
 					}
 				}
-				preparedStatementManager = new PreparedStatementManager(connection, orderedBatchedTables);
+				preparedStatementManager = new PersistenceStatementsManager(connection, maxBatchSize, orderedBatchedTables);
 				
 				for(ModificationInfo modificationInfo : new ArrayList<ModificationInfo>(modificationTracker.getModifications())) {
 					if(modificationInfo.getStatus() == ModificationInfo.Status.New) {
@@ -145,21 +147,12 @@ public void persist() {
 
 public void execute(final PreparedStatementBuilder psb) {
 	psb.initialize();
-	getLogger().info(psb.getSqlDebugString());
 	psb.execute(preparedStatementManager);
 	try {
-		preparedStatementManager.executeAllIfMaxEntriesReached();
+		preparedStatementManager.executeBatchedIfMaxEntriesReached();
 	} catch (SQLException ex) {
 		throw new RuntimeException(ex);
 	}
-}
-
-public Logger getLogger() {
-	return logger;
-}
-
-public void setLogger(Logger logger) {
-	this.logger = logger;
 }
 
 }

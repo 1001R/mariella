@@ -1,14 +1,14 @@
 package org.mariella.persistence.oracle;
 
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.mariella.persistence.database.BatchInsertStatementBuilder;
 import org.mariella.persistence.database.Column;
-import org.mariella.persistence.persistor.PreparedStatementManager;
+import org.mariella.persistence.persistor.PersistenceStatementsManager;
 import org.mariella.persistence.persistor.Row;
+import org.mariella.persistence.persistor.PersistenceStatementsManager.PersistenceStatement;
 
 
 public class OracleBatchInsertStatementBuilder implements BatchInsertStatementBuilder{
@@ -41,7 +41,7 @@ private boolean isBatch() {
 }
 
 @Override
-public void execute(PreparedStatementManager psManager) {
+public void execute(PersistenceStatementsManager psManager) {
 	if(!rows.isEmpty()) {
 		StringBuilder b = new StringBuilder();
 		b.append("INSERT INTO ");
@@ -60,16 +60,17 @@ public void execute(PreparedStatementManager psManager) {
 		}
 		b.append(")");
 		try {
-			PreparedStatement ps = psManager.prepareStatement(getTemplateRow().getTable().getName(), false, b.toString());
+			PersistenceStatement ps = psManager.prepareBatchedStatement(getTemplateRow().getTable().getName(), false, b.toString());
 			try {
 				for(Row row : rows) {
 					int index = 1;
 					for(Column column : row.getSetColumns()) {
-						column.setObject(ps, index, row.getProperty(column));
+						column.setObject(ps.getPreparedStatement(), index, row.getProperty(column));
 						index++;
 					}
-					psManager.prepared(ps);
+					ps.execute(null);
 				}
+				ps.executeBatch();
 			} finally {
 				ps.close();
 			}

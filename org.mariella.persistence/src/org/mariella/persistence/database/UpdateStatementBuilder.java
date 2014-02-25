@@ -1,9 +1,9 @@
 package org.mariella.persistence.database;
 
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import org.mariella.persistence.persistor.PreparedStatementManager;
+import org.mariella.persistence.persistor.PersistenceStatementsManager;
+import org.mariella.persistence.persistor.PersistenceStatementsManager.PersistenceStatement;
 import org.mariella.persistence.persistor.Row;
 
 
@@ -14,7 +14,7 @@ public UpdateStatementBuilder(Row row) {
 }
 
 @Override
-public void execute(PreparedStatementManager psManager) {
+public void execute(PersistenceStatementsManager psManager) {
 	StringBuilder b = new StringBuilder();
 	b.append("UPDATE ");
 	b.append(row.getTable().getName());
@@ -39,19 +39,19 @@ public void execute(PreparedStatementManager psManager) {
 	}
 	
 	try {
-		PreparedStatement ps = psManager.prepareStatement(row.getTable().getName(), false, b.toString());
+		PersistenceStatement ps = psManager.prepareStatement(row.getTable().getName(), false, b.toString());
 		int index = 1;
 		for(Column column : row.getSetColumns()) {
 			if(!row.getTable().getPrimaryKey().contains(column)) {
-				column.setObject(ps, index, row.getProperty(column));
+				column.setObject(ps.getPreparedStatement(), index, row.getProperty(column));
 				index++;
 			}
 		}
 		for(Column pk : row.getTable().getPrimaryKey()) {
-			pk.setObject(ps, index, row.getProperty(pk));
+			pk.setObject(ps.getPreparedStatement(), index, row.getProperty(pk));
 			index++;
 		}
-		psManager.prepared(ps);
+		ps.execute(getSqlDebugString());
 	} catch(SQLException e) {
 		throw new RuntimeException(e);
 	}	
