@@ -1,11 +1,11 @@
 package org.mariella.persistence.database;
 
-import org.mariella.persistence.persistor.PreparedStatementManager;
+import org.mariella.persistence.persistor.PersistenceStatementsManager;
 
 public interface PreparedStatementBuilder {
 
 public void initialize();
-public void execute(PreparedStatementManager psManager);
+public void execute(PersistenceStatementsManager psManager);
 public String getSqlDebugString();
 
 }

@@ -3,7 +3,8 @@ package org.mariella.persistence.database;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import org.mariella.persistence.persistor.PreparedStatementManager;
+import org.mariella.persistence.persistor.PersistenceStatementsManager;
+import org.mariella.persistence.persistor.PersistenceStatementsManager.PersistenceStatement;
 import org.mariella.persistence.persistor.Row;
 
 
@@ -14,12 +15,12 @@ public InsertStatementBuilder(Row row) {
 }
 
 @Override
-public void execute(PreparedStatementManager psManager) {
+public void execute(PersistenceStatementsManager psManager) {
 	try {
 		String sql = getInsertString();
-		PreparedStatement ps = psManager.prepareStatement(row.getTable().getName(), false, sql);
-		setParameters(ps);
-		psManager.prepared(ps);
+		PersistenceStatement ps = psManager.prepareStatement(row.getTable().getName(), false, sql);
+		setParameters(ps.getPreparedStatement());
+		ps.execute(getSqlDebugString());
 	} catch(SQLException e) {
 		throw new RuntimeException(e);
 	}

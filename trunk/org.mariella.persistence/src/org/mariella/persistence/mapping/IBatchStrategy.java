@@ -8,4 +8,8 @@ public interface IBatchStrategy {
 	 */
 	Class<?>[] getOrderedBatchClasses();
 	
+	/**
+	 * @return The maximum number of overall rows batched before executing the batched statements.
+	 */
+	int getMaxBatchSize();
 }

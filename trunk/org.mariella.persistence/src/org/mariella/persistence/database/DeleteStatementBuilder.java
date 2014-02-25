@@ -1,10 +1,10 @@
 package org.mariella.persistence.database;
 
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.mariella.persistence.persistor.PreparedStatementManager;
+import org.mariella.persistence.persistor.PersistenceStatementsManager;
+import org.mariella.persistence.persistor.PersistenceStatementsManager.PersistenceStatement;
 import org.mariella.persistence.persistor.Row;
 
 
@@ -17,7 +17,7 @@ public DeleteStatementBuilder(Row row) {
 public abstract List<Column> getColumnsForWhereClause();
 
 @Override
-public void execute(PreparedStatementManager psManager) {
+public void execute(PersistenceStatementsManager psManager) {
 	StringBuilder b = new StringBuilder();
 	b.append("DELETE FROM ");
 	b.append(row.getTable().getName());
@@ -32,13 +32,13 @@ public void execute(PreparedStatementManager psManager) {
 	}
 	
 	try {
-		PreparedStatement ps = psManager.prepareStatement(row.getTable().getName(), true, b.toString());
+		PersistenceStatement ps = psManager.prepareStatement(row.getTable().getName(), true, b.toString());
 		int index = 1;
 		for(Column column : getColumnsForWhereClause()) {
-			column.setObject(ps, index, row.getProperty(column));
+			column.setObject(ps.getPreparedStatement(), index, row.getProperty(column));
 			index++;
 		}
-		psManager.prepared(ps);
+		ps.execute(getSqlDebugString());
 	} catch(SQLException e) {
 		throw new RuntimeException(e);
 	}	

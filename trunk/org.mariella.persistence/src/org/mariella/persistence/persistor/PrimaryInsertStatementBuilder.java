@@ -18,7 +18,7 @@ public PrimaryInsertStatementBuilder(ObjectPersistor objectPersistor, Row row) {
 }
 
 @Override
-public void execute(PreparedStatementManager psManager) {
+public void execute(PersistenceStatementsManager psManager) {
 	try {
 		ClassMapping classMapping = objectPersistor.getClassMapping();
 		if(classMapping.getPrimaryKey().getGeneratedByDatabaseColumnMappings().length > 0) {
