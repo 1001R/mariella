@@ -23,8 +23,7 @@ public class Persistor {
 	private final DatabaseAccess databaseAccess;
 
 	private Map<Object, ObjectPersistor> persistorMap = new HashMap<Object, ObjectPersistor>();
-	private Class<?>[] orderedBatchedClasses;
-	private int maxBatchSize = 500;
+	private IBatchStrategy batchStrategy;
 	private PersistenceStatementsManager preparedStatementManager;
 
 public Persistor(SchemaMapping schemaMapping, DatabaseAccess databaseAccess, ModificationTracker modificationTracker) {
@@ -32,19 +31,11 @@ public Persistor(SchemaMapping schemaMapping, DatabaseAccess databaseAccess, Mod
 	this.schemaMapping = schemaMapping;
 	this.modificationTracker = modificationTracker;
 	this.databaseAccess = databaseAccess;
-	IBatchStrategy defaultBatchStrategy = schemaMapping.getDefaultBatchStrategy();
-	if (defaultBatchStrategy != null) {
-		this.orderedBatchedClasses = defaultBatchStrategy.getOrderedBatchClasses();
-		this.maxBatchSize = defaultBatchStrategy.getMaxBatchSize();
-	}
+	batchStrategy = schemaMapping.getDefaultBatchStrategy();
 }
 
-public void setOrderedBatchedClasses(Class<?>... persistentClasses) {
-	this.orderedBatchedClasses = persistentClasses;
-}
-
-public void setMaxBatchSize(int maxBatchSize) {
-	this.maxBatchSize = maxBatchSize;
+public void setBatchStrategy(IBatchStrategy batchStrategy) {
+	this.batchStrategy = batchStrategy;
 }
 
 public SchemaMapping getSchemaMapping() {
@@ -73,12 +64,22 @@ public Collection<ObjectPersistor> getObjectPersistors() {
 	return persistorMap.values();
 }
 
-private void addTables(List<String> tables, ClassMapping classMapping) {
+private ClassMapping addTablesToSuper(List<String> tables, ClassMapping classMapping) {
 	if (classMapping.getSuperClassMapping() != null) {
-		addTables(tables, classMapping.getSuperClassMapping());
+		addTablesToSuper(tables, classMapping.getSuperClassMapping());
 	}
 	if (classMapping != null && classMapping.getMainUpdateTable() != null && !tables.contains(classMapping.getMainUpdateTable().getName())) {
 		tables.add(classMapping.getMainUpdateTable().getName());
+	}
+	return classMapping.getSuperClassMapping() != null ? classMapping.getSuperClassMapping() : classMapping;
+}
+
+private void addInheritedTables(List<String> tables, ClassMapping classMapping) {
+	if (classMapping != null && classMapping.getMainUpdateTable() != null && !tables.contains(classMapping.getMainUpdateTable().getName())) {
+		tables.add(classMapping.getMainUpdateTable().getName());
+	}
+	for (ClassMapping childClass : classMapping.getImmediateChildren()) {
+		addInheritedTables(tables, childClass);
 	}
 }
 
@@ -87,11 +88,32 @@ public void persist() {
 		databaseAccess.doInConnection(new ConnectionCallback() {
 			@Override
 			public Object doInConnection(Connection connection) throws SQLException {
+				Object[] orderedBatchedClasses = null;
+				int maxBatchSize = 500;
+				if (batchStrategy != null) {
+					orderedBatchedClasses = batchStrategy.getOrderedBatchClasses();
+					maxBatchSize = batchStrategy.getMaxBatchSize();
+				}
 				List<String> orderedBatchedTables = new ArrayList<String>();
 				if (orderedBatchedClasses != null) {
-					for (Class<?> persistentClass : orderedBatchedClasses) {
-						ClassMapping cm = schemaMapping.getClassMapping(persistentClass.getName());
-						addTables(orderedBatchedTables, cm);
+					List<ClassMapping> classesToAddInheritance = new ArrayList<ClassMapping>();
+					for (Object persistentClass : orderedBatchedClasses) {
+						if (persistentClass instanceof String) {
+							if (!orderedBatchedTables.contains(persistentClass)) {
+								orderedBatchedTables.add((String) persistentClass);
+							}
+						} else {
+							ClassMapping cm = schemaMapping.getClassMapping(((Class<?>) persistentClass).getName());
+							// add the super class tables immediately when a class is processed
+							ClassMapping superClass = addTablesToSuper(orderedBatchedTables, cm);
+							if (!classesToAddInheritance.contains(superClass)) {
+								classesToAddInheritance.add(superClass);
+							}
+						}
+					}
+					// add the derived classes after the given list of classes is processed
+					for (ClassMapping cm : classesToAddInheritance) {
+						addInheritedTables(orderedBatchedTables, cm);
 					}
 				}
 				preparedStatementManager = new PersistenceStatementsManager(connection, maxBatchSize, orderedBatchedTables);

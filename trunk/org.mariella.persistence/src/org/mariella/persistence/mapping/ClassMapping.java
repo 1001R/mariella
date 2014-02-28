@@ -76,7 +76,7 @@ public PropertyMapping getPropertyMappingInHierarchy(PropertyDescription propert
 	return hierarchyPropertyMappingMap.get(propertyDescription);
 }
 
-protected List<ClassMapping> getImmediateChildren() {
+public List<ClassMapping> getImmediateChildren() {
 	return immediateChildren;
 }
 
