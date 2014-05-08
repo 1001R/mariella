@@ -13,7 +13,19 @@ import java.util.Map;
 public class SchemaDescription implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	private String schemaName;
 	private final Map<String, ClassDescription> classDescriptions = new HashMap<String, ClassDescription>();
+
+public SchemaDescription() {
+}	
+
+public String getSchemaName() {
+	return schemaName;
+}
+
+public void setSchemaName(String schemaName) {
+	this.schemaName = schemaName;
+}
 	
 public ClassDescription getClassDescription(String className) {
 	return classDescriptions.get(className);
