@@ -36,6 +36,11 @@ public AbstractModificationTrackerImpl() {
 	super();
 }
 
+// TODO remove
+public void setThread(Thread thread) {
+}
+
+
 public abstract SchemaDescription getSchemaDescription();
 
 @Override
