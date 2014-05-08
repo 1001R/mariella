@@ -41,6 +41,8 @@ protected void createSchemaMapping() {
 		} finally {
 			connectionProvider.close();
 		}
+		
+		schemaMapping.getSchemaDescription().setSchemaName(oxyUnitInfo.getPersistenceUnitName());
 
 		String defaultBatchStrategyClassName = getStringProperty(DEFAULT_BATCH_STRATEGY);
 		if (defaultBatchStrategyClassName != null) {
