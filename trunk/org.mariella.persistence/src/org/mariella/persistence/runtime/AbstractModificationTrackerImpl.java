@@ -273,6 +273,17 @@ public void detachAll() {
 	modificationMap.clear();
 }
 
+protected void detach(Collection<Object> participantsToDetach) {
+	for(Object participant : participantsToDetach) {
+		PropertyChangeHelper.removePropertyChangeListener(participant, this);
+		ModificationInfo mi = modificationMap.remove(participant);
+		if (mi != null) {
+			modifications.remove(mi);
+		}
+	}
+	participants.values().removeAll(participantsToDetach);
+}
+
 @Override
 public void dispose() {
 	for(Object participant : participants.values()) {
