@@ -26,7 +26,7 @@ public abstract class AbstractModificationTrackerImpl implements PropertyChangeL
 	private List<ModificationTrackerEntityListener> entityListeners = new ArrayList<ModificationTrackerEntityListener>();
 	
 	private transient List<ModificationTrackerListener> listeners;
-	private transient List<ModificationTrackerParticipantsListener> participantsListeners;
+	private SerializableList<ModificationTrackerParticipantsListener> participantsListeners;
 	
 	private boolean enabled = true;
 	
@@ -57,7 +57,7 @@ protected List<ModificationTrackerListener> getListeners() {
 
 protected List<ModificationTrackerParticipantsListener> getParticipantsListeners() {
 	if(participantsListeners == null) {
-		participantsListeners = new ArrayList<ModificationTrackerParticipantsListener>();
+		participantsListeners = new SerializableList<ModificationTrackerParticipantsListener>();
 	}
 	return participantsListeners;
 }
@@ -273,15 +273,19 @@ public void detachAll() {
 	modificationMap.clear();
 }
 
-protected void detach(Collection<Object> participantsToDetach) {
-	for(Object participant : participantsToDetach) {
-		PropertyChangeHelper.removePropertyChangeListener(participant, this);
-		ModificationInfo mi = modificationMap.remove(participant);
-		if (mi != null) {
-			modifications.remove(mi);
+protected void detach(Object participant) {
+	boolean removed = false;
+	PropertyChangeHelper.removePropertyChangeListener(participant, this);
+	ModificationInfo mi = modificationMap.remove(participant);
+	if (mi != null) {
+		removed |= modifications.remove(mi);
+	}
+	removed |= participants.values().remove(participant);
+	if (removed) {
+		for (ModificationTrackerParticipantsListener listener : getParticipantsListeners()) {
+			listener.removedParticipant(participant);
 		}
 	}
-	participants.values().removeAll(participantsToDetach);
 }
 
 @Override
@@ -301,6 +305,7 @@ public void addModificationInfo(ModificationInfo modificationInfo) {
 
 	modifications.add(modificationInfo);
 	modificationMap.put(modificationInfo.getObject(), modificationInfo);
+//	participants.values().remove(modificationInfo.getObject());
 }
 
 
