@@ -393,9 +393,11 @@ public void setHint(String key, Object value) {
 
 @Override
 public Object getHint(String key) {
-	for (int i = 0; i < hints.length; i += 2) {
-		if (hints[i].equals(key)) {
-			return hints[i+1];
+	if (hints != null) {
+		for (int i = 0; i < hints.length; i += 2) {
+			if (hints[i].equals(key)) {
+				return hints[i+1];
+			}
 		}
 	}
 	return null;
