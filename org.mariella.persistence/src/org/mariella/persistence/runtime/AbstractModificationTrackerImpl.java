@@ -30,6 +30,7 @@ public abstract class AbstractModificationTrackerImpl implements PropertyChangeL
 	
 	private boolean enabled = true;
 	
+	private Object[] hints = null;
 	private SavePointSupport savePointSupport = null;
 
 public AbstractModificationTrackerImpl() {
@@ -369,6 +370,35 @@ public boolean moveAfter(Object toBeMoved, Object target) {
 
 public Collection<?> getParticipants() {
 	return participants.values();
+}
+
+@Override
+public void setHint(String key, Object value) {
+	if (hints == null) {
+		hints = new Object[] { key, value };
+	} else {
+		for (int i = 0; i < hints.length; i += 2) {
+			if (hints[i].equals(key)) {
+				hints[i+1] = value;
+				return;
+			}
+		}
+		Object[] newHints = new Object[hints.length+2];
+		System.arraycopy(hints, 0, newHints, 0, hints.length);
+		hints = newHints;
+		hints[hints.length-2] = key;
+		hints[hints.length-1] = value;
+	}
+}
+
+@Override
+public Object getHint(String key) {
+	for (int i = 0; i < hints.length; i += 2) {
+		if (hints[i].equals(key)) {
+			return hints[i+1];
+		}
+	}
+	return null;
 }
 
 
