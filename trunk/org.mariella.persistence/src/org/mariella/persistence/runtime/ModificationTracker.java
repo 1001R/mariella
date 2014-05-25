@@ -31,7 +31,5 @@ public boolean moveBefore(Object toBeMoved, Object target);
 public boolean moveAfter(Object toBeMoved, Object target);
 public Collection<?> getParticipants();
 public void detachAll();
-public void setHint(String key, Object value);
-public Object getHint(String key);
 
 }
