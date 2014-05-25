@@ -67,6 +67,10 @@ public CollectionModificationInfo getCollectionModificationInfo(String propertyN
 	return cmi;
 }
 
+public Collection<String> getCollectionModifiedProperties() {
+	return collectionModificationInfos.keySet();
+}
+
 public void clearCollectionModificationInfos() {
 	collectionModificationInfos = new HashMap<String, CollectionModificationInfo>();
 }
