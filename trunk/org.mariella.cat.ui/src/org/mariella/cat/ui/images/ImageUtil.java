@@ -18,6 +18,11 @@ public final class ImageUtil {
 	private static Image cbImgCheckedDisabled = null;
 	private static Image cbImgUncheckedDisabled = null;
 	
+	private static Image radioImgChecked = null;
+	private static Image radioImgUnchecked = null;
+	private static Image radioImgCheckedDisabled = null;
+	private static Image radioImgUncheckedDisabled = null;
+
 	private ImageUtil() {
 	}
 
@@ -78,7 +83,7 @@ public final class ImageUtil {
 			Button cb = new Button(shell, SWT.CHECK);
 			cb.setLocation(0, 0);
 			cb.setSize(cb.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-			cb.setBackground(cb.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+			cb.setBackground(cb.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 			shell.pack();
 			shell.open();
 			cb.setSelection(true);
@@ -94,6 +99,28 @@ public final class ImageUtil {
 		}
 	}
 	
+	private static void ensureRadioImages() {
+		if (radioImgChecked == null) {
+			Shell shell = new Shell(SWT.NO_TRIM);
+			Button rb = new Button(shell, SWT.RADIO);
+			rb.setLocation(0, 0);
+			rb.setSize(rb.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+			rb.setBackground(rb.getDisplay().getSystemColor(SWT.COLOR_WHITE));
+			shell.pack();
+			shell.open();
+			rb.setSelection(true);
+			radioImgChecked = createImage(rb);
+			rb.setSelection(false);
+			radioImgUnchecked = createImage(rb);
+			rb.setEnabled(false);
+			rb.setSelection(true);
+			radioImgCheckedDisabled = createImage(rb);
+			rb.setSelection(false);
+			radioImgUncheckedDisabled = createImage(rb);
+			shell.close();
+		}
+	}
+
 	private static Image createImage(Control control) {
 		Point size = control.getSize();
 		Image image = new Image(control.getDisplay(), size.x, size.y);
@@ -123,5 +150,24 @@ public final class ImageUtil {
 		return cbImgUncheckedDisabled;
 	}
 	
+	public static Image getRadioImgChecked() {
+		ensureRadioImages();
+		return radioImgChecked;
+	}
+	
+	public static Image getRadioImgCheckedDisabled() {
+		ensureRadioImages();
+		return radioImgCheckedDisabled;
+	}
+	
+	public static Image getRadioImgUnchecked() {
+		ensureRadioImages();
+		return radioImgUnchecked;
+	}
+	
+	public static Image getRadioImgUncheckedDisabled() {
+		ensureRadioImages();
+		return radioImgUncheckedDisabled;
+	}
 	
 }
