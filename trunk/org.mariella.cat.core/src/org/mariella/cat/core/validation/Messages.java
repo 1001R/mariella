@@ -163,5 +163,37 @@ public class Messages implements Iterable<Message> {
 			processChangeListeners = false;
 		}
 	}
+	
+	public Message getMostSevereMessage(Object source) {
+		List<Message> messages = messageMap.get(source);
+		if (messages == null || messages.isEmpty()) {
+			return null;
+		} else {
+			Message mostSevereMessage = null;
+			for (Message msg : messages) {
+				if (mostSevereMessage == null || msg.getType().ordinal() < mostSevereMessage.getType().ordinal()) {
+					mostSevereMessage = msg;
+				}
+				if (mostSevereMessage.getType() == Type.ERROR) {
+					break;
+				}
+			}
+			return mostSevereMessage;
+		}
+	}
+	
+	public Message getMostSevereMessage(Object... sources) {
+		Message mostSevereMessage = null;
+		for (Object source : sources) {
+			Message msg = getMostSevereMessage(source);
+			if ((mostSevereMessage == null && msg != null) || (msg != null && msg.getType().ordinal() < mostSevereMessage.getType().ordinal())) {
+				mostSevereMessage = msg;
+			}
+			if (mostSevereMessage != null && mostSevereMessage.getType() == Type.ERROR) {
+				break;
+			}
+		}
+		return mostSevereMessage;
+	}	
 
 }
