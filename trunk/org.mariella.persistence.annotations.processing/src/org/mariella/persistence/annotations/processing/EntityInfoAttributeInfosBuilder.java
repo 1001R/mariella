@@ -7,11 +7,10 @@ import org.mariella.persistence.mapping.EntityInfo;
 import org.mariella.persistence.mapping.MappedClassInfo;
 import org.mariella.persistence.mapping.MappedSuperclassInfo;
 
-public class EntityInfoAttributeInfosBuilder extends
-		MappedClassInfoAttributeInfosBuilder {
+public class EntityInfoAttributeInfosBuilder extends MappedClassInfoAttributeInfosBuilder {
 
-	public EntityInfoAttributeInfosBuilder(OxyUnitInfoBuilder oxyUnitInfoBuilder, MappedClassInfo mappedClassInfo) {
-		super(oxyUnitInfoBuilder, mappedClassInfo);
+	public EntityInfoAttributeInfosBuilder(OxyUnitInfoBuilder oxyUnitInfoBuilder, MappedClassInfo mappedClassInfo, IModelToDb translator) {
+		super(oxyUnitInfoBuilder, mappedClassInfo, translator);
 	}
 
 	@SuppressWarnings("unchecked")

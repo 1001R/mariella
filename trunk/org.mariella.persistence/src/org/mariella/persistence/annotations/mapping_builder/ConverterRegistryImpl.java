@@ -53,6 +53,7 @@ public ConverterRegistryImpl() {
 	registerConverterFactory(Types.LONGVARCHAR, String.class, new ConverterFactoryImpl(StringConverter.Singleton));
 	registerConverterFactory(Types.OTHER, String.class, new ConverterFactoryImpl(NStringConverter.Singleton));
 	registerNumericConverters(Types.INTEGER);
+	registerNumericConverters(Types.BIGINT);
 	registerNumericConverters(Types.DECIMAL);
 	registerNumericConverters(Types.NUMERIC);
 
@@ -78,6 +79,7 @@ public ConverterRegistryImpl() {
 	registerConverterFactory(Types.TIMESTAMP, Date.class, new ConverterFactoryImpl(DateConverter.Singleton));
 
 	registerConverterFactory(Types.BLOB, byte[].class, new ConverterFactoryImpl(ByteArrayConverter.Singleton));
+	registerConverterFactory(Types.BINARY, byte[].class, new ConverterFactoryImpl(ByteArrayConverter.Singleton));
 	registerConverterFactory(Types.CLOB, char[].class, new ConverterFactoryImpl(CharArrayConverter.Singleton));
 }
 

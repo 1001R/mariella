@@ -72,12 +72,13 @@ public class OxyUnitInfoBuilder {
 
 	Map<Class<?>, EntityListenerClassInfoBuilder> classToEntityListenerClassInfoBuilder = new HashMap<Class<?>, EntityListenerClassInfoBuilder>();
 	Map<AttributeInfo, AnnotatedElement> attributeInfoToAnnotatedElementMap = new HashMap<AttributeInfo, AnnotatedElement>();
+	
 
 public OxyUnitInfoBuilder(PersistenceUnitParser parser) {
 	super();
 	this.persistenceUnitParser = parser;
 }
-	
+
 public void build() {
 	try {
 		persistenceUnitParser.parsePersistenceUnits();
@@ -95,19 +96,20 @@ public void build() {
 }
 
 private void buildJoinTableInfos(OxyUnitInfo info) {
+	IModelToDb translator = getTranslator(info);
 	for (ClassInfo classInfo : info.getClassInfos()) {
 		if (classInfo instanceof MappedClassInfo) {
 			for (AttributeInfo attributeInfo : ((MappedClassInfo)classInfo).getAttributeInfos()) {
 				if (attributeInfo instanceof ToManyAttributeInfo) {
 					ToManyAttributeInfo toMany = (ToManyAttributeInfo)attributeInfo;
-					buildJoinTableInfos(toMany);
+					buildJoinTableInfos(toMany, translator);
 				}
 			}
 		}
 	}
 }
 
-private void buildJoinTableInfos(ToManyAttributeInfo toMany) {
+private void buildJoinTableInfos(ToManyAttributeInfo toMany, IModelToDb translator) {
 	if (toMany.getJoinTableInfo() != null)
 		return;
 
@@ -121,27 +123,27 @@ private void buildJoinTableInfos(ToManyAttributeInfo toMany) {
 	javax.persistence.JoinTable joinTable = ae.getAnnotation(javax.persistence.JoinTable.class);
 
 	JoinTableInfo info = new JoinTableInfo();
-	info.setCatalog(joinTable.catalog());
-	info.setName(joinTable.name());
-	info.setSchema(joinTable.schema());
-	info.setUniqueConstraintInfos(buildUniqueContraintInfos(joinTable.uniqueConstraints()));
-	info.setJoinColumnInfos(buildJoinColumnInfos(joinTable.joinColumns()));
-	info.setInverseJoinColumnInfos(buildJoinColumnInfos(joinTable.inverseJoinColumns()));
+	info.setCatalog(translator.translate(joinTable.catalog()));
+	info.setName(translator.translate(joinTable.name()));
+	info.setSchema(translator.translate(joinTable.schema()));
+	info.setUniqueConstraintInfos(buildUniqueContraintInfos(joinTable.uniqueConstraints(), translator));
+	info.setJoinColumnInfos(buildJoinColumnInfos(joinTable.joinColumns(), translator));
+	info.setInverseJoinColumnInfos(buildJoinColumnInfos(joinTable.inverseJoinColumns(), translator));
 	toMany.setJoinTableInfo(info);
 }
 
-private List<JoinColumnInfo> buildJoinColumnInfos(JoinColumn[] joinColumns) {
+private List<JoinColumnInfo> buildJoinColumnInfos(JoinColumn[] joinColumns, IModelToDb translator) {
 	List<JoinColumnInfo> infos = new ArrayList<JoinColumnInfo>();
 	for (JoinColumn joinCol : joinColumns) {
-		infos.add(new JoinColumnInfoBuilder(joinCol).buildJoinColumnInfo());
+		infos.add(new JoinColumnInfoBuilder(joinCol, translator).buildJoinColumnInfo());
 	}
 	return infos;
 }
 
-private List<UniqueConstraintInfo> buildUniqueContraintInfos(javax.persistence.UniqueConstraint[] uniqueConstraints) {
+private List<UniqueConstraintInfo> buildUniqueContraintInfos(javax.persistence.UniqueConstraint[] uniqueConstraints, IModelToDb translator) {
 	List<UniqueConstraintInfo> infos = new ArrayList<UniqueConstraintInfo>();
 	for (UniqueConstraint con : uniqueConstraints) {
-		infos.add(new UniqueConstraintInfoBuilder(con).buildUniqueConstraintInfo());
+		infos.add(new UniqueConstraintInfoBuilder(con, translator).buildUniqueConstraintInfo());
 	}
 	return infos;
 }
@@ -329,9 +331,10 @@ private void parseEmbeddables(OxyUnitInfo oxyUnitInfo, List<Class<?>> classes) t
 		parseEmbeddable(oxyUnitInfo, clazz);
 	}
 
+	IModelToDb translator = getTranslator(oxyUnitInfo);
 	for (Class<?> clazz: classes) {
 		ClassInfo ci = oxyUnitInfo.getClassToInfoMap().get(clazz.getName());
-		createMappedClassInfoAttributeInfosBuilder(ci).buildAttributeInfos();
+		createMappedClassInfoAttributeInfosBuilder(ci, translator).buildAttributeInfos();
 	}
 }
 
@@ -355,6 +358,7 @@ private void processEntityListenerClassInfoBuilders() {
 }
 
 private void buildClassInfos(OxyUnitInfo oxyUnitInfo, List<Class<?>> annotatedClasses) throws Exception {
+	IModelToDb translator = getTranslator(oxyUnitInfo);
 	for (Class<?> clazz : annotatedClasses) {
 		buildClassInfo(oxyUnitInfo, clazz);
 	}
@@ -366,7 +370,7 @@ private void buildClassInfos(OxyUnitInfo oxyUnitInfo, List<Class<?>> annotatedCl
 	for (Class<?> clazz: annotatedClasses) {
 		ClassInfo ci = oxyUnitInfo.getClassToInfoMap().get(clazz.getName());
 		if (ci instanceof MappedClassInfo) {
-			createMappedClassInfoAttributeInfosBuilder(ci).buildAttributeInfos();
+			createMappedClassInfoAttributeInfosBuilder(ci, translator).buildAttributeInfos();
 		}
 	}
 	for (Class<?> clazz: annotatedClasses) {
@@ -380,16 +384,21 @@ private void buildClassInfos(OxyUnitInfo oxyUnitInfo, List<Class<?>> annotatedCl
 	}
 }
 
-private MappedClassInfoAttributeInfosBuilder createMappedClassInfoAttributeInfosBuilder(ClassInfo ci) {
+private MappedClassInfoAttributeInfosBuilder createMappedClassInfoAttributeInfosBuilder(ClassInfo ci, IModelToDb translator) {
 	if (ci instanceof EntityInfo)
-		return new EntityInfoAttributeInfosBuilder(this, (EntityInfo)ci);
+		return new EntityInfoAttributeInfosBuilder(this, (EntityInfo)ci, translator);
 
-	return new MappedClassInfoAttributeInfosBuilder(this, (MappedClassInfo)ci);
+	return new MappedClassInfoAttributeInfosBuilder(this, (MappedClassInfo)ci, translator);
+}
+
+private IModelToDb getTranslator(OxyUnitInfo oxyUnitInfo) {
+	return "false".equals(oxyUnitInfo.getProperties().getProperty("org.mariella.persistence.db.uppercase")) ? ModelToDbTranslator.LOWERCASE : ModelToDbTranslator.UPPERCASE;
 }
 
 private void buildClassInfo(OxyUnitInfo oxyUnitInfo, Class<?> clazz) {
 	MappedClassInfo info;
 	if (clazz.isAnnotationPresent(Entity.class)) {
+		IModelToDb translator = getTranslator(oxyUnitInfo);
 		info = new EntityInfo();
 		Entity annotation = ((AnnotatedElement)clazz).getAnnotation(Entity.class);
 		info.setName("".equals(annotation.name()) ? null : annotation.name());
@@ -398,18 +407,18 @@ private void buildClassInfo(OxyUnitInfo oxyUnitInfo, Class<?> clazz) {
 			Table table = ((AnnotatedElement)clazz).getAnnotation(Table.class);
 
 			TableTableInfo tti = new TableTableInfo();
-			tti.setCatalog(table.catalog());
-			tti.setName(table.name());
-			tti.setSchema(table.schema());
+			tti.setCatalog(translator.translate(table.catalog()));
+			tti.setName(translator.translate(table.name()));
+			tti.setSchema(translator.translate(table.schema()));
 			((EntityInfo)info).setTableInfo(tti);
 		}
 		if (clazz.isAnnotationPresent(UpdateTable.class)) {
 			UpdateTable table = ((AnnotatedElement)clazz).getAnnotation(UpdateTable.class);
 
 			UpdateTableInfo uti = new UpdateTableInfo();
-			uti.setCatalog(table.catalog());
-			uti.setName(table.name());
-			uti.setSchema(table.schema());
+			uti.setCatalog(translator.translate(table.catalog()));
+			uti.setName(translator.translate(table.name()));
+			uti.setSchema(translator.translate(table.schema()));
 			((EntityInfo)info).setUpdateTableInfo(uti);
 		}
 	} else if (clazz.isAnnotationPresent(MappedSuperclass.class)) {
@@ -442,12 +451,13 @@ private void buildClassInfo(OxyUnitInfo oxyUnitInfo, Class<?> clazz) {
 	if (clazz.isAnnotationPresent(DiscriminatorColumn.class)) {
 		if (!(info instanceof EntityInfo))
 			throw new IllegalArgumentException("@DiscriminatorColumn annotation can only be assigned to classes that have an @Entity annotation");
+		IModelToDb translator = getTranslator(oxyUnitInfo);
 		DiscriminatorColumn discrCol = ((AnnotatedElement)clazz).getAnnotation(DiscriminatorColumn.class);
 		DiscriminatorColumnInfo discrColumnInfo = new DiscriminatorColumnInfo();
 		discrColumnInfo.setColumnDefinition(discrCol.columnDefinition());
 		discrColumnInfo.setDiscriminatorType(discrCol.discriminatorType());
 		discrColumnInfo.setLength(discrCol.length());
-		discrColumnInfo.setName(discrCol.name());
+		discrColumnInfo.setName(translator.translate(discrCol.name()));
 
 		((EntityInfo)info).setDiscriminatorColumnInfo(discrColumnInfo);
 	}
@@ -461,41 +471,42 @@ private void buildClassInfo(OxyUnitInfo oxyUnitInfo, Class<?> clazz) {
 		((EntityInfo)info).setDiscriminatorValueInfo(discrValueInfo);
 	}
 
+	IModelToDb translator = getTranslator(oxyUnitInfo);
 	if (clazz.isAnnotationPresent(PrimaryKeyJoinColumns.class)) {
 		if (!(info instanceof EntityInfo))
 			throw new IllegalArgumentException("@PrimaryKeyJoinColumns annotation can only be assigned to classes that have an @Entity annotation");
 		if(clazz.isAnnotationPresent(PrimaryKeyJoinColumn.class)) {
 			throw new IllegalArgumentException("@PrimaryKeyJoinColumns and @PrimaryKeyJoinColumn annotations must not be used together!");
-			}
-			PrimaryKeyJoinColumns primaryKeyJoinColumns = ((AnnotatedElement)clazz).getAnnotation(PrimaryKeyJoinColumns.class);
-			for(PrimaryKeyJoinColumn primaryKeyJoinColumn : primaryKeyJoinColumns.value()) {
-				((EntityInfo)info).getPrimaryKeyJoinColumnInfos().add(buildPrimaryKeyJoinColumnInfo(primaryKeyJoinColumn));
-			}
-		} else if(clazz.isAnnotationPresent(PrimaryKeyJoinColumn.class)) {
-			((EntityInfo)info).getPrimaryKeyJoinColumnInfos().add(buildPrimaryKeyJoinColumnInfo(((AnnotatedElement)clazz).getAnnotation(PrimaryKeyJoinColumn.class)));
 		}
-
-		if (clazz.isAnnotationPresent(SequenceGenerator.class)) {
-			SequenceGenerator generator = ((AnnotatedElement)clazz).getAnnotation(SequenceGenerator.class);
-
-			SequenceGeneratorInfo sqinfo = new SequenceGeneratorInfo();
-			sqinfo.setAllocationSize(generator.allocationSize());
-			sqinfo.setInitialValue(generator.initialValue());
-			sqinfo.setName(generator.name());
-			sqinfo.setSequenceName(generator.sequenceName());
-			oxyUnitInfo.getSequenceGeneratorInfos().add(sqinfo);
+		PrimaryKeyJoinColumns primaryKeyJoinColumns = ((AnnotatedElement)clazz).getAnnotation(PrimaryKeyJoinColumns.class);
+		for(PrimaryKeyJoinColumn primaryKeyJoinColumn : primaryKeyJoinColumns.value()) {
+			((EntityInfo)info).getPrimaryKeyJoinColumnInfos().add(buildPrimaryKeyJoinColumnInfo(primaryKeyJoinColumn, translator));
 		}
+	} else if(clazz.isAnnotationPresent(PrimaryKeyJoinColumn.class)) {
+		((EntityInfo)info).getPrimaryKeyJoinColumnInfos().add(buildPrimaryKeyJoinColumnInfo(((AnnotatedElement)clazz).getAnnotation(PrimaryKeyJoinColumn.class), translator));
+	}
 
-		if (clazz.isAnnotationPresent(TableGenerator.class)) {
-			new TableGeneratorInfoBuilder(((AnnotatedElement)clazz).getAnnotation(TableGenerator.class), oxyUnitInfo).buildInfo();
-		}
+	if (clazz.isAnnotationPresent(SequenceGenerator.class)) {
+		SequenceGenerator generator = ((AnnotatedElement)clazz).getAnnotation(SequenceGenerator.class);
+
+		SequenceGeneratorInfo sqinfo = new SequenceGeneratorInfo();
+		sqinfo.setAllocationSize(generator.allocationSize());
+		sqinfo.setInitialValue(generator.initialValue());
+		sqinfo.setName(generator.name());
+		sqinfo.setSequenceName(generator.sequenceName());
+		oxyUnitInfo.getSequenceGeneratorInfos().add(sqinfo);
+	}
+
+	if (clazz.isAnnotationPresent(TableGenerator.class)) {
+		new TableGeneratorInfoBuilder(((AnnotatedElement)clazz).getAnnotation(TableGenerator.class), oxyUnitInfo, translator).buildInfo();
+	}
 }
 
-	private PrimaryKeyJoinColumnInfo buildPrimaryKeyJoinColumnInfo(PrimaryKeyJoinColumn primaryKeyJoinColumn) {
+	private PrimaryKeyJoinColumnInfo buildPrimaryKeyJoinColumnInfo(PrimaryKeyJoinColumn primaryKeyJoinColumn, IModelToDb translator) {
 		PrimaryKeyJoinColumnInfo pkInfo = new PrimaryKeyJoinColumnInfo();
 		pkInfo.setColumnDefinition(primaryKeyJoinColumn.columnDefinition());
-		pkInfo.setName(primaryKeyJoinColumn.name());
-		pkInfo.setReferencedColumnName(primaryKeyJoinColumn.referencedColumnName());
+		pkInfo.setName(translator.translate(primaryKeyJoinColumn.name()));
+		pkInfo.setReferencedColumnName(translator.translate(primaryKeyJoinColumn.referencedColumnName()));
 		return pkInfo;
 	}
 

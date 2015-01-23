@@ -52,10 +52,12 @@ public class MappedClassInfoAttributeInfosBuilder {
 	
 	OxyUnitInfoBuilder oxyUnitInfoBuilder;
 	MappedClassInfo mappedClassInfo;
+	IModelToDb translator;
 	
-	public MappedClassInfoAttributeInfosBuilder(OxyUnitInfoBuilder oxyUnitInfoBuilder, MappedClassInfo mappedClassInfo) {
+	public MappedClassInfoAttributeInfosBuilder(OxyUnitInfoBuilder oxyUnitInfoBuilder, MappedClassInfo mappedClassInfo, IModelToDb translator) {
 		this.oxyUnitInfoBuilder = oxyUnitInfoBuilder;
 		this.mappedClassInfo = mappedClassInfo;
+		this.translator = translator;
 	}
 	
 	void buildAttributeInfos() throws Exception {
@@ -106,11 +108,11 @@ public class MappedClassInfoAttributeInfosBuilder {
 		colInfo.setColumnDefinition(column.columnDefinition());
 		colInfo.setInsertable(column.insertable());
 		colInfo.setLength(column.length());
-		colInfo.setName(column.name());
+		colInfo.setName(translator.translate(column.name()));
 		colInfo.setNullable(column.nullable());
 		colInfo.setPrecision(column.precision());
 		colInfo.setScale(column.scale());
-		colInfo.setTable(column.table());
+		colInfo.setTable(translator.translate(column.table()));
 		colInfo.setUnique(column.unique());
 		colInfo.setUpdatable(column.updatable());
 		basicAttributeInfo.setColumnInfo(colInfo);
@@ -156,7 +158,7 @@ public class MappedClassInfoAttributeInfosBuilder {
 
 		List<JoinColumnInfo> joinColumnInfos = new ArrayList<JoinColumnInfo>();
 		for (JoinColumn col : joinColumns) {
-			joinColumnInfos.add(new JoinColumnInfoBuilder(col).buildJoinColumnInfo());
+			joinColumnInfos.add(new JoinColumnInfoBuilder(col, translator).buildJoinColumnInfo());
 		}
 
 		String attributeName = ReflectionUtil.readFieldOrPropertyName(ae);
@@ -189,7 +191,7 @@ public class MappedClassInfoAttributeInfosBuilder {
 
 		TableGenerator tableGenerator = ae.getAnnotation(TableGenerator.class);
 
-		new TableGeneratorInfoBuilder(tableGenerator, mappedClassInfo.getOxyUnitInfo()).buildInfo();
+		new TableGeneratorInfoBuilder(tableGenerator, mappedClassInfo.getOxyUnitInfo(), translator).buildInfo();
 	}
 
 	private void parseGeneratedValueAnnotation(AnnotatedElement ae) throws Exception {
@@ -226,7 +228,7 @@ public class MappedClassInfoAttributeInfosBuilder {
 		OrderBy orderBy = ae.getAnnotation(OrderBy.class);
 		
 		OrderByInfo info = new OrderByInfo();
-		info.setOrderBy(orderBy.value());
+		info.setOrderBy(translator.translate(orderBy.value()));
 		toManyAttributeInfo.setOrderByInfo(info);
 
 	}
