@@ -8,18 +8,20 @@ import org.mariella.persistence.mapping.UniqueConstraintInfo;
 
 public class TableGeneratorInfoBuilder {
 	
-	TableGenerator tableGenerator;
-	OxyUnitInfo oxyUnitInfo;
+	private TableGenerator tableGenerator;
+	private OxyUnitInfo oxyUnitInfo;
+	private IModelToDb translator;
 	
-	public TableGeneratorInfoBuilder(TableGenerator tableGenerator, OxyUnitInfo oxyUnitInfo) {
+	public TableGeneratorInfoBuilder(TableGenerator tableGenerator, OxyUnitInfo oxyUnitInfo, IModelToDb translator) {
 		this.tableGenerator = tableGenerator;
 		this.oxyUnitInfo = oxyUnitInfo;
+		this.translator = translator;
 	}
 
 	public void buildInfo() {
 		UniqueConstraintInfo[] uniqueConstraintInfos = new UniqueConstraintInfo[tableGenerator.uniqueConstraints().length];
 		for (int i=0; i<tableGenerator.uniqueConstraints().length;i++) {
-			uniqueConstraintInfos[i] = new UniqueConstraintInfoBuilder(tableGenerator.uniqueConstraints()[i]).buildUniqueConstraintInfo();
+			uniqueConstraintInfos[i] = new UniqueConstraintInfoBuilder(tableGenerator.uniqueConstraints()[i], translator).buildUniqueConstraintInfo();
 		}
 
 		

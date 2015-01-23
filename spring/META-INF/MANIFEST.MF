@@ -1183,4 +1183,5 @@ Import-Package: javax.mail;version="1.4.0";resolution:=optional,
  oracle.security.o3logon,
  oracle.security.o5logon,
  oracle.sql,
- oracle.sql.converter
+ oracle.sql.converter,
+ org.postgresql
