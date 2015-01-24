@@ -1,6 +1,8 @@
 package org.mariella.persistence.annotations.processing;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.mariella.persistence.mapping.OxyUnitInfo;
 import org.xml.sax.Attributes;
@@ -10,16 +12,19 @@ import org.xml.sax.helpers.DefaultHandler;
 // TODO validate with schema validator, aquire persistence-schema-xml
 public class PersistenceXmlHandler extends DefaultHandler {
 
-OxyUnitInfo oxyUnitInfo;
-String curValue;
+private List<OxyUnitInfo> oxyUnitInfos = new ArrayList<OxyUnitInfo>();
+private OxyUnitInfo oxyUnitInfo;
+private String curValue;
 
-public void setOxyUnitInfo(OxyUnitInfo oxyUnitInfo) {
-	this.oxyUnitInfo = oxyUnitInfo;
+public List<OxyUnitInfo> getOxyUnitInfos() {
+	return oxyUnitInfos;
 }
 
 public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 	try {
 		if (localName.equals("persistence-unit")) {
+			oxyUnitInfo = new OxyUnitInfo();
+			oxyUnitInfos.add(oxyUnitInfo);
 			oxyUnitInfo.setPersistenceUnitName(attributes.getValue("name"));
 		} if (localName.equals("property")) {
 			String name = attributes.getValue("name");

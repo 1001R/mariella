@@ -54,7 +54,7 @@ public void parsePersistenceUnits() throws Exception {
 		throw new Exception("No " + PERSISTENCE_XML_LOCATION + " found.");
 	}
 	for (URL url : urls) {
-		oxyUnitInfos.add(parsePersistenceUnit(url));
+		oxyUnitInfos.addAll(parsePersistenceUnit(url));
 	}
 }
 
@@ -68,18 +68,17 @@ public List<OxyUnitInfo> getOxyUnitInfos() {
 	return oxyUnitInfos;
 }
 
-private OxyUnitInfo parsePersistenceUnit(URL xmlRes) throws Exception {
+private List<OxyUnitInfo> parsePersistenceUnit(URL xmlRes) throws Exception {
 	InputStream persistenceXmlIs = xmlRes.openStream();
 	if (persistenceXmlIs == null)
 		throw new Exception("Could not find " + xmlRes.toString());
 
 	PersistenceXmlHandler handler = new PersistenceXmlHandler();
-	handler.setOxyUnitInfo(new OxyUnitInfo());
 	XMLReader reader = XMLReaderFactory.createXMLReader();
 	reader.setContentHandler(handler);
 	reader.parse(new InputSource(persistenceXmlIs));
 
-	return handler.getOxyUnitInfo();
+	return handler.getOxyUnitInfos();
 }
 
 public List<Bundle> getBundles() {
