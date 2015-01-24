@@ -64,4 +64,11 @@
          version="1.0.2"
          unpack="false"/>
 
+   <plugin
+         id="org.mariella.persistence.postgres"
+         download-size="0"
+         install-size="0"
+         version="1.0.2"
+         unpack="false"/>
+
 </feature>
