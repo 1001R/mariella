@@ -45,7 +45,6 @@ public void parsePersistenceUnits() throws Exception {
 		throw new Exception("Could not find " + url.toString());
 
 	PersistenceXmlHandler handler = new PersistenceXmlHandler();
-	handler.oxyUnitInfo = new OxyUnitInfo();
 	File file=new File(urlDecode(url.getFile()));
 	File rootFile = file.getParentFile().getParentFile();
 	URL rootUrl;
@@ -58,13 +57,17 @@ public void parsePersistenceUnits() throws Exception {
 	} else {
 		rootUrl = new URL("file", null, rootFile.getPath());
 	}
-	handler.oxyUnitInfo.setPersistenceUnitRootUrl(rootUrl);
 
 	XMLReader reader = XMLReaderFactory.createXMLReader();
 	reader.setContentHandler(handler);
 	reader.parse(new InputSource(persistenceXmlIs));
+	
+	List<OxyUnitInfo> oxyUnitInfos = handler.getOxyUnitInfos();
+	for (OxyUnitInfo unitInfo : oxyUnitInfos) {
+		unitInfo.setPersistenceUnitRootUrl(rootUrl);		
+	}
 
-	oxyUnitInfos.add(handler.getOxyUnitInfo());
+	oxyUnitInfos.addAll(oxyUnitInfos);
 }
 
 @Override
