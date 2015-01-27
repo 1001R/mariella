@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.mariella.persistence.database.Column;
 import org.mariella.persistence.database.DeleteJoinedTableByPrimaryKeyStatementBuilder;
-import org.mariella.persistence.database.JoinedUpsertStatementBuilder;
 import org.mariella.persistence.database.SingleRowPreparedStatementBuilder;
 import org.mariella.persistence.database.Table;
 import org.mariella.persistence.persistor.ObjectPersistor;
@@ -153,7 +152,7 @@ public SingleRowPreparedStatementBuilder createPrimaryPreparedStatementBuilder(O
 			SingleRowPreparedStatementBuilder primaryPreparedStatementBuilder;
 			Row row = new Row(joinUpdateTable);
 			if(objectPersistor.getModificationInfo().getStatus() == ModificationInfo.Status.New || objectPersistor.getModificationInfo().getStatus() == ModificationInfo.Status.Modified) {
-				primaryPreparedStatementBuilder = new JoinedUpsertStatementBuilder(objectPersistor, this, row);
+				primaryPreparedStatementBuilder = getSchemaMapping().getSchema().createJoinedUpsertStatementBuilder(objectPersistor, this, row);
 			} else if(objectPersistor.getModificationInfo().getStatus() == ModificationInfo.Status.Removed) {
 				primaryPreparedStatementBuilder = new DeleteJoinedTableByPrimaryKeyStatementBuilder(objectPersistor, this, row);
 			} else {
