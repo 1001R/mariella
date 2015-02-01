@@ -1,4 +1,4 @@
-package org.mariella.persistence.oracle;
+package org.mariella.persistence.database;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,7 +8,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.mariella.persistence.database.Converter;
 import org.mariella.persistence.query.Literal;
 import org.mariella.persistence.query.StringLiteral;
 

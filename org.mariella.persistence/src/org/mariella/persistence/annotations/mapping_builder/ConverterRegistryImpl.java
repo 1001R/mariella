@@ -11,6 +11,7 @@ import org.mariella.persistence.database.BigDecimalConverter;
 import org.mariella.persistence.database.BooleanAsNumberConverter;
 import org.mariella.persistence.database.ByteArrayConverter;
 import org.mariella.persistence.database.CharArrayConverter;
+import org.mariella.persistence.database.ClobConverter;
 import org.mariella.persistence.database.Converter;
 import org.mariella.persistence.database.DateConverter;
 import org.mariella.persistence.database.DoubleConverter;
@@ -81,6 +82,7 @@ public ConverterRegistryImpl() {
 	registerConverterFactory(Types.BLOB, byte[].class, new ConverterFactoryImpl(ByteArrayConverter.Singleton));
 	registerConverterFactory(Types.BINARY, byte[].class, new ConverterFactoryImpl(ByteArrayConverter.Singleton));
 	registerConverterFactory(Types.CLOB, char[].class, new ConverterFactoryImpl(CharArrayConverter.Singleton));
+	registerConverterFactory(Types.CLOB, String.class, new ConverterFactoryImpl(ClobConverter.Singleton));
 }
 
 protected void registerNumericConverters(int type) {
