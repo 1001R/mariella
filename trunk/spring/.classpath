@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="lib/commons/commons-collections.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/commons/commons-dbcp.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/commons/commons-logging.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/commons/commons-pool.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons/commons-collections4-4.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons/commons-dbcp2-2.0.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons/commons-logging-1.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/commons/commons-pool2-2.3.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/log4j/log4j-1.2.14.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/aopalliance/aopalliance.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/spring/org.springframework.aop-3.0.5.RELEASE.jar" sourcepath="lib/spring/src/org.springframework.aop-sources-3.0.5.RELEASE.jar"/>
