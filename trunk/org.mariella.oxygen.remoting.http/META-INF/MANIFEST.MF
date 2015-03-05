@@ -2,16 +2,16 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Http
 Bundle-SymbolicName: org.mariella.oxygen.remoting.http;singleton:=true
-Bundle-Version: 1.1.2
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Require-Bundle: org.apache.http;bundle-version="4.2.1",
- org.mariella.oxygen.remoting;bundle-version="1.0.0",
- org.mariella.oxygen.core;bundle-version="1.1.1",
- org.eclipse.core.runtime;bundle-version="3.7.0",
- org.mariella.persistence;bundle-version="1.0.2",
- javax.servlet,
- javax.persistence;bundle-version="[3.0.0,3.1.0)"
+Bundle-Version: 1.1.3
 Bundle-Activator: org.mariella.oxygen.remoting.http.common.HttpRemoting
 Export-Package: org.mariella.oxygen.remoting.http.client,
  org.mariella.oxygen.remoting.http.common
+Require-Bundle: org.apache.http;bundle-version="[4.3.5,4.4.0)",
+ org.mariella.oxygen.remoting;bundle-version="[1.1.3,1.1.3]",
+ org.mariella.oxygen.core;bundle-version="[1.1.3,1.1.3]",
+ org.eclipse.core.runtime;bundle-version="3.7.0",
+ org.mariella.persistence;bundle-version="[1.0.3,1.1.0)",
+ javax.servlet,
+ javax.persistence;bundle-version="[3.0.0,3.1.0)"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy

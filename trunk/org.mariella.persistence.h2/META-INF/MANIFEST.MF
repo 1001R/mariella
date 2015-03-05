@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: H2
 Bundle-SymbolicName: org.mariella.persistence.h2
-Bundle-Version: 1.0.2
+Bundle-Version: 1.0.3
 Export-Package: org.mariella.persistence.h2
-Require-Bundle: org.mariella.persistence;bundle-version="[1.0.2,1.0.2]"
+Require-Bundle: org.mariella.persistence;bundle-version="[1.0.3,1.0.3]"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

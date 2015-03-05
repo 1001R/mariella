@@ -2,7 +2,7 @@
 <feature
       id="org.mariella.persistence.feature"
       label="Mariella Persistence Feature"
-      version="1.0.2">
+      version="1.0.3">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
@@ -20,28 +20,28 @@
          id="org.mariella.persistence"
          download-size="0"
          install-size="0"
-         version="1.0.2"
+         version="1.0.3"
          unpack="false"/>
 
    <plugin
          id="org.mariella.persistence.annotations"
          download-size="0"
          install-size="0"
-         version="1.0.2"
+         version="1.0.3"
          unpack="false"/>
 
    <plugin
          id="org.mariella.persistence.annotations.processing"
          download-size="0"
          install-size="0"
-         version="1.0.2"
+         version="1.0.3"
          unpack="false"/>
 
    <plugin
          id="org.mariella.persistence.mapping"
          download-size="0"
          install-size="0"
-         version="1.0.2"
+         version="1.0.3"
          unpack="false"/>
 
    <plugin
@@ -54,21 +54,21 @@
          id="org.mariella.persistence.h2"
          download-size="0"
          install-size="0"
-         version="1.0.2"
+         version="1.0.3"
          unpack="false"/>
 
    <plugin
          id="org.mariella.persistence.oracle"
          download-size="0"
          install-size="0"
-         version="1.0.2"
+         version="1.0.3"
          unpack="false"/>
 
    <plugin
          id="org.mariella.persistence.postgres"
          download-size="0"
          install-size="0"
-         version="1.0.2"
+         version="1.0.3"
          unpack="false"/>
 
 </feature>
