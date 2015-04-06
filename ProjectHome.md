@@ -1,0 +1,1 @@
+Mariella is build on top of Eclipse RCP, which provides meta driven databinding and a simplified model based resource framework. Note that the API is not stable. Examples will follow.
